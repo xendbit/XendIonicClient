@@ -612,8 +612,8 @@ export class Constants {
     static getCurrentWalletProperties() {
         return Constants.getWalletProperties(Constants.WORKING_WALLET);
     }
-
-    static btcWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, chainCode) {
+    
+    static btcWallet(ls: StorageService, _loading, _loadingCtrl, http, _toastCtrl, chainCode) {
         let network = Constants.NETWORKS[chainCode];
         let passphrase = ls.getItem('mnemonic');
 
@@ -627,8 +627,8 @@ export class Constants {
         //import private key
         let privKey = hd.keyPair.toWIF();
         let address = hd.getAddress();
-        let url = Constants.RPC_PROXY + "/importprivkey/" + privKey + "/" + address + "/ALL";
-        http.get(url).map(res => res.json()).subscribe(_success => { }, _error => { });
+        let url = Constants.RPC_PROXY + "/importprivkey/" + privKey + "/" + address + "/" + chainCode;
+        http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(_success => { }, _error => { });
 
     }
     static xndWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, chainCode) {
