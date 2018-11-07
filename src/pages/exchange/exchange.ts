@@ -1,4 +1,3 @@
-import {Storage} from '@ionic/storage';
 import {FingerprintAIO} from '@ionic-native/fingerprint-aio';
 import {StorageService} from './../utils/storageservice';
 import {Constants} from './../utils/constants';
@@ -40,7 +39,7 @@ export class ExchangePage {
     selectedPaymentMethod: string;
     rate = 0;
 
-    constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public storage: Storage, public loadingCtrl: LoadingController) {
+    constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController,  public loadingCtrl: LoadingController) {
         this.sellForm = this.formBuilder.group({
             numberOfBTC: ['', Validators.required],
             pricePerBTC: ['', Validators.required],
@@ -72,7 +71,7 @@ export class ExchangePage {
         //     this.paymentMethods.push(bpm);
         // }        
 
-        this.ls = new StorageService(this.storage);
+        this.ls = Constants.storageService;
         this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
         let app = this;
         //let pageTitle = Constants.properties['select.payment.method.title'];

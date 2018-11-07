@@ -10,7 +10,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Rx';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from '../utils/storageservice';
 
 
@@ -57,7 +57,7 @@ export class RegisterPage {
 
   emailRegex = '^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$';
 
-  constructor(public base64: Base64, public imageResizer: ImageResizer, public storage: Storage, private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, private mediaCapture: MediaCapture, private transfer: FileTransfer) {
+  constructor(public base64: Base64, public imageResizer: ImageResizer,  private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, private mediaCapture: MediaCapture, private transfer: FileTransfer) {
     this.mnemonic = this.navParams.get("mnemonic");
 
     this.isTrader = Constants.properties['walletType'] === 'trader';
@@ -96,7 +96,7 @@ export class RegisterPage {
     });
 
     this.isBasic = false;
-    this.ls = new StorageService(this.storage);
+    this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
     let app = this;
     setTimeout(function () {

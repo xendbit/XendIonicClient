@@ -22,7 +22,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-item class="bg" *ngFor="let wallet of loadedWallets" (click)="openHomePage(wallet)" detail-push>
+  <ion-item class="bg" *ngFor="let wallet of loadedWallets" (click)="openHomePage(wallet)">
     <ion-avatar item-start>
       <img src="https://xendbit.com/coins/{{wallet.ticker_symbol}}.png">    
     </ion-avatar>              

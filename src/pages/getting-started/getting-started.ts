@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Console } from '../utils/console';
 import { NavController, NavParams, ToastController, IonicPage } from 'ionic-angular';
 import { Constants } from '../utils/constants';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from '../utils/storageservice';
 
 /*
@@ -41,7 +41,7 @@ export class GettingStartedPage {
 
   ls;
 
-  constructor(public storage: Storage, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController) {
+  constructor( public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController) {
     this.pageTitle = Constants.properties['getting.started.page.title'];
     this.restoreText = Constants.properties['restore'];
     this.restoreWalletText = Constants.properties['restore.wallet'];
@@ -58,7 +58,7 @@ export class GettingStartedPage {
     this.requireKYCText = Constants.properties['require.kyc'];
     this.recoverText = Constants.properties['recover.or.migrate.wallet'];
 
-    this.ls = new StorageService(this.storage);
+    this.ls = Constants.storageService;
   }
 
   toggleShowDetailsAdvanced() {

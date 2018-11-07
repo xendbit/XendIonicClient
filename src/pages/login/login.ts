@@ -1,5 +1,4 @@
 import { EquitiesExchangePage } from './../equities-exchange/equities-exchange';
-import { Mnemonics } from './../utils/mnemonics';
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
 import { Console } from '../utils/console';
@@ -9,7 +8,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { TabsPage } from '../tabs/tabs';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from '../utils/storageservice';
 import Web3 from 'web3';
 
@@ -45,7 +44,7 @@ export class LoginPage {
 
     emailRegex = '^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$';
 
-    constructor(public storage: Storage, public alertCtrl: AlertController, public platform: Platform, public http: Http, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public formBuilder: FormBuilder, public navCtrl: NavController, public navParams: NavParams) {
+    constructor(public alertCtrl: AlertController, public platform: Platform, public http: Http, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public formBuilder: FormBuilder, public navCtrl: NavController, public navParams: NavParams) {
         this.loginForm = formBuilder.group({
             password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
             email: new FormControl({ value: '', disabled: true }),
@@ -55,13 +54,12 @@ export class LoginPage {
 
         this.initProps();
 
-        this.ls = new StorageService(this.storage);
+        this.ls = Constants.storageService;
         this.enableGuest = Constants.ENABLE_GUEST;
 
         let app = this;
 
-        setTimeout(function () {
-            app.loginForm.controls.exchangeType.setValue("equities");
+        setTimeout(function () {            
             app.loginForm.controls.email.setValue(app.ls.getItem("emailAddress"));
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
     }
@@ -85,12 +83,12 @@ export class LoginPage {
         let isValid = false;
         let rf = this.loginForm.value;
 
-        if (this.loginForm.valid) {
-            isValid = true;
-        } else if (rf.password === '' || rf.password === undefined) {
+        if (rf.password === '' || rf.password === undefined) {
             Constants.showLongToastMessage(Constants.properties['password.invalid.message'], this.toastCtrl);
         } else if (rf.exchangeType === '' || rf.exchangeType === undefined) {
             Constants.showLongToastMessage("Please select a wallet type", this.toastCtrl);
+        } else {
+            isValid = true;
         }
 
         if (isValid) {
@@ -118,25 +116,6 @@ export class LoginPage {
         this.http.post(url, requestData, Constants.getHeader())
             .map(res => res.json())
             .subscribe(responseData => { }, error => { });
-    }
-
-    guest() {
-        this.ls.setItem('isGuest', true);
-        this.ls.setItem("lastLoginTime", new Date().getTime() + "");
-        StorageService.ACCOUNT_TYPE = "ADVANCED";
-        this.ls.setItem("accountType", "ADVANCED");
-        // StorageService.ACCOUNT_TYPE = "BASIC";
-        // this.ls.setItem("accountType", "BASIC");        
-        if (this.ls.getItem('mnemonic') === undefined) {
-            let guestEmail = "guest-" + Math.ceil(Math.random() * 1000000000) + "@xendbit.com";
-            this.ls.setItem('emailAddress', guestEmail);
-            this.ls.setItem('password', 'guest');
-            this.ls.setItem('accountNumber', '0109998058');
-            this.ls.setItem('bankCode', '058');
-            Mnemonics.generateMnemonic(this.ls, this.loading, this.loadingCtrl, this.toastCtrl, this.navCtrl, this.http);
-        } else {
-            this.navCtrl.push(TabsPage);
-        }
     }
 
     loginOnServer(password, emailAddress, exchangeType) {

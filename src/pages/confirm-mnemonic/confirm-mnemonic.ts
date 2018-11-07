@@ -1,5 +1,3 @@
-import { networks } from 'bitcoinjs-lib';
-import { mnemonicToSeed } from 'bip39';
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
 import { Console } from '../utils/console';
@@ -7,9 +5,8 @@ import { ActionSheetController, NavController, NavParams, ToastController, Loadi
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Rx';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from '../utils/storageservice';
-import { HDNode } from 'bitcoinjs-lib';
 /*
   Generated class for the CreateMnemonic page.
 
@@ -45,7 +42,7 @@ export class ConfirmMnemonicPage {
 
   FB_APP_ID: number = 1900836276861220;
 
-  constructor(public storage: Storage, public actionSheetCtrl: ActionSheetController, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams) {
+  constructor( public actionSheetCtrl: ActionSheetController, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams) {
     this.pageTitle = Constants.properties['confirm.mnemonic.page.title'];
     this.email = navParams.get('email');
     this.passphrase = navParams.get('mnemonic');
@@ -68,7 +65,7 @@ export class ConfirmMnemonicPage {
     this.isRestore = navParams.get("type") == "restore";
     this.isUpgrade = navParams.get("type") == "upgrade";
     this.isNew = navParams.get("type") == "new";
-    this.ls = new StorageService(this.storage);
+    this.ls = Constants.storageService;
 
     if (this.shouldRegister === 'true') {
       this.buttonText = Constants.properties['create.wallet'];
@@ -115,26 +112,18 @@ export class ConfirmMnemonicPage {
             this.ls.clear();
             let lastWord = responseData.result;
             this.passphrase = this.confirmMnemonic + " " + lastWord;
-            var hd = HDNode.fromSeedBuffer(mnemonicToSeed(this.passphrase), Constants.NETWORKS.BTCTEST).derivePath("m/0/0/0");
-
-            Constants.registrationData['networkAddress'] = hd.getAddress();
-            this.ls.setItem('BTCAddress', hd.getAddress());
             this.ls.setItem('mnemonic', this.passphrase);
+
+            Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTC");
+            Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTC");
+            Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTCTEST");
+            Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTCTEST");            
             Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'XND');
             Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'NXT');
             Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'ARDR');
             Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'IGNIS');
             Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
             Constants.ethWallet(this.ls);
-
-            //import private key
-            let privKey = hd.keyPair.toWIF();
-            let address = hd.getAddress();
-            console.log(privKey);
-            console.dir(hd);
-            console.dir(hd.keyPair);
-            let url = Constants.RPC_PROXY + "/importprivkey/" + privKey + "/" + address + "/ALL";
-            this.http.get(url).map(res => res.json()).subscribe(_success => { }, _error => { });
 
             this.ls.setItem('emailAddress', this.email);
             Constants.showLongToastMessage("Restore Successful. Now login", this.toastCtrl);
@@ -150,28 +139,18 @@ export class ConfirmMnemonicPage {
       );
     } else {
       this.ls.clear();
-      Console.log(this.passphrase)
-      var hd = HDNode.fromSeedBuffer(mnemonicToSeed(this.passphrase), Constants.NETWORKS.BTCTEST).derivePath("m/0/0/0");
-      Console.log("Got HD NODE: " + hd);
-      Constants.registrationData['networkAddress'] = hd.getAddress();
-      Console.log("Got HD Address: ");
-      this.ls.setItem('BTCAddress', hd.getAddress());
-      Console.log("Set HD Address Into ls: ");
       this.ls.setItem('mnemonic', this.passphrase);
-      Console.log("Set Passphrase into ls: ");
+
+      Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTC");
+      Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTC");
+      Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTCTEST");
+      Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTCTEST");
       Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'XND');
       Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'NXT');
       Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'ARDR');
       Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'IGNIS');            
       Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
       Constants.ethWallet(this.ls);
-
-      //import private key
-      let privKey = hd.keyPair.toWIF();
-      let address = hd.getAddress();
-      console.log(privKey);
-      let url = Constants.RPC_PROXY + "/importprivkey/" + privKey + "/" + address + "/ALL";
-      this.http.get(url).map(res => res.json()).subscribe(_success => { }, _error => { });
 
       if (this.isRestore) {
         return;

@@ -8,9 +8,7 @@ import { Platform, ActionSheetController, ModalController, AlertController, NavC
 import { Clipboard } from '@ionic-native/clipboard';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Storage } from '@ionic/storage';
-import { HDNode } from 'bitcoinjs-lib';
-import { mnemonicToSeed } from 'bip39';
+
 
 @IonicPage()
 @Component({
@@ -62,9 +60,9 @@ export class HomePage {
     cryptoSellOrderText = 'Crypto Sell-Order';
     fiatSellOrderText = 'Fiat Sell-Order';
 
-    constructor(public storage: Storage, public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public toastCtrl: ToastController, public localNotifications: LocalNotifications, public actionSheetCtrl: ActionSheetController) {
+    constructor( public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public toastCtrl: ToastController, public localNotifications: LocalNotifications, public actionSheetCtrl: ActionSheetController) {
         this.clipboard = new Clipboard();
-        this.ls = new StorageService(this.storage);
+        this.ls = Constants.storageService;
         this.initProps();
     }
 
@@ -191,13 +189,7 @@ export class HomePage {
                 } else if (wallet['currencyId'] !== undefined) {
                     Constants.tokenWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
                 } else {
-                    let key = coin + 'Address';
-                    if (app.ls.getItem(key) === undefined || app.ls.getItem(key) === "") {
-                        let network = Constants.NETWORKS[coin];
-                        let mnemonic = app.ls.getItem('mnemonic').trim();
-                        let hd = HDNode.fromSeedBuffer(mnemonicToSeed(mnemonic), network).derivePath("m/0/0/0");
-                        app.ls.setItem(key, hd.getAddress());
-                    }
+                    Constants.btcWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
                 }
             }
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION)

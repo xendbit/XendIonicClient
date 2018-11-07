@@ -3,7 +3,7 @@ import { Platform, AlertController } from 'ionic-angular';
 import { Constants } from '../utils/constants';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from '../utils/storageservice';
 
 @Component({
@@ -26,13 +26,12 @@ export class TabsPage {
 
  isAdvanced: boolean = false;
 
-  constructor(public storage: Storage, public http: Http, public alertCtrl: AlertController, public platform: Platform) {
+  constructor( public http: Http, public alertCtrl: AlertController, public platform: Platform) {
     if(Constants.properties === undefined) {
       //do nothing
     } else {
       this.initProps();
     }
-    new StorageService(this.storage);
   }
 
   ionViewDidEnter() {

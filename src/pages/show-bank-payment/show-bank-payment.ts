@@ -1,5 +1,5 @@
 import { CoinsSender } from './../utils/coinssender';
-import { Storage } from '@ionic/storage';
+
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, AlertController, IonicPage } from 'ionic-angular';
@@ -42,7 +42,7 @@ export class ShowBankPaymentPage {
   disableButton = false;
   brokerAccount = "";
 
-  constructor(public alertCtrl: AlertController, public storage: Storage, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public toastCtrl: ToastController) {
+  constructor(public alertCtrl: AlertController,  public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public toastCtrl: ToastController) {
     this.pageTitle = Constants.properties['buy.bit.with.cc.page.title'];
     this.currencyText = Constants.properties['currency'];
     this.buyBitFormHeaderText = this.pageTitle;
@@ -70,7 +70,7 @@ export class ShowBankPaymentPage {
     this.amountToSend = data['amountToSell'];
     this.brokerAccount = data['brokerAccount'];
 
-    this.ls = new StorageService(this.storage);
+    this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
     let app = this;
     //let pageTitle = Constants.properties['select.payment.method.title'];

@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Rx';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from './../utils/storageservice';
 import { Console } from './../utils/console';
 import { Constants } from './../utils/constants';
@@ -41,13 +41,13 @@ export class BuyBitPage {
     toCoin: string;
     showHeaders = false;
 
-    constructor(public storage: Storage, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+    constructor( public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
         let fees = Constants.getCurrentWalletProperties();
         this.currentWallet = fees;
 
         this.loadRate();
 
-        this.ls = new StorageService(this.storage);
+        this.ls = Constants.storageService;
                 
         //let pageTitle = Constants.properties['select.payment.method.title'];
         setTimeout(function () {                        

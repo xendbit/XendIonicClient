@@ -1,8 +1,6 @@
 import { Console } from './../utils/console';
-import { mnemonicToSeed } from 'bip39';
-import { HDNode } from 'bitcoinjs-lib';
 import { Constants } from './../utils/constants';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from './../utils/storageservice';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, LoadingController, Loading, AlertController, IonicPage } from 'ionic-angular';
@@ -29,8 +27,8 @@ export class LandingPage {
   loadWalletDelay = 500;
   count = 0;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
-    this.ls = new StorageService(this.storage);
+  constructor(public navCtrl: NavController, public navParams: NavParams,  public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+    this.ls = Constants.storageService;
   }
 
   ionViewDidLoad() {
@@ -42,14 +40,11 @@ export class LandingPage {
       this.wallets = Constants.properties['equities'];
     }
     Constants.properties['wallets'] = this.wallets;
-
-    Console.log(this.wallets);
     this.count = 0;
     this.loadWallets();
   }
 
   reloadWallets() {
-    console.log(this.count);
     if (this.count === 0) {
       this.loadedWallets = [];
       this.totalAssets = 0;
@@ -106,13 +101,11 @@ export class LandingPage {
           app.refresh(wallet);
         }, this.loadWalletDelay);
       } else {
-        let network = Constants.NETWORKS[working_wallet];
-        let mnemonic = this.ls.getItem('mnemonic').trim();
-
-        var hd = HDNode.fromSeedBuffer(mnemonicToSeed(mnemonic), network).derivePath("m/0/0/0");
-        var key = working_wallet + 'Address';
-        this.ls.setItem(key, hd.getAddress());
-        this.refresh(wallet);
+        Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
+        let app = this;
+        setTimeout(function () {
+          app.refresh(wallet);
+        }, this.loadWalletDelay);        
       }
     } else if (this.ls.getItem("exchangeType") === 'equities') {
       if (wallet['equityId'] !== undefined) {
@@ -193,7 +186,6 @@ export class LandingPage {
         //doNothing
       });
     }
-    console.log(this.loadedWallets);
   }
 
   openHome() {

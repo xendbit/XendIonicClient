@@ -1,9 +1,10 @@
+import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
 import { Platform, AlertController } from 'ionic-angular';
 import { Constants } from '../utils/constants';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from '../utils/storageservice';
 
 @Component({

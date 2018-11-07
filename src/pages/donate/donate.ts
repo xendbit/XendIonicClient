@@ -3,7 +3,6 @@ import {Console} from './../utils/console';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {FingerprintAIO} from '@ionic-native/fingerprint-aio';
 import {Constants} from './../utils/constants';
-import {Storage} from '@ionic/storage';
 import {StorageService} from './../utils/storageservice';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Component} from '@angular/core';
@@ -43,7 +42,7 @@ export class DonatePage {
     hmcisWarning: string;
     disableButton = false;
 
-    constructor(public http: Http, public barcodeScanner: BarcodeScanner, public formBuilder: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public storage: Storage, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+    constructor(public http: Http, public barcodeScanner: BarcodeScanner, public formBuilder: FormBuilder, public navCtrl: NavController, public navParams: NavParams,  public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
         this.donateForm = formBuilder.group({
             amount: ['', Validators.compose([Validators.required])],
             networkAddress: ['', Validators.required],
@@ -62,7 +61,7 @@ export class DonatePage {
         this.hmcisWarning = Constants.properties['hmcis.warning'];
 
 
-        this.ls = new StorageService(this.storage);
+        this.ls = Constants.storageService;
         this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
         let app = this;
         setTimeout(function () {

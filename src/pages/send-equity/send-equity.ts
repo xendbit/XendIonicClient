@@ -8,7 +8,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from '../utils/storageservice';
 
 /*
@@ -25,7 +25,7 @@ import { StorageService } from '../utils/storageservice';
 export class SendEquityPage {
 
   sendBitForm;
-  ls;
+  ls: StorageService;
   loading: Loading
   toBitcoinAddress: string;
   useFingerprint: boolean = false;
@@ -43,7 +43,7 @@ export class SendEquityPage {
   currencyText: string;
   disableButton = false;
 
-  constructor(private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public storage: Storage, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
+  constructor(private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController,  public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
     this.sendBitForm = formBuilder.group({
       amount: ['', Validators.compose([Validators.required])],
       networkAddress: ['', Validators.required],
@@ -51,7 +51,7 @@ export class SendEquityPage {
       password: ['', Validators.required]
     });
 
-    this.ls = new StorageService(this.storage);
+    this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
     let app = this;
     setTimeout(function () {

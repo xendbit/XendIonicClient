@@ -2,7 +2,7 @@ import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
 import { Console } from '../utils/console';
 import { ToastController, Loading, LoadingController, NavController, NavParams, Platform, AlertController, IonicPage } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from '../utils/storageservice';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
@@ -36,7 +36,7 @@ export class SettingsPage {
  isAdvanced = false;
  isBeneficiary = false;
 
-  constructor(public http: Http, public toastCtrl: ToastController, public formBuilder: FormBuilder, public loadingCtrl: LoadingController, public storage: Storage, public alertCtrl: AlertController, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public http: Http, public toastCtrl: ToastController, public formBuilder: FormBuilder, public loadingCtrl: LoadingController,  public alertCtrl: AlertController, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
     this.showMnemonicForm = formBuilder.group({
       password: ['', Validators.required]
     });
@@ -47,7 +47,7 @@ export class SettingsPage {
     this.updgradeAccountText = Constants.properties['upgrade.account'];
     this.showMnemonicText = Constants.properties['show.recovery.words'];
     this.revealText = Constants.properties['reveal'];    
-    this.ls = new StorageService(this.storage);
+    this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
     let app = this;
     setTimeout(function () {

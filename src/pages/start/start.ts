@@ -1,12 +1,12 @@
+import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
 import { Console } from '../utils/console';
 import { Platform, AlertController, NavController, NavParams } from 'ionic-angular';
 import { Constants } from '../utils/constants';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { TabsPage } from '../tabs/tabs';
 import { StorageService } from '../utils/storageservice';
-import { Storage } from '@ionic/storage';
+
 
 /*
   Generated class for the Login page.
@@ -28,6 +28,7 @@ export class StartPage {
 
   constructor(public storage: Storage, public alertCtrl: AlertController, public platform: Platform, public http: Http, public navCtrl: NavController, public navParams: NavParams) {
     this.ss = new StorageService(storage);
+    Constants.storageService = this.ss;
   }
 
   ionViewDidLoad() {

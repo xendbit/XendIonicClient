@@ -5,14 +5,16 @@ import { Headers } from "@angular/http";
 import { networks, Network } from "bitcoinjs-lib";
 import { LocalProps } from "./localprops";
 import { CoinsSender } from "./coinssender";
+import { HDNode } from 'bitcoinjs-lib';
+import { mnemonicToSeed } from 'bip39';
 
-export class Constants {    
+export class Constants {
     //static TOMCAT_URL = "http://localhost:8080";
     static APP_VERSION = "v3.2-rc15"
     static ENABLE_GUEST = true;
     static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
     static TOMCAT_URL = "https://lb.xendbit.com";
-    static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";    
+    static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
 
@@ -28,6 +30,8 @@ export class Constants {
         "xend.address": "1HHeKfxgDe4Vqv7nJcvT1QYahksekUwkMN",
         "multiplier": 100000000
     };
+
+    static storageService: StorageService;
 
     static TRADE_CANCELLED = false;
 
@@ -329,7 +333,7 @@ export class Constants {
 
     static getHeader() {
         let wallet = Constants.WORKING_WALLET;
-        if(wallet.startsWith("t")) {
+        if (wallet.startsWith("t")) {
             wallet = wallet.replace("t", "");
         }
         let headers = new Headers();
@@ -340,9 +344,9 @@ export class Constants {
     }
 
     static getWalletHeader(wallet: string) {
-        if(wallet.startsWith("t")) {
+        if (wallet.startsWith("t")) {
             wallet = wallet.replace("t", "");
-        }        
+        }
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('apiKey', 'oalkuisnetgauyno');
@@ -609,6 +613,24 @@ export class Constants {
         return Constants.getWalletProperties(Constants.WORKING_WALLET);
     }
 
+    static btcWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, chainCode) {
+        let network = Constants.NETWORKS[chainCode];
+        let passphrase = ls.getItem('mnemonic');
+
+        if (ls.getItem(chainCode + "Address") !== undefined && ls.getItem(chainCode + "Address") !== "") {
+            return;
+        }
+
+        var hd = HDNode.fromSeedBuffer(mnemonicToSeed(passphrase), network).derivePath("m/0/0/0");
+        Constants.registrationData['networkAddress'] = hd.getAddress();
+        ls.setItem(chainCode + 'Address', hd.getAddress());
+        //import private key
+        let privKey = hd.keyPair.toWIF();
+        let address = hd.getAddress();
+        let url = Constants.RPC_PROXY + "/importprivkey/" + privKey + "/" + address + "/ALL";
+        http.get(url).map(res => res.json()).subscribe(_success => { }, _error => { });
+
+    }
     static xndWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, chainCode) {
         if (ls.getItem(chainCode + "Id") !== undefined && ls.getItem(chainCode + "Id") !== "") {
             return;
@@ -625,7 +647,6 @@ export class Constants {
         loading = Constants.showLoading(loading, loadingCtrl, "Please wait");
 
         http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(data => {
-            console.log(data);
             let accountRS = data.result.accountRS;
             let accountId = data.result.account;
             let publicKey = data.result.publicKey;

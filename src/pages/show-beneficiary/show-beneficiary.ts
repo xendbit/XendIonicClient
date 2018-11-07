@@ -1,4 +1,4 @@
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from './../utils/storageservice';
 import { Console } from './../utils/console';
 import { Constants } from './../utils/constants';
@@ -32,7 +32,7 @@ export class ShowBeneficiaryPage {
     Console.log(this.beneficiary);
     this.dateRegistered = new Date(this.beneficiary.dateRegistered).toLocaleString();    
 
-    this.ls = new StorageService(this.storage);
+    this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
     let app = this;
     setTimeout(function () {

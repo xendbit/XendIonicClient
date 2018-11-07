@@ -1,4 +1,4 @@
-import { Storage } from '@ionic/storage';
+
 import { FileTransferObject } from '@ionic-native/file-transfer';
 import { StorageService } from './../utils/storageservice';
 import { FileUploadOptions, FileTransfer } from '@ionic-native/file-transfer';
@@ -35,7 +35,7 @@ export class UpgradePage {
   ls: StorageService;
   emailAddress: string;
 
-  constructor(public alertCtrl: AlertController, private http: Http, private storage: Storage, private loadingCtrl: LoadingController, private mediaCapture: MediaCapture, public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private imageResizer: ImageResizer, private toastCtrl: ToastController, private transfer: FileTransfer) {
+  constructor(public alertCtrl: AlertController, private http: Http, private loadingCtrl: LoadingController, private mediaCapture: MediaCapture, public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private imageResizer: ImageResizer, private toastCtrl: ToastController, private transfer: FileTransfer) {
     this.registerForm = this.formBuilder.group({      
       phoneNumber: ['', Validators.required],
       idType: ['', Validators.required],
@@ -49,7 +49,7 @@ export class UpgradePage {
     this.banks = Constants.properties['banks'];
     this.idTypes = Constants.properties['id.types'];
 
-    this.ls = new StorageService(this.storage);
+    this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
     let app = this;
     setTimeout(function () {

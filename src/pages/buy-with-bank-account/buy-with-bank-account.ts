@@ -3,7 +3,7 @@ import { StorageService } from './../utils/storageservice';
 import { Component } from '@angular/core';
 import { ToastController, NavController, NavParams, Loading, LoadingController, IonicPage } from 'ionic-angular';
 import { Http } from '@angular/http';
-import { Storage } from '@ionic/storage';
+
 import 'rxjs/add/operator/map';
 import { Console } from '../utils/console';
 
@@ -38,7 +38,7 @@ export class BuyWithBankAccountPage {
   referenceCode: string;
   disableButton = false;
 
-  constructor(public storage: Storage, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public toastCtrl: ToastController) {
+  constructor( public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public toastCtrl: ToastController) {
     let fees = Constants.getCurrentWalletProperties();
     this.pageTitle = "Bank Information";
     this.currencyText = fees.currencyText
@@ -46,7 +46,7 @@ export class BuyWithBankAccountPage {
     this.btcText = fees.btcText;
     this.banks = Constants.properties['banks'];
 
-    this.ls = new StorageService(this.storage);
+    this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
     let app = this;
     //let pageTitle = Constants.properties['select.payment.method.title'];

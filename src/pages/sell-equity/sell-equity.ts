@@ -1,8 +1,7 @@
+import { StorageService } from './../utils/storageservice';
 import {FingerprintAIO} from '@ionic-native/fingerprint-aio';
 import {FormBuilder, Validators} from '@angular/forms';
 import {Console} from '../utils/console';
-import {Storage} from '@ionic/storage';
-import {StorageService} from '../utils/storageservice';
 import {Constants} from '../utils/constants';
 import {Component} from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, ActionSheetController, AlertController, IonicPage } from 'ionic-angular';
@@ -25,7 +24,7 @@ export class SellEquityPage {
 
     networkAddress: string;
     confirmedAccountBalance: string;
-    ls: any;
+    ls: StorageService;
     sellForm: any;
     loading: Loading;
     usdRate: number = 0;
@@ -53,7 +52,7 @@ export class SellEquityPage {
         beneficiaryAccountNumber: ""
     };
 
-    constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public storage: Storage, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
+    constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,  public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
         this.banks = Constants.properties['banks'];
         this.paymentMethods = Constants.properties['payment.methods'];
         this.pageTitle = Constants.properties['sell.bit.page.title']
@@ -84,7 +83,7 @@ export class SellEquityPage {
             brokerAccount: ['', Validators.required]
         });
 
-        this.ls = new StorageService(this.storage);
+        this.ls = Constants.storageService;
         this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
         let app = this;
         setTimeout(function () {

@@ -1,5 +1,5 @@
 import { Constants } from './../utils/constants';
-import { Storage } from '@ionic/storage';
+
 import { StorageService } from './../utils/storageservice';
 import { Console } from './../utils/console';
 import { Component } from '@angular/core';
@@ -24,8 +24,8 @@ export class ViewBeneficiariesPage {
   loading: Loading;
   beneficiaries = [];
 
-  constructor(public loadingCtrl: LoadingController, public storage: Storage, public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, public modalCtrl: ModalController) {
-    this.ls = new StorageService(this.storage);
+  constructor(public loadingCtrl: LoadingController,  public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, public modalCtrl: ModalController) {
+    this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
     let app = this;
     setTimeout(function () {
