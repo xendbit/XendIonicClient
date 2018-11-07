@@ -31,11 +31,11 @@ export class CreateMnemonicPage {
 
 
   constructor(public http: Http, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController) {
-    this.pageTitle = Constants.properties['create.mnemonic.page.title'];
-    this.iveWrittenItText = Constants.properties['i.ve.written.it'];
-    this.warning1Text = Constants.properties['create.mnemonic.warning.1'];
-    this.warning2Text = Constants.properties['create.mnemonic.warning.2'];
-    this.warning3Text = Constants.properties['create.mnemonic.warning.3'];
+    this.pageTitle = "See The Passphrase";
+    this.iveWrittenItText = "I've Written It Down";
+    this.warning1Text = "Take a pen and a paper and carefully write down the Passphrase in bold below. You must not lose or forget them.";
+    this.warning2Text = "Don't Email Them";
+    this.warning3Text = "Write Them on Paper";
   }
 
   ionViewDidLoad() {
@@ -45,7 +45,7 @@ export class CreateMnemonicPage {
 
 
   generateMnemonic() {
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let generateAnotherMnemonic = true;
     while (generateAnotherMnemonic) {
       let result = genwallet();

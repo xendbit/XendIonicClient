@@ -49,7 +49,7 @@ export class BuyBitPage {
 
         this.ls = Constants.storageService;
                 
-        //let pageTitle = Constants.properties['select.payment.method.title'];
+        //let pageTitle = "Select Payment Method";
         setTimeout(function () {                        
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
     }
@@ -95,7 +95,7 @@ export class BuyBitPage {
 
     loadSellers() {
         this.currencyPairs = [];
-        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         let wallets = Constants.properties['wallets'];
         for (let w in wallets) {
             let wallet = wallets[w];

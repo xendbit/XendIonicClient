@@ -42,10 +42,10 @@ export class TabsPage {
   }
 
   initProps() {
-    this.homeText = Constants.properties['home'];
-    this.buyText = Constants.properties['buy'];
-    this.sendText = Constants.properties['send'];
-    this.send2BankText = Constants.properties['send.to.bank'];
-    this.settingsText = Constants.properties['settings'];    
+    this.homeText = "Home";
+    this.buyText = "Buy";
+    this.sendText = "Xend";
+    this.send2BankText = "Xend2Bank";
+    this.settingsText = "More..";    
   }
 }

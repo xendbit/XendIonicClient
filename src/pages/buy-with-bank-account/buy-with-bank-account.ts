@@ -47,9 +47,9 @@ export class BuyWithBankAccountPage {
     this.banks = Constants.properties['banks'];
 
     this.ls = Constants.storageService;
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
-    //let pageTitle = Constants.properties['select.payment.method.title'];
+    //let pageTitle = "Select Payment Method";
     setTimeout(function () {
       //Wait for sometimes for storage to be ready
       app.loading.dismiss();

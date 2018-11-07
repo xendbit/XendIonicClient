@@ -62,21 +62,21 @@ export class RegisterPage {
 
     this.isTrader = Constants.properties['walletType'] === 'trader';
     this.banks = Constants.properties['banks'];
-    this.pageTitle = Constants.properties['register.page.title'];
-    this.cbnWarning = Constants.properties['cbn.warning'];
-    this.emailAddressText = Constants.properties['email'];
-    this.phoneNumberText = Constants.properties['phonenumber'];
-    this.bvnText = Constants.properties['bvn'];
-    this.nextText = Constants.properties['next'];
-    this.kycInformationText = Constants.properties['kyc.information'];
-    this.formOfIdText = Constants.properties['form.of.identification'];
-    this.passportText = Constants.properties['passport'];
-    this.driversLicenceText = Constants.properties['drivers.licence'];
-    this.nationalIdText = Constants.properties['national.identity.card'];
-    this.idTypeText = Constants.properties['id.type'];
-    this.idNumberText = Constants.properties['id.number'];
+    this.pageTitle = "Complete Registration";
+    this.cbnWarning = "Due to CBN regulations, Your XendBit wallet must be integrated with your BVN. Make sure the information below is the same as the one on your BVN registration. If we can not validate your information with your BVN information, you will not be able to Send Bits.";
+    this.emailAddressText = "Email Address";
+    this.phoneNumberText = "Phone Number";
+    this.bvnText = "BVN";
+    this.nextText = "Next";
+    this.kycInformationText = "KYC Information";
+    this.formOfIdText = "Form Of Identification";
+    this.passportText = "Passport";
+    this.driversLicenceText = "Driver's Licence";
+    this.nationalIdText = "National ID Card";
+    this.idTypeText = "ID Type";
+    this.idNumberText = "ID Number";
     this.idTypes = Constants.properties['id.types'];
-    this.idImageText = Constants.properties['id.image'];
+    this.idImageText = "ID Image";
     this.country = 1;
 
     Constants.registrationData['fileTransferObject'] = this.transfer.create();
@@ -97,7 +97,7 @@ export class RegisterPage {
 
     this.isBasic = false;
     this.ls = Constants.storageService;
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
     setTimeout(function () {
       //Wait for sometimes for storage to be ready

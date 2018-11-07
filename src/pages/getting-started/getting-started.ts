@@ -42,21 +42,21 @@ export class GettingStartedPage {
   ls;
 
   constructor( public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController) {
-    this.pageTitle = Constants.properties['getting.started.page.title'];
-    this.restoreText = Constants.properties['restore'];
+    this.pageTitle = "Select Account Type";
+    this.restoreText = "Restore";
     this.restoreWalletText = Constants.properties['restore.wallet'];
-    this.basicWalletText = Constants.properties['basic.wallet'];
-    this.canSendCoinsText = Constants.properties['can.send.coins'];
-    this.canNotConvertCashText = Constants.properties['can.not.convert.cash'];
-    this.canNotConvertCoinsText = Constants.properties['can.not.convert.coins'];
-    this.createBasicWalletText = Constants.properties['create.basic.wallet'];
-    this.advancedWalletText = Constants.properties['advanced.wallet'];
-    this.canConvertCashText = Constants.properties['can.convert.cash'];
-    this.canConvertCoinsText = Constants.properties['can.convert.coins'];
-    this.createAdvancedWalletText = Constants.properties['create.advanced.wallet'];
-    this.doesNotRequireKYCText = Constants.properties['does.not.require.kyc'];
-    this.requireKYCText = Constants.properties['require.kyc'];
-    this.recoverText = Constants.properties['recover.or.migrate.wallet'];
+    this.basicWalletText = "Basic Wallet";
+    this.canSendCoinsText = "SEND, RECEIVE & TRANSFER COINS";
+    this.canNotConvertCashText = "Can not convert cash to coins";
+    this.canNotConvertCoinsText = "Can not convert coins to cash";
+    this.createBasicWalletText = "Create Basic Wallet";
+    this.advancedWalletText = "Advanced Wallet";
+    this.canConvertCashText = "Can convert cash to coins";
+    this.canConvertCoinsText = "Can convert coins to cash";
+    this.createAdvancedWalletText = "Create Advanced Wallet";
+    this.doesNotRequireKYCText = "Does not require KYC";
+    this.requireKYCText = "Requires Full KYC Documents";
+    this.recoverText = "RECOVER OR MIGRATE WALLET";
 
     this.ls = Constants.storageService;
   }

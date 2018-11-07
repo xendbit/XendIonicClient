@@ -48,7 +48,7 @@ export class MyOrdersPage {
 
         this.ls = Constants.storageService;
 
-        //let pageTitle = Constants.properties['select.payment.method.title'];
+        //let pageTitle = "Select Payment Method";
         setTimeout(function () {
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
     }
@@ -95,7 +95,7 @@ export class MyOrdersPage {
     loadSellers() {
         this.currencyPairs = [];        
         this.sellersPairs = [];
-        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         let wallets = Constants.properties['wallets'];
         for (let w in wallets) {
             let wallet = wallets[w];
@@ -136,7 +136,7 @@ export class MyOrdersPage {
     }
 
     deleteOrder(transactionId) {
-        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         let url = Constants.UPDATE_USER_SELL_ORDERS_TX_URL;
         let postData = {
             emailAddress: this.ls.getItem("emailAddress"),

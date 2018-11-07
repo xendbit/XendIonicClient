@@ -26,7 +26,7 @@ export class ViewBeneficiariesPage {
 
   constructor(public loadingCtrl: LoadingController,  public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, public modalCtrl: ModalController) {
     this.ls = Constants.storageService;
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
     setTimeout(function () {
       //Wait for sometimes for storage to be ready
@@ -52,7 +52,7 @@ export class ViewBeneficiariesPage {
       emailAddress: this.ls.getItem("emailAddress")      
     }
 
-    let loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+    let loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
 
     this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {

@@ -27,11 +27,11 @@ export class PasswordPage {
  importantNoticeText: string;
 
   constructor(public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams) {
-    this.pageTitle = Constants.properties['password.page.title'];
-    this.passwordWarningText = Constants.properties['password.page.warning'];
+    this.pageTitle = "Enter Your Password";
+    this.passwordWarningText = "Select Your Password. You need it for transactions. It will also be used to encrypt your Passphrase. So make sure you don't forget it. Make sure no one is watching. If your are restoring your wallet, make sure you use the password you used previously.";
     this.numbers = Constants.properties['password.page.numbers.pad'];
-    this.completeRegistrationText = Constants.properties['complete.registration'];
-    this.enterPasswordText = Constants.properties['password.page.title'];
+    this.completeRegistrationText = "Complete Registration";
+    this.enterPasswordText = "Enter Your Password";
     this.importantNoticeText = Constants.properties['important.notice'];
   }
 

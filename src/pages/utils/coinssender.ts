@@ -17,7 +17,7 @@ export class CoinsSender {
         let password = ls.getItem('password');
         let brokerAccount = data['brokerAccount'];
 
-        loading = Constants.showLoading(loading, loadingCtrl, Constants.properties['loading.dialog.text']);        
+        loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");        
         let mnemonicCode = Constants.normalizeMnemonicCode(ls);        
 
         let val = Math.round(+amount * +fees.multiplier)        
@@ -74,7 +74,7 @@ export class CoinsSender {
         //let http = data['http'];
         //let password = ls.getItem('password');
 
-        loading = Constants.showLoading(loading, loadingCtrl, Constants.properties['loading.dialog.text']);
+        loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
 
         let mnemonicCode = Constants.normalizeMnemonicCode(ls);
 
@@ -151,7 +151,7 @@ export class CoinsSender {
 
         let xendFees = (amount * +fees.xendFees);
 
-        loading = Constants.showLoading(loading, loadingCtrl, Constants.properties['loading.dialog.text']);
+        loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
         let url = Constants.GET_UNSPENT_OUTPUTS_URL + fromAddress;
         let amountToSend: number = amount + xendFees + +fees.blockFees;
         let postData = {

@@ -277,7 +277,7 @@ export class Constants {
         let loading = data['loading'];
         let loadingCtrl = data['loadingCtrl'];
 
-        loading = Constants.showLoading(loading, loadingCtrl, Constants.properties['loading.dialog.text']);
+        loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
         http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(
             responseData => {
                 if (responseData.response_text === "success") {
@@ -285,7 +285,7 @@ export class Constants {
                     ls.setItem("emailAddress", data['email']);
                     ls.setItem("password", data['password']);
                     ls.setItem("isRegistered", "true");
-                    Constants.showPersistentToastMessage(Constants.properties['registration.success'], toastCtrl);
+                    Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
                     data['navCtrl'].push('LoginPage');
                 } else {
                     Constants.showPersistentToastMessage(responseData.result, toastCtrl);
@@ -294,7 +294,7 @@ export class Constants {
             },
             error => {
                 loading.dismiss();
-                Constants.showPersistentToastMessage(Constants.properties['server.error.prefix'] + error, toastCtrl);
+                Constants.showPersistentToastMessage("Error from server: " + error, toastCtrl);
             });
     }
 

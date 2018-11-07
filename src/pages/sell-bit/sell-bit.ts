@@ -55,15 +55,15 @@ export class SellBitPage {
     constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,  public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
         this.banks = Constants.properties['banks'];
         this.paymentMethods = Constants.properties['payment.methods'];
-        this.pageTitle = Constants.properties['sell.bit.page.title']
-        this.priceText = Constants.properties['price.per.coin'];
-        this.numberOfBTCText = Constants.properties['number.of.coins'];
-        this.sendBitText = Constants.properties['sell.bit'];
-        this.placeOrderText = Constants.properties['place.order'];
-        this.beneficiaryNameText = Constants.properties['beneficiary.name'];
-        this.beneficiaryAccountNumberText = Constants.properties['beneficiary.account.number'];
-        this.beneficiaryBankText = Constants.properties['beneficiary.bank'];
-        this.passwordText = Constants.properties['wallet.password'];
+        this.pageTitle = "Place Sell Order"
+        this.priceText = "Price Per Coin";
+        this.numberOfBTCText = "Number of Coins";
+        this.sendBitText = "Place Sell Order";
+        this.placeOrderText = "Place Order";
+        this.beneficiaryNameText = "Beneficiary Name";
+        this.beneficiaryAccountNumberText = "Beneficiary Account Number";
+        this.beneficiaryBankText = "Beneficiary Bank";
+        this.passwordText = "Wallet Password";
         this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;
 
         let fees = Constants.getCurrentWalletProperties();
@@ -83,7 +83,7 @@ export class SellBitPage {
         });
 
         this.ls = Constants.storageService;
-        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         let app = this;
         setTimeout(function () {
             //Wait for sometimes for storage to be ready
@@ -118,17 +118,17 @@ export class SellBitPage {
         let blockFees = fees.blockFees;
 
         if (coinAmount === 0) {
-            Constants.showLongToastMessage(Constants.properties['amount.zero.info'], this.toastCtrl);
+            Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
         } else if (!this.isOwner && sb.beneficiaryBank === "") {
-            Constants.showLongToastMessage(Constants.properties['beneficiary.bank.warning'], this.toastCtrl);
+            Constants.showLongToastMessage("Please select the beneficiary bank", this.toastCtrl);
         } else if (price === 0) {
-            Constants.showLongToastMessage(Constants.properties['price.zero.info'], this.toastCtrl);
+            Constants.showLongToastMessage("Price must be greater than 0", this.toastCtrl);
         } else if (!this.isOwner && sb.beneficiaryAccountNumber === '') {
-            Constants.showLongToastMessage(Constants.properties['beneficiary.account.number.invalid.message'], this.toastCtrl);
+            Constants.showLongToastMessage("Please enter a valid beneficiary account number", this.toastCtrl);
         } else if (password !== this.ls.getItem("password")) {
-            Constants.showLongToastMessage(Constants.properties['password.invalid.message'], this.toastCtrl);
+            Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
         } else if (coinAmount + xendFees + blockFees > balance) {
-            Constants.showPersistentToastMessage(Constants.properties['insufficient.bitcoin.balance'], this.toastCtrl);
+            Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
         } else if (sb.acceptedPaymentMethods === "") {
             Constants.showPersistentToastMessage("Please specify accepted payment methods", this.toastCtrl);
         } else {
@@ -153,7 +153,7 @@ export class SellBitPage {
 
     presentActionSheet(beneficiaryName) {
         let actionSheet = this.actionSheetCtrl.create({
-            title: Constants.properties['continue'] + '?',
+            title: "Continue" + '?',
             buttons: [
                 {
                     text: beneficiaryName,
@@ -172,7 +172,7 @@ export class SellBitPage {
     }
 
     confirmBeneficiary(data) {
-        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
 
         let url = Constants.RESOLVE_ACCOUNT_URL;
         let postData = {
@@ -186,7 +186,7 @@ export class SellBitPage {
                 this.loading.dismiss();
                 this.presentActionSheet(this.beneficiaryName);
             } else {
-                Constants.showPersistentToastMessage(Constants.properties['resolve.account.error'], this.toastCtrl);
+                Constants.showPersistentToastMessage("Can not confirm beneficiary account number.", this.toastCtrl);
                 this.loading.dismiss();
             }
         }, error => {
@@ -196,7 +196,7 @@ export class SellBitPage {
     }
 
     continue() {
-        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         let sb = this.sellForm.value;
         let coinAmount = +sb.numberOfBTC;
         let beneficiaryAccountNumber = this.beneficiaryData.beneficiaryAccountNumber;
@@ -236,7 +236,7 @@ export class SellBitPage {
             this.clearForm();
             this.loading.dismiss();
             if (responseData.response_text === "success") {
-                Constants.showPersistentToastMessage(Constants.properties['order.placed.available.soon'], this.toastCtrl);
+                Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
             } else {
                 Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
             }
@@ -258,7 +258,7 @@ export class SellBitPage {
                 this.sellBit();
             })
             .catch((error: any) => {
-                Constants.showLongToastMessage(Constants.properties['fingerprint.invalid'], this.toastCtrl);
+                Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
             });
     }
 

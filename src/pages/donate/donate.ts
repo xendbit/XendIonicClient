@@ -50,19 +50,19 @@ export class DonatePage {
         });
 
         this.beneficiary = Constants.registrationData['beneficiary'];
-        this.sendBitWarningText = Constants.properties['send.bit.warning'];
-        this.amountToSendText = Constants.properties['amount.to.send'];
-        this.bitcoinAddressText = Constants.properties['bitcoin.address'];
-        this.scanCodeText = Constants.properties['scan.code'];
-        this.passwordText = Constants.properties['password'];
-        this.sendBitText = Constants.properties['send.bit'];
-        this.btcText = Constants.properties['btc'];
-        this.howMuchCanISendText = Constants.properties['how.much.can.i.send'];
-        this.hmcisWarning = Constants.properties['hmcis.warning'];
+        this.sendBitWarningText = "Please make sure the bitcoin address you will enter below is correct. Once you send your bits, the transaction can not be reversed.";
+        this.amountToSendText = "Amount to Send";
+        this.bitcoinAddressText = "Bitcoin Address";
+        this.scanCodeText = "Scan Address";
+        this.passwordText = "Password";
+        this.sendBitText = "Xend Bit";
+        this.btcText = "BTC";
+        this.howMuchCanISendText = "How much can I send?";
+        this.hmcisWarning = "This is only an optimistic estimate depending on how much the block fee is, your charges may be less or more than we estimated.";
 
 
         this.ls = Constants.storageService;
-        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         let app = this;
         setTimeout(function () {
             //Wait for sometimes for storage to be ready
@@ -94,16 +94,16 @@ export class DonatePage {
         let fees = Constants.getCurrentWalletProperties();
         let xendFees = amountToSend * +fees.xendFees;
 
-        let invalidAddressMessage = Constants.properties['bitcoin.address.invalid.message'].replace("Coin", fees.currencyText);
+        let invalidAddressMessage = "Invalid Coin Address detected".replace("Coin", fees.currencyText);
 
         if (amountToSend === 0) {
-            Constants.showLongToastMessage(Constants.properties['amount.zero.info'], this.toastCtrl);
+            Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
         } else if (amountToSend + fees.blockFees + xendFees > balance) {
-            Constants.showPersistentToastMessage(Constants.properties['insufficient.bitcoin.balance'], this.toastCtrl);
+            Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
         } else if (toBitcoinAddress === '') {
             Constants.showPersistentToastMessage(invalidAddressMessage, this.toastCtrl);
         } else if (password !== this.ls.getItem("password")) {
-            Constants.showLongToastMessage(Constants.properties['password.invalid.message'], this.toastCtrl);
+            Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
         } else if (this.donateForm.valid) {
             isValid = true;
         }
@@ -185,7 +185,7 @@ export class DonatePage {
             .catch((error: any) => {
                 //doNothing
                 Console.log(error);
-                Constants.showLongToastMessage(Constants.properties['fingerprint.invalid'], this.toastCtrl);
+                Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
             });
     }
 

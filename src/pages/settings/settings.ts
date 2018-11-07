@@ -40,15 +40,15 @@ export class SettingsPage {
     this.showMnemonicForm = formBuilder.group({
       password: ['', Validators.required]
     });
-    this.passwordText = Constants.properties['wallet.password'];
-    this.pageTitle = Constants.properties['settings.page.title'];
+    this.passwordText = "Wallet Password";
+    this.pageTitle = "More...";
     this.restoreWalletText = Constants.properties['restore.wallet'];
-    this.logoutText = Constants.properties['logout'];
-    this.updgradeAccountText = Constants.properties['upgrade.account'];
-    this.showMnemonicText = Constants.properties['show.recovery.words'];
-    this.revealText = Constants.properties['reveal'];    
+    this.logoutText = "Logout";
+    this.updgradeAccountText = "Upgrade Account";
+    this.showMnemonicText = "Show my Passphrase";
+    this.revealText = "Reveal";    
     this.ls = Constants.storageService;
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
     setTimeout(function () {
       //Wait for sometimes for storage to be ready
@@ -86,7 +86,7 @@ export class SettingsPage {
       beneficiary: true      
     };
     
-    let loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+    let loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     this.http.post(Constants.BECOME_BENEFICIARY_URL, postData, Constants.getHeader())
       .map(res => res.json())
       .subscribe(responseData => {
@@ -113,13 +113,13 @@ export class SettingsPage {
     let bv = this.showMnemonicForm.value;
     let password = bv.password;
     if (password !== this.ls.getItem("password")) {
-      Constants.showLongToastMessage(Constants.properties['password.invalid.message'], this.toastCtrl);
+      Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
     } else {
       this.showMnemonicForm.controls.password.setValue("");
       let sm = this.ls.getItem('mnemonic').split(' ').splice(0, 12).join(' ');
 
       let alert = this.alertCtrl.create({
-        title: Constants.properties['recovery.words'],
+        title: "Your Passphrase",
         message: sm,
         buttons: ['Dismiss']
       });

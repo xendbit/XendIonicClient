@@ -84,7 +84,7 @@ export class LoginPage {
         let rf = this.loginForm.value;
 
         if (rf.password === '' || rf.password === undefined) {
-            Constants.showLongToastMessage(Constants.properties['password.invalid.message'], this.toastCtrl);
+            Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
         } else if (rf.exchangeType === '' || rf.exchangeType === undefined) {
             Constants.showLongToastMessage("Please select a wallet type", this.toastCtrl);
         } else {
@@ -92,7 +92,7 @@ export class LoginPage {
         }
 
         if (isValid) {
-            this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+            this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
             let emailAddress = this.ls.getItem('emailAddress');
             let password = rf.password;
             let exchangeType = rf.exchangeType;
@@ -193,7 +193,7 @@ export class LoginPage {
             })
             .catch((error: any) => {
                 Console.log(error);
-                Constants.showLongToastMessage(Constants.properties['fingerprint.invalid'], this.toastCtrl);
+                Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
             });
     }
 
@@ -202,14 +202,14 @@ export class LoginPage {
     }
 
     initProps() {
-        this.emailAddressText = Constants.properties['email'];
-        this.passwordText = Constants.properties['wallet.password'];
-        this.loginText = Constants.properties['login'];
-        this.registerText = Constants.properties['register'];
-        this.dontHaveAccountText = Constants.properties['dont.have.account'];
+        this.emailAddressText = "Email Address";
+        this.passwordText = "Wallet Password";
+        this.loginText = "Log In";
+        this.registerText = "Register";
+        this.dontHaveAccountText = "Don't have an account? Register One";
         this.pageTitle = Constants.properties['login.page.title'];
-        this.forgotPasswordText = Constants.properties['forgot.password'];
-        this.getHelpText = Constants.properties['get.help'];
+        this.forgotPasswordText = "Forgot your login details? ";
+        this.getHelpText = "Get help signing in";
     }
 
     deployContract() {

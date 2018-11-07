@@ -49,8 +49,8 @@ export class ExchangePage {
             recipientOtherAddress: ['', Validators.required]
         });
 
-        this.numberOfBTCText = Constants.properties['number.of.coins'];
-        this.priceText = Constants.properties['price.per.coin'];
+        this.numberOfBTCText = "Number of Coins";
+        this.priceText = "Price Per Coin";
 
         let fees = Constants.getCurrentWalletProperties();
         this.currencyText = fees.currencyText;
@@ -72,9 +72,9 @@ export class ExchangePage {
         // }        
 
         this.ls = Constants.storageService;
-        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         let app = this;
-        //let pageTitle = Constants.properties['select.payment.method.title'];
+        //let pageTitle = "Select Payment Method";
         setTimeout(function () {
             //Wait for sometimes for storage to be ready
             app.loading.dismiss();
@@ -120,9 +120,9 @@ export class ExchangePage {
         } else if (rate === 0) {
             Constants.showLongToastMessage("Please enter rate", this.toastCtrl);
         } else if (password !== this.ls.getItem("password")) {
-            Constants.showLongToastMessage(Constants.properties['password.invalid.message'], this.toastCtrl);
+            Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
         } else if (coinAmount + xendFees + blockFees > balance) {
-            Constants.showPersistentToastMessage(Constants.properties['insufficient.bitcoin.balance'], this.toastCtrl);
+            Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
         } else if (sb.acceptedPaymentMethods === "") {
             Constants.showPersistentToastMessage("Please specify accepted payment method", this.toastCtrl);
         } else if (this.sellForm.valid) {
@@ -134,7 +134,7 @@ export class ExchangePage {
             let key = Constants.WORKING_WALLET + "Address";
             let sellerFromAddress = this.ls.getItem(key);
 
-            this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+            this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
             let postData = {
                 amountToSell: amountToSell,
                 amountToRecieve: amountToRecieve,
@@ -183,7 +183,7 @@ export class ExchangePage {
                 this.sellBit();
             })
             .catch((error: any) => {
-                Constants.showLongToastMessage(Constants.properties['fingerprint.invalid'], this.toastCtrl);
+                Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
             });
     }
 

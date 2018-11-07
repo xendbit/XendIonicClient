@@ -43,7 +43,7 @@ export class ConfirmMnemonicPage {
   FB_APP_ID: number = 1900836276861220;
 
   constructor( public actionSheetCtrl: ActionSheetController, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams) {
-    this.pageTitle = Constants.properties['confirm.mnemonic.page.title'];
+    this.pageTitle = "Confirm The Passphrase";
     this.email = navParams.get('email');
     this.passphrase = navParams.get('mnemonic');
     let splitted = this.passphrase.split(" ");
@@ -68,15 +68,15 @@ export class ConfirmMnemonicPage {
     this.ls = Constants.storageService;
 
     if (this.shouldRegister === 'true') {
-      this.buttonText = Constants.properties['create.wallet'];
-      this.description = Constants.properties['lets.confirm'];
+      this.buttonText = "Create Wallet";
+      this.description = "Let's confirm you have written down your Passphrase correctly. Please click the words in the order they were shown on the previous page.";
     } else {
-      this.buttonText = Constants.properties['restore.wallet'];
-      this.description = Constants.properties['enter.words'];
+      this.buttonText = "Restore Wallet";
+      this.description = "Enter the Passphrase you were asked to write down during initial configuration/registration.";
     }
 
     if (this.isUpgrade) {
-      this.buttonText = Constants.properties['upgrade.account'];
+      this.buttonText = "Upgrade Account";
     }
   }
 
@@ -100,7 +100,7 @@ export class ConfirmMnemonicPage {
     this.confirmMnemonic = this.confirmMnemonic.toLowerCase().trim();
 
     if (this.isRestore) {
-      this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+      this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
       let postData = {
         passphrase: this.confirmMnemonic
       };
@@ -180,10 +180,10 @@ export class ConfirmMnemonicPage {
           //do nothing the code will never get here.
         } else {
           if (this.confirmMnemonic === undefined) {
-            Constants.showLongToastMessage(Constants.properties['type.words'], this.toastCtrl);
+            Constants.showLongToastMessage("Type the Passphrase shown on the previous page", this.toastCtrl);
             return;
           } else if (minus13thWord !== this.confirmMnemonic) {
-            Constants.showLongToastMessage(Constants.properties['words.dont.match'], this.toastCtrl);
+            Constants.showLongToastMessage("The Passphrase don't match", this.toastCtrl);
             this.confirmMnemonic = "";
             return;
           }
@@ -204,7 +204,7 @@ export class ConfirmMnemonicPage {
     Constants.registrationData['idType'] = "";
     Constants.registrationData['idNumber'] = "";
 
-    let loading = Constants.showLoading(Constants.registrationData['loading'], Constants.registrationData['loadingCtrl'], Constants.properties['loading.dialog.text']);
+    let loading = Constants.showLoading(Constants.registrationData['loading'], Constants.registrationData['loadingCtrl'], "Please Wait...");
     Constants.registrationData['loading'] = loading;
     Constants.registerOnServer();
   }

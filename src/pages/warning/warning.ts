@@ -26,12 +26,12 @@ export class WarningPage {
  takeNoteText: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.pageTitle = Constants.properties['warning.page.title'];
-    this.imReadyText = Constants.properties['i.am.ready'];
-    this.warning1Text = Constants.properties['warning.1'];
-    this.warning2Text = Constants.properties['warning.2'];
-    this.warning3Text = Constants.properties['warning.3'];
-    this.warning4Text = Constants.properties['warning.4'];
+    this.pageTitle = "Warning!!!";
+    this.imReadyText = "I'm Ready";
+    this.warning1Text = "On the next page, we will show you your Passphrase. Get a pen and paper and write it down.";
+    this.warning2Text = "You must not lose it.";
+    this.warning3Text = "In case you lose your phone, or want to migrate this wallet to another device, you will need the Passphrase.";
+    this.warning4Text = "DO NOT LOSE OR FORGET YOUR PASSPHRASE";
     this.takeNoteText = Constants.properties['take.not'];
   }
 

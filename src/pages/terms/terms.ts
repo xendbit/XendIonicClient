@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {Console} from '../utils/console';
 import { NavController, NavParams, IonicPage } from 'ionic-angular';
 import { Http } from '@angular/http';
-import { Constants } from '../utils/constants';
 
 /*
   Generated class for the Terms page.
@@ -22,8 +21,8 @@ export class TermsPage {
  pageTitle: string;
 
   constructor(public http:Http, public navCtrl: NavController, public navParams: NavParams) {
-    this.iAcceptText = Constants.properties['i.accept'];
-    this.pageTitle = Constants.properties['terms.page.title'];
+    this.iAcceptText = "I Accept";
+    this.pageTitle = "Terms and Agreement";
    }
 
   ionViewDidLoad() {

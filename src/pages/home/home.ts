@@ -126,7 +126,7 @@ export class HomePage {
         }
         this.clipboard.copy(this.networkAddress);
         let fees = Constants.getCurrentWalletProperties();
-        let message = Constants.properties['address.copied'].replace("Coin", fees.currencyText);
+        let message = "Coin Address Copied".replace("Coin", fees.currencyText);
         Constants.showLongToastMessage(message, this.toastCtrl);
     }
 
@@ -144,7 +144,7 @@ export class HomePage {
             app.currencyText = fees.currencyText;
             app.btcText = fees.btcText;
 
-            app.yourBTCWalletText = Constants.properties['your.btc.wallet'].replace('Coin', app.btcText);
+            app.yourBTCWalletText = "My Coin Wallet".replace('Coin', app.btcText);
 
             Console.log(app.yourBTCWalletText);
 
@@ -222,7 +222,7 @@ export class HomePage {
         let fees = Constants.getCurrentWalletProperties();
         Console.log(fees);
         if (showLoading) {
-            this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+            this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         }
 
         let key = Constants.WORKING_WALLET + "Address";
@@ -290,19 +290,19 @@ export class HomePage {
     }
 
     initProps() {
-        this.pageTitle = Constants.properties['home.page.title'];
-        this.yourCashWalletText = Constants.properties['your.cash.wallet'];
-        this.clickToCopyText = Constants.properties['click.to.copy'];
-        this.accountBalanceText = Constants.properties['account.balance'];
-        this.historyText = Constants.properties['history'];
-        this.cashSymbolText = Constants.properties['cash.symbol'];
-        this.loadWalletText = Constants.properties['load.wallet'];
-        this.sellBitText = Constants.properties['sell.bit'];
+        this.pageTitle = "Home";
+        this.yourCashWalletText = "My Cash Wallet";
+        this.clickToCopyText = "Click the address to copy it";
+        this.accountBalanceText = "Account Balance";
+        this.historyText = "History";
+        this.cashSymbolText = "NGN";
+        this.loadWalletText = "Fund Wallet";
+        this.sellBitText = "Place Sell Order";
 
         let fees = Constants.getCurrentWalletProperties();
         this.currencyText = fees.currencyText;
         this.btcText = fees.btcText;
-        this.yourBTCWalletText = Constants.properties['your.btc.wallet'].replace('Coin', this.btcText);
+        this.yourBTCWalletText = "My Coin Wallet".replace('Coin', this.btcText);
         this.yourBTCWalletText = this.yourBTCWalletText.replace('/t*BTC/gi', this.btcText);
     }
 

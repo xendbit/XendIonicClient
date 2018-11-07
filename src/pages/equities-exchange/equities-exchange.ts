@@ -42,10 +42,10 @@ export class EquitiesExchangePage {
   }
 
   initProps() {
-    this.homeText = Constants.properties['home'];
-    this.buyText = Constants.properties['buy'];
+    this.homeText = "Home";
+    this.buyText = "Buy";
     this.sendText = "Transfer";
-    this.send2BankText = Constants.properties['send.to.bank'];
-    this.settingsText = Constants.properties['settings'];    
+    this.send2BankText = "Xend2Bank";
+    this.settingsText = "More..";    
   }
 }

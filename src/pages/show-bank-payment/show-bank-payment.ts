@@ -21,13 +21,11 @@ import { Console } from '../utils/console';
   templateUrl: 'show-bank-payment.html',
 })
 export class ShowBankPaymentPage {
-  pageTitle: string;
   usdRate: number = 0;
   btcRate: number = 0;
   btcToNgn = 0;
   btcText: string;
-  currencyText: string;
-  buyBitFormHeaderText: string;
+  currencyText: string;  
   banks = [];
   bankName: string;
   accountNumber: string;
@@ -43,10 +41,8 @@ export class ShowBankPaymentPage {
   brokerAccount = "";
 
   constructor(public alertCtrl: AlertController,  public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public toastCtrl: ToastController) {
-    this.pageTitle = Constants.properties['buy.bit.with.cc.page.title'];
-    this.currencyText = Constants.properties['currency'];
-    this.buyBitFormHeaderText = this.pageTitle;
-    this.btcText = Constants.properties['btc'];
+    this.currencyText = "NGN";    
+    this.btcText = "BTC";
     this.banks = Constants.properties['banks'];
 
     this.sellOrder = this.navParams.get('sellOrder');
@@ -71,9 +67,9 @@ export class ShowBankPaymentPage {
     this.brokerAccount = data['brokerAccount'];
 
     this.ls = Constants.storageService;
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
-    //let pageTitle = Constants.properties['select.payment.method.title'];
+    //let pageTitle = "Select Payment Method";
     setTimeout(function () {
       //Wait for sometimes for storage to be ready
       app.loading.dismiss();

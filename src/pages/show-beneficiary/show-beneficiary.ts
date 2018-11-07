@@ -33,7 +33,7 @@ export class ShowBeneficiaryPage {
     this.dateRegistered = new Date(this.beneficiary.dateRegistered).toLocaleString();    
 
     this.ls = Constants.storageService;
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, Constants.properties['loading.dialog.text']);
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
     setTimeout(function () {
       //Wait for sometimes for storage to be ready
