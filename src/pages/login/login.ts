@@ -61,6 +61,7 @@ export class LoginPage {
 
         setTimeout(function () {            
             app.loginForm.controls.email.setValue(app.ls.getItem("emailAddress"));
+            app.loginForm.controls.exchangeType.setValue("exchange");
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
     }
 
