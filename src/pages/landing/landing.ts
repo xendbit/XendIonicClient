@@ -27,28 +27,44 @@ export class LandingPage {
   loadWalletDelay = 500;
   count = 0;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,  public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
     this.ls = Constants.storageService;
   }
 
   ionViewDidLoad() {
-    this.loadedWallets = [];
-    this.totalAssets = 0;
-    if (this.ls.getItem("exchangeType") === 'exchange') {
-      this.wallets = Constants.properties['wallets'];
-    } else if (this.ls.getItem("exchangeType") === 'equities') {
-      this.wallets = Constants.properties['equities'];
-    }
-    Constants.properties['wallets'] = this.wallets;
-    this.count = 0;
-    this.loadWallets();
+    this.reloadWallets();
+  }
+
+  ionViewDidEnter() {
+    this.reloadWallets();
   }
 
   reloadWallets() {
     if (this.count === 0) {
       this.loadedWallets = [];
+      let temp = Object.assign([], this.wallets);
+      for (let wallet of temp) {
+        if (wallet.default === "true") {
+          let index = this.wallets.indexOf(wallet);
+          this.wallets.splice(index, 1);
+          if (wallet['usdRate'] === undefined) {
+            wallet['usdRate'] = "0.00";
+          }
+          if (wallet['usdBalance'] === undefined) {
+            wallet['usdBalance'] = "0.00";
+          }
+          this.loadedWallets.push(wallet);
+          this.wallets.push(wallet);
+        }
+      }
+
       this.totalAssets = 0;
-      this.wallets = Constants.properties['wallets'];
+      if (this.ls.getItem("exchangeType") === 'exchange') {
+        this.wallets = Constants.properties['wallets'];
+      } else if (this.ls.getItem("exchangeType") === 'equities') {
+        this.wallets = Constants.properties['equities'];
+      }
+      Constants.properties['wallets'] = this.wallets;
       this.count = 0;
       this.loadWallets();
     }
@@ -105,7 +121,7 @@ export class LandingPage {
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);
-        }, this.loadWalletDelay);        
+        }, this.loadWalletDelay);
       }
     } else if (this.ls.getItem("exchangeType") === 'equities') {
       if (wallet['equityId'] !== undefined) {
@@ -167,7 +183,7 @@ export class LandingPage {
 
   loadRate(wallet) {
     let working_wallet = wallet['value'];
-    if (wallet.confirmedAccountBalance === 0 && wallet.value !== "XND") {
+    if (wallet.confirmedAccountBalance === 0 && wallet.default !== "true") {
       this.count = this.count + 1;
       this.loadWallets();
     } else {
@@ -176,10 +192,18 @@ export class LandingPage {
       let url = Constants.GET_USD_RATE_URL + tickerSymbol;
 
       this.http.get(url, Constants.getWalletHeader(working_wallet)).map(res => res.json()).subscribe(responseData => {
+        let index = this.loadedWallets.indexOf(wallet);
+        if (index >= 0) {
+          this.loadedWallets.splice(index, 1);
+        }
         wallet['usdRate'] = responseData.result.rate;
         wallet['usdBalance'] = responseData.result.rate * wallet['confirmedAccountBalance'];
         this.totalAssets += wallet['usdBalance'];
-        this.loadedWallets.push(wallet);
+        if (wallet.default === "true") {
+          this.loadedWallets.splice(0, 0, wallet);
+        } else {
+          this.loadedWallets.push(wallet);
+        }
         this.count = this.count + 1;
         this.loadWallets();
       }, error => {

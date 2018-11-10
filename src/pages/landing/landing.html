@@ -17,7 +17,7 @@
   <ion-card class="header-card">
     <ion-card-content class="header-content">
       <p class="total-assets" (click)="reloadWallets()">Portfolio Value</p>
-      <p class="total-assets">{{totalAssets | currency: 'USD' : 'symbol' : '.2-2'}}</p>
+      <p class="total-assets">{{totalAssets | currency: 'USD' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ion-icon name="refresh" color="xend"></ion-icon></p>
       <button ion-button small full round color="xend" (click)="openHome()">Buy/Sell</button>
     </ion-card-content>
   </ion-card>
