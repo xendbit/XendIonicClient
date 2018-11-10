@@ -44,7 +44,7 @@ export class GettingStartedPage {
   constructor( public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController) {
     this.pageTitle = "Select Account Type";
     this.restoreText = "Restore";
-    this.restoreWalletText = Constants.properties['restore.wallet'];
+    this.restoreWalletText = "Restore Wallet";
     this.basicWalletText = "Basic Wallet";
     this.canSendCoinsText = "SEND, RECEIVE & TRANSFER COINS";
     this.canNotConvertCashText = "Can not convert cash to coins";

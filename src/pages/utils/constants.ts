@@ -10,7 +10,7 @@ import { mnemonicToSeed } from 'bip39';
 
 export class Constants {
     //static TOMCAT_URL = "http://localhost:8080";
-    static APP_VERSION = "v3.2-rc15"
+    static APP_VERSION = "v3.4-rc1"
     static ENABLE_GUEST = true;
     static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
     static TOMCAT_URL = "https://lb.xendbit.com";
@@ -618,7 +618,7 @@ export class Constants {
         let passphrase = ls.getItem('mnemonic');
 
         if (ls.getItem(chainCode + "Address") !== undefined && ls.getItem(chainCode + "Address") !== "") {
-            return;
+            //return;
         }
 
         var hd = HDNode.fromSeedBuffer(mnemonicToSeed(passphrase), network).derivePath("m/0/0/0");
@@ -626,6 +626,7 @@ export class Constants {
         ls.setItem(chainCode + 'Address', hd.getAddress());
         //import private key
         let privKey = hd.keyPair.toWIF();
+        Console.log(privKey);
         let address = hd.getAddress();
         let url = Constants.RPC_PROXY + "/importprivkey/" + privKey + "/" + address + "/" + chainCode;
         http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(_success => { }, _error => { });
