@@ -110,7 +110,6 @@
     <plugin name="cordova-plugin-websocket" spec="^0.12.2" />
     <plugin name="info.protonet.imageresizer" spec="^0.1.1" />
     <plugin name="cordova-plugin-camera" spec="^4.0.2" />
-    <plugin name="phonegap-plugin-barcodescanner" spec="^7.0.2" />
     <plugin name="cordova-android-support-gradle-release" spec="^1.2.0">
         <variable name="ANDROID_SUPPORT_VERSION" value="26.+" />
     </plugin>
@@ -119,4 +118,5 @@
     <plugin name="cordova-plugin-media-capture" spec="^2.0.0" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <engine name="android" spec="6.4.0" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="git+https://github.com/phonegap/phonegap-plugin-barcodescanner.git" />
 </widget>
