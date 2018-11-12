@@ -57,13 +57,15 @@ export class HomePage {
     isEquities = false;
     isBeneficiary = false;
 
-    cryptoSellOrderText = 'Crypto Sell-Order';
+    cryptoSellOrderText = 'Sell';
+    cryptoBuyOrderText = 'Buy';
     fiatSellOrderText = 'Fiat Sell-Order';
 
-    constructor( public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public toastCtrl: ToastController, public localNotifications: LocalNotifications, public actionSheetCtrl: ActionSheetController) {
+    constructor(public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public toastCtrl: ToastController, public localNotifications: LocalNotifications, public actionSheetCtrl: ActionSheetController) {
         this.clipboard = new Clipboard();
         this.ls = Constants.storageService;
         this.initProps();
+        Constants.properties['home'] = this;
     }
 
     loadRate() {
@@ -78,14 +80,6 @@ export class HomePage {
         }, error => {
             //doNothing
         });
-    }
-
-    donate() {
-        this.navCtrl.push('MarketDataPage');
-    }
-
-    buyBit() {
-        this.navCtrl.push('BuyBitPage');
     }
 
     getXndBalance() {
@@ -110,10 +104,6 @@ export class HomePage {
             }, error => {
                 //doNothing
             });
-    }
-
-    switchWallet() {
-        this.navCtrl.push('SwitchWalletPage', { 'home': this });
     }
 
     copyBitcoinAddress() {
@@ -162,10 +152,12 @@ export class HomePage {
     ionViewDidLoad() {
         Console.log('ionViewDidLoad HomePage');
         if (this.ls.getItem("exchangeType") === 'exchange') {
-            this.cryptoSellOrderText = 'Crypto Sell Order';
-            this.fiatSellOrderText = 'Fiat Sell Order'
+            this.cryptoSellOrderText = 'Sell';
+            this.cryptoBuyOrderText = 'Buy';
+            this.fiatSellOrderText = 'Fiat Sell-Order'
         } else {
-            this.cryptoSellOrderText = 'Exchange Assets';
+            this.cryptoSellOrderText = 'Sell';
+            this.cryptoBuyOrderText = 'Buy';
             this.fiatSellOrderText = 'Sell Equities'
         }
         let app = this;
@@ -199,17 +191,19 @@ export class HomePage {
         Console.log('ionViewDidEnter HomePage');
         this.isAdvanced = false;
         this.isEquities = this.ls.getItem("exchangeType") !== 'exchange';
-        
+
         this.refresh(false);
         if (StorageService.ACCOUNT_TYPE === "ADVANCED") {
             this.isAdvanced = true;
         }
 
         if (this.ls.getItem("exchangeType") === 'exchange') {
-            this.cryptoSellOrderText = 'Crypto Sell Order';
+            this.cryptoSellOrderText = 'Sell';
+            this.cryptoBuyOrderText = 'Buy';
             this.fiatSellOrderText = 'Fiat Sell Order'
         } else {
-            this.cryptoSellOrderText = 'Exchange Assets';
+            this.cryptoSellOrderText = 'Sell';
+            this.cryptoBuyOrderText = 'Buy';
             this.fiatSellOrderText = 'Sell Equities'
         }
     }
@@ -306,10 +300,14 @@ export class HomePage {
         this.yourBTCWalletText = this.yourBTCWalletText.replace('/t*BTC/gi', this.btcText);
     }
 
-    exchange() {
-        Console.log("exchange");
+    exchange(type) {
         this.getTransactions(false);
-        this.navCtrl.push('ExchangePage');
+        if (type === 'Sell') {
+            this.getTransactions(false);
+            this.navCtrl.push('SellBitPage');
+        } else {
+            this.navCtrl.push('BuyBitPage');
+        }
     }
 
     sellBit() {

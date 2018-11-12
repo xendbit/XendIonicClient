@@ -1,11 +1,11 @@
-import {FingerprintAIO} from '@ionic-native/fingerprint-aio';
-import {StorageService} from './../utils/storageservice';
-import {Constants} from './../utils/constants';
-import {Component} from '@angular/core';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+import { StorageService } from './../utils/storageservice';
+import { Constants } from './../utils/constants';
+import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, LoadingController, Loading, AlertController, IonicPage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
-import {Http} from '@angular/http';
-import {FormBuilder, Validators} from '@angular/forms';
+import { Http } from '@angular/http';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Console } from '../utils/console';
 
 /**
@@ -38,8 +38,25 @@ export class ExchangePage {
     loading: Loading;
     selectedPaymentMethod: string;
     rate = 0;
+    type = 'Sell';
+    getOrPay = "get";
+    sentOrDeducted = "sent to";
+    isSellEnabled = false;
+    isBuyEnabled = true;
 
-    constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController,  public loadingCtrl: LoadingController) {
+    switchTo(type) {
+        this.type = type;
+        this.getOrPay = this.type === 'Sell' ? 'get' : 'pay';
+        this.sentOrDeducted = this.type === 'Sell' ? 'sent to': 'deducted from';
+        if (type === 'Sell') {
+            this.isSellEnabled = false;
+            this.isBuyEnabled = true;
+        } else {
+            this.isSellEnabled = true;
+            this.isBuyEnabled = false;
+        }
+    }
+    constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public loadingCtrl: LoadingController) {
         this.sellForm = this.formBuilder.group({
             numberOfBTC: ['', Validators.required],
             pricePerBTC: ['', Validators.required],
@@ -52,38 +69,39 @@ export class ExchangePage {
         this.numberOfBTCText = "Number of Coins";
         this.priceText = "Price Per Coin";
 
+        this.ls = Constants.storageService;
+        let app = this;
+        //let pageTitle = "Select Payment Method";
+        setTimeout(function () {
+            //Wait for sometimes for storage to be ready
+            app.loadRate();
+        }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
+    }
+
+    ionViewDidLoad() {
+    }
+
+    ionViewDidEnter() {
+        Console.log('ionViewDidEnter ExchangePage');
+        this.init();
+    }
+
+    init() {
+        this.paymentMethods = [];
         let fees = Constants.getCurrentWalletProperties();
         this.currencyText = fees.currencyText;
         this.btcText = fees.btcText;
         this.priceText = this.priceText.replace('Coin', this.btcText);
         this.numberOfBTCText = this.numberOfBTCText.replace('Coin', this.btcText);
 
+        this.type = 'Sell';
+
         let wallets = Constants.properties['wallets'];
-        for (let w in wallets) {
-            let wallet = wallets[w];
+        for (let wallet of wallets) {
             if (wallet['value'] !== Constants.WORKING_WALLET) {
-                this.paymentMethods.push(wallets[w]);
+                this.paymentMethods.push(wallet);
             }
         }
-
-        // this.bankPaymentMenthods = Constants.properties['payment.methods'];
-        // for(let bpm of this.bankPaymentMenthods) {
-        //     this.paymentMethods.push(bpm);
-        // }        
-
-        this.ls = Constants.storageService;
-        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-        let app = this;
-        //let pageTitle = "Select Payment Method";
-        setTimeout(function () {
-            //Wait for sometimes for storage to be ready
-            app.loading.dismiss();
-            app.loadRate();
-        }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
-    }
-
-    ionViewDidLoad() {
-        Console.log('ionViewDidLoad ExchangePage');
     }
 
     loadRate() {
@@ -101,14 +119,31 @@ export class ExchangePage {
     }
 
     sellBit() {
-        let isValid = false;
         let sb = this.sellForm.value;
-        let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
+
+        let fromCoin = Constants.WORKING_WALLET;
+        let toCoin = this.selectedPaymentMethod;
+        let key = Constants.WORKING_WALLET + "Address";
+        let sellerFromAddress = this.ls.getItem(key);
+        let networdAddress = sellerFromAddress;
+        let sellerToAddress = sb.recipientOtherAddress;
+
+        if (this.type === 'Buy') {
+            //switch sides
+            let temp = sellerFromAddress;
+            sellerFromAddress = sellerToAddress;
+            sellerToAddress = temp;
+            temp = fromCoin;
+            fromCoin = toCoin;
+            toCoin = temp;
+        }
+
+        let isValid = false;        
+        let balance = +this.ls.getItem(fromCoin + "confirmedAccountBalance");
         let rate = +sb.pricePerBTC;
         let password = sb.password;
         let coinAmount = +sb.numberOfBTC;
-        let amountToRecieve = +sb.amountToRecieve;
-        let sellerToAddress = sb.recipientOtherAddress;
+        let amountToRecieve = +sb.amountToRecieve;        
 
         let fees = Constants.getCurrentWalletProperties();
 
@@ -131,8 +166,6 @@ export class ExchangePage {
 
         if (isValid) {
             let amountToSell = coinAmount;
-            let key = Constants.WORKING_WALLET + "Address";
-            let sellerFromAddress = this.ls.getItem(key);
 
             this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
             let postData = {
@@ -140,12 +173,12 @@ export class ExchangePage {
                 amountToRecieve: amountToRecieve,
                 sellerFromAddress: sellerFromAddress,
                 sellerToAddress: sellerToAddress,
-                fromCoin: Constants.WORKING_WALLET,
-                toCoin: this.selectedPaymentMethod,
+                fromCoin: fromCoin,
+                toCoin: toCoin,
                 rate: rate,
                 emailAddress: this.ls.getItem("emailAddress"),
                 password: password,
-                networkAddress: sellerFromAddress,
+                networkAddress: networdAddress,
                 currencyId: fees.currencyId
             }
 
@@ -177,11 +210,10 @@ export class ExchangePage {
             clientId: "Fingerprint-Demo",
             clientSecret: "password", //Only necessary for Android
             disableBackup: true  //Only for Android(optional)
+        }).then((result: any) => {
+            this.sellForm.controls.password.setValue(this.ls.getItem("password"));
+            this.sellBit();
         })
-            .then((result: any) => {
-                this.sellForm.controls.password.setValue(this.ls.getItem("password"));
-                this.sellBit();
-            })
             .catch((error: any) => {
                 Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
             });
@@ -206,7 +238,7 @@ export class ExchangePage {
                 let amount = toSell * this.rate;
                 this.sellForm.controls.amountToRecieve.setValue(amount.toFixed(3));
             }
-        }, error => {
+        }, _error => {
             this.loading.dismiss();
             Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
         });

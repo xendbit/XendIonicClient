@@ -19,9 +19,9 @@ export class TabsPage {
   // this tells the tabs component which Pages
   // should be each tab's root Page
   tab1Root: any = 'LandingPage';
-  tab2Root: any = 'ViewBeneficiariesPage';
+  tab2Root: any = 'MyOrdersPage';
   tab3Root: any = 'SendBitPage';
-  tab4Root: any = 'SellBitPage';
+  tab4Root: any = 'ExchangePage';
   tab5Root: any = 'SettingsPage';
 
  isAdvanced: boolean = false;

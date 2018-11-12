@@ -23,7 +23,7 @@ export class SwitchWalletPage {
   home: HomePage;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.ls = Constants.storageService;
-    this.home = this.navParams.get('home');
+    this.home = Constants.properties['home'];
   }
 
   ionViewDidLoad() {

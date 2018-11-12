@@ -39,11 +39,18 @@ export class MyOrdersPage {
     fromCoin: string;
     toCoin: string;
     showHeaders = false;
+    type = 'Sell';
+    isSellEnabled = false;
+    isBuyEnabled = true;
+    lastValue: String;
 
-    constructor( public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+
+    constructor(public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
         let fees = Constants.getCurrentWalletProperties();
         this.currentWallet = fees;
 
+        Console.log(fees);
+        Console.log(this.currentWallet);
         this.loadRate();
 
         this.ls = Constants.storageService;
@@ -75,8 +82,22 @@ export class MyOrdersPage {
         });
     }
 
+    switchTo(type) {
+        this.type = type;
+        if (type === 'Sell') {
+            this.isSellEnabled = false;
+            this.isBuyEnabled = true;
+        } else {
+            this.isSellEnabled = true;
+            this.isBuyEnabled = false;
+        } 
+        
+        this.pairSelected(this.lastValue);
+    }
+
     pairSelected(value) {
         this.showHeaders = false;
+        this.lastValue = value;
         Console.log("Selected Pair");
         let selectedPair = value;
         this.sellersPairs = [];
@@ -84,8 +105,16 @@ export class MyOrdersPage {
             let splitted = selectedPair.split(" -> ");
             this.toCoin = splitted[1];
             this.fromCoin = splitted[0];
-            if (seller.toCoin == this.toCoin) {
-                this.sellersPairs.push(seller);
+
+            if (this.type === 'Sell') {
+                if (seller.toCoin === this.toCoin) {
+                    this.sellersPairs.push(seller);
+                }
+            }
+            if (this.type === 'Buy') {
+                if (seller.fromCoin === this.toCoin) {
+                    this.sellersPairs.push(seller);
+                }
             }
         }
 
@@ -93,7 +122,7 @@ export class MyOrdersPage {
     }
 
     loadSellers() {
-        this.currencyPairs = [];        
+        this.currencyPairs = [];
         this.sellersPairs = [];
         this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         let wallets = Constants.properties['wallets'];
@@ -122,7 +151,7 @@ export class MyOrdersPage {
         this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.sellers = responseData.result;
             this.loading.dismiss();
-            if(this.currencyPair !== undefined && this.currencyPair !== "") {
+            if (this.currencyPair !== undefined && this.currencyPair !== "") {
                 this.pairSelected(this.currencyPair);
             }
         }, _error => {
@@ -148,7 +177,7 @@ export class MyOrdersPage {
         this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.loading.dismiss();
             let deletedId = responseData.result;
-            if (deletedId > 0) {                
+            if (deletedId > 0) {
                 Constants.showLongToastMessage("Order Deleted Successfully", this.toastCtrl);
                 this.loadSellers();
             } else {

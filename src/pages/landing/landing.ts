@@ -29,13 +29,14 @@ export class LandingPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
     this.ls = Constants.storageService;
+    this.wallets = Constants.properties['wallets'];
   }
 
   ionViewDidLoad() {
-    this.reloadWallets();
   }
 
   ionViewDidEnter() {
+    Console.log("Entered");
     this.reloadWallets();
   }
 
@@ -152,8 +153,6 @@ export class LandingPage {
 
   getTransactions(wallet) {
     let fees = Constants.getWalletProperties(wallet['value']);
-    Console.log(wallet);
-    Console.log(fees);
 
     let key = wallet['value'] + "Address";
 
@@ -164,8 +163,6 @@ export class LandingPage {
       currencyId: fees.currencyId,
       equityId: fees.equityId
     };
-
-    Console.log(postData);
 
     this.http.post(Constants.GET_TX_URL, postData, Constants.getWalletHeader(wallet['value']))
       .map(res => res.json())
@@ -194,14 +191,16 @@ export class LandingPage {
       this.http.get(url, Constants.getWalletHeader(working_wallet)).map(res => res.json()).subscribe(responseData => {
         let index = this.loadedWallets.indexOf(wallet);
         if (index >= 0) {
-          this.loadedWallets.splice(index, 1);
-        }
-        wallet['usdRate'] = responseData.result.rate;
-        wallet['usdBalance'] = responseData.result.rate * wallet['confirmedAccountBalance'];
-        this.totalAssets += wallet['usdBalance'];
-        if (wallet.default === "true") {
-          this.loadedWallets.splice(0, 0, wallet);
+          this.loadedWallets[index]['usdRate'] = responseData.result.rate;
+          this.loadedWallets[index]['usdBalance'] = responseData.result.rate * wallet['confirmedAccountBalance'];
+          this.totalAssets += this.loadedWallets[index]['usdBalance'];
         } else {
+          wallet['usdRate'] = responseData.result.rate;
+          wallet['usdBalance'] = responseData.result.rate * wallet['confirmedAccountBalance'];
+          this.totalAssets += wallet['usdBalance'];
+        }
+
+        if (index < 0) {
           this.loadedWallets.push(wallet);
         }
         this.count = this.count + 1;
@@ -213,7 +212,7 @@ export class LandingPage {
   }
 
   openHome() {
-    Constants.WORKING_WALLET = "XND";
+    Constants.WORKING_WALLET = "BTC";
     this.navCtrl.push('HomePage');
   }
 

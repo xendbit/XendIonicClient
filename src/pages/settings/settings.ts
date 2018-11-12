@@ -21,22 +21,23 @@ import 'rxjs/add/operator/map';
 })
 export class SettingsPage {
 
- pageTitle: string;
- restoreWalletText: string;
- logoutText: string;
- showMnemonicText: string;
- updgradeAccountText: string;
- afterUpgradeWarningText: string;
- accountType;
- ls;
- loading: Loading;
- showMnemonicForm;
- passwordText: string;
- revealText: string;
- isAdvanced = false;
- isBeneficiary = false;
+  pageTitle: string;
+  restoreWalletText: string;
+  logoutText: string;
+  showMnemonicText: string;
+  updgradeAccountText: string;
+  afterUpgradeWarningText: string;
+  accountType;
+  ls;
+  loading: Loading;
+  showMnemonicForm;
+  passwordText: string;
+  revealText: string;
+  isAdvanced = false;
+  isBeneficiary = false;
+  canSwitchWallet = false;
 
-  constructor(public http: Http, public toastCtrl: ToastController, public formBuilder: FormBuilder, public loadingCtrl: LoadingController,  public alertCtrl: AlertController, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public http: Http, public toastCtrl: ToastController, public formBuilder: FormBuilder, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
     this.showMnemonicForm = formBuilder.group({
       password: ['', Validators.required]
     });
@@ -46,7 +47,8 @@ export class SettingsPage {
     this.logoutText = "Logout";
     this.updgradeAccountText = "Upgrade Account";
     this.showMnemonicText = "Show my Passphrase";
-    this.revealText = "Reveal";    
+    this.revealText = "Reveal";
+    this.canSwitchWallet = Constants.properties['home'] !== undefined;
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
@@ -64,14 +66,18 @@ export class SettingsPage {
 
   ionViewDidEnter() {
     Console.log('ionViewDidEnter SettingsPage');
-    if(StorageService.ACCOUNT_TYPE === "ADVANCED") {
+    if (StorageService.ACCOUNT_TYPE === "ADVANCED") {
       this.isAdvanced = true;
-    }    
+    }
     this.afterUpgradeWarningText = Constants.AFTER_UPGRADE_WARNING;
     this.accountType = StorageService.ACCOUNT_TYPE;
     this.isBeneficiary = StorageService.IS_BENEFICIARY;
   }
-  
+
+  switchWallet() {
+    this.navCtrl.push('SwitchWalletPage');
+  }
+
   logout() {
     if (Constants.AFTER_UPGRADE_WARNING !== "") {
       Constants.AFTER_UPGRADE_WARNING = "";
@@ -83,15 +89,15 @@ export class SettingsPage {
     let postData = {
       password: this.ls.getItem("password"),
       emailAddress: this.ls.getItem("emailAddress"),
-      beneficiary: true      
+      beneficiary: true
     };
-    
+
     let loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     this.http.post(Constants.BECOME_BENEFICIARY_URL, postData, Constants.getHeader())
       .map(res => res.json())
       .subscribe(responseData => {
         loading.dismiss();
-        if(responseData.result === "successfull") {
+        if (responseData.result === "successfull") {
           StorageService.IS_BENEFICIARY = true;
           this.isBeneficiary = true;
           Constants.showLongerToastMessage("You are now a beneficiary, you will show up in donor searches.", this.toastCtrl);
@@ -101,8 +107,8 @@ export class SettingsPage {
       }, error => {
         loading.dismiss();
         Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
-      });    
-    
+      });
+
   }
 
   upgrade() {
@@ -148,5 +154,5 @@ export class SettingsPage {
     });
     confirm.present();
   }
-  
+
 }
