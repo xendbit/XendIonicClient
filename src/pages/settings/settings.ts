@@ -69,6 +69,7 @@ export class SettingsPage {
     if (StorageService.ACCOUNT_TYPE === "ADVANCED") {
       this.isAdvanced = true;
     }
+    this.canSwitchWallet = Constants.properties['home'] !== undefined;
     this.afterUpgradeWarningText = Constants.AFTER_UPGRADE_WARNING;
     this.accountType = StorageService.ACCOUNT_TYPE;
     this.isBeneficiary = StorageService.IS_BENEFICIARY;
