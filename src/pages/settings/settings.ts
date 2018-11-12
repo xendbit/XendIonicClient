@@ -36,6 +36,7 @@ export class SettingsPage {
   isAdvanced = false;
   isBeneficiary = false;
   canSwitchWallet = false;
+  canLogout = true;
 
   constructor(public http: Http, public toastCtrl: ToastController, public formBuilder: FormBuilder, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
     this.showMnemonicForm = formBuilder.group({
@@ -70,6 +71,7 @@ export class SettingsPage {
       this.isAdvanced = true;
     }
     this.canSwitchWallet = Constants.properties['home'] !== undefined;
+    this.canLogout = !this.platform.is('ios');
     this.afterUpgradeWarningText = Constants.AFTER_UPGRADE_WARNING;
     this.accountType = StorageService.ACCOUNT_TYPE;
     this.isBeneficiary = StorageService.IS_BENEFICIARY;

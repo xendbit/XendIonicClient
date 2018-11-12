@@ -201,14 +201,13 @@ export class SendBitPage {
   }
 
   scanCode() {
-    let app = this;
     this.barcodeScanner.scan().then((barcodeData) => {
-      if (barcodeData.cancelled === false) {
-        app.sendBitForm.controls.networkAddress.setValue(barcodeData.text);
-      } else {
+      if (barcodeData.cancelled) {
         Constants.showLongerToastMessage('Barcode scanner cancelled', this.toastCtrl);
+      } else {
+        this.sendBitForm.controls.networkAddress.setValue(barcodeData.text);        
       }
-    }, (err) => {
+    }, (_err) => {
       Constants.showLongerToastMessage('Error launching barcode scanner', this.toastCtrl);
     });
   }

@@ -50,7 +50,7 @@
         </ion-card-content>
     </ion-card> -->
 
-    <ion-card>
+    <ion-card *ngIf="canLogout">
         <ion-card-content>
             <button ion-button full round color="fingerprint" (click)="logout();" icon-right>{{logoutText}}
                 <ion-icon name="log-out"></ion-icon>
