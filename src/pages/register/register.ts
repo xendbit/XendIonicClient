@@ -187,7 +187,7 @@ export class RegisterPage {
         //return;
         this.idImagePath = "UNDEFINED";
         this.idImage = "UNDEFINED";
-      }
+      })
 
       let url = Constants.RESTORE_USER_URL;
       url = Constants.NEW_USER_URL;
@@ -229,6 +229,18 @@ export class RegisterPage {
       }
     }
     
+    if(rf.phoneNumber !== undefined) {
+      if(rf.phoneNumber.startsWith("+")) {
+        Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
+        return;
+      }
+
+      if(rf.phoneNumber.startsWith("0")) {
+        Constants.showLongerToastMessage("Phone number entered is not in international format", this.toastCtrl);
+        return;
+      }
+    }
+
     Constants.registrationData['email'] = rf.email;
     Constants.registrationData['phoneNumber'] = rf.phoneNumber;
     Constants.registrationData['surName'] = rf.surName;
@@ -248,5 +260,15 @@ export class RegisterPage {
     StorageService.IS_BENEFICIARY = rf.isBeneficiary;
     
     Constants.registerOnServer();
+  }
+
+  countrySelected(country) {
+    if(country === "Nigeria") {
+      this.registerForm.controls.phoneNumber.setValue("234");
+    } else if(country === "Kenya") {
+      this.registerForm.controls.phoneNumber.setValue("254");
+    } else if(country === "Ghana") {
+      this.registerForm.controls.phoneNumber.setValue("233");
+    }
   }
 }

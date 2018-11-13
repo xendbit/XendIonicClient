@@ -41,17 +41,17 @@
 
             <ion-item *ngIf="!isBasic">
                 <ion-label stacked><sup>**</sup>Country of Residence</ion-label>
-                <ion-select formControlName="country" placeholder="Click to select country">
+                <ion-select formControlName="country" placeholder="Click to select country" (ionChange)="countrySelected($event)">
                     <ion-option value="Nigeria">Nigeria</ion-option>
                     <ion-option value="Kenya">Kenya</ion-option>
                     <ion-option value="Ghana">Ghana</ion-option>
-                    <ion-option value="Ghana">Others</ion-option>
+                    <ion-option value="Nigeria">Others</ion-option>
                 </ion-select>
             </ion-item>
 
             <ion-item *ngIf="!isBasic">
                 <ion-label stacked>{{phoneNumberText}} (optional)</ion-label>
-                <ion-input type="number" formControlName="phoneNumber"></ion-input>
+                <ion-input type="number" formControlName="phoneNumber" placeholder="International Format"></ion-input>
             </ion-item>
 
             <ion-item *ngIf="!isBasic">

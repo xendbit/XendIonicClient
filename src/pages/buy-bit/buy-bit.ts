@@ -41,16 +41,16 @@ export class BuyBitPage {
     toCoin: string;
     showHeaders = false;
 
-    constructor( public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+    constructor(public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
         let fees = Constants.getCurrentWalletProperties();
         this.currentWallet = fees;
 
         this.loadRate();
 
         this.ls = Constants.storageService;
-                
+
         //let pageTitle = "Select Payment Method";
-        setTimeout(function () {                        
+        setTimeout(function () {
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
     }
 
@@ -58,12 +58,12 @@ export class BuyBitPage {
         Console.log('ionViewDidLoad BuyBitNgntPage');
     }
 
-    ionViewDidEnter(){
+    ionViewDidEnter() {
         this.loadSellers();
     }
 
     loadRate() {
-        let fees = Constants.getCurrentWalletProperties();        
+        let fees = Constants.getCurrentWalletProperties();
         let tickerSymbol = fees.tickerSymbol;
         let url = Constants.GET_USD_RATE_URL + tickerSymbol;
 
@@ -85,13 +85,13 @@ export class BuyBitPage {
             let splitted = selectedPair.split(" -> ");
             this.toCoin = splitted[1];
             this.fromCoin = splitted[0];
-            if(seller.toCoin == this.toCoin) {
+            if (seller.toCoin == this.toCoin) {
                 this.sellersPairs.push(seller);
             }
         }
-        
+
         this.showHeaders = this.sellersPairs.length > 0;
-    } 
+    }
 
     loadSellers() {
         this.currencyPairs = [];
@@ -105,14 +105,14 @@ export class BuyBitPage {
             }
         }
 
-        for(let bpm of Constants.properties['payment.methods']) {
+        for (let bpm of Constants.properties['payment.methods']) {
             let pair = Constants.WORKING_WALLET + " -> " + bpm.value;
             this.currencyPairs.push(pair);
-        }        
+        }
 
         Console.log(this.currencyPairs);
 
-        let url = Constants.GET_SELL_ORDERS_TX_URL;    
+        let url = Constants.GET_SELL_ORDERS_TX_URL;
 
         let postData = {
             emailAddress: this.ls.getItem("emailAddress"),
@@ -146,21 +146,40 @@ export class BuyBitPage {
             message: message,
             buttons: [
                 {
+                    text: 'Buy',
+                    handler: () => {
+                        this.getBuyerOtherAddress(seller);
+                    }
+                },
+                {
+                    text: 'Chat With Seller',
+                    handler: () => {
+                        this.sendExternalMessage(seller);
+                    }
+                },
+                {
                     text: "Don't Buy",
                     role: 'cancel',
                     handler: () => {
                         //doNothing
                     }
-                },
-                {
-                    text: 'Buy',
-                    handler: () => {
-                        this.getBuyerOtherAddress(seller);
-                    }
                 }
             ]
         });
         alert.present();
+    }
+
+    sendExternalMessage(seller) {
+        let phoneNumber = seller.seller.phoneNumber;
+        //let phoneNumber = '2348025614173';
+        if (phoneNumber === undefined || phoneNumber === null) {
+            Constants.showLongerToastMessage("You can't chat with this seller.", this.toastCtrl);
+        } else {
+            let coin = seller.toCoin;
+            let message = "A buyer is interested in your " + coin + ".";            
+            let url = "https://wa.me/" + phoneNumber + "?text=" + message;
+            window.open(url,'_system', 'location=yes');
+        }
     }
 
     getBuyerOtherAddress(seller) {
@@ -239,7 +258,7 @@ export class BuyBitPage {
             .subscribe(responseData => {
                 this.loading.dismiss();
                 let confirmedAccountBalance = +responseData.result.balance;
-                
+
                 let xendFees = amountToSend * +fees.xendFees;
                 let totalAmount: number = amountToSend + +fees.blockFees + xendFees;
                 if (confirmedAccountBalance < totalAmount) {
