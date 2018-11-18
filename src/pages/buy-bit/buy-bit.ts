@@ -1,3 +1,4 @@
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Observable } from 'rxjs/Rx';
 
 import { StorageService } from './../utils/storageservice';
@@ -41,7 +42,7 @@ export class BuyBitPage {
     toCoin: string;
     showHeaders = false;
 
-    constructor(public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+    constructor(private iab: InAppBrowser, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
         let fees = Constants.getCurrentWalletProperties();
         this.currentWallet = fees;
 
@@ -80,17 +81,19 @@ export class BuyBitPage {
         this.showHeaders = false;
         Console.log("Selected Pair");
         let selectedPair = value;
-        this.sellersPairs = [];
-        for (let seller of this.sellers) {
-            let splitted = selectedPair.split(" -> ");
-            this.toCoin = splitted[1];
-            this.fromCoin = splitted[0];
-            if (seller.toCoin == this.toCoin) {
-                this.sellersPairs.push(seller);
+        if (selectedPair !== undefined && selectedPair.indexOf("->") >= 0) {
+            this.sellersPairs = [];
+            for (let seller of this.sellers) {
+                let splitted = selectedPair.split(" -> ");
+                this.toCoin = splitted[1];
+                this.fromCoin = splitted[0];
+                if (seller.toCoin == this.toCoin) {
+                    this.sellersPairs.push(seller);
+                }
             }
-        }
 
-        this.showHeaders = this.sellersPairs.length > 0;
+            this.showHeaders = this.sellersPairs.length > 0;
+        }
     }
 
     loadSellers() {
@@ -170,15 +173,17 @@ export class BuyBitPage {
     }
 
     sendExternalMessage(seller) {
-        let phoneNumber = seller.seller.phoneNumber;
-        //let phoneNumber = '2348025614173';
+        //let phoneNumber = seller.seller.phoneNumber;
+        let phoneNumber = '2348032517996';
         if (phoneNumber === undefined || phoneNumber === null) {
             Constants.showLongerToastMessage("You can't chat with this seller.", this.toastCtrl);
         } else {
-            let coin = seller.toCoin;
-            let message = "A buyer is interested in your " + coin + ".";            
+            let coin = seller.fromCoin;
+            let toCoin = seller.toCoin;
+            let message = "I'm is interested in your " + coin + " -> " + toCoin + " trade posted on XendBit";
             let url = "https://wa.me/" + phoneNumber + "?text=" + message;
-            window.open(url,'_system', 'location=yes');
+            const browser = this.iab.create(url, "_system", "hardwareback=yes,");
+            browser.close();
         }
     }
 

@@ -66,6 +66,7 @@ export class HomePage {
         this.ls = Constants.storageService;
         this.initProps();
         Constants.properties['home'] = this;
+        Console.log("Working Wallet: " + Constants.WORKING_WALLET);
     }
 
     loadRate() {

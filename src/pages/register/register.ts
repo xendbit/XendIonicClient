@@ -187,7 +187,7 @@ export class RegisterPage {
         //return;
         this.idImagePath = "UNDEFINED";
         this.idImage = "UNDEFINED";
-      })
+      }
 
       let url = Constants.RESTORE_USER_URL;
       url = Constants.NEW_USER_URL;

@@ -34,9 +34,14 @@ ion-col {
     font-weight: bold;
 }
 
- .card {
-     background-color: rgba(0,0,0,0) !important;
- }
+.card {
+    background-color: rgba(0, 0, 0, 0) !important;
+    padding: 0 !important;
+}
+
+.card-content {
+    padding: 0 !important;
+}
 
 ion-content {
     background-image: url("../assets/img/bg_lb.png") !important;
@@ -142,11 +147,11 @@ ion-icon {
 }
 
 .card-header {
-    color:white;   
+    color: white;
 }
 
 .card-content {
-    color:white;   
+    color: white;
 }
 
 ion-content {

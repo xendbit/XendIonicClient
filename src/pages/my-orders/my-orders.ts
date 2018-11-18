@@ -90,8 +90,8 @@ export class MyOrdersPage {
         } else {
             this.isSellEnabled = true;
             this.isBuyEnabled = false;
-        } 
-        
+        }
+
         this.pairSelected(this.lastValue);
     }
 
@@ -100,25 +100,28 @@ export class MyOrdersPage {
         this.lastValue = value;
         Console.log("Selected Pair");
         let selectedPair = value;
-        this.sellersPairs = [];
-        for (let seller of this.sellers) {
-            let splitted = selectedPair.split(" -> ");
-            this.toCoin = splitted[1];
-            this.fromCoin = splitted[0];
+        if (selectedPair !== undefined && selectedPair.indexOf("->") >= 0) {
 
-            if (this.type === 'Sell') {
-                if (seller.toCoin === this.toCoin) {
-                    this.sellersPairs.push(seller);
+            this.sellersPairs = [];
+            for (let seller of this.sellers) {
+                let splitted = selectedPair.split(" -> ");
+                this.toCoin = splitted[1];
+                this.fromCoin = splitted[0];
+
+                if (this.type === 'Sell') {
+                    if (seller.toCoin === this.toCoin) {
+                        this.sellersPairs.push(seller);
+                    }
+                }
+                if (this.type === 'Buy') {
+                    if (seller.fromCoin === this.toCoin) {
+                        this.sellersPairs.push(seller);
+                    }
                 }
             }
-            if (this.type === 'Buy') {
-                if (seller.fromCoin === this.toCoin) {
-                    this.sellersPairs.push(seller);
-                }
-            }
+
+            this.showHeaders = this.sellersPairs.length > 0;
         }
-
-        this.showHeaders = this.sellersPairs.length > 0;
     }
 
     loadSellers() {

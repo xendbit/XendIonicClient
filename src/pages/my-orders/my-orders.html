@@ -44,7 +44,7 @@
 
     <ion-item style="background-color: none">
         <ion-label stacked>Select Pairs</ion-label>
-        <ion-select [(ngModel)]="currencyPair" placeholder="Click to select currency pairs" (ionChange)="pairSelected($event)">
+        <ion-select interface='action-sheet' [(ngModel)]="currencyPair" placeholder="Click to select currency pairs" (ionChange)="pairSelected($event)">
             <ion-option *ngFor="let currencyPair of currencyPairs" value="{{currencyPair}}">
                 {{currencyPair}}
             </ion-option>

@@ -49,13 +49,13 @@
                 </ion-item>
                 <ion-item *ngIf="!isOwner">
                     <ion-label stacked>{{beneficiaryBankText}}</ion-label>
-                    <ion-select formControlName="beneficiaryBank" placeholder="Click to select bank">
+                    <ion-select interface='action-sheet' formControlName="beneficiaryBank" placeholder="Click to select bank">
                         <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
                     </ion-select>
                 </ion-item>                
                 <ion-item>
                     <ion-label stacked>Accepted Payment Method</ion-label>
-                    <ion-select formControlName="acceptedPaymentMethods" placeholder="Click to select payment methods">
+                    <ion-select interface='action-sheet' formControlName="acceptedPaymentMethods" placeholder="Click to select payment methods">
                         <ion-option *ngFor="let paymentMethod of paymentMethods" value="{{paymentMethod.value}}">
                             {{paymentMethod.text}}
                         </ion-option>
