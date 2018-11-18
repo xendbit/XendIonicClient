@@ -174,13 +174,16 @@ export class BuyBitPage {
 
     sendExternalMessage(seller) {
         //let phoneNumber = seller.seller.phoneNumber;
-        let phoneNumber = '2348032517996';
+        let phoneNumber = '2348025943549';
         if (phoneNumber === undefined || phoneNumber === null) {
             Constants.showLongerToastMessage("You can't chat with this seller.", this.toastCtrl);
         } else {
             let coin = seller.fromCoin;
             let toCoin = seller.toCoin;
-            let message = "I'm is interested in your " + coin + " -> " + toCoin + " trade posted on XendBit";
+            let priceFrom = seller.amountToSell;
+            let priceTo = seller.amountToRecieve;
+            let rate = seller.rate;
+            let message = "I'm is interested in your " + priceFrom + coin +  " -> " + priceTo + toCoin + " (@ " + rate + ") trade posted on XendBit";
             let url = "https://wa.me/" + phoneNumber + "?text=" + message;
             const browser = this.iab.create(url, "_system", "hardwareback=yes,");
             browser.close();
