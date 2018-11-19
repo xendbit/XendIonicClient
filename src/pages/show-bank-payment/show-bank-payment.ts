@@ -45,9 +45,6 @@ export class ShowBankPaymentPage {
     this.btcText = "BTC";
     this.banks = Constants.properties['banks'];
 
-    this.sellOrder = this.navParams.get('sellOrder');
-    Console.log(this.sellOrder);
-
     let data = this.sellOrder;
     let sellerToAddress = data['sellerToAddress'];
     let splitted = sellerToAddress.split(":");
@@ -75,6 +72,11 @@ export class ShowBankPaymentPage {
       app.loading.dismiss();
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
 
+  }
+
+  ionViewWillEnter(){
+    this.sellOrder = this.navParams.get('sellOrder');
+    Console.log(this.sellOrder);   
   }
 
   ionViewDidLoad() {
@@ -145,7 +147,7 @@ export class ShowBankPaymentPage {
     this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       //doNothing
     }, error => {
-      Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+      Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
     });
   }
 

@@ -3,9 +3,10 @@ import { StorageService } from './../utils/storageservice';
 import { Console } from './../utils/console';
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
-import { NavController, NavParams, Loading, LoadingController, AlertController, ViewController, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, Loading, LoadingController, AlertController, ViewController, IonicPage, ToastController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the ShowBeneficiaryPage page.
@@ -27,7 +28,7 @@ export class ShowBeneficiaryPage {
   dataImage = "";
   loading: Loading;
 
-  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage) {
+  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage, public toastCtrl: ToastController) {
     this.beneficiary = Constants.registrationData['beneficiary'];
     Console.log(this.beneficiary);
     this.dateRegistered = new Date(this.beneficiary.dateRegistered).toLocaleString();    
@@ -75,7 +76,7 @@ export class ShowBeneficiaryPage {
         Console.log(responseData);
         this.dataImage = 'data:image/jpeg;base64,' + responseData.result;
       }, error => {
-        Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+        Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
       }
     )    
   }  

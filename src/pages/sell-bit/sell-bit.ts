@@ -64,7 +64,6 @@ export class SellBitPage {
         this.beneficiaryAccountNumberText = "Beneficiary Account Number";
         this.beneficiaryBankText = "Beneficiary Bank";
         this.passwordText = "Wallet Password";
-        this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;
 
         let fees = Constants.getCurrentWalletProperties();
         this.currencyText = fees.currencyText;
@@ -90,6 +89,10 @@ export class SellBitPage {
             app.loading.dismiss();
 
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
+    }
+
+    ionViewWillEnter(){
+        this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;     
     }
 
     ionViewDidLoad() {
@@ -191,7 +194,7 @@ export class SellBitPage {
             }
         }, error => {
             this.loading.dismiss();
-            Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+            Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
         });
     }
 
@@ -242,7 +245,7 @@ export class SellBitPage {
             }
         }, error => {
             this.loading.dismiss();
-            Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+            Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
         });
     }
 

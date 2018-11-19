@@ -1,7 +1,7 @@
 import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
 import { Console } from '../utils/console';
-import { Platform, AlertController, NavController, NavParams } from 'ionic-angular';
+import { Platform, AlertController, NavController, NavParams, ToastController } from 'ionic-angular';
 import { Constants } from '../utils/constants';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -26,7 +26,7 @@ export class StartPage {
   ss: StorageService;
   appVersion: string;
 
-  constructor(public storage: Storage, public alertCtrl: AlertController, public platform: Platform, public http: Http, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public storage: Storage, public alertCtrl: AlertController, public platform: Platform, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController) {
     this.ss = new StorageService(storage);
     Constants.storageService = this.ss;
   }
@@ -53,7 +53,7 @@ export class StartPage {
     this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(data => {
       Constants.properties = data;
     }, error => {
-      Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+      Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
       Console.log("Can not pull data from server");
       //this.platform.exitApp();
     });

@@ -3,7 +3,7 @@ import { Constants } from './../utils/constants';
 import { StorageService } from './../utils/storageservice';
 import { Console } from './../utils/console';
 import { Component } from '@angular/core';
-import { NavController, NavParams, Loading, LoadingController, AlertController, ModalController, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, Loading, LoadingController, AlertController, ModalController, IonicPage, ToastController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -24,7 +24,7 @@ export class ViewBeneficiariesPage {
   loading: Loading;
   beneficiaries = [];
 
-  constructor(public loadingCtrl: LoadingController,  public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, public modalCtrl: ModalController) {
+  constructor(public loadingCtrl: LoadingController,  public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, public modalCtrl: ModalController, public toastCtrl: ToastController) {
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
@@ -61,7 +61,7 @@ export class ViewBeneficiariesPage {
         Console.log(responseData);
       }, error => {
         loading.dismiss();
-        Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+        Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
       }
     )
   }

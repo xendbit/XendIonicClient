@@ -30,6 +30,7 @@ export class ConfirmMnemonicPage {
   isRestore = false;
   isNew = false;
   isUpgrade = false;
+  isReset = false;
   loading: Loading;
   email: string;
   ls: StorageService;
@@ -39,13 +40,21 @@ export class ConfirmMnemonicPage {
   restorWalletText: string;
   mnemonicArray = [];
   disableButton = false;
+  password: string;
 
   FB_APP_ID: number = 1900836276861220;
 
-  constructor( public actionSheetCtrl: ActionSheetController, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public actionSheetCtrl: ActionSheetController, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams) {
     this.pageTitle = "Confirm The Passphrase";
-    this.email = navParams.get('email');
-    this.passphrase = navParams.get('mnemonic');
+  }
+
+  ionViewWillEnter(){
+    console.log(this.navParams);
+    this.email = this.navParams.get('email');
+    this.password = this.navParams.get('password');
+    Console.log("Password: " + this.password);
+    this.passphrase = this.navParams.get('mnemonic');
+   
     let splitted = this.passphrase.split(" ");
 
     let pushed = [];
@@ -60,11 +69,13 @@ export class ConfirmMnemonicPage {
         break;
       }
     }
+        
+    this.shouldRegister = this.navParams.get("shouldRegister");
+    this.isRestore = this.navParams.get("type") === "restore";
+    this.isUpgrade = this.navParams.get("type") === "upgrade";
+    this.isReset = this.navParams.get("type") === "resetPassword";
 
-    this.shouldRegister = navParams.get("shouldRegister");
-    this.isRestore = navParams.get("type") == "restore";
-    this.isUpgrade = navParams.get("type") == "upgrade";
-    this.isNew = navParams.get("type") == "new";
+    this.isNew = this.navParams.get("type") == "new";
     this.ls = Constants.storageService;
 
     if (this.shouldRegister === 'true') {
@@ -77,7 +88,7 @@ export class ConfirmMnemonicPage {
 
     if (this.isUpgrade) {
       this.buttonText = "Upgrade Account";
-    }
+    }    
   }
 
   disableAndSave(ma) {
@@ -96,47 +107,83 @@ export class ConfirmMnemonicPage {
     Console.log('ionViewDidLoad ConfirmMnemonicPage');
   }
 
+  loginOnServer() {
+
+    let postData = {
+      passphrase: this.confirmMnemonic
+    };
+
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
+
+    this.http.post(Constants.GET_13TH_WORD, postData, Constants.getHeader()).map(res => res.json()).subscribe(
+      responseData => {
+        if (responseData.response_code == 0) {
+          this.ls.clear();
+          let lastWord = responseData.result;
+          this.passphrase = this.confirmMnemonic + " " + lastWord;
+          let url = Constants.LOGIN_URL;
+          let key = Constants.WORKING_WALLET + "Address";
+          let action = "restore";
+          if (this.isReset) {
+            action = "reset";
+          }
+
+          let requestData = {
+            emailAddress: this.email,
+            password: this.password,
+            networkAddress: this.ls.getItem(key),
+            passphrase: this.passphrase,
+            refCode: action
+          };
+        
+          this.http.post(url, requestData, Constants.getHeader())
+            .map(res => res.json())
+            .subscribe(responseData => {              
+              if (responseData.response_text === "success") {                
+                this.loading.dismiss();
+                this.ls.setItem('mnemonic', this.passphrase);
+
+                Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTC");
+                Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTC");
+                Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTCTEST");
+                Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTCTEST");
+                Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'XND');
+                Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'NXT');
+                Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'ARDR');
+                Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'IGNIS');
+                Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
+                Constants.ethWallet(this.ls);
+
+                this.ls.setItem('emailAddress', this.email);
+                Constants.showLongToastMessage("Restore Successful. Now login", this.toastCtrl);
+                this.navCtrl.push('LoginPage');
+              } else {
+                this.loading.dismiss();
+                Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+              }
+            },
+              _error => {
+                this.loading.dismiss();
+                Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+              });
+        } else {
+          this.loading.dismiss();
+          Constants.showLongerToastMessage(responseData.response_text, this.toastCtrl);
+          throw (responseData.response_text);
+        }
+      },
+      _error => {
+        this.loading.dismiss();
+        Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+      }
+    );
+  }
+
   createWallet() {
     this.confirmMnemonic = this.confirmMnemonic.toLowerCase().trim();
 
-    if (this.isRestore) {
-      this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-      let postData = {
-        passphrase: this.confirmMnemonic
-      };
-
-      this.http.post(Constants.GET_13TH_WORD, postData, Constants.getHeader()).map(res => res.json()).subscribe(
-        responseData => {
-          this.loading.dismiss();
-          if (responseData.response_code == 0) {
-            this.ls.clear();
-            let lastWord = responseData.result;
-            this.passphrase = this.confirmMnemonic + " " + lastWord;
-            this.ls.setItem('mnemonic', this.passphrase);
-
-            Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTC");
-            Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTC");
-            Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTCTEST");
-            Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTCTEST");            
-            Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'XND');
-            Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'NXT');
-            Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'ARDR');
-            Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'IGNIS');
-            Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
-            Constants.ethWallet(this.ls);
-
-            this.ls.setItem('emailAddress', this.email);
-            Constants.showLongToastMessage("Restore Successful. Now login", this.toastCtrl);
-            this.navCtrl.push('LoginPage');
-          } else {
-            throw (responseData.response_text);
-          }
-        },
-        error => {
-          this.loading.dismiss();
-          throw (error);
-        }
-      );
+    if (this.isRestore || this.isReset) {
+      this.loginOnServer();
     } else {
       this.ls.clear();
       this.ls.setItem('mnemonic', this.passphrase);
@@ -148,7 +195,7 @@ export class ConfirmMnemonicPage {
       Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'XND');
       Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'NXT');
       Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'ARDR');
-      Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'IGNIS');            
+      Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'IGNIS');
       Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
       Constants.ethWallet(this.ls);
 

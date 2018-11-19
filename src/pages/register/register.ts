@@ -58,8 +58,6 @@ export class RegisterPage {
   emailRegex = '^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$';
 
   constructor(public base64: Base64, public imageResizer: ImageResizer,  private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, private mediaCapture: MediaCapture, private transfer: FileTransfer) {
-    this.mnemonic = this.navParams.get("mnemonic");
-
     this.isTrader = Constants.properties['walletType'] === 'trader';
     this.banks = Constants.properties['banks'];
     this.pageTitle = "Complete Registration";
@@ -104,6 +102,10 @@ export class RegisterPage {
       app.loading.dismiss();
       app.isBasic = StorageService.ACCOUNT_TYPE === "BASIC";
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
+  }
+
+  ionViewWillEnter(){
+    this.mnemonic = this.navParams.get("mnemonic");    
   }
 
   ionViewDidEnter() {

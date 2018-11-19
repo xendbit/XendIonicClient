@@ -52,6 +52,12 @@
             <ion-item>
                 <ion-input type="email" placeholder="Email Address" [(ngModel)]="email"></ion-input>
             </ion-item>
+            <ion-item>
+                <ion-input type="password" placeholder="{{passwordPlaceHolder}}" [(ngModel)]="password"></ion-input>
+            </ion-item>            
+            <ion-item *ngIf='isReset'>
+                <ion-input type="password" placeholder="Confirm New Password" [(ngModel)]="confirmPassword"></ion-input>
+            </ion-item>                        
             <button ion-button full round color="dark" (click)="restoreWallet()">{{restoreWalletText}}</button>
         </ion-card-content>
     </ion-card>

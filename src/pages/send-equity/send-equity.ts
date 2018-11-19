@@ -118,7 +118,7 @@ export class SendEquityPage {
     if (canSend < 0) {
       canSend = 0;
     }
-    Constants.showAlert(this.alertCtrl, this.howMuchCanISendText, canSend.toFixed(3));
+    Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, canSend.toFixed(3));
   }
 
   sendBit() {

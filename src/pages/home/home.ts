@@ -267,7 +267,7 @@ export class HomePage {
                 if (showLoading) {
                     this.loading.dismiss();
                 }
-                Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+                Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
             });
     }
 
@@ -315,7 +315,7 @@ export class HomePage {
         Console.log("sellBit");
         this.getTransactions(false);
         if (this.ls.getItem("bankCode") === "000" || this.ls.getItem('bankCode') === undefined) {
-            Constants.showAlert(this.alertCtrl, "Feature Unavailable", "This feature is not available because you didn't provide bank details during registration.");
+            Constants.showAlert(this.toastCtrl, "Feature Unavailable", "This feature is not available because you didn't provide bank details during registration.");
             return;
         } else if (this.ls.getItem("exchangeType") === 'exchange') {
             this.navCtrl.push('SellBitPage', { 'isOwner': true });

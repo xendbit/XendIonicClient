@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, Loading, AlertController, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Loading, AlertController, IonicPage, ToastController } from 'ionic-angular';
 import { Constants } from '../utils/constants';
 import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
@@ -22,7 +22,7 @@ export class MarketDataPage {
   globalData = {};
   loading: Loading;
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController) {
+  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
@@ -41,7 +41,7 @@ export class MarketDataPage {
       this.globalData = responseData.globalData;
       this.loading.dismiss();
     }, error => {
-      Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+      Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
       this.loading.dismiss();
     });
   }

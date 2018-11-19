@@ -168,7 +168,7 @@ export class DonatePage {
         });
 
         Constants.properties['donatePage'] = this;
-        Constants.showAlert(this.alertCtrl, "Contacting Beneficiary", "Please wait while we contact the beneficiary. You can close this window.");
+        Constants.showAlert(this.toastCtrl, "Contacting Beneficiary", "Please wait while we contact the beneficiary. You can close this window.");
     }
 
     sendBitFingerprint() {
@@ -197,7 +197,7 @@ export class DonatePage {
         if (canSend < 0) {
             canSend = 0;
         }
-        Constants.showAlert(this.alertCtrl, this.howMuchCanISendText, canSend.toFixed(3));
+        Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, canSend.toFixed(3));
     }
 
     scanCode() {

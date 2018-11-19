@@ -127,7 +127,7 @@ export class BuyBitPage {
             this.loading.dismiss();
         }, _error => {
             this.loading.dismiss();
-            Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+            Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
         });
     }
 
@@ -241,7 +241,6 @@ export class BuyBitPage {
             timer = timer - 1;
             if (timer <= 0) {
                 running.unsubscribe();
-                //Constants.showAlert(this.alertCtrl, "Trade Cancelled", "Time out before User could respond.");
             }
         });
         Constants.properties['startTradeObservable'] = running;

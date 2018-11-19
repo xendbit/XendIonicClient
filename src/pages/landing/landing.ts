@@ -174,7 +174,7 @@ export class LandingPage {
           this.loadRate(wallet);
         }
       }, _error => {
-        Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+        Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
       });
   }
 

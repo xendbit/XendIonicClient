@@ -1,12 +1,12 @@
 import { StorageService } from './../utils/storageservice';
-import {FingerprintAIO} from '@ionic-native/fingerprint-aio';
-import {FormBuilder, Validators} from '@angular/forms';
-import {Console} from '../utils/console';
-import {Constants} from '../utils/constants';
-import {Component} from '@angular/core';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Console } from '../utils/console';
+import { Constants } from '../utils/constants';
+import { Component } from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, ActionSheetController, AlertController, IonicPage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
-import {Http} from '@angular/http';
+import { Http } from '@angular/http';
 
 /**
  * Generated class for the SellBitPage page.
@@ -52,7 +52,7 @@ export class SellEquityPage {
         beneficiaryAccountNumber: ""
     };
 
-    constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,  public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
+    constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
         this.banks = Constants.properties['banks'];
         this.paymentMethods = Constants.properties['payment.methods'];
         this.pageTitle = "Place Sell Order"
@@ -64,7 +64,6 @@ export class SellEquityPage {
         this.beneficiaryAccountNumberText = "Beneficiary Account Number";
         this.beneficiaryBankText = "Beneficiary Bank";
         this.passwordText = "Wallet Password";
-        this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;
 
         let fees = Constants.getCurrentWalletProperties();
         this.currencyText = fees.currencyText;
@@ -91,6 +90,10 @@ export class SellEquityPage {
             app.loading.dismiss();
 
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
+    }
+
+    ionViewWillEnter() {
+        this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;
     }
 
     ionViewDidLoad() {
@@ -132,13 +135,13 @@ export class SellEquityPage {
             Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
         } else if (sb.acceptedPaymentMethods === "") {
             Constants.showPersistentToastMessage("Please specify accepted payment methods", this.toastCtrl);
-        } else if(sb.brokerAccount === "") {
-            Constants.showPersistentToastMessage("Please specify a broker", this.toastCtrl);        
+        } else if (sb.brokerAccount === "") {
+            Constants.showPersistentToastMessage("Please specify a broker", this.toastCtrl);
         } else {
             isValid = true;
         }
 
-        if (isValid) {            
+        if (isValid) {
             let beneficiaryAccountNumber = this.isOwner ? this.ls.getItem('accountNumber') : sb.beneficiaryAccountNumber;
             let beneficiaryBank = this.isOwner ? this.ls.getItem('bankCode') : sb.beneficiaryBank;
 
@@ -194,7 +197,7 @@ export class SellEquityPage {
             }
         }, error => {
             this.loading.dismiss();
-            Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+            Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
         });
     }
 
@@ -247,7 +250,7 @@ export class SellEquityPage {
             }
         }, error => {
             this.loading.dismiss();
-            Constants.showAlert(this.alertCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+            Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
         });
     }
 
