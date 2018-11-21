@@ -118,6 +118,10 @@ export class SettingsPage {
     this.navCtrl.push('UpgradePage');
   }
 
+  showMyInfo() {
+    
+  }
+
   showMnemonic() {
     let bv = this.showMnemonicForm.value;
     let password = bv.password;

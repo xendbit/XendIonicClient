@@ -30,6 +30,14 @@
         </ion-card-content>
     </ion-card>
 
+    <ion-card>
+        <ion-card-content>
+            <button color="xend" ion-button icon-right full round (click)="showMyInfo();" icon-right>My Info 
+                <ion-icon name="person"></ion-icon>
+            </button>
+        </ion-card-content>
+    </ion-card>
+
     <ion-card *ngIf="canSwitchWallet">
         <ion-card-content>
             <button color="xend" ion-button icon-right full round (click)="switchWallet();">Switch Wallet 
