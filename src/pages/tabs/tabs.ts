@@ -21,8 +21,8 @@ export class TabsPage {
   tab1Root: any = 'LandingPage';
   tab2Root: any = 'MyOrdersPage';
   tab3Root: any = 'SendBitPage';
-  tab4Root: any = 'ExchangePage';
-  tab5Root: any = 'SettingsPage';
+  // tab4Root: any = 'ExchangePage';
+  tab4Root: any = 'SettingsPage';
 
  isAdvanced: boolean = false;
 
