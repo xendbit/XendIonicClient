@@ -119,7 +119,8 @@ export class SettingsPage {
   }
 
   showMyInfo() {
-    
+    Console.log('Showing My Info Page');
+    this.navCtrl.push('PersonalPage');
   }
 
   showMnemonic() {

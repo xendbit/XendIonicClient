@@ -109,7 +109,7 @@ export class PersonalPage {
   }
 
   ionViewDidEnter() {
-
+    this.loginOnServer();
     this.isBasic = StorageService.ACCOUNT_TYPE === "BASIC";
   }
 
@@ -171,7 +171,9 @@ export class PersonalPage {
           this.loading.dismiss();
           let user = responseData.result.user;
           Constants.properties['loggedInUser'] = user;
-          this.registerForm.controls.email = user.emailAddress;
+          this.registerForm.controls.email.setValue(user.emailAddress);
+          this.registerForm.controls.phoneNumber.setValue(user.phoneNumber);
+          this.registerForm.controls.kyc.idType.setValue(user.emailAddress);
         } else {
           this.loading.dismiss();
           Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
