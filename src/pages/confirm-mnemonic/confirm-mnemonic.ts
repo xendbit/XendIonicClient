@@ -107,6 +107,22 @@ export class ConfirmMnemonicPage {
     Console.log('ionViewDidLoad ConfirmMnemonicPage');
   }
 
+  createWallets() {
+    let allWallets = Constants.properties['wallets'];
+
+    for(let wallet of allWallets) {
+      if(wallet.value === 'BTC' || wallet.value === 'LTC' || wallet.value === 'BTCTEST' || wallet.value === 'LTCTEST') {
+        Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, wallet.value);
+      } else if(wallet.value === 'XND' || wallet.value === 'IGNIS' || wallet.value === 'ARDR' || wallet.value === 'NXT') {
+        Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, wallet.value);
+      } else if(wallet.value === 'NGNT') {
+        Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
+      } else if(wallet.value === 'ETH' || wallet.value === 'ETHTEST') {
+        Constants.ethWallet(this.ls);
+      }
+    }
+  }
+
   loginOnServer() {
 
     let postData = {
@@ -143,16 +159,7 @@ export class ConfirmMnemonicPage {
                 this.loading.dismiss();
                 this.ls.setItem('mnemonic', this.passphrase);
 
-                Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTC");
-                Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTC");
-                Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTCTEST");
-                Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTCTEST");
-                Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'XND');
-                Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'NXT');
-                Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'ARDR');
-                Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'IGNIS');
-                Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
-                Constants.ethWallet(this.ls);
+                this.createWallets();
 
                 this.ls.setItem('emailAddress', this.email);
                 Constants.showLongToastMessage("Restore Successful. Now login", this.toastCtrl);
@@ -188,16 +195,7 @@ export class ConfirmMnemonicPage {
       this.ls.clear();
       this.ls.setItem('mnemonic', this.passphrase);
 
-      Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTC");
-      Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTC");
-      Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "BTCTEST");
-      Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "LTCTEST");
-      Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'XND');
-      Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'NXT');
-      Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'ARDR');
-      Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'IGNIS');
-      Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
-      Constants.ethWallet(this.ls);
+      this.createWallets();
 
       if (this.isRestore) {
         return;
