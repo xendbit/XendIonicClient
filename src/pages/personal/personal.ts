@@ -90,7 +90,7 @@ export class PersonalPage {
       country: [''],
       bank: [''],
       accountNumber: [''],
-      isBeneficiary: ['false']
+      password: ['']
     });
 
     this.isBasic = false;
@@ -168,19 +168,25 @@ export class PersonalPage {
       .map(res => res.json())
       .subscribe(responseData => {
         if (responseData.response_text === "success") {
-          this.loading.dismiss();
           let user = responseData.result.user;
           Constants.properties['loggedInUser'] = user;
           this.registerForm.controls.email.setValue(user.emailAddress);
-          this.registerForm.controls.phoneNumber.setValue(user.phoneNumber);
-          this.registerForm.controls.kyc.idType.setValue(user.emailAddress);
+          this.registerForm.controls.phoneNumber.setValue(user.kyc.phoneNumber);
+          this.registerForm.controls.idType.setValue(user.kyc.idType);
+          this.registerForm.controls.idNumber.setValue(user.kyc.idNumber);
+          this.idImage = user.kyc.proofOfIdentity;
+          this.idImagePath = user.kyc.proofOfIdentity;
+          this.registerForm.controls.surName.setValue(user.kyc.surName);
+          this.registerForm.controls.firstName.setValue(user.kyc.firstName);
+          this.registerForm.controls.middleName.setValue(user.kyc.middleName);
+          this.registerForm.controls.country.setValue(user.kyc.countryOfResidence);
+          this.registerForm.controls.bank.setValue(user.kyc.bankCode);
+          this.registerForm.controls.accountNumber.setValue(user.kyc.bankAccountNumber);
         } else {
-          this.loading.dismiss();
           Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
         }
       },
         _error => {
-          this.loading.dismiss();
           Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
         });
 
@@ -195,6 +201,11 @@ export class PersonalPage {
     } else {
       if (rf.email.match(this.emailRegex) === null) {
         Constants.showLongToastMessage("Enter valid email address", this.toastCtrl);
+        return;
+      }
+
+      if (rf.phoneNumber === '') {
+        Constants.showLongToastMessage("Enter valid phone number", this.toastCtrl);
         return;
       }
 
@@ -229,8 +240,7 @@ export class PersonalPage {
         this.idImage = "UNDEFINED";
       }
 
-      let url = Constants.RESTORE_USER_URL;
-      url = Constants.NEW_USER_URL;
+      let url = Constants.UPDATE_USER_INFO_URL;
       let registrationType = "NEW";
 
       Constants.registrationData['loading'] = this.loading;
@@ -245,11 +255,9 @@ export class PersonalPage {
       Constants.registrationData['tp'] = 'LoginPage';
       Constants.registrationData['idImage'] = this.idImage;
       Constants.registrationData['url'] = url;
-      Constants.registrationData['registrationType'] = registrationType;
+      Constants.registrationData['registrationType'] = registrationType;      
 
-      this.navCtrl.push('PasswordPage');
-
-      Constants.passwordPadSuccessCallback = this.passwordPadSuccess;
+      this.passwordPadSuccess();
     } else {
       Constants.showLongToastMessage("Please fill form properly", this.toastCtrl);
     }
@@ -269,7 +277,9 @@ export class PersonalPage {
       }
     }
 
-    if (rf.phoneNumber !== undefined) {
+    Console.log(rf.phoneNumber);
+    
+    if (rf.phoneNumber !== undefined) {      
       if (rf.phoneNumber.startsWith("+")) {
         Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
         return;
@@ -290,25 +300,20 @@ export class PersonalPage {
     Constants.registrationData['idType'] = rf.idType;
     Constants.registrationData['idNumber'] = rf.idNumber;
     Constants.registrationData['country'] = rf.country;
+    Constants.registrationData['password'] = rf.password;
     if (rf.bank !== undefined && rf.bank !== "") {
       Constants.registrationData['bankCode'] = rf.bank;
     } else {
       Constants.registrationData['bankCode'] = "000";
     }
     Constants.registrationData['accountNumber'] = rf.accountNumber;
-    Constants.registrationData['isBeneficiary'] = rf.isBeneficiary;
+    Constants.registrationData['isBeneficiary'] = false;
+    Constants.registrationData['updateInfo'] = true;
     StorageService.IS_BENEFICIARY = rf.isBeneficiary;
 
-    Constants.registerOnServer();
+    Constants.registerOnServer();    
   }
 
   countrySelected(country) {
-    if (country === "Nigeria") {
-      this.registerForm.controls.phoneNumber.setValue("234");
-    } else if (country === "Kenya") {
-      this.registerForm.controls.phoneNumber.setValue("254");
-    } else if (country === "Ghana") {
-      this.registerForm.controls.phoneNumber.setValue("233");
-    }
   }
 }

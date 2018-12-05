@@ -36,8 +36,13 @@
 
             <ion-item>
                 <ion-label stacked><sup>**</sup>{{emailAddressText}}</ion-label>
-                <ion-input type="email" formControlName="email"></ion-input>
+                <ion-input disabled type="email" formControlName="email"></ion-input>
             </ion-item>
+
+            <ion-item *ngIf="!isBasic">
+                <ion-label  stacked><sup>**</sup>{{phoneNumberText}}</ion-label>
+                <ion-input type="number" formControlName="phoneNumber" placeholder="International Format"></ion-input>
+            </ion-item>            
 
             <ion-item *ngIf="!isBasic">
                 <ion-label stacked><sup>**</sup>Country of Residence</ion-label>
@@ -45,13 +50,8 @@
                     <ion-option value="Nigeria">Nigeria</ion-option>
                     <ion-option value="Kenya">Kenya</ion-option>
                     <ion-option value="Ghana">Ghana</ion-option>
-                    <ion-option value="Nigeria">Others</ion-option>
+                    <ion-option value="Others">Others</ion-option>
                 </ion-select>
-            </ion-item>
-
-            <ion-item *ngIf="!isBasic">
-                <ion-label stacked>{{phoneNumberText}} (optional)</ion-label>
-                <ion-input type="number" formControlName="phoneNumber" placeholder="International Format"></ion-input>
             </ion-item>
 
             <ion-item *ngIf="!isBasic">
@@ -65,34 +65,10 @@
                     <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
                 </ion-select>
             </ion-item>
-        </ion-list>
 
-        <ion-list no-lines>
             <ion-item>
-                <ion-label stacked>{{idTypeText}}</ion-label>
-                <ion-select interface='action-sheet' formControlName="idType" placeholder="Click to select ID Type">
-                    <ion-option *ngFor="let idType of idTypes" value="{{idType.text}}">{{idType.text}}</ion-option>
-                </ion-select>
-            </ion-item>
-            <ion-item>
-                <ion-label stacked>{{idNumberText}}</ion-label>
-                <ion-input formControlName="idNumber" type="text"></ion-input>
-            </ion-item>
-            <ion-item>
-                <button item-center ion-button icon-only class="center" (click)="capturePassport()">
-                    <ion-icon name="camera"></ion-icon>Picture of ID
-                </button>
-                <p>{{idImagePath}}</p>
-            </ion-item>
-        </ion-list>
-        <ion-list no-lines>
-            <ion-item>Become a Beneficiary</ion-item>
-            <p>
-                If you accept to be a beneficiary, Donors will be able to view all your information.
-            </p>
-            <ion-item>
-                <ion-label stacked>Make my information public</ion-label>
-                <ion-checkbox (click)="checkValue()" formControlName="isBeneficiary"></ion-checkbox>
+                <ion-label stacked>Enter Your Password</ion-label>
+                <ion-input type="password" formControlName="password"></ion-input>
             </ion-item>
         </ion-list>
     </form>

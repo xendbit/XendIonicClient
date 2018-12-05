@@ -9,11 +9,11 @@ import { HDNode } from 'bitcoinjs-lib';
 import { mnemonicToSeed } from 'bip39';
 
 export class Constants {
-    //static TOMCAT_URL = "http://localhost:8080";
+    static TOMCAT_URL = "http://localhost:8080";
     static APP_VERSION = "v3.4-rc1"
     static ENABLE_GUEST = true;
     static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
-    static TOMCAT_URL = "https://lb.xendbit.com";
+    //static TOMCAT_URL = "https://lb.xendbit.com";
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
@@ -90,6 +90,7 @@ export class Constants {
     static UPDATE_TRADE_URL = Constants.SERVER_URL + "exchange/update-exchange-status";
 
     static NEW_USER_URL = Constants.SERVER_URL + "user/new";
+    static UPDATE_USER_INFO_URL = Constants.SERVER_URL + "user/update";
     static RESTORE_USER_URL = Constants.SERVER_URL + "user/restore";
     static UPGRADE_USER_URL = Constants.SERVER_URL + "user/upgrade";
     static GET_TX_URL = Constants.SERVER_URL + "user/transactions/";
@@ -280,8 +281,14 @@ export class Constants {
                     ls.setItem("emailAddress", data['email']);
                     ls.setItem("password", data['password']);
                     ls.setItem("isRegistered", "true");
-                    Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
-                    data['navCtrl'].push('LoginPage');
+                    if (data['updateInfo']) {
+                        Constants.showPersistentToastMessage("Update Successful.", toastCtrl);
+                        data['navCtrl'].pop();
+                        return;
+                    } else {
+                        Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
+                        data['navCtrl'].push('LoginPage');
+                    }
                 } else {
                     Constants.showPersistentToastMessage(responseData.result, toastCtrl);
                     loading.dismiss();
@@ -295,6 +302,12 @@ export class Constants {
 
     static registerOnServer() {
         let data = Constants.registrationData;
+
+        if (data['updateInfo']) {
+            Constants.completeRegistration();
+            return;
+        }
+
         let ls = data['ls'];
         let http = data['http'];
         let toastCtrl = data['toastCtrl'];
@@ -605,12 +618,12 @@ export class Constants {
     }
 
     static getCurrentWalletProperties() {
-        if(Constants.WORKING_WALLET === undefined || Constants.WORKING_WALLET === "") {
+        if (Constants.WORKING_WALLET === undefined || Constants.WORKING_WALLET === "") {
             Constants.WORKING_WALLET = "BTC";
         }
         return Constants.getWalletProperties(Constants.WORKING_WALLET);
     }
-    
+
     static btcWallet(ls: StorageService, _loading, _loadingCtrl, http, _toastCtrl, chainCode) {
         let network = Constants.NETWORKS[chainCode];
         let passphrase = ls.getItem('mnemonic');

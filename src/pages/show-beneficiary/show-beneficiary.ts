@@ -62,13 +62,13 @@ export class ShowBeneficiaryPage {
     let url = Constants.GET_IMAGE_URL;
     let key = Constants.WORKING_WALLET + "Address";
 
-    Console.log(beneficiary.kyc.accountKYC.proofOfIdentity);
+    Console.log(beneficiary.kyc.proofOfIdentity);
 
     let requestData = {
       password: this.ls.getItem("password"),
       networkAddress: this.ls.getItem(key),
       emailAddress: this.ls.getItem("emailAddress"),
-      idImage: beneficiary.kyc.accountKYC.proofOfIdentity
+      idImage: beneficiary.kyc.proofOfIdentity
     }
 
     this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(

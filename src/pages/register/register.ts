@@ -160,6 +160,11 @@ export class RegisterPage {
         return;
       }
 
+      if (rf.phoneNumber === '') {
+        Constants.showLongToastMessage("Enter valid phone number", this.toastCtrl);
+        return;
+      }      
+
       if (rf.surName === '') {
         Constants.showLongToastMessage("Please enter your surname", this.toastCtrl);
         return;
@@ -265,12 +270,5 @@ export class RegisterPage {
   }
 
   countrySelected(country) {
-    if(country === "Nigeria") {
-      this.registerForm.controls.phoneNumber.setValue("234");
-    } else if(country === "Kenya") {
-      this.registerForm.controls.phoneNumber.setValue("254");
-    } else if(country === "Ghana") {
-      this.registerForm.controls.phoneNumber.setValue("233");
-    }
   }
 }

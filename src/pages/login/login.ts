@@ -150,8 +150,8 @@ export class LoginPage {
                     ls.setItem("exchangeType", exchangeType);
 
                     try {
-                        ls.setItem("accountNumber", user.kyc.accountKYC.bankAccountNumber);
-                        ls.setItem("bankCode", user.kyc.accountKYC.bankCode);
+                        ls.setItem("accountNumber", user.kyc.bankAccountNumber);
+                        ls.setItem("bankCode", user.kyc.bankCode);
                     } catch (e) {
                         Console.log(e);
                     }
