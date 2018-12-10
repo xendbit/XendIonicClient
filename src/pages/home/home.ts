@@ -152,38 +152,17 @@ export class HomePage {
 
     ionViewDidLoad() {
         Console.log('ionViewDidLoad HomePage');
-        if (this.ls.getItem("exchangeType") === 'exchange') {
-            this.cryptoSellOrderText = 'Sell';
-            this.cryptoBuyOrderText = 'Buy';
-            this.fiatSellOrderText = 'Fiat Sell-Order'
-        } else {
-            this.cryptoSellOrderText = 'Sell';
-            this.cryptoBuyOrderText = 'Buy';
-            this.fiatSellOrderText = 'Sell Equities'
-        }
+        this.cryptoSellOrderText = 'Sell';
+        this.cryptoBuyOrderText = 'Buy';
+        this.fiatSellOrderText = 'Sell Equities'
         let app = this;
         setTimeout(function () {
             //Do all wallets.
-            let wallets = Constants.properties['wallets'];
+            let wallets = Constants.properties['equities'];
             for (let w in wallets) {
                 let wallet = wallets[w];
                 let coin = wallet['value'];
-
-                if (coin.indexOf("ETH") >= 0) {
-                    Constants.ethWallet(app.ls);
-                } else if (coin === "XND") {
-                    Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-                } else if (coin === "NXT") {
-                    Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-                } else if (coin === "ARDR") {
-                    Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-                } else if (coin === "IGNIS") {
-                    Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-                } else if (wallet['currencyId'] !== undefined) {
-                    Constants.tokenWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-                } else {
-                    Constants.btcWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-                }
+                Constants.tokenWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
             }
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION)
     }
