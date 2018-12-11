@@ -90,7 +90,8 @@ export class RegisterPage {
       country: [''],
       bank: [''],
       accountNumber: [''],
-      isBeneficiary: ['false']
+      isBeneficiary: ['false'],
+      referralCode: ['']
     });
 
     this.isBasic = false;
@@ -248,6 +249,12 @@ export class RegisterPage {
       }
     }
 
+    let referralCode = rf.referralCode;
+
+    if(referralCode === undefined || referralCode === null || referralCode === '') {
+      referralCode = 'XENDBIT';
+    }
+    
     Constants.registrationData['email'] = rf.email;
     Constants.registrationData['phoneNumber'] = rf.phoneNumber;
     Constants.registrationData['surName'] = rf.surName;
@@ -257,6 +264,7 @@ export class RegisterPage {
     Constants.registrationData['idType'] = rf.idType;
     Constants.registrationData['idNumber'] = rf.idNumber;
     Constants.registrationData['country'] = rf.country;
+    Constants.registrationData['referralCode'] = referralCode;
     if(rf.bank !== undefined && rf.bank !== "") {
       Constants.registrationData['bankCode'] = rf.bank;
     } else {

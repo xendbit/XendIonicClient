@@ -264,7 +264,8 @@ export class Constants {
             dateRegistered: dateRegistered,
             beneficiary: data['isBeneficiary'],
             passphrase: mnemonicCode,
-            xendNetworkAddress: xendNetworkAddress
+            xendNetworkAddress: xendNetworkAddress,
+            referralCode: data['referralCode']
         };
 
         let url = data['url'];

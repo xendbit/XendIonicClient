@@ -85,7 +85,13 @@
                 <p>{{idImagePath}}</p>
             </ion-item>
         </ion-list>
-        <ion-list no-lines>
+        <ion-list>
+            <ion-item>
+                <ion-label stacked>Enter Referral Code</ion-label>
+                <ion-input type="text" formControlName="referralCode"></ion-input>
+            </ion-item>
+        </ion-list>
+        <!-- <ion-list no-lines>
             <ion-item>Become a Beneficiary</ion-item>
             <p>
                 If you accept to be a beneficiary, Donors will be able to view all your information.
@@ -94,7 +100,7 @@
                 <ion-label stacked>Make my information public</ion-label>
                 <ion-checkbox (click)="checkValue()" formControlName="isBeneficiary"></ion-checkbox>
             </ion-item>
-        </ion-list>
+        </ion-list> -->
     </form>
 
     <ion-row>
