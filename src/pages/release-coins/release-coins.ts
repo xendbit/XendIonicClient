@@ -1,6 +1,5 @@
-import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { Constants } from './../utils/constants';
-import { StorageService } from './../utils/storageservice';
+import { Constants } from '../utils/constants';
+import { StorageService } from '../utils/storageservice';
 import { Component } from '@angular/core';
 import { ToastController, NavController, NavParams, Loading, LoadingController, IonicPage } from 'ionic-angular';
 import { Http } from '@angular/http';
@@ -15,12 +14,12 @@ import { Console } from '../utils/console';
  * Ionic pages and navigation.
  */
 
- @IonicPage()
+@IonicPage()
 @Component({
-  selector: 'page-buy-with-bank-account',
-  templateUrl: 'buy-with-bank-account.html',
+  selector: 'page-release-coins',
+  templateUrl: 'release-coins.html',
 })
-export class BuyWithBankAccountPage {
+export class ReleaseCoinsPage {
 
   pageTitle: string;
   usdRate: number = 0;
@@ -39,7 +38,7 @@ export class BuyWithBankAccountPage {
   referenceCode: string;
   disableButton = false;
 
-  constructor(private iab: InAppBrowser, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public toastCtrl: ToastController) {
+  constructor( public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public toastCtrl: ToastController) {
     let fees = Constants.getCurrentWalletProperties();
     this.pageTitle = "Bank Information";
     this.currencyText = fees.currencyText
@@ -72,27 +71,6 @@ export class BuyWithBankAccountPage {
   ionViewDidLoad() {
     Console.log('ionViewDidLoad BuyWithBankAccountPage');
   }
-
-  sendExternalMessage() {
-    let data = Constants.properties['buyWithBankMessage'];
-    console.log(data);
-    let seller = data.seller;
-    let phoneNumber = seller.kyc.phoneNumber;
-    //let phoneNumber = '2348025943549';
-    if (phoneNumber === undefined || phoneNumber === null) {
-        Constants.showLongerToastMessage("You can't chat with this seller.", this.toastCtrl);
-    } else {
-        let coin = seller.fromCoin;
-        let toCoin = seller.toCoin;
-        let priceFrom = seller.amountToSell;
-        let priceTo = seller.amountToRecieve;
-        let rate = seller.rate;
-        let message = "I'm interested in your " + priceFrom + coin +  " -> " + priceTo + toCoin + " (@ " + rate + ") trade posted on XendBit";
-        let url = "https://wa.me/" + phoneNumber + "?text=" + message;
-        const browser = this.iab.create(url, "_system", "hardwareback=yes,");
-        browser.close();
-    }
-}
 
   loadRate() {
     let fees = Constants.getCurrentWalletProperties();

@@ -1,3 +1,4 @@
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { BuyWithBankAccountPage } from './buy-with-bank-account';
 import { IonicPageModule } from 'ionic-angular';
 import { NgModule } from '@angular/core';
@@ -12,6 +13,9 @@ import { NgModule } from '@angular/core';
     exports: [
         BuyWithBankAccountPage
     ],
+    providers: [
+      InAppBrowser
+    ]
   })
 
   export class BuyWithBankAccountPageModule {}

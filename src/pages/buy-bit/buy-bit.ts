@@ -173,7 +173,7 @@ export class BuyBitPage {
     }
 
     sendExternalMessage(seller) {
-        let phoneNumber = seller.seller.phoneNumber;
+        let phoneNumber = seller.seller.kyc.phoneNumber;
         //let phoneNumber = '2348025943549';
         if (phoneNumber === undefined || phoneNumber === null) {
             Constants.showLongerToastMessage("You can't chat with this seller.", this.toastCtrl);

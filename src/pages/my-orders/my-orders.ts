@@ -164,31 +164,56 @@ export class MyOrdersPage {
     }
 
     finalizeSale(sellOrder) {
-        this.navCtrl.push('ShowBankPaymentPage', { "sellOrder": sellOrder });
+        Console.log('Sell Order: ' + sellOrder);
+        Constants.properties['finalize_sale_order'] = sellOrder;
+        this.navCtrl.push('ShowBankPaymentPage');
+    }
+
+    presentAlert(transactionId) {
+        let alert = this.alertCtrl.create({
+            title: 'Are you sure you want to delete this order?',
+            subTitle: 'This process can not be reversed',
+            buttons: [
+                {
+                    text: 'No',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
+                        let url = Constants.UPDATE_USER_SELL_ORDERS_TX_URL;
+                        let postData = {
+                            emailAddress: this.ls.getItem("emailAddress"),
+                            sellOrderTransactionId: transactionId,
+                            status: "delete",
+                            password: this.ls.getItem("password")
+                        };
+
+                        this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+                            this.loading.dismiss();
+                            let deletedId = responseData.result;
+                            if (deletedId > 0) {
+                                Constants.showLongToastMessage("Order Deleted Successfully", this.toastCtrl);
+                                this.loadSellers();
+                            } else {
+                                Constants.showLongToastMessage("Error Deleting your order, please try again", this.toastCtrl)
+                            }
+                        }, _error => {
+                            this.loading.dismiss();
+                            Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+                        });
+                    }
+                }
+            ]
+        });
+        alert.present();
     }
 
     deleteOrder(transactionId) {
-        this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-        let url = Constants.UPDATE_USER_SELL_ORDERS_TX_URL;
-        let postData = {
-            emailAddress: this.ls.getItem("emailAddress"),
-            sellOrderTransactionId: transactionId,
-            status: "delete",
-            password: this.ls.getItem("password")
-        };
-
-        this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-            this.loading.dismiss();
-            let deletedId = responseData.result;
-            if (deletedId > 0) {
-                Constants.showLongToastMessage("Order Deleted Successfully", this.toastCtrl);
-                this.loadSellers();
-            } else {
-                Constants.showLongToastMessage("Error Deleting your order, please try again", this.toastCtrl)
-            }
-        }, _error => {
-            this.loading.dismiss();
-            Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
-        });
+        this.presentAlert(transactionId);
     }
 }

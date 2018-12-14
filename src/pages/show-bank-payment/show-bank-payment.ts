@@ -25,12 +25,13 @@ export class ShowBankPaymentPage {
   btcRate: number = 0;
   btcToNgn = 0;
   btcText: string;
-  currencyText: string;  
+  currencyText: string;
   banks = [];
   bankName: string;
   accountNumber: string;
   totalAmount = 0;
   amountToSend = 0;
+  fromCoin: string;
 
   referenceCode: string;
   buyerAddress: string;
@@ -40,12 +41,14 @@ export class ShowBankPaymentPage {
   disableButton = false;
   brokerAccount = "";
 
-  constructor(public alertCtrl: AlertController,  public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public toastCtrl: ToastController) {
-    this.currencyText = "NGN";    
+  constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public toastCtrl: ToastController) {
+    this.currencyText = "NGN";
     this.btcText = "BTC";
     this.banks = Constants.properties['banks'];
 
-    let data = this.sellOrder;
+    let data = Constants.properties['finalize_sale_order'];
+    this.sellOrder = data;
+    Console.log(data);
     let sellerToAddress = data['sellerToAddress'];
     let splitted = sellerToAddress.split(":");
 
@@ -62,6 +65,7 @@ export class ShowBankPaymentPage {
     this.buyerAddress = data['buyerFromAddress'];
     this.amountToSend = data['amountToSell'];
     this.brokerAccount = data['brokerAccount'];
+    this.fromCoin = data['fromCoin'];
 
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
@@ -74,25 +78,21 @@ export class ShowBankPaymentPage {
 
   }
 
-  ionViewWillEnter(){
-    this.sellOrder = this.navParams.get('sellOrder');
-    Console.log(this.sellOrder);   
-  }
-
   ionViewDidLoad() {
     Console.log('ionViewDidLoad ShowBankPaymentPage');
   }
 
   successCall(data) {
-    let app:ShowBankPaymentPage = data['page'];
+    let app: ShowBankPaymentPage = data['page'];
     app.disableButton = true;
+    Console.log(app.sellOrder);
     //ok, we need to call server "update-exchange-status";
     let url = Constants.UPDATE_TRADE_URL;
     let requestData = {
       "sellOrderTransactionId": app.sellOrder['trxId'],
       "status": "SUCCESS",
       emailAddress: app.ls.getItem("emailAddress"),
-      password: app.ls.getItem("password")      
+      password: app.ls.getItem("password")
     };
 
     app.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
@@ -106,33 +106,55 @@ export class ShowBankPaymentPage {
     //doNothing
   }
 
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Are you sure you want to confirm this order?',
+      subTitle: 'Once confirmed, the coins held in escrow will be released to the buyer',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            let data = {};
+            data['amount'] = this.amountToSend
+            data['recipientAddress'] = this.buyerAddress;
+            data['loading'] = this.loading;
+            data['loadingCtrl'] = this.loadingCtrl;
+            data['ls'] = this.ls;
+            data['toastCtrl'] = this.toastCtrl;
+            data['http'] = this.http;
+            data['page'] = this;
+            data['trxId'] = this.sellOrder;
+            data['brokerAccount'] = this.brokerAccount;
+
+            let fees = Constants.getCurrentWalletProperties();
+            if (this.fromCoin.indexOf('ETH') >= 0) {
+              CoinsSender.sendCoinsEth(data, this.successCall, this.errorCall, this.fromCoin);
+            } else if (this.fromCoin === 'XND' || this.fromCoin === "NXT" || this.fromCoin === "ARDR" || this.fromCoin === "IGNIS") {
+              CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
+            } else if (fees.currencyId !== undefined) {
+              CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
+            } else if (fees.equityId !== undefined) {
+              CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
+            } else {
+              let key = this.fromCoin + "Address";
+              CoinsSender.sendCoinsBtc(data, this.successCall, this.errorCall, this.fromCoin, this.ls.getItem(key), Constants.NETWORKS[this.fromCoin]);
+            }
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
   confirmBankPayment() {
-    let data = {};
-    data['amount'] = this.amountToSend
-    data['recipientAddress'] = this.buyerAddress;
-    data['loading'] = this.loading;
-    data['loadingCtrl'] = this.loadingCtrl;
-    data['ls'] = this.ls;
-    data['toastCtrl'] = this.toastCtrl;
-    data['http'] = this.http;
-    data['page'] = this;
-    data['trxId'] = this.sellOrder;
-    data['brokerAccount'] = this.brokerAccount;
-  
-    let fees = Constants.getCurrentWalletProperties();
-    
-    if (Constants.WORKING_WALLET.indexOf('ETH') >= 0) {
-      CoinsSender.sendCoinsEth(data, this.successCall, this.errorCall, Constants.WORKING_WALLET);
-    } else if (Constants.WORKING_WALLET === 'XND' || Constants.WORKING_WALLET === "NXT" || Constants.WORKING_WALLET === "ARDR" || Constants.WORKING_WALLET === "IGNIS") {
-      CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
-    } else if (fees.currencyId !== undefined) {
-      CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
-    } else if (fees.equityId !== undefined) {
-      CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
-    } else {
-      let key = Constants.WORKING_WALLET + "Address";
-      CoinsSender.sendCoinsBtc(data, this.successCall, this.errorCall, Constants.WORKING_WALLET, this.ls.getItem(key), Constants.NETWORK);
-    }
+    this.presentAlert();
   }
 
   updateOrder(transactionId) {

@@ -9,11 +9,11 @@ import { HDNode } from 'bitcoinjs-lib';
 import { mnemonicToSeed } from 'bip39';
 
 export class Constants {
-    static TOMCAT_URL = "http://localhost:8080";
+    //static TOMCAT_URL = "http://localhost:8080";
     static APP_VERSION = "v3.4-rc1"
     static ENABLE_GUEST = true;
     static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
-    //static TOMCAT_URL = "https://lb.xendbit.com";
+    static TOMCAT_URL = "https://lb.xendbit.com";
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
@@ -77,6 +77,7 @@ export class Constants {
     static GET_BUY_TX_URL = Constants.SERVER_URL + "buy/tx/";
     static SEND_OTP_URL = Constants.SERVER_URL + "buy/otp";
 
+    static GET_EXCHANGE_URL = Constants.SERVER_URL + "exchange/";
     static GET_USD_RATE_URL = Constants.SERVER_URL + "exchange/usdrate/";
     static GET_EXCHANGE_RATE_URL = Constants.SERVER_URL + "exchange/xrate/";
     static POST_TRADE_URL = Constants.SERVER_URL + "exchange/post-trade";
@@ -524,21 +525,39 @@ export class Constants {
         }
     }
 
+    static releaseCoins(message, home) {
+        let trxId = message['trxId'];
+        let http = home.http;
+
+        let url = Constants.GET_EXCHANGE_URL + trxId;
+        http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(
+            responseData => {
+                let sellOrder = responseData.result;
+                Constants.properties['finalize_sale_order'] = sellOrder;
+                home.navCtrl.push('ShowBankPaymentPage');
+            },
+             _error => {
+                 Constants.showLongToastMessage("Unable to get sell-order properties. Please try again later", home.toastCtrl);
+             });
+    }
+
     static paySeller(message, navCtrl) {
         let sellerOtherAddress = message['sellerOtherAddress'];
         let splitted = sellerOtherAddress.split(":");
         let sellerBank = splitted[0];
-        let sellerAccountNumber = splitted[0];
+        let sellerAccountNumber = splitted[1];
         let amountToSell = message['amountToSell'];
         let amountToRecieve = message['amountToRecieve'];
         let trxId = message['trxId'];
+        let seller = JSON.parse(message['seller']);        
 
         Constants.properties['buyWithBankMessage'] = {
             "sellerBank": sellerBank,
             "sellerAccountNumber": sellerAccountNumber,
             "amount": amountToSell,
             "amountToRecieve": amountToRecieve,
-            "trxId": trxId
+            "trxId": trxId,
+            "seller": seller
         };
 
         navCtrl.push('BuyWithBankAccountPage');

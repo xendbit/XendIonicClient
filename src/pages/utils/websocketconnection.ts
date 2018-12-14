@@ -62,6 +62,7 @@ export class WSConnection {
           } else if(message['action'] === 'buyerConfirmedBankPayment') {  
             let alertMessage = "Buyer " + message['buyerFullname'] + " notified that they have paid you " + message['amountToRecieve'] + " for your " + message['fromCoin'] + " Please check your bank for confirmation. You have to go to My Sell Orders on the home page and click on confirm (to release the coins to they buyer) once you get confirmation from the bank that the money has been paid."
             Constants.showAlert(app.alertCtrl, "Buyer Paid You", alertMessage);
+            Constants.releaseCoins(message, app);
           } else if(message['action'] === 'provideAddressToDonor') {  
             Constants.askBeneficiaryForAddress(message, app);
           } else if(message['action'] === 'addressProvidedToDonor') {  
