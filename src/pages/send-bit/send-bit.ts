@@ -117,7 +117,7 @@ export class SendBitPage {
     if (canSend < 0) {
       canSend = 0;
     }
-    Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, canSend.toFixed(3));
+    Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, "You can send " + canSend.toFixed(3) + " " + Constants.WORKING_WALLET);
   }
 
   sendBit() {

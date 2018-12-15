@@ -183,7 +183,7 @@ export class BuyBitPage {
             let priceFrom = seller.amountToSell;
             let priceTo = seller.amountToRecieve;
             let rate = seller.rate;
-            let message = "I'm interested in your " + priceFrom + coin +  " -> " + priceTo + toCoin + " (@ " + rate + ") trade posted on XendBit";
+            let message = "I'm interested in your " + priceFrom + coin +  " -> " + priceTo + toCoin + " (@ " + rate + ") trade posted on XendBit. Please log in to your XendBit app to continue trade";
             let url = "https://wa.me/" + phoneNumber + "?text=" + message;
             const browser = this.iab.create(url, "_system", "hardwareback=yes,");
             browser.close();
