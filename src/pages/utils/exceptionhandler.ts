@@ -1,11 +1,13 @@
 import { IonicErrorHandler } from 'ionic-angular';
 import { Injectable } from '@angular/core';
 import { AlertController } from 'ionic-angular';
-
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class MyExceptionHandler extends IonicErrorHandler {
-    constructor(public alertCtrl: AlertController) {
+
+    constructor(public alertCtrl: AlertController, public http: Http) {
         super();
     }
 
@@ -15,13 +17,21 @@ export class MyExceptionHandler extends IonicErrorHandler {
             error.message = "phem";
             return;
         } else {
-            let options = {
-                title: "Error Occured.",
-                message: error.message,
-            };
+            // let options = {
+            //     title: "Error Occured.",
+            //     message: error.message,
+            // };
 
-            let alert = this.alertCtrl.create(options);
-            alert.present();
+            // let alert = this.alertCtrl.create(options);
+            // alert.present();
+            //we should send this error to a slack channel
+            console.log(error);
+            let url = "https://hooks.slack.com/services/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";
+
+            let postData = {
+                text: error.message
+            }
+            this.http.post(url, postData).map(res => res.json()).subscribe(_responseData => {}, _error => {});
         }
         super.handleError(error);
     }

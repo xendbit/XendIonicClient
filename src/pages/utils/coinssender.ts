@@ -178,7 +178,11 @@ export class CoinsSender {
                 xendFees = Math.trunc(xendFees * +fees.multiplier);
                 sum = Math.trunc(sum * +fees.multiplier);
                 let blockFees = Math.trunc(+fees.blockFees * +fees.multiplier);
-                let change = Math.trunc(sum - amount - blockFees - xendFees); 
+                let change = Math.trunc(sum - amount - blockFees - xendFees);                 
+
+                if(xendFees <= Constants.DUST) {
+                    change = Math.trunc(sum - amount - blockFees);                 
+                }
 
                 Console.log(fees);
                 Console.log(sum);
@@ -188,7 +192,9 @@ export class CoinsSender {
                 Console.log(change);        
 
                 txb.addOutput(recipientAddress, amount);
-                txb.addOutput(fees.xendAddress, xendFees);
+                if(xendFees > Constants.DUST) {
+                    txb.addOutput(fees.xendAddress, xendFees);
+                }
                 txb.addOutput(fromAddress, change);
 
                 let index = 0;

@@ -171,6 +171,7 @@ export class LoginPage {
                 }
             },
                 error => {
+                    Console.log(error);
                     this.loading.dismiss();
                     Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
                 });
