@@ -37,6 +37,12 @@ export class LandingPage {
 
   ionViewDidEnter() {
     Console.log("Entered");
+    if (this.ls.getItem("exchangeType") === 'exchange') {
+      this.wallets = Constants.properties['wallets'];
+    } else if (this.ls.getItem("exchangeType") === 'equities') {
+      this.wallets = Constants.properties['equities'];
+    }
+    Constants.properties['wallets'] = this.wallets;
     this.reloadWallets();
   }
 

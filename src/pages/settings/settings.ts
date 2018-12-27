@@ -118,6 +118,10 @@ export class SettingsPage {
     this.navCtrl.push('UpgradePage');
   }
 
+  showBeneficiaries() {
+    this.navCtrl.push('ViewBeneficiariesPage')
+  }
+
   showMyInfo() {
     Console.log('Showing My Info Page');
     this.navCtrl.push('PersonalPage');
