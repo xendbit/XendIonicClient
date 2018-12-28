@@ -1,12 +1,12 @@
 import { StorageService } from './../utils/storageservice';
-import {FingerprintAIO} from '@ionic-native/fingerprint-aio';
-import {FormBuilder, Validators} from '@angular/forms';
-import {Console} from './../utils/console';
-import {Constants} from './../utils/constants';
-import {Component} from '@angular/core';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Console } from './../utils/console';
+import { Constants } from './../utils/constants';
+import { Component } from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, ActionSheetController, AlertController, IonicPage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
-import {Http} from '@angular/http';
+import { Http } from '@angular/http';
 
 /**
  * Generated class for the SellBitPage page.
@@ -52,7 +52,7 @@ export class SellBitPage {
         beneficiaryAccountNumber: ""
     };
 
-    constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,  public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
+    constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
         this.banks = Constants.properties['banks'];
         this.paymentMethods = Constants.properties['payment.methods'];
         this.pageTitle = "Place Sell Order"
@@ -91,8 +91,8 @@ export class SellBitPage {
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
     }
 
-    ionViewWillEnter(){
-        this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;     
+    ionViewWillEnter() {
+        this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;
     }
 
     ionViewDidLoad() {
@@ -138,7 +138,7 @@ export class SellBitPage {
             isValid = true;
         }
 
-        if (isValid) {            
+        if (isValid) {
             let beneficiaryAccountNumber = this.isOwner ? this.ls.getItem('accountNumber') : sb.beneficiaryAccountNumber;
             let beneficiaryBank = this.isOwner ? this.ls.getItem('bankCode') : sb.beneficiaryBank;
 
@@ -249,6 +249,21 @@ export class SellBitPage {
             this.loading.dismiss();
             Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
         });
+    }
+
+    sellAll() {
+        let fees = Constants.getCurrentWalletProperties();
+        let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
+        let xendFees = +fees.xendFees * balance;
+        //0.001 is added because of rounding issues.
+        Console.log("confirmedAccountBalance: " + balance);
+        let canSend = balance - fees.blockFees - xendFees;
+        if (canSend < 0) {
+            canSend = 0;
+        }
+
+        this.sellForm.controls.numberOfBTC.setValue(canSend);
+        this.sellForm.controls.amountToRecieve.setValue(this.sellForm.value.pricePerBTC * canSend);
     }
 
     sellBitFingerprint() {

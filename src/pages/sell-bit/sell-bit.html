@@ -34,6 +34,10 @@
                     <ion-input type="number" formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();"></ion-input>
                 </ion-item>
                 <ion-item>
+                        <button ion-button round full color="xend" (click)="sellAll();" icon-right>Sell All {{btcText}}<ion-icon
+                            name="trending-up"></ion-icon></button>
+                </ion-item>
+                <ion-item>
                     <ion-label stacked>You will get (NGN)</ion-label>
                     <ion-input readonly type="number" formControlName="amountToRecieve"></ion-input>
                 </ion-item>
