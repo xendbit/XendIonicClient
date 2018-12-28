@@ -59,7 +59,7 @@ export class LoginPage {
 
         let app = this;
 
-        setTimeout(function () {            
+        setTimeout(function () {
             app.loginForm.controls.email.setValue(app.ls.getItem("emailAddress"));
             app.loginForm.controls.exchangeType.setValue("exchange");
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
@@ -119,6 +119,46 @@ export class LoginPage {
             .subscribe(responseData => { }, error => { });
     }
 
+    showResendConfirmationEmailDialog() {
+        const confirm = this.alertCtrl.create({
+            title: 'Resend Confirmation Email?',
+            message: 'Do you want us to resend the confirmation email to ' + this.ls.getItem('emailAddress') + '?',
+            buttons: [
+                {
+                    text: 'No',
+                    handler: () => {
+                        //do nothing
+                    }
+                },
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        this.resendConfirmationEmail();
+                    }
+                }
+            ]
+        });
+        confirm.present();
+    }
+
+    resendConfirmationEmail() {
+        let emailAddress = this.ls.getItem('emailAddress');
+        let requestData = {
+            emailAddress: emailAddress,
+        };
+
+        let url = Constants.SEND_CONFIRMATION_EMAIL_URL;
+
+        this.http.post(url, requestData, Constants.getHeader())
+            .map(res => res.json())
+            .subscribe(responseData => {
+                Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+            },
+                _error => {
+                    Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+                });
+    }
+
     loginOnServer(password, emailAddress, exchangeType) {
         this.ls.setItem('isGuest', false);
         this.ls.setItem('emailAddress', emailAddress);
@@ -168,6 +208,12 @@ export class LoginPage {
                 } else {
                     this.loading.dismiss();
                     Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+
+                    Console.log(responseData.response_code === 601);
+                    if (responseData.response_code === 601) {
+                        //account is not activated
+                        this.showResendConfirmationEmailDialog();
+                    }
                 }
             },
                 error => {
@@ -204,7 +250,7 @@ export class LoginPage {
     }
 
     resetPassword() {
-        this.navCtrl.push('GettingStartedPage', {'type': 'resetPassword'});
+        this.navCtrl.push('GettingStartedPage', { 'type': 'resetPassword' });
     }
 
     initProps() {

@@ -101,6 +101,7 @@ export class Constants {
     static GET_TX_URL = Constants.SERVER_URL + "user/transactions/";
     static SEND_URL = Constants.SERVER_URL + "user/send-coins";
     static LOGIN_URL = Constants.SERVER_URL + "user/login";
+    static SEND_CONFIRMATION_EMAIL_URL = Constants.SERVER_URL + "user/send-confirmation-email";
     static ADD_KYC_URL = Constants.SERVER_URL + "user/add/kyc";
     static XND_ACCOUNT_ID_URL = Constants.SERVER_URL + "user/get-account-id";
     static LOAD_BENEFICIARIES_URL = Constants.SERVER_URL + "user/beneficiaries";
