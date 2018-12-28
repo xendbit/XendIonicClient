@@ -127,6 +127,7 @@ export class BuyWithBankAccountPage {
 
   cancelTrade() {
     let message = Constants.properties['buyWithBankMessage'];
+    console.log(message);
     let connection = Constants.properties['ws_connection'];
     let data = {
       "action": "cancelBankPayment",

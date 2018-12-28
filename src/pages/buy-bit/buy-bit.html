@@ -24,13 +24,23 @@
     </ion-card>
     <ion-item style="background-color: none">
         <ion-label stacked>Select Pairs</ion-label>
-        <ion-select interface='action-sheet' [(ngModel)]="currencyPair" placeholder="Click to select currency pairs" (ionChange)="pairSelected($event)">
+        <ion-select interface='action-sheet' [(ngModel)]="currencyPair" placeholder="Click to select currency pairs"
+            (ionChange)="pairSelected($event)">
             <ion-option *ngFor="let currencyPair of currencyPairs" value="{{currencyPair}}">
                 {{currencyPair}}
             </ion-option>
         </ion-select>
     </ion-item>
     <ion-grid style="background-color: none">
+        <ion-row>
+            <ion-col col-4 class="colgrid"></ion-col>
+            <ion-col col-4 class="colgrid">
+                <button ion-button icon-left clear small (click)="loadSellers()" item-left>
+                    Refresh &nbsp;&nbsp;&nbsp;<ion-icon name="refresh-circle"></ion-icon>
+                </button>                
+            </ion-col>
+            <ion-col col-4 class="colgrid"></ion-col>
+        </ion-row>
         <ion-row class="rowgrid" *ngIf="showHeaders">
             <ion-col col-4 class="colgrid">{{fromCoin}}</ion-col>
             <ion-col col-4 class="colgrid">{{toCoin}}</ion-col>

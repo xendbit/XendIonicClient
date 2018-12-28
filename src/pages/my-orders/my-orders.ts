@@ -42,8 +42,7 @@ export class MyOrdersPage {
     type = 'Sell';
     isSellEnabled = false;
     isBuyEnabled = true;
-    lastValue: String;
-
+    lastValue: string;
 
     constructor(public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
         let fees = Constants.getCurrentWalletProperties();
@@ -54,7 +53,6 @@ export class MyOrdersPage {
         this.loadRate();
 
         this.ls = Constants.storageService;
-
         //let pageTitle = "Select Payment Method";
         setTimeout(function () {
         }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
@@ -65,7 +63,8 @@ export class MyOrdersPage {
     }
 
     ionViewDidEnter() {
-        this.loadSellers();
+        this.currencyPair = (Constants.properties['selectedPair'] !== undefined && Constants.properties['selectedPair'] !== "") ? Constants.properties['selectedPair'] : "";
+        this.loadSellers();        
     }
 
     loadRate() {
@@ -98,7 +97,6 @@ export class MyOrdersPage {
     pairSelected(value) {
         this.showHeaders = false;
         this.lastValue = value;
-        Console.log("Selected Pair");
         let selectedPair = value;
         if (selectedPair !== undefined && selectedPair.indexOf("->") >= 0) {
 
@@ -128,14 +126,17 @@ export class MyOrdersPage {
         this.currencyPairs = [];
         this.sellersPairs = [];
         this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-        let wallets = Constants.properties['wallets'];
-        for (let w in wallets) {
-            let wallet = wallets[w];
-            if (wallet['value'] !== Constants.WORKING_WALLET) {
-                let pair = Constants.WORKING_WALLET + " -> " + wallets[w].value;
-                this.currencyPairs.push(pair);
-            }
-        }
+        /**
+         * The commented code is only neccessary if/when we are doing exchange
+         */
+        // let wallets = Constants.properties['wallets'];
+        // for (let w in wallets) {
+        //     let wallet = wallets[w];
+        //     if (wallet['value'] !== Constants.WORKING_WALLET) {
+        //         let pair = Constants.WORKING_WALLET + " -> " + wallets[w].value;
+        //         this.currencyPairs.push(pair);
+        //     }
+        // }
 
         for (let bpm of Constants.properties['payment.methods']) {
             let pair = Constants.WORKING_WALLET + " -> " + bpm.value;

@@ -240,6 +240,8 @@ export class SellBitPage {
             this.loading.dismiss();
             if (responseData.response_text === "success") {
                 Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
+                Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
+                this.navCtrl.push('MyOrdersPage');
             } else {
                 Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
             }

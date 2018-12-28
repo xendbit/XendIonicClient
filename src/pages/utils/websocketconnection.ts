@@ -46,7 +46,9 @@ export class WSConnection {
               //doNothing
             })
           } else if(message['action'] === 'notOnline') {
-            Constants.showAlert(app.alertCtrl, "User not online", "The user is not online");            
+            Constants.showAlert(app.alertCtrl, "User not online", "The user is not online");  
+          } else if(message['action'] === 'orderInProgress')          {
+            Constants.showAlert(app.alertCtrl, "Trade not possible", "Another user is currently interested in the order. Please refresh and check another order");
           } else if (message['action'] === 'accountNotApproved') {
             Constants.showAlert(app.alertCtrl, "Account Error", message['message']);
           } else if (message['action'] === 'cancelTrade') {
