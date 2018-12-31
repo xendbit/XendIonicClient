@@ -190,7 +190,7 @@ export class ExchangePage {
                     this.loading.dismiss();
                 }, error => {
                     this.loading.dismiss();
-                    Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+                    Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
                     //doNothing
                 })
         }
@@ -240,7 +240,7 @@ export class ExchangePage {
             }
         }, _error => {
             this.loading.dismiss();
-            Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+            Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
         });
     }
 

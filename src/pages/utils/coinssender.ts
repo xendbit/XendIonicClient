@@ -1,7 +1,7 @@
-import {HDNode, TransactionBuilder} from 'bitcoinjs-lib';
-import {mnemonicToSeed} from 'bip39';
-import {Console} from './console';
-import {Constants} from './constants';
+import { HDNode, TransactionBuilder } from 'bitcoinjs-lib';
+import { mnemonicToSeed } from 'bip39';
+import { Console } from './console';
+import { Constants } from './constants';
 import Web3 from 'web3';
 
 export class CoinsSender {
@@ -17,10 +17,10 @@ export class CoinsSender {
         let password = ls.getItem('password');
         let brokerAccount = data['brokerAccount'];
 
-        loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");        
-        let mnemonicCode = Constants.normalizeMnemonicCode(ls);        
+        loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
+        let mnemonicCode = Constants.normalizeMnemonicCode(ls);
 
-        let val = Math.round(Math.floor(+amount) * +fees.multiplier)        
+        let val = Math.round(Math.floor(+amount) * +fees.multiplier)
         let xendFees = Math.floor(amount * +fees.xendFees * +fees.multiplier);
         let xendAddress = fees.xendAddress;
 
@@ -116,7 +116,7 @@ export class CoinsSender {
         Console.log(fees.multiplier);
 
         try {
-            instance.send(recipientAddress, xendFees, {value: val, from: sender}, function (err, result) {
+            instance.send(recipientAddress, xendFees, { value: val, from: sender }, function (err, result) {
                 if (err) {
                     errorCall(data);
                     loading.dismiss();
@@ -172,16 +172,16 @@ export class CoinsSender {
                 for (let utxo in utxos) {
                     txb.addInput(utxos[utxo]['hash'], utxos[utxo]['index']);
                     sum = sum + +utxos[utxo]['value'];
-                }                                
+                }
 
                 amount = Math.trunc(amount * +fees.multiplier);
                 xendFees = Math.trunc(xendFees * +fees.multiplier);
                 sum = Math.trunc(sum * +fees.multiplier);
                 let blockFees = Math.trunc(+fees.blockFees * +fees.multiplier);
-                let change = Math.trunc(sum - amount - blockFees - xendFees);                 
+                let change = Math.trunc(sum - amount - blockFees - xendFees);
 
-                if(xendFees <= Constants.DUST) {
-                    change = Math.trunc(sum - amount - blockFees);                 
+                if (xendFees <= Constants.DUST) {
+                    change = Math.trunc(sum - amount - blockFees);
                 }
 
                 Console.log(fees);
@@ -189,13 +189,16 @@ export class CoinsSender {
                 Console.log(amount);
                 Console.log(xendFees);
                 Console.log(fees.multiplier);
-                Console.log(change);        
+                Console.log(change);
 
                 txb.addOutput(recipientAddress, amount);
-                if(xendFees > Constants.DUST) {
+                if (xendFees > Constants.DUST) {
                     txb.addOutput(fees.xendAddress, xendFees);
                 }
-                txb.addOutput(fromAddress, change);
+
+                if (change > Constants.DUST) {
+                    txb.addOutput(fromAddress, change);
+                }
 
                 let index = 0;
                 for (let utxo in utxos) {
@@ -206,7 +209,7 @@ export class CoinsSender {
                 let hex = txb.build().toHex();
                 CoinsSender.submitTx(data, coin, hex, password, loading, successCall, errorCall);
             }
-        }, error => {
+        }, _error => {
             loading.dismiss();
             Constants.showLongerToastMessage("Error getting your transactions", toastCtrl);
             errorCall(data);

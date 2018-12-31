@@ -53,7 +53,7 @@ export class StartPage {
     this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(data => {
       Constants.properties = data;
     }, error => {
-      Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
       Console.log("Can not pull data from server");
       //this.platform.exitApp();
     });

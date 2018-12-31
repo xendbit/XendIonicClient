@@ -177,7 +177,7 @@ export class UpgradePage {
       },
       error => {
         this.loading.dismiss();
-        Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
+        Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
       });
   }
 
