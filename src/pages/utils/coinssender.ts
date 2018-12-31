@@ -20,8 +20,8 @@ export class CoinsSender {
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");        
         let mnemonicCode = Constants.normalizeMnemonicCode(ls);        
 
-        let val = Math.round(+amount * +fees.multiplier)        
-        let xendFees = (amount * +fees.xendFees * +fees.multiplier);
+        let val = Math.round(Math.floor(+amount) * +fees.multiplier)        
+        let xendFees = Math.floor(amount * +fees.xendFees * +fees.multiplier);
         let xendAddress = fees.xendAddress;
 
         Console.log(fees);

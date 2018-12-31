@@ -82,7 +82,8 @@ export class UpgradePage {
       folderName: 'XendID',
       quality: 100,
       width: 400,
-      height: 400
+      height: 400,
+      fileName: 'resized.jpg'
     };
 
     this.imageResizer.resize(options).then((filePath: string) => {

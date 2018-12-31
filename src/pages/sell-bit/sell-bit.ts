@@ -213,12 +213,15 @@ export class SellBitPage {
 
         let btcValue = coinAmount;
 
+        let totalFees = (+fees.xendFees * btcValue) + +fees.blockFees;
+
         let key = Constants.WORKING_WALLET + "Address";
         let sellerFromAddress = this.ls.getItem(key);
         let sellerToAddress = beneficiaryBank + ":" + beneficiaryAccountNumber;
 
         let postData = {
             amountToSell: btcValue,
+            fees: totalFees,
             amountToRecieve: amountToRecieve,
             sellerFromAddress: sellerFromAddress,
             sellerToAddress: sellerToAddress,

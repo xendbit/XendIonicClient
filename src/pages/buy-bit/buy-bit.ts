@@ -81,6 +81,7 @@ export class BuyBitPage {
         this.showHeaders = false;
         Console.log("Selected Pair");
         let selectedPair = value;
+        this.currencyPair = value;
         if (selectedPair !== undefined && selectedPair.indexOf("->") >= 0) {
             this.sellersPairs = [];
             for (let seller of this.sellers) {
@@ -125,6 +126,7 @@ export class BuyBitPage {
         this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.sellers = responseData.result;
             this.loading.dismiss();
+            this.pairSelected(this.currencyPair);
         }, _error => {
             this.loading.dismiss();
             Constants.showAlert(this.toastCtrl, "Server unavailable", "The server is temporarily unable to service your request due to maintenance downtime");
