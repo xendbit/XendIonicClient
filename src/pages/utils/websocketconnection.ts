@@ -42,7 +42,7 @@ export class WSConnection {
                 text: message['message'],
                 data: { secret: "key" }
               });
-            }, error => {
+            }, _error => {
               //doNothing
             })
           } else if(message['action'] === 'notOnline') {

@@ -8,6 +8,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import { HDNode, script, crypto, address, TransactionBuilder } from 'bitcoinjs-lib';
+import { mnemonicToSeed } from 'bip39';
+
 /*
   Generated class for the Settings page.
 
@@ -67,6 +70,7 @@ export class SettingsPage {
 
   ionViewDidEnter() {
     Console.log('ionViewDidEnter SettingsPage');
+    //this.craftMultisig();
     if (StorageService.ACCOUNT_TYPE === "ADVANCED") {
       this.isAdvanced = true;
     }
@@ -163,4 +167,52 @@ export class SettingsPage {
     confirm.present();
   }
 
+  craftMultisig() {
+    var hd = HDNode.fromSeedBuffer(mnemonicToSeed("carve whenever axle type repent smash eternity zippers chase narrate childhood effort zippers"), Constants.NETWORKS.BTCTEST).derivePath("m/0/0/0");
+    let privKey1 = hd.keyPair;    
+
+    var hd2 = HDNode.fromSeedBuffer(mnemonicToSeed("place ashtray blush amnesty problems serve bemused neck reheat pig tremble upright ashtray"), Constants.NETWORKS.BTCTEST).derivePath("m/0/0/0");
+    let privKey2 = hd2.keyPair;        
+
+    var hd3 = HDNode.fromSeedBuffer(mnemonicToSeed("jan feb mar apr may jun jul aug sep oct nov dec dec"), Constants.NETWORKS.BTCTEST).derivePath("m/0/0/0");
+    let privKey3 = hd3.keyPair;            
+
+    var privKeys = [privKey1, privKey2, privKey3];
+    var pubKeys = privKeys.map(function(privKey) {
+      return privKey.getPublicKeyBuffer();
+    });
+
+    var witnessScript = script.multisig.output.encode(2, pubKeys);
+    var witnessScriptHash = crypto.sha256(witnessScript);
+
+    var redeemScript = script.witnessScriptHash.output.encode(witnessScriptHash);
+    var redeemScriptHash = crypto.hash160(redeemScript)
+    
+    var scriptPubKey = script.scriptHash.output.encode(redeemScriptHash);
+    var P2SHaddress = address.fromOutputScript(scriptPubKey, Constants.NETWORKS.BTCTEST);     
+    
+    console.log(P2SHaddress)
+    
+    var txb = new TransactionBuilder(Constants.NETWORKS.BTCTEST)
+    
+    txb.addInput("65b6f3b76e003a99df21ab66ffb7801196a39c4f9928c35b22edcb206279d5d3", 0, null, scriptPubKey);
+    txb.addInput("246b6859a969e3c406e167f72ff0b02e00c5576bfb0f69042317b997473dbe98", 0, null, scriptPubKey);
+    
+    
+    txb.addOutput ("mqgSLgUyDSwPG387ePKKXSLMXnWKrxDur5", 94500000-1000);    
+
+    var transvalue0=64000000;
+    var transvalue1=30500000;
+
+    txb.sign(0, privKeys[0], redeemScript, null, transvalue0, witnessScript);
+    txb.sign(0, privKeys[1], redeemScript, null, transvalue0, witnessScript);
+
+    txb.sign(1, privKeys[0], redeemScript, null, transvalue1, witnessScript);
+    txb.sign(1, privKeys[1], redeemScript, null, transvalue1, witnessScript);
+
+    var tx = txb.build();
+    var txhex = tx.toHex();
+    
+    console.log (txhex);    
+  }
 }

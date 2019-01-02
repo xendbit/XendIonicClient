@@ -97,13 +97,29 @@ export class ShowBankPaymentPage {
 
     app.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       //doNothing
-    }, error => {
+    }, _error => {
       Constants.showLongerToastMessage("We have released coins to the buyer, but we can't update the status of your transaction. Please speak to an admin immediately", app.toastCtrl);
     })
   }
 
   errorCall(data) {
-    //doNothing
+    let app: ShowBankPaymentPage = data['page'];
+    app.disableButton = true;
+    Console.log(app.sellOrder);
+    //ok, we need to call server "update-exchange-status";
+    let url = Constants.UPDATE_TRADE_URL;
+    let requestData = {
+      "sellOrderTransactionId": app.sellOrder['trxId'],
+      "status": "SELLER_SENDING_ERROR",
+      emailAddress: app.ls.getItem("emailAddress"),
+      password: app.ls.getItem("password")
+    };
+
+    app.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+      //doNothing
+    }, error => {
+      Constants.showLongerToastMessage("We have released coins to the buyer, but we can't update the status of your transaction. Please speak to an admin immediately", app.toastCtrl);
+    })
   }
 
   presentAlert() {

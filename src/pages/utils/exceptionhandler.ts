@@ -25,9 +25,6 @@ export class MyExceptionHandler extends IonicErrorHandler {
             // let alert = this.alertCtrl.create(options);
             // alert.present();
             //we should send this error to a slack channel
-            console.log("------------------------------------------------------------------------------------------");
-            console.log(error);
-            console.log("------------------------------------------------------------------------------------------");
             let url = "https://hooks.slack.com/services/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";
 
             let postData = {
