@@ -116,7 +116,7 @@ export class LoginPage {
 
         this.http.post(url, requestData, Constants.getHeader())
             .map(res => res.json())
-            .subscribe(responseData => { }, error => { });
+            .subscribe(_responseData => { }, error => { });
     }
 
     showResendConfirmationEmailDialog() {

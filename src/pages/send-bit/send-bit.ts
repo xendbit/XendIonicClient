@@ -157,6 +157,7 @@ export class SendBitPage {
       data['toastCtrl'] = this.toastCtrl;
       data['http'] = this.http;
       data['sendBitPage'] = this;
+      data['alertCtrl'] = this.alertCtrl;
 
       this.disableButton = true;
       Console.log(fees);

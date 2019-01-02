@@ -81,6 +81,7 @@ export class Constants {
     static GET_BUY_TX_URL = Constants.SERVER_URL + "buy/tx/";
     static SEND_OTP_URL = Constants.SERVER_URL + "buy/otp";
 
+    static SEND_2FA_CODE_URL = Constants.SERVER_URL + "user/send-2fa"
     static GET_EXCHANGE_URL = Constants.SERVER_URL + "exchange/";
     static GET_USD_RATE_URL = Constants.SERVER_URL + "exchange/usdrate/";
     static GET_EXCHANGE_RATE_URL = Constants.SERVER_URL + "exchange/xrate/";
@@ -456,6 +457,7 @@ export class Constants {
         data['http'] = home.http;
         data['connection'] = connection;
         data['message'] = message;
+        data['alertCtrl'] = home.alertCtrl;
 
         let coin: string = message['toCoin'];
         let fees = Constants.getWalletProperties(coin);
@@ -500,6 +502,7 @@ export class Constants {
         data['http'] = home.http;
         data['connection'] = connection;
         data['message'] = message;
+        data['alertCtrl'] = home.alertCtrl;
 
         let coin: string = message['fromCoin'];
         let key = coin + "Address";

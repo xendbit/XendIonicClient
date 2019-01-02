@@ -38,6 +38,17 @@
         </ion-card-content>
     </ion-card>
 
+    <ion-card>
+        <ion-card-content>
+            <ion-list>
+                <ion-item>
+                  <ion-label>Enable 2 Factor Authentication</ion-label>
+                  <ion-checkbox [(ngModel)]="enable2fa" (ionChange)="enable2FA()"></ion-checkbox>
+                </ion-item>        
+              </ion-list>
+        </ion-card-content>
+    </ion-card>    
+
     <!-- <ion-card *ngIf="canSwitchWallet">
         <ion-card-content>
             <button color="xend" ion-button icon-right full round (click)="switchWallet();">Switch Wallet 

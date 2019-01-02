@@ -31,7 +31,7 @@ export class SettingsPage {
   updgradeAccountText: string;
   afterUpgradeWarningText: string;
   accountType;
-  ls;
+  ls: StorageService;
   loading: Loading;
   showMnemonicForm;
   passwordText: string;
@@ -40,6 +40,7 @@ export class SettingsPage {
   isBeneficiary = false;
   canSwitchWallet = false;
   canLogout = true;
+  enable2fa = false;
 
   constructor(public http: Http, public toastCtrl: ToastController, public formBuilder: FormBuilder, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
     this.showMnemonicForm = formBuilder.group({
@@ -61,7 +62,7 @@ export class SettingsPage {
       app.loading.dismiss();
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
     this.accountType = StorageService.ACCOUNT_TYPE;
-    this.isBeneficiary = StorageService.IS_BENEFICIARY;
+    this.isBeneficiary = StorageService.IS_BENEFICIARY;    
   }
 
   ionViewDidLoad() {
@@ -71,6 +72,8 @@ export class SettingsPage {
   ionViewDidEnter() {
     Console.log('ionViewDidEnter SettingsPage');
     //this.craftMultisig();
+    this.enable2fa = this.ls.getItem("enable2FA");
+
     if (StorageService.ACCOUNT_TYPE === "ADVANCED") {
       this.isAdvanced = true;
     }
@@ -165,6 +168,10 @@ export class SettingsPage {
       ]
     });
     confirm.present();
+  }
+
+  enable2FA() {
+    this.ls.setItem('enable2FA', this.enable2fa);
   }
 
   craftMultisig() {

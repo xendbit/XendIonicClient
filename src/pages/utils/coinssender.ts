@@ -137,17 +137,73 @@ export class CoinsSender {
         }
     }
 
+    static show2FAAlert(data, successCall, errorCall, coin, fromAddress, network, alertCtrl, code) {
+        let toastCtrl = data['toastCtrl'];
+        const prompt = alertCtrl.create({
+            title: 'Enter Code',
+            message: "Please type the code sent to your email address to complete this transaction",
+            inputs: [
+                {
+                    name: '2fa',
+                    placeholder: '2 Factor Authentication'
+                },
+            ],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    handler: data => {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Save',
+                    handler: alertData => {
+                        if(alertData['2fa'] === code) {
+                            this.continueSendingBTC(data, successCall, errorCall, coin, fromAddress, network);
+                        } else {
+                            Constants.showLongToastMessage("Wrong code entered. Please try again", toastCtrl);
+                            this.show2FAAlert(data, successCall, errorCall, coin, fromAddress, network, data['alertCtrl'], code);
+                        }                        
+                    }
+                }
+            ]
+        });
+        prompt.present();
+    }
+
     static sendCoinsBtc(data, successCall, errorCall, coin, fromAddress, network) {
         Console.log("sendCoinsBtc");
+        let ls = data['ls'];
+        let http = data['http'];
+
+        if (ls.getItem('enable2FA')) {
+            let url = Constants.SEND_2FA_CODE_URL;
+            let postData = {
+                emailAddress: ls.getItem("emailAddress")
+            };
+
+            http.post(url, postData, Constants.getWalletHeader(coin)).map(res => res.json()).subscribe(responseData => {
+                if (responseData.response_text === "success") {
+                    let code = responseData.result;
+                    this.show2FAAlert(data, successCall, errorCall, coin, fromAddress, network, data['alertCtrl'], code);
+                }
+            }, _error => { });
+        } else {
+            this.continueSendingBTC(data, successCall, errorCall, coin, fromAddress, network);
+        }
+    }
+
+
+    static continueSendingBTC(data, successCall, errorCall, coin, fromAddress, network) {
+        let ls = data['ls'];
+        let http = data['http'];
         let fees = Constants.getWalletProperties(coin);
         let amount: number = +data['amount'];
         let recipientAddress = data['recipientAddress'];
         let loading = data['loading'];
         let loadingCtrl = data['loadingCtrl'];
-        let ls = data['ls'];
         let toastCtrl = data['toastCtrl'];
-        let http = data['http'];
-        let password = ls.getItem('password');
+        let password = ls.getItem('password');        
 
         let xendFees = (amount * +fees.xendFees);
 
@@ -215,7 +271,6 @@ export class CoinsSender {
             errorCall(data);
         });
     }
-
     static submitTx(data, coin, hex, password, loading, successCall, errorCall) {
         let ls = data['ls'];
         let http = data['http'];

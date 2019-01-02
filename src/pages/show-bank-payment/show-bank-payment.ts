@@ -148,6 +148,7 @@ export class ShowBankPaymentPage {
             data['page'] = this;
             data['trxId'] = this.sellOrder;
             data['brokerAccount'] = this.brokerAccount;
+            data['alertCtrl'] = this.alertCtrl;
 
             let fees = Constants.getCurrentWalletProperties();
             if (this.fromCoin.indexOf('ETH') >= 0) {

@@ -162,6 +162,7 @@ export class SendEquityPage {
       data['http'] = this.http;
       data['sendBitPage'] = this;
       data['brokerAccount'] = brokerAccount;
+      data['alertCtrl'] = this.alertCtrl;
 
       this.disableButton = true;
       Console.log(fees);
