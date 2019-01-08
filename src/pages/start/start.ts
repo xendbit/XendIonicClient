@@ -36,7 +36,7 @@ export class StartPage {
     Console.log('ionViewDidLoad StartPage');
   }
 
-  ionViewDidEnter() {
+  ionViewDidEnter() {    
     this.loadSettings();
   }
 
@@ -52,7 +52,7 @@ export class StartPage {
     Console.log(Constants.SETTINGS_URL);
     this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(data => {
       Constants.properties = data;
-    }, error => {
+    }, _error => {
       Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
       Console.log("Can not pull data from server");
       //this.platform.exitApp();

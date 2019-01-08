@@ -1,3 +1,4 @@
+import { Constants } from './constants';
 import { Storage } from '@ionic/storage';
 
 export class StorageService {
@@ -39,7 +40,10 @@ export class StorageService {
         if (this.data['isGuest'] === true || this.data['isGuest'] === 'true') {
             let key2 = 'guest' + key;
             key = key2;
-        }                
+        }            
+        if(key === "mnemonic" || key === "password")    {
+            itemData = Constants.encryptData(itemData);
+        }
         this.data[key] = itemData;
         this.ns.set("store", this.data);
     }
@@ -49,7 +53,13 @@ export class StorageService {
             let key2 = 'guest' + key;
             key = key2;
         }
-        return this.data[key];
+        let itemData = this.data[key];
+
+        if(key === "mnemonic" || key === "password") {
+            return Constants.decryptData(itemData);
+        }
+
+        return itemData;
     }
 
     clear() {

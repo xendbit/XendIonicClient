@@ -224,12 +224,16 @@ export class BuyBitPage {
             "buyerAddress": buyerAddress,
             "buyerOtherAddress": this.buyerOtherAddress,
             "buyerEmailAddress": this.ls.getItem("emailAddress"),
+            "buyerPublicKey": this.ls.getItem(Constants.WORKING_WALLET + "PublicKey"),
             "action": "startTrade",
             "trxId": trxId
         };
 
+        Console.log(data);
+        Console.log(Constants.WORKING_WALLET);
+
         ws.send(Constants.encryptData(JSON.stringify(data))).subscribe((data) => {
-        }, (error) => {
+        }, (_error) => {
         }, () => {
         });
 

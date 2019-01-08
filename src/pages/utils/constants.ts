@@ -35,7 +35,8 @@ export class Constants {
     };
 
     static DUST = 546;
-    
+    static vector = crypto.getRandomValues(new Uint8Array(16));
+
     static storageService: StorageService;
 
     static TRADE_CANCELLED = false;
@@ -408,7 +409,6 @@ export class Constants {
     }
 
     static sendCoinsToSellerError(data) {
-        Console.log(data);
         let message = data['message'];
         let connection = data['connection'];
         let wsData = {
@@ -480,7 +480,7 @@ export class Constants {
                 {
                     text: 'Continue?',
                     handler: () => {
-                        Constants.askBuyerToPay(data);
+                        Constants.craftMultisig(data);
                     }
                 }, {
                     text: 'Cancel',
@@ -491,6 +491,16 @@ export class Constants {
             ]
         });
         actionSheet.present();
+    }
+
+    static craftMultisig(data) {
+        let message = data['message'];
+        let coin: string = message['fromCoin'];
+        let key = coin + "Address";    
+        let ls = data['ls'];
+        let fromAddress = ls.getItem(key);   
+        let network = Constants.NETWORKS[coin]; 
+        CoinsSender.craftMultisig(data, Constants.askBuyerToPay, Constants.sendCoinsToBuyerError, coin, fromAddress, network);
     }
 
     static startTrade(message, home, connection) {
@@ -557,7 +567,7 @@ export class Constants {
         let amountToSell = message['amountToSell'];
         let amountToRecieve = message['amountToRecieve'];
         let trxId = message['trxId'];
-        let seller = JSON.parse(message['seller']);        
+        let seller = JSON.parse(message['seller']);
 
         Constants.properties['buyWithBankMessage'] = {
             "sellerBank": sellerBank,
@@ -566,29 +576,35 @@ export class Constants {
             "amountToRecieve": amountToRecieve,
             "trxId": trxId,
             "seller": seller
-        };
-
+        };        
+        
         navCtrl.push('BuyWithBankAccountPage');
     }
 
     static askBuyerToPay(data) {
+        Console.log("Asking Buyer to Pay");
+        //construct a 2 of 3 transaction here
         let wsConnection = data['connection'];
         let message = data['message'];
         let buyerEmailAddress = message['buyerEmailAddress'];
         let buyerOtherAddress = message['buyerOtherAddress'];
         let buyerAddress = message['buyerAddress'];
+        let trxHex = data['trxhex'];
+
+        let ecHex = Constants.encryptData(trxHex);
 
         let wsData = {
             "trxId": message['trxId'],
             "buyerEmailAddress": buyerEmailAddress,
             "buyerOtherAddress": buyerOtherAddress,
             "buyerAddress": buyerAddress,
+            "trxHex": ecHex,
             "action": "askBuyerToPay"
         };
 
-        wsConnection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((responseData) => {
+        wsConnection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((_responseData) => {
             //doNothing
-        }, (error) => {
+        }, (_error) => {
             //doNothing
         }, () => {
             //doNothing
@@ -608,6 +624,7 @@ export class Constants {
         let contract = "";
         let currencyId = "";
         let equityId = "";
+        let publicKey = "";
 
         let wallets = Constants.properties['wallets'];
         for (let w in wallets) {
@@ -625,6 +642,7 @@ export class Constants {
                 contract = wallet['contract'];
                 currencyId = wallet['currencyId'];
                 equityId = wallet['equityId'];
+                publicKey = wallet['xend.public_key'];
             }
         }
 
@@ -640,7 +658,8 @@ export class Constants {
             "contract": contract,
             "url": url,
             "currencyId": currencyId,
-            "equityId": equityId
+            "equityId": equityId,
+            "publicKey": publicKey
         };
         return fees;
     }
@@ -664,8 +683,10 @@ export class Constants {
         Constants.registrationData['networkAddress'] = hd.getAddress();
         ls.setItem(chainCode + 'Address', hd.getAddress());
         //import private key
-        let privKey = hd.keyPair.toWIF();
-        Console.log(privKey);
+        let pk = hd.keyPair;
+        let privKey = pk.toWIF();
+        let pubKeyHash = pk.getPublicKeyBuffer().toString('hex');       
+        ls.setItem(chainCode + 'PublicKey', pubKeyHash);
         let address = hd.getAddress();
         let url = Constants.RPC_PROXY + "/importprivkey/" + privKey + "/" + address + "/" + chainCode;
         http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(_success => { }, _error => { });
@@ -785,11 +806,22 @@ export class Constants {
         let b64Data = btoa(data);
         let b64Key = btoa(key);
         let part1Key = b64Key.substr(0, 5);
-        let part2Key = b64Key.substr(5, 5);
+        let part2Key = b64Key.substr(b64Key.length - 5, b64Key.length);
         let coded = part1Key + b64Data + part2Key;
         let result = btoa(coded);
-        Console.log(result);
         return result;
+    }
+
+    static decryptData(data) {
+        try {
+        let coded = atob(data);
+        let part1Key = coded.substr(0, 5);
+        let part2Key = coded.substr(coded.length-5, coded.length);        
+        coded = coded.replace(part1Key, "").replace(part2Key, "");
+        return atob(coded);
+        } catch(e) {
+            return data;
+        }
     }
 
     static makeid() {

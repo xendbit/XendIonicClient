@@ -1,4 +1,4 @@
-import { HDNode, TransactionBuilder } from 'bitcoinjs-lib';
+import { HDNode, script, crypto, TransactionBuilder, ECPair, Transaction } from 'bitcoinjs-lib';
 import { mnemonicToSeed } from 'bip39';
 import { Console } from './console';
 import { Constants } from './constants';
@@ -23,11 +23,6 @@ export class CoinsSender {
         let val = Math.round(Math.floor(+amount) * +fees.multiplier)
         let xendFees = Math.floor(amount * +fees.xendFees * +fees.multiplier);
         let xendAddress = fees.xendAddress;
-
-        Console.log(fees);
-        Console.log(val);
-        Console.log(xendFees);
-        Console.log(fees.multiplier);
 
         let url = Constants.PUSH_TX_URL;
 
@@ -110,11 +105,6 @@ export class CoinsSender {
         let val = +amount * +fees.multiplier
         let xendFees = (+amount * +fees.xendFees) * +fees.multiplier
 
-        Console.log(fees);
-        Console.log(val);
-        Console.log(xendFees);
-        Console.log(fees.multiplier);
-
         try {
             instance.send(recipientAddress, xendFees, { value: val, from: sender }, function (err, result) {
                 if (err) {
@@ -152,7 +142,7 @@ export class CoinsSender {
                 {
                     text: 'Cancel',
                     handler: data => {
-                        console.log('Cancel clicked');
+                        Console.log('Cancel clicked');
                     }
                 },
                 {
@@ -220,49 +210,7 @@ export class CoinsSender {
                 Constants.showLongerToastMessage(responseData.result, toastCtrl);
                 errorCall(data);
             } else {
-                var hd = HDNode.fromSeedBuffer(mnemonicToSeed(ls.getItem('mnemonic').trim()), network).derivePath("m/0/0/0");
-                var keyPair = hd.keyPair;
-                var txb = new TransactionBuilder(network);
-                var utxos = responseData.result;
-                let sum = 0;
-                for (let utxo in utxos) {
-                    txb.addInput(utxos[utxo]['hash'], utxos[utxo]['index']);
-                    sum = sum + +utxos[utxo]['value'];
-                }
-
-                amount = Math.trunc(amount * +fees.multiplier);
-                xendFees = Math.trunc(xendFees * +fees.multiplier);
-                sum = Math.trunc(sum * +fees.multiplier);
-                let blockFees = Math.trunc(+fees.blockFees * +fees.multiplier);
-                let change = Math.trunc(sum - amount - blockFees - xendFees);
-
-                if (xendFees <= Constants.DUST) {
-                    change = Math.trunc(sum - amount - blockFees);
-                }
-
-                Console.log(fees);
-                Console.log(sum);
-                Console.log(amount);
-                Console.log(xendFees);
-                Console.log(fees.multiplier);
-                Console.log(change);
-
-                txb.addOutput(recipientAddress, amount);
-                if (xendFees > Constants.DUST) {
-                    txb.addOutput(fees.xendAddress, xendFees);
-                }
-
-                if (change > Constants.DUST) {
-                    txb.addOutput(fromAddress, change);
-                }
-
-                let index = 0;
-                for (let utxo in utxos) {
-                    txb.sign(index, keyPair);
-                    index = index + 1;
-                }
-
-                let hex = txb.build().toHex();
+                let hex = CoinsSender.getTransactionHex(responseData, network, ls, amount, fees, xendFees, recipientAddress, fromAddress);
                 CoinsSender.submitTx(data, coin, hex, password, loading, successCall, errorCall);
             }
         }, _error => {
@@ -271,6 +219,87 @@ export class CoinsSender {
             errorCall(data);
         });
     }
+
+    static getTransactionHex(responseData, network, ls, amount, fees, xendFees, recipientAddress, fromAddress) {
+        var hd = HDNode.fromSeedBuffer(mnemonicToSeed(ls.getItem('mnemonic').trim()), network).derivePath("m/0/0/0");
+        var keyPair = hd.keyPair;
+        var txb = new TransactionBuilder(network);
+        var utxos = responseData.result;
+        let sum = 0;
+        for (let utxo of utxos) {
+            txb.addInput(utxo['hash'], utxo['index']);
+            sum = sum + +utxo['value'];
+        }
+
+        amount = Math.trunc(amount * +fees.multiplier);
+        xendFees = Math.trunc(xendFees * +fees.multiplier);
+        sum = Math.trunc(sum * +fees.multiplier);
+        let blockFees = Math.trunc(+fees.blockFees * +fees.multiplier);
+        let change = Math.trunc(sum - amount - blockFees - xendFees);
+
+        if (xendFees <= Constants.DUST) {
+            change = Math.trunc(sum - amount - blockFees);
+        }
+
+        txb.addOutput(recipientAddress, amount);
+        if (xendFees > Constants.DUST) {
+            txb.addOutput(fees.xendAddress, xendFees);
+        }
+
+        if (change > Constants.DUST) {
+            txb.addOutput(fromAddress, change);
+        }
+
+        let index = 0;
+        for (let _utxo of utxos) {
+            txb.sign(index, keyPair);
+            index = index + 1;
+        }
+
+        let hex = txb.build().toHex();    
+        return hex;    
+    }
+
+    static craftMultisig(data, successCall, errorCall, coin, fromAddress, network) {  
+        let ls = data['ls'];
+        let http = data['http'];
+
+        let fees = Constants.getWalletProperties(coin);
+            
+        var txb = new TransactionBuilder(network);      
+        
+        let amount: number = +data['amount'];
+        let recipientAddress = data['recipientAddress'];
+        let loading = data['loading'];
+        let loadingCtrl = data['loadingCtrl'];
+        let toastCtrl = data['toastCtrl'];     
+
+        let xendFees = (amount * +fees.xendFees);
+
+        loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
+        let url = Constants.GET_UNSPENT_OUTPUTS_URL + fromAddress;
+        let amountToSend: number = amount + xendFees + +fees.blockFees;
+        let postData = {
+            btcValue: amountToSend
+        };
+
+        http.post(url, postData, Constants.getWalletHeader(coin)).map(res => res.json()).subscribe(responseData => {
+            loading.dismiss();
+            if (responseData.response_text === "error") {                
+                Constants.showLongerToastMessage(responseData.result, toastCtrl);
+                errorCall(data);
+            } else {            
+                let hex = CoinsSender.getTransactionHex(responseData, network, ls, amount, fees, xendFees, recipientAddress, fromAddress);
+                data['trxHex'] = hex;
+                successCall(data);
+            }
+        }, _error => {
+            loading.dismiss();
+            Constants.showLongerToastMessage("Error getting your transactions", toastCtrl);
+            errorCall(data);
+        });                
+    }
+
     static submitTx(data, coin, hex, password, loading, successCall, errorCall) {
         let ls = data['ls'];
         let http = data['http'];
@@ -297,5 +326,4 @@ export class CoinsSender {
             Constants.showLongerToastMessage(error, toastCtrl);
         });
     }
-
 }

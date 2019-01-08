@@ -7,7 +7,6 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/map';
 import { Console } from '../utils/console';
-
 /**
  * Generated class for the BuyWithBankAccountPage page.
  *
@@ -15,7 +14,7 @@ import { Console } from '../utils/console';
  * Ionic pages and navigation.
  */
 
- @IonicPage()
+@IonicPage()
 @Component({
   selector: 'page-buy-with-bank-account',
   templateUrl: 'buy-with-bank-account.html',
@@ -57,8 +56,8 @@ export class BuyWithBankAccountPage {
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
 
     let data = Constants.properties['buyWithBankMessage'];
-    for(let bank in this.banks) {
-      if(this.banks[bank]['bankCode'] === data['sellerBank']) {
+    for (let bank in this.banks) {
+      if (this.banks[bank]['bankCode'] === data['sellerBank']) {
         this.bankName = this.banks[bank]['bankName'];
         break;
       }
@@ -80,23 +79,23 @@ export class BuyWithBankAccountPage {
     let phoneNumber = seller.kyc.phoneNumber;
     //let phoneNumber = '2348025943549';
     if (phoneNumber === undefined || phoneNumber === null) {
-        Constants.showLongerToastMessage("You can't chat with this seller.", this.toastCtrl);
+      Constants.showLongerToastMessage("You can't chat with this seller.", this.toastCtrl);
     } else {
-        let coin = seller.fromCoin;
-        let toCoin = seller.toCoin;
-        let priceFrom = seller.amountToSell;
-        let priceTo = seller.amountToRecieve;
-        let rate = seller.rate;
-        let message = "I'm interested in your " + priceFrom + coin +  " -> " + priceTo + toCoin + " (@ " + rate + ") trade posted on XendBit";
-        let url = "https://wa.me/" + phoneNumber + "?text=" + message;
-        const browser = this.iab.create(url, "_system", "hardwareback=yes,");
-        browser.close();
+      let coin = seller.fromCoin;
+      let toCoin = seller.toCoin;
+      let priceFrom = seller.amountToSell;
+      let priceTo = seller.amountToRecieve;
+      let rate = seller.rate;
+      let message = "I'm interested in your " + priceFrom + coin + " -> " + priceTo + toCoin + " (@ " + rate + ") trade posted on XendBit";
+      let url = "https://wa.me/" + phoneNumber + "?text=" + message;
+      const browser = this.iab.create(url, "_system", "hardwareback=yes,");
+      browser.close();
     }
-}
+  }
 
   loadRate() {
     let fees = Constants.getCurrentWalletProperties();
-    let tickerSymbol = fees.tickerSymbol;        
+    let tickerSymbol = fees.tickerSymbol;
     let url = Constants.GET_USD_RATE_URL + tickerSymbol;
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
@@ -107,18 +106,21 @@ export class BuyWithBankAccountPage {
       //doNothing
     });
   }
-  
+
   confirmBankPayment() {
+    Console.log("confirmBankPayment");
     let message = Constants.properties['buyWithBankMessage'];
     let connection = Constants.properties['ws_connection'];
     let data = {
       "buyerEmailAddress": this.ls.getItem("emailAddress"),
       "action": "buyerConfirmedBankPayment",
-      "trxId": message['trxId']
-    };      
+      "trxId": message['trxId'],
+    };
 
-    connection.send(Constants.encryptData(JSON.stringify(data))).subscribe((data) => {
-    }, (error) => {
+    Console.log(data);
+    
+    connection.send(Constants.encryptData(JSON.stringify(data))).subscribe((_data) => {
+    }, (_error) => {
     }, () => {
     });
     Constants.showLongerToastMessage("Trader notified. Once trader confirms reciept of payment, your wallet will be credited", this.toastCtrl);
@@ -131,11 +133,11 @@ export class BuyWithBankAccountPage {
     let data = {
       "action": "cancelBankPayment",
       "trxId": message['sellOrderTransactionId']
-    };    
+    };
     connection.send(Constants.encryptData(JSON.stringify(data))).subscribe((data) => {
     }, (error) => {
     }, () => {
     });
-    this.disableButton = true;  
+    this.disableButton = true;
   }
 }
