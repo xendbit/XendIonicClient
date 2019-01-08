@@ -58,7 +58,7 @@ export class GettingStartedPage {
     this.advancedWalletText = "Advanced Wallet";
     this.canConvertCashText = "Can convert cash to coins";
     this.canConvertCoinsText = "Can convert coins to cash";
-    this.createAdvancedWalletText = "Create Advanced Wallet";
+    this.createAdvancedWalletText = "Create Wallet";
     this.doesNotRequireKYCText = "Does not require KYC";
     this.requireKYCText = "Requires Full KYC Documents";
     this.recoverText = "RECOVER OR MIGRATE WALLET";

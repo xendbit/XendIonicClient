@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Portfolio Manager</ion-title>
+    <ion-title>My Portfolio</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -22,7 +22,7 @@
   </ion-card>
 
   <ion-item>
-    Select an Asset below to View and/or Trade
+    Select an Asset below to View or Trade
   </ion-item>
   <ion-item class="bg" *ngFor="let wallet of loadedWallets" (click)="openHomePage(wallet)">
     <ion-avatar item-start>

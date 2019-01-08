@@ -45,8 +45,8 @@
             </ion-item>            
 
             <ion-item *ngIf="!isBasic">
-                <ion-label stacked><sup>**</sup>Country of Residence</ion-label>
-                <ion-select interface='action-sheet' formControlName="country" placeholder="Click to select country" (ionChange)="countrySelected($event)">
+                    <ion-label stacked></ion-label>
+                <ion-select interface='action-sheet' formControlName="country" placeholder="Click to Select Country" (ionChange)="countrySelected($event)">
                     <ion-option value="Nigeria">Nigeria</ion-option>
                     <ion-option value="Kenya">Kenya</ion-option>
                     <ion-option value="Ghana">Ghana</ion-option>
@@ -60,8 +60,8 @@
             </ion-item>
 
             <ion-item *ngIf="!isBasic">
-                <ion-label stacked>Bank Name (optional)</ion-label>
-                <ion-select interface='action-sheet' formControlName="bank" placeholder="Click to select bank">
+                    <ion-label stacked></ion-label>
+                <ion-select interface='action-sheet' formControlName="bank" placeholder="Click to Select Bank Name (optional)">
                     <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
                 </ion-select>
             </ion-item>

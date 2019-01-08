@@ -45,7 +45,6 @@ export class SellBitPage {
     beneficiaryName: string;
     passwordText: string;
     placeOrderText: string;
-    paymentMethods = [];
     isOwner = false;
     beneficiaryData = {
         beneficiaryBank: "",
@@ -53,8 +52,7 @@ export class SellBitPage {
     };
 
     constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
-        this.banks = Constants.properties['banks'];
-        this.paymentMethods = Constants.properties['payment.methods'];
+        this.banks = Constants.properties['banks']
         this.pageTitle = "Place Sell Order"
         this.priceText = "Price Per Coin";
         this.numberOfBTCText = "Number of Coins";
@@ -77,8 +75,7 @@ export class SellBitPage {
             amountToRecieve: ['', Validators.required],
             beneficiaryAccountNumber: ['', Validators.required],
             beneficiaryBank: ['', Validators.required],
-            password: ['', Validators.required],
-            acceptedPaymentMethods: ['', Validators.required]
+            password: ['', Validators.required]
         });
 
         this.ls = Constants.storageService;
@@ -132,8 +129,6 @@ export class SellBitPage {
             Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
         } else if (coinAmount + xendFees + blockFees > balance) {
             Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
-        } else if (sb.acceptedPaymentMethods === "") {
-            Constants.showPersistentToastMessage("Please specify accepted payment methods", this.toastCtrl);
         } else {
             isValid = true;
         }
@@ -226,7 +221,7 @@ export class SellBitPage {
             sellerFromAddress: sellerFromAddress,
             sellerToAddress: sellerToAddress,
             fromCoin: Constants.WORKING_WALLET,
-            toCoin: sb.acceptedPaymentMethods.toString(),
+            toCoin: "Naira",
             rate: rate,
             emailAddress: this.ls.getItem("emailAddress"),
             password: password,
@@ -294,7 +289,7 @@ export class SellBitPage {
             this.usdRate = responseData.result.buy;
             this.btcRate = responseData.result.rate;
             this.btcToNgn = this.btcRate / this.usdRate;
-            this.sellForm.controls.pricePerBTC.setValue(this.btcToNgn);
+            this.sellForm.controls.pricePerBTC.setValue(this.btcToNgn.toFixed(4));
         }, error => {
             //doNothing
         });

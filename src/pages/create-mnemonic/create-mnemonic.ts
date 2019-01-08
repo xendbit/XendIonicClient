@@ -33,7 +33,7 @@ export class CreateMnemonicPage {
   constructor(public http: Http, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController) {
     this.pageTitle = "See The Passphrase";
     this.iveWrittenItText = "I've Written It Down";
-    this.warning1Text = "Take a pen and a paper and carefully write down the Passphrase in bold below. You must not lose or forget them.";
+    this.warning1Text = " “Write down the passphrase displayed below in exact case as displayed. Keep securely and do not misplace it";
     this.warning2Text = "Don't Email Them";
     this.warning3Text = "Write Them on Paper";
   }
