@@ -1,4 +1,4 @@
-import { HDNode, script, crypto, TransactionBuilder, ECPair, Transaction } from 'bitcoinjs-lib';
+import { HDNode, TransactionBuilder } from 'bitcoinjs-lib';
 import { mnemonicToSeed } from 'bip39';
 import { Console } from './console';
 import { Constants } from './constants';
@@ -256,7 +256,7 @@ export class CoinsSender {
             index = index + 1;
         }
 
-        let hex = txb.build().toHex();    
+        let hex = txb.build().toHex();            
         return hex;    
     }
 
@@ -265,9 +265,7 @@ export class CoinsSender {
         let http = data['http'];
 
         let fees = Constants.getWalletProperties(coin);
-            
-        var txb = new TransactionBuilder(network);      
-        
+                    
         let amount: number = +data['amount'];
         let recipientAddress = data['recipientAddress'];
         let loading = data['loading'];

@@ -589,7 +589,7 @@ export class Constants {
         let buyerEmailAddress = message['buyerEmailAddress'];
         let buyerOtherAddress = message['buyerOtherAddress'];
         let buyerAddress = message['buyerAddress'];
-        let trxHex = data['trxhex'];
+        let trxHex = data['trxHex'];
 
         let ecHex = Constants.encryptData(trxHex);
 
@@ -602,6 +602,8 @@ export class Constants {
             "action": "askBuyerToPay"
         };
 
+        Console.log(wsData);
+        
         wsConnection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((_responseData) => {
             //doNothing
         }, (_error) => {

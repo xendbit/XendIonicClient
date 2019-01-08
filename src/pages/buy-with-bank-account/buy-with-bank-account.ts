@@ -132,7 +132,7 @@ export class BuyWithBankAccountPage {
     let connection = Constants.properties['ws_connection'];
     let data = {
       "action": "cancelBankPayment",
-      "trxId": message['sellOrderTransactionId']
+      "trxId": message['trxId']
     };
     connection.send(Constants.encryptData(JSON.stringify(data))).subscribe((data) => {
     }, (error) => {

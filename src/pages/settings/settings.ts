@@ -1,4 +1,4 @@
-import { HDNode, script, address, crypto, TransactionBuilder } from 'bitcoinjs-lib';
+// import { HDNode, script, address, crypto, TransactionBuilder } from 'bitcoinjs-lib';
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
 import { Console } from '../utils/console';
@@ -8,7 +8,7 @@ import { StorageService } from '../utils/storageservice';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { mnemonicToSeed } from 'bip39';
+// import { mnemonicToSeed } from 'bip39';
 
 /*
   Generated class for the Settings page.
