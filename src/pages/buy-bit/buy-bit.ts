@@ -224,7 +224,6 @@ export class BuyBitPage {
             "buyerAddress": buyerAddress,
             "buyerOtherAddress": this.buyerOtherAddress,
             "buyerEmailAddress": this.ls.getItem("emailAddress"),
-            "buyerPublicKey": this.ls.getItem(Constants.WORKING_WALLET + "PublicKey"),
             "action": "startTrade",
             "trxId": trxId
         };
