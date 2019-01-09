@@ -65,7 +65,7 @@
                 {{seller.amountToRecieve | number: '.0-3'}}
             </ion-col>
             <ion-col col-4 class="colgrid">
-                {{seller.rate | number: '.0-5'}}
+                {{seller.rate | number: '.0-4'}}
             </ion-col>
             <ion-col col-2 *ngIf="seller.status=='ORDER_PLACED'" (click)=deleteOrder(seller.trxId) class="colgrid">
                 <ion-icon name="trash" class="action-icon"></ion-icon>
