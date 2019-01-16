@@ -5,7 +5,7 @@ import { ImageResizer, ImageResizerOptions } from '@ionic-native/image-resizer';
 import { Console } from './../utils/console';
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, LoadingController, Loading, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, ToastController, LoadingController, Loading, IonicPage, normalizeURL, Platform } from 'ionic-angular';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -57,7 +57,7 @@ export class RegisterPage {
 
   emailRegex = '^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$';
 
-  constructor(public base64: Base64, public imageResizer: ImageResizer,  private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, private mediaCapture: MediaCapture, private transfer: FileTransfer) {
+  constructor(public base64: Base64, public imageResizer: ImageResizer, private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, private mediaCapture: MediaCapture, public platform: Platform, private transfer: FileTransfer) {
     this.isTrader = Constants.properties['walletType'] === 'trader';
     this.banks = Constants.properties['banks'];
     this.pageTitle = "Complete Registration";
@@ -105,8 +105,8 @@ export class RegisterPage {
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
-  ionViewWillEnter(){
-    this.mnemonic = this.navParams.get("mnemonic");    
+  ionViewWillEnter() {
+    this.mnemonic = this.navParams.get("mnemonic");
   }
 
   ionViewDidEnter() {
@@ -129,25 +129,48 @@ export class RegisterPage {
   }
 
   resizeImage(uri) {
-    let options: ImageResizerOptions = {
-      uri: uri,
-      folderName: 'XendBit',
-      quality: 100,
-      width: 400,
-      height: 400,
-      fileName: 'resized.jpg'
-    };
-
-    this.imageResizer.resize(options).then((filePath: string) => {
-      this.idImagePath = filePath;
-      this.base64.encodeFile(filePath).then((base64File: string) => {
-        this.idImage = base64File;
-      }, (err) => {
-        Console.log(err);
+    this.idImagePath = uri;
+    if (this.platform.is('ios')) {
+      uri = normalizeURL(uri);
+      this.toDataUrl(uri, function (myBase64) {
+        this.idImage = myBase64;
       });
-    }).catch(e => {
-      Console.log(e)
-    });
+    } else {
+      let fileName = Constants.makeid();
+      let options: ImageResizerOptions = {
+        uri: uri,
+        folderName: 'XendBit',
+        quality: 100,
+        width: 400,
+        height: 400,
+        fileName: fileName
+      };
+
+      this.imageResizer.resize(options).then((filePath: string) => {
+        this.idImagePath = filePath;
+        this.base64.encodeFile(filePath).then((base64File: string) => {
+          this.idImage = base64File;
+        }, (err) => {
+          Console.log(err);
+        });
+      }).catch(e => {
+        Console.log(e)
+      });
+    }
+  }
+
+  toDataUrl(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        callback(reader.result);
+      }
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
   }
 
   register() {
@@ -165,7 +188,7 @@ export class RegisterPage {
       if (rf.phoneNumber === '') {
         Constants.showLongToastMessage("Enter valid phone number", this.toastCtrl);
         return;
-      }      
+      }
 
       if (rf.surName === '') {
         Constants.showLongToastMessage("Please enter your surname", this.toastCtrl);
@@ -175,27 +198,23 @@ export class RegisterPage {
       if (rf.firstName === '') {
         Constants.showLongToastMessage("Please enter your first name", this.toastCtrl);
         return;
-      }      
+      }
 
       if (rf.country === '') {
         Constants.showLongToastMessage("Please enter your Country", this.toastCtrl);
         return;
       }
 
-      if (rf.idNumber === '' && !this.isBasic) {
-        //Constants.showLongToastMessage("Please enter  ID Number", this.toastCtrl);
-        //return;
-        rf.idNumber = "UNDEFINED";
+      if (rf.idNumber === '') {
+        Constants.showLongToastMessage("Please enter  ID Number", this.toastCtrl);
+        return;
       }
     }
 
     if (isValid) {
-      //this.idImagePath = 'data:image/jpeg;base64,' + "1011001";
-      if (this.idImagePath === undefined && !this.isBasic) {
-        //Constants.showLongToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
-        //return;
-        this.idImagePath = "UNDEFINED";
-        this.idImage = "UNDEFINED";
+      if (this.idImagePath === undefined) {
+        Constants.showLongToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
+        return;
       }
 
       let url = Constants.RESTORE_USER_URL;
@@ -231,20 +250,20 @@ export class RegisterPage {
   passwordPadSuccess() {
     let rf = Constants.registrationData['rf'];
 
-    for(let bank in this.banks) {
-      if(this.banks[bank]['bankCode'] === rf.bank) {
+    for (let bank in this.banks) {
+      if (this.banks[bank]['bankCode'] === rf.bank) {
         Constants.registrationData['bankName'] = this.banks[bank]['bankName'];
         break;
       }
     }
-    
-    if(rf.phoneNumber !== undefined) {
-      if(rf.phoneNumber.startsWith("+")) {
+
+    if (rf.phoneNumber !== undefined) {
+      if (rf.phoneNumber.startsWith("+")) {
         Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
         return;
       }
 
-      if(rf.phoneNumber.startsWith("0")) {
+      if (rf.phoneNumber.startsWith("0")) {
         Constants.showLongerToastMessage("Phone number entered is not in international format", this.toastCtrl);
         return;
       }
@@ -252,10 +271,10 @@ export class RegisterPage {
 
     let referralCode = rf.referralCode;
 
-    if(referralCode === undefined || referralCode === null || referralCode === '') {
+    if (referralCode === undefined || referralCode === null || referralCode === '') {
       referralCode = 'XENDBIT';
     }
-    
+
     Constants.registrationData['email'] = rf.email;
     Constants.registrationData['phoneNumber'] = rf.phoneNumber;
     Constants.registrationData['surName'] = rf.surName;
@@ -266,7 +285,7 @@ export class RegisterPage {
     Constants.registrationData['idNumber'] = rf.idNumber;
     Constants.registrationData['country'] = rf.country;
     Constants.registrationData['referralCode'] = referralCode;
-    if(rf.bank !== undefined && rf.bank !== "") {
+    if (rf.bank !== undefined && rf.bank !== "") {
       Constants.registrationData['bankCode'] = rf.bank;
     } else {
       Constants.registrationData['bankCode'] = "000";
@@ -274,7 +293,7 @@ export class RegisterPage {
     Constants.registrationData['accountNumber'] = rf.accountNumber;
     Constants.registrationData['isBeneficiary'] = rf.isBeneficiary;
     StorageService.IS_BENEFICIARY = rf.isBeneficiary;
-    
+
     Constants.registerOnServer();
   }
 
