@@ -172,6 +172,7 @@ export class SendBitPage {
         CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);
       } else {
         let key = Constants.WORKING_WALLET + "Address";
+        data['key'] = key;
         CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, this.ls.getItem(key), Constants.NETWORK);
       }
       this.disableButton = false;
@@ -186,8 +187,53 @@ export class SendBitPage {
     me.sendBitForm.controls.amount.setValue("");
     me.sendBitForm.controls.networkAddress.setValue("");
     me.sendBitForm.controls.password.setValue("");
+
+
   }
 
+  addToExchangeTable(data) {
+    let fees = Constants.getCurrentWalletProperties();
+    let amount = +data['amount'];
+    let xendFees = (amount * +fees.xendFees);
+    let totalFees = xendFees + +fees.blockFees;
+    let fromAddress = this.ls.getItem(data['key']);
+    let password = this.ls.getItem('password');        
+
+    let postData = {
+      amountToSell: amount,
+      fees: totalFees,
+      amountToRecieve: 0.00,
+      sellerFromAddress: fromAddress,
+      sellerToAddress: "",
+      fromCoin: Constants.WORKING_WALLET,
+      toCoin: "",
+      rate: 0.00,
+      emailAddress: this.ls.getItem("emailAddress"),
+      password: password,
+      networkAddress: fromAddress,
+      currencyId: fees.currencyId,
+      equityId: fees.equityId,
+      directSend: true
+  }
+
+  //this is wrong
+  let url = Constants.POST_TRADE_URL;
+
+  this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+      this.clearForm();
+      this.loading.dismiss();
+      if (responseData.response_text === "success") {
+          Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
+          Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
+          this.navCtrl.push('MyOrdersPage');
+      } else {
+          Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+      }
+  }, _error => {
+      this.loading.dismiss();
+      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+  });    
+  }
   sendCoinsError(data) {
     let me: SendBitPage = data['sendBitPage'];
     me.disableButton = false;

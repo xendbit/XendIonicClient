@@ -1,0 +1,3 @@
+The way the transactions is pulled is not efficient
+    On the home page, pull only balance
+    On the history page, pull only the transactions.

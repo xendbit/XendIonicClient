@@ -37,7 +37,6 @@ export class HomePage {
     clickToCopyText: string;
     accountBalanceText: string;
     xendBalance: string;
-    historyText: string;
     cashSymbolText: string;
     btcText: string;
     sellBitText: string;
@@ -279,17 +278,11 @@ export class HomePage {
         }
     }
 
-    openTransactionInWebpage(hash: string) {
-        this.clipboard.copy(this.networkAddress);
-        Constants.showLongToastMessage("Transaction with hash " + hash + " copied.", this.toastCtrl);
-    }
-
     initProps() {
         this.pageTitle = "Home";
         this.yourCashWalletText = "My Cash Wallet";
         this.clickToCopyText = "Click the address to copy it";
         this.accountBalanceText = "Account Balance";
-        this.historyText = "History";
         this.cashSymbolText = "NGN";
         this.loadWalletText = "Fund Wallet";
         this.sellBitText = "Place Sell Order";

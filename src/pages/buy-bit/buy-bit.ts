@@ -231,7 +231,7 @@ export class BuyBitPage {
         Console.log(data);
         Console.log(Constants.WORKING_WALLET);
 
-        ws.send(Constants.encryptData(JSON.stringify(data))).subscribe((data) => {
+        ws.send(Constants.encryptData(JSON.stringify(data))).subscribe((_data) => {
         }, (_error) => {
         }, () => {
         });

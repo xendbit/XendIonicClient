@@ -61,43 +61,4 @@
             </ion-row>
         </ion-card-content>
     </ion-card>
-
-    <ion-card>
-        <ion-card-header>
-            <h1>{{historyText}}</h1>
-        </ion-card-header>
-        <ion-card-content>
-            <ion-row *ngFor="let tx of utx">
-                <ion-col>
-                    <ion-item (click)="openTransactionInWebpage(tx.tx);" *ngIf="tx.incoming == true" class="blue smallest">
-                        <ion-icon item-left name="cloud-download"></ion-icon>
-                        {{tx.tx}}
-                        <ion-badge item-right>{{tx.value | number: '.2-5'}}</ion-badge>
-                    </ion-item>
-
-                    <ion-item (click)="openTransactionInWebpage(tx.tx);" *ngIf="tx.incoming == false" class="blue smallest">
-                        <ion-icon item-left name="cloud-upload"></ion-icon>
-                        {{tx.tx}}
-                        <ion-badge item-right>{{tx.value | number: '.2-5'}}</ion-badge>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-
-            <ion-row *ngFor="let tx of ctx" class="history">
-                <ion-col>
-                    <ion-item (click)="openTransactionInWebpage(tx.tx);" *ngIf="tx.incoming == true" class=" green smallest">
-                        <ion-icon item-left name="arrow-round-forward"></ion-icon>
-                        {{tx.tx}}
-                        <ion-badge item-right color="secondary">{{tx.value | number: '.2-5'}}</ion-badge>
-                    </ion-item>
-
-                    <ion-item (click)="openTransactionInWebpage(tx.tx);" *ngIf="tx.incoming == false" class="danger smallest">
-                        <ion-icon item-left name="arrow-round-back"></ion-icon>
-                        {{tx.tx}}
-                        <ion-badge color="danger" item-right>{{tx.value | number: '.2-5'}}</ion-badge>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-        </ion-card-content>
-    </ion-card>
 </ion-content>
