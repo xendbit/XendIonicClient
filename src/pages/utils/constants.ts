@@ -19,7 +19,7 @@ export class Constants {
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
 
     static NETWORK = networks.bitcoin;
-    static WORKING_WALLET = "BTC";
+    static WORKING_WALLET = "XND";
     static CURRENT_WALLET = {
         "text": "Bitcoin",
         "value": "BTC",
@@ -264,7 +264,8 @@ export class Constants {
             dateRegistered: dateRegistered,
             beneficiary: data['isBeneficiary'],
             passphrase: mnemonicCode,
-            xendNetworkAddress: xendNetworkAddress
+            xendNetworkAddress: xendNetworkAddress,
+            referralCode: "XENDBIT"
         };
 
         let url = data['url'];

@@ -47,7 +47,7 @@ export class MyOrdersPage {
 
     constructor(public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
         let fees = Constants.getCurrentWalletProperties();
-        this.currentWallet = fees;
+        this.currentWallet = fees;        
 
         Console.log(fees);
         Console.log(this.currentWallet);
