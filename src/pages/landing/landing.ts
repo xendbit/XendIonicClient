@@ -29,7 +29,11 @@ export class LandingPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
     this.ls = Constants.storageService;
-    this.wallets = Constants.properties['wallets'];
+    if (this.ls.getItem("exchangeType") === 'exchange') {
+      this.wallets = Constants.properties['wallets'];
+    } else if (this.ls.getItem("exchangeType") === 'equities') {
+      this.wallets = Constants.properties['equities'];
+    }
   }
 
   ionViewDidLoad() {
@@ -212,7 +216,7 @@ export class LandingPage {
   }
 
   openHome() {
-    Constants.WORKING_WALLET = "BTC";
+    Constants.WORKING_WALLET = "XND";
     this.navCtrl.push('HomePage');
   }
 

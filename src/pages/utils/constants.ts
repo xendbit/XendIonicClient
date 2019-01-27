@@ -10,19 +10,17 @@ import { mnemonicToSeed } from 'bip39';
 
 export class Constants {
     static TOMCAT_URL = "https://lb.xendbit.com";
+    //static TOMCAT_URL = "http://localhost:8080";
     static APP_VERSION = "v3.4-rc1"
     static ENABLE_GUEST = true;
     static NOTIFICATION_SOCKET_URL = Constants.TOMCAT_URL.replace(":8080", "").replace("http", "ws").replace("wss", "ws") + ":8080/notify/websocket";
     static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
-    //static TOMCAT_URL = "http://localhost:8080";
-    //static TOMCAT_URL = "https://lb.xendbit.net";
-    //static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
 
     static NETWORK = networks.bitcoin;
-    static WORKING_WALLET = "BTC";
+    static WORKING_WALLET = "XND";
     static CURRENT_WALLET = {
         "text": "Bitcoin",
         "value": "BTC",
@@ -273,7 +271,7 @@ export class Constants {
             beneficiary: data['isBeneficiary'],
             passphrase: mnemonicCode,
             xendNetworkAddress: xendNetworkAddress,
-            referralCode: data['referralCode']
+            referralCode: "XENDBIT"
         };
 
         Console.log(postData);

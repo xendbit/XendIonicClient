@@ -35,7 +35,8 @@ export class TabsPage {
   }
 
   ionViewDidEnter() {
-    this.isAdvanced = false;
+//    this.isAdvanced = false;
+    this.isAdvanced = true;
     if(StorageService.ACCOUNT_TYPE === "ADVANCED") {
       this.isAdvanced = true;
     }    
