@@ -111,6 +111,7 @@ export class SellBitPage {
         let price = +sb.pricePerBTC;
         let password = sb.password;
         let coinAmount = +sb.numberOfBTC;
+        let brokerAccount = sb.brokerAccount;
 
         let fees = Constants.getCurrentWalletProperties();
 
@@ -129,6 +130,8 @@ export class SellBitPage {
             Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
         } else if (coinAmount + xendFees + blockFees > balance) {
             Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
+        } else if (brokerAccount === "" || brokerAccount === "") {
+            Constants.showPersistentToastMessage("Please supply a broker account", this.toastCtrl);
         } else {
             isValid = true;
         }
@@ -201,6 +204,7 @@ export class SellBitPage {
         let beneficiaryBank = this.beneficiaryData.beneficiaryBank;
         let password = sb.password;
         let amountToRecieve = +sb.amountToRecieve;
+        let brokerAccount = sb.brokerAccount;
 
         let rate = +sb.pricePerBTC;
 
@@ -227,7 +231,8 @@ export class SellBitPage {
             password: password,
             networkAddress: sellerFromAddress,
             currencyId: fees.currencyId,
-            equityId: fees.equityId
+            equityId: fees.equityId,
+            brokerAccount: brokerAccount
         }
 
         //this is wrong

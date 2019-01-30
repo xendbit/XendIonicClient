@@ -22,7 +22,8 @@ export class EquitiesExchangePage {
   tab1Root: any = 'LandingPage';
   tab2Root: any = 'MyOrdersPage';
   tab3Root: any = 'SendEquityPage';
-  tab4Root: any = 'SettingsPage';
+  tab4Root: any = 'HistoryPage';
+  tab5Root: any = 'SettingsPage';
 
  isAdvanced: boolean = false;
 

@@ -9,10 +9,10 @@ import { HDNode } from 'bitcoinjs-lib';
 import { mnemonicToSeed } from 'bip39';
 
 export class Constants {
-    static TOMCAT_URL = "https://lb.xendbit.com";
-    //static TOMCAT_URL = "http://localhost:8080";
     static APP_VERSION = "v3.4-rc1"
     static ENABLE_GUEST = true;
+    static TOMCAT_URL = "https://lb.xendbit.com";
+    //static TOMCAT_URL = "http://localhost:8080";
     static NOTIFICATION_SOCKET_URL = Constants.TOMCAT_URL.replace(":8080", "").replace("http", "ws").replace("wss", "ws") + ":8080/notify/websocket";
     static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
@@ -480,7 +480,7 @@ export class Constants {
                 {
                     text: 'Continue?',
                     handler: () => {
-                        Constants.craftMultisig(data);
+                        Constants.askBuyerToPay(data);
                     }
                 }, {
                     text: 'Cancel',
@@ -491,16 +491,6 @@ export class Constants {
             ]
         });
         actionSheet.present();
-    }
-
-    static craftMultisig(data) {
-        let message = data['message'];
-        let coin: string = message['fromCoin'];
-        let key = coin + "Address";    
-        let ls = data['ls'];
-        let fromAddress = ls.getItem(key);   
-        let network = Constants.NETWORKS[coin]; 
-        CoinsSender.craftMultisig(data, Constants.askBuyerToPay, Constants.sendCoinsToBuyerError, coin, fromAddress, network);
     }
 
     static startTrade(message, home, connection) {
@@ -528,18 +518,7 @@ export class Constants {
         if (bankPaymentMethodsValues.indexOf(toCoin) >= 0) {
             Constants.sellerConfirmTrade(data, home);
         } else {
-            if (fees.btcText.indexOf('ETH') > 0) {
-                CoinsSender.sendCoinsEth(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin);
-            } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
-                CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
-            } else if (fees.currencyId !== undefined) {
-                CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
-            } else if (fees.equityId !== undefined) {
-                CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
-            } else {
-                let network = Constants.NETWORKS[coin];
-                CoinsSender.sendCoinsBtc(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin, fromAddress, network);
-            }
+            CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
         }
     }
 
@@ -588,7 +567,7 @@ export class Constants {
         let buyerEmailAddress = message['buyerEmailAddress'];
         let buyerOtherAddress = message['buyerOtherAddress'];
         let buyerAddress = message['buyerAddress'];
-        let trxHex = data['trxHex'];
+        let trxHex = "EQUITY"
 
         let ecHex = Constants.encryptData(trxHex);
 

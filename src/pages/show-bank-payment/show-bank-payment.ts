@@ -150,19 +150,8 @@ export class ShowBankPaymentPage {
             data['brokerAccount'] = this.brokerAccount;
             data['alertCtrl'] = this.alertCtrl;
 
-            let fees = Constants.getCurrentWalletProperties();
-            if (this.fromCoin.indexOf('ETH') >= 0) {
-              CoinsSender.sendCoinsEth(data, this.successCall, this.errorCall, this.fromCoin);
-            } else if (this.fromCoin === 'XND' || this.fromCoin === "NXT" || this.fromCoin === "ARDR" || this.fromCoin === "IGNIS") {
+            let fees = Constants.getCurrentWalletProperties();  
               CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
-            } else if (fees.currencyId !== undefined) {
-              CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
-            } else if (fees.equityId !== undefined) {
-              CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
-            } else {
-              let key = this.fromCoin + "Address";
-              CoinsSender.sendCoinsBtc(data, this.successCall, this.errorCall, this.fromCoin, this.ls.getItem(key), Constants.NETWORKS[this.fromCoin]);
-            }
           }
         }
       ]
