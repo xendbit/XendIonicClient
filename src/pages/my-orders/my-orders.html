@@ -42,7 +42,7 @@
         </ion-col>
     </ion-row>
 
-    <ion-item style="background-color: none">
+    <ion-item style="background-color: none" *ngIf="isBuyEnabled">
         <ion-label stacked></ion-label>
         <ion-select interface='action-sheet' [(ngModel)]="currencyPair" placeholder="Click To Select Currency Pair" (ionChange)="pairSelected($event)">
             <ion-option *ngFor="let currencyPair of currencyPairs" value="{{currencyPair}}">
@@ -50,7 +50,31 @@
             </ion-option>
         </ion-select>
     </ion-item>
-    <ion-grid style="background-color: none">
+    <ion-grid style="background-color: none" *ngIf="isSellEnabled">
+        <ion-row class="rowgrid">
+            <ion-col col-3 class="colgrid">Naira</ion-col>
+            <ion-col col-3 class="colgrid">BTC</ion-col>
+            <ion-col col-3 class="colgrid">Rate</ion-col>            
+            <ion-col col-3 class="colgrid">Status</ion-col>            
+        </ion-row>  
+        <ion-row *ngFor="let buyer of buyOrders; let i = index" [ngClass]="(i % 2 == 0) ? 'odd' : 'even'">
+            <ion-col col-3 class="colgrid">
+                {{buyer.amount | number: '.0-3'}}
+            </ion-col>
+            <ion-col col-3 class="colgrid">
+                {{buyer.bitcoinAmount | number: '.0-3'}}
+            </ion-col>    
+            <ion-col col-3 class="colgrid">
+                {{(buyer.amount/buyer.bitcoinAmount) | number: '.0-3'}}
+            </ion-col>    
+            <ion-col col-3 class="colgrid">
+                {{buyer.status}}
+            </ion-col>    
+                                            
+        </ion-row>      
+    </ion-grid>
+
+    <ion-grid style="background-color: none" *ngIf="isBuyEnabled">
         <ion-row class="rowgrid" *ngIf="showHeaders">
             <ion-col col-3 class="colgrid">{{fromCoin}}</ion-col>
             <ion-col col-3 class="colgrid">{{toCoin}}</ion-col>

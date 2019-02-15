@@ -54,7 +54,7 @@ export class SellBitPage {
     constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
         this.banks = Constants.properties['banks']
         this.pageTitle = "Place Sell Order"
-        this.priceText = "Price Per Coin";
+        this.priceText = "Price Per Coin (USD)";
         this.numberOfBTCText = "Number of Coins";
         this.sendBitText = "Place Sell Order";
         this.placeOrderText = "Place Order";
@@ -72,6 +72,7 @@ export class SellBitPage {
         this.sellForm = this.formBuilder.group({
             numberOfBTC: ['', Validators.required],
             pricePerBTC: ['', Validators.required],
+            usdRate: ['', Validators.required],
             amountToRecieve: ['', Validators.required],
             beneficiaryAccountNumber: ['', Validators.required],
             beneficiaryBank: ['', Validators.required],
@@ -187,7 +188,7 @@ export class SellBitPage {
                 Constants.showPersistentToastMessage("Can not confirm beneficiary account number.", this.toastCtrl);
                 this.loading.dismiss();
             }
-        }, error => {
+        }, _error => {
             this.loading.dismiss();
             Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
         });
@@ -261,17 +262,17 @@ export class SellBitPage {
         }
 
         this.sellForm.controls.numberOfBTC.setValue(canSend);
-        this.sellForm.controls.amountToRecieve.setValue(this.sellForm.value.pricePerBTC * canSend);
+        this.sellForm.controls.amountToRecieve.setValue(this.sellForm.value.pricePerBTC * this.sellForm.value.usdRate * canSend);
     }
 
     sellBitFingerprint() {
         let faio: FingerprintAIO = new FingerprintAIO();
         faio.show({
-            clientId: "Fingerprint-Demo",
+            clientId: "XendBit",
             clientSecret: "password", //Only necessary for Android
             disableBackup: true  //Only for Android(optional)
         })
-            .then((result: any) => {
+            .then((_result: any) => {
                 this.sellForm.controls.password.setValue(this.ls.getItem("password"));
                 this.sellBit();
             })
@@ -288,8 +289,9 @@ export class SellBitPage {
         this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.usdRate = responseData.result.buy;
             this.btcRate = responseData.result.rate;
-            this.btcToNgn = this.btcRate / this.usdRate;
-            this.sellForm.controls.pricePerBTC.setValue(this.btcToNgn.toFixed(4));
+            this.btcToNgn = this.btcRate * this.usdRate;
+            this.sellForm.controls.pricePerBTC.setValue(this.btcRate.toFixed(4));
+            this.sellForm.controls.usdRate.setValue(this.usdRate.toFixed(4));
         }, error => {
             //doNothing
         });
@@ -306,14 +308,16 @@ export class SellBitPage {
     clearForm() {
         //this.sellForm.controls.pricePerBTC.setValue("");
         this.sellForm.controls.numberOfBTC.setValue("");
+        this.sellForm.controls.usdRate.setValue("");
         this.sellForm.controls.password.setValue("");
     }
 
     calculateHowMuchToRecieve() {
         this.rate = this.sellForm.value.pricePerBTC;
+        let usdRate = this.sellForm.value.usdRate;
         let toSell = +this.sellForm.value.numberOfBTC;
         if (this.rate !== 0 && toSell !== 0) {
-            let toRecieve = toSell * this.rate;
+            let toRecieve = toSell * this.rate * usdRate;
             this.sellForm.controls.amountToRecieve.setValue(toRecieve.toFixed(3));
         }
     }

@@ -31,6 +31,7 @@ export class MyOrdersPage {
 
     sellersText: string;
     sellers = [];
+    buyOrders = undefined;
     priceText: string;
     buyerOtherAddress: string;
     currencyPairs = [];
@@ -62,9 +63,15 @@ export class MyOrdersPage {
         Console.log('ionViewDidLoad BuyBitNgntPage');
     }
 
+    ionViewDidLeave(){
+        this.buyOrders = undefined;
+        this.isSellEnabled = false;
+        this.isBuyEnabled = true;        
+    }
+
     ionViewDidEnter() {
         this.currencyPair = (Constants.properties['selectedPair'] !== undefined && Constants.properties['selectedPair'] !== "") ? Constants.properties['selectedPair'] : "";
-        this.loadSellers();        
+        this.loadSellers();
     }
 
     loadRate() {
@@ -75,23 +82,33 @@ export class MyOrdersPage {
         this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.usdRate = responseData.result.buy;
             this.btcRate = responseData.result.rate;
-            this.btcToNgn = this.btcRate / this.usdRate;
+            this.btcToNgn = this.btcRate * this.usdRate;
         }, error => {
             //doNothing
         });
     }
 
     switchTo(type) {
-        this.type = type;
         if (type === 'Sell') {
             this.isSellEnabled = false;
             this.isBuyEnabled = true;
+            this.pairSelected(this.lastValue);
         } else {
             this.isSellEnabled = true;
-            this.isBuyEnabled = false;
+            this.isBuyEnabled = false;            
+            this.loadBuyOrders();
         }
+        //The below code is needed when we're doing exchange.
+        // this.type = type;
+        // if (type === 'Sell') {
+        //     this.isSellEnabled = false;
+        //     this.isBuyEnabled = true;
+        // } else {
+        //     this.isSellEnabled = true;
+        //     this.isBuyEnabled = false;
+        // }
 
-        this.pairSelected(this.lastValue);
+        // this.pairSelected(this.lastValue);
     }
 
     pairSelected(value) {
@@ -119,6 +136,25 @@ export class MyOrdersPage {
             }
 
             this.showHeaders = this.sellersPairs.length > 0;
+        }
+    }
+
+    loadBuyOrders() {
+        if (this.buyOrders === undefined) {
+            let url = Constants.GET_USER_BUY_ORDERS_TX_URL;
+
+            let postData = {
+                emailAddress: this.ls.getItem("emailAddress"),
+                password: this.ls.getItem("password")
+            };
+    
+            this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+                this.buyOrders = responseData.result;
+                this.loading.dismiss();
+            }, _error => {
+                this.loading.dismiss();
+                Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+            });            
         }
     }
 
@@ -155,9 +191,10 @@ export class MyOrdersPage {
         this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.sellers = responseData.result;
             this.loading.dismiss();
-            if (this.currencyPair !== undefined && this.currencyPair !== "") {
-                this.pairSelected(this.currencyPair);
+            if (this.currencyPair === undefined || this.currencyPair === "") {
+                this.currencyPair = Constants.WORKING_WALLET + " -> Naira";
             }
+            this.pairSelected(this.currencyPair);
         }, _error => {
             this.loading.dismiss();
             Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");

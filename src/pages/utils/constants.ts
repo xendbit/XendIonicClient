@@ -87,10 +87,14 @@ export class Constants {
     static GET_USD_RATE_URL = Constants.SERVER_URL + "exchange/usdrate/";
     static GET_EXCHANGE_RATE_URL = Constants.SERVER_URL + "exchange/xrate/";
     static POST_TRADE_URL = Constants.SERVER_URL + "exchange/post-trade";
+    static BUY_CUSTOM_URL = Constants.SERVER_URL + "exchange/buy-direct";
+    static HOW_MUCH_CAN_WE_SELL_URL = Constants.SERVER_URL + "exchange/how-much-can-we-sell";
+
     static GET_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/sell-orders";
     static GET_UNSPENT_OUTPUTS_URL = Constants.SERVER_URL + "exchange/utxos/";
     static PUSH_TX_URL = Constants.SERVER_URL + "exchange/pushtx";
     static GET_USER_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-sell-orders"
+    static GET_USER_BUY_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-buy-orders"
     static UPDATE_USER_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-sell-orders/update"
     static GET_MARKET_DATA_URL = Constants.SERVER_URL + "exchange/market-data"
     static RESOLVE_ACCOUNT_URL = Constants.SERVER_URL + "exchange/account/verify";
@@ -825,6 +829,17 @@ export class Constants {
         } catch(e) {
             return data;
         }
+    }
+
+    static makeReference() {
+        var text = "";
+        var possible = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+
+        for (let i = 0; i < 4; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+
+        return text;
     }
 
     static makeid() {

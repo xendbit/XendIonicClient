@@ -22,8 +22,13 @@
             </button>
         </ion-card-content>
     </ion-card>
+    <ion-item>
+        <button ion-button icon-left round default full (click)="buyCustom()" item-left>
+            Custom Buy Order&nbsp;&nbsp;&nbsp;<ion-icon name="log-in" color="dark"></ion-icon>
+        </button>
+    </ion-item>
     <ion-item style="background-color: none">
-            <ion-label stacked></ion-label>
+        <ion-label stacked>Click to Select Currency Pair</ion-label>
         <ion-select interface='action-sheet' [(ngModel)]="currencyPair" placeholder="Click to Select Currency Pair"
             (ionChange)="pairSelected($event)">
             <ion-option *ngFor="let currencyPair of currencyPairs" value="{{currencyPair}}">
@@ -31,13 +36,16 @@
             </ion-option>
         </ion-select>
     </ion-item>
+    <ion-item>
+        <ion-label stacked>Available Sell Orders</ion-label>
+    </ion-item>
     <ion-grid style="background-color: none">
         <ion-row>
             <ion-col col-4 class="colgrid"></ion-col>
             <ion-col col-4 class="colgrid">
                 <button ion-button icon-left clear small (click)="loadSellers()" item-left>
                     Refresh &nbsp;&nbsp;&nbsp;<ion-icon name="refresh-circle"></ion-icon>
-                </button>                
+                </button>
             </ion-col>
             <ion-col col-4 class="colgrid"></ion-col>
         </ion-row>

@@ -93,7 +93,7 @@ export class SendEquityPage {
   sendBitFingerprint() {
     let faio: FingerprintAIO = new FingerprintAIO();
     faio.show({
-      clientId: "Fingerprint-Demo",
+      clientId: "XendBit",
       clientSecret: "password", //Only necessary for Android
       disableBackup: true  //Only for Android(optional)
     })

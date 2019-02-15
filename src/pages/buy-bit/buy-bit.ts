@@ -57,10 +57,10 @@ export class BuyBitPage {
 
     ionViewDidLoad() {
         Console.log('ionViewDidLoad BuyBitNgntPage');
+        this.loadSellers();   
     }
 
-    ionViewDidEnter() {
-        this.loadSellers();
+    ionViewDidEnter() {                     
     }
 
     loadRate() {
@@ -71,7 +71,8 @@ export class BuyBitPage {
         this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.usdRate = responseData.result.buy;
             this.btcRate = responseData.result.rate;
-            this.btcToNgn = this.btcRate / this.usdRate;
+            this.btcToNgn = this.btcRate * this.usdRate;
+
         }, error => {
             //doNothing
         });
@@ -126,11 +127,16 @@ export class BuyBitPage {
         this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.sellers = responseData.result;
             this.loading.dismiss();
+            this.currencyPair = Constants.WORKING_WALLET + " -> Naira";
             this.pairSelected(this.currencyPair);
         }, _error => {
             this.loading.dismiss();
             Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
         });
+    }
+
+    buyCustom() {
+        this.navCtrl.push('BuyCustomPage');
     }
 
     buyBit(seller) {
@@ -185,7 +191,7 @@ export class BuyBitPage {
             let priceFrom = seller.amountToSell;
             let priceTo = seller.amountToRecieve;
             let rate = seller.rate;
-            let message = "I'm interested in your " + priceFrom + coin +  " -> " + priceTo + toCoin + " (@ " + rate + ") trade posted on XendBit. Please log in to your XendBit app to continue trade";
+            let message = "I'm interested in your " + priceFrom + coin + " -> " + priceTo + toCoin + " (@ " + rate + ") trade posted on XendBit. Please log in to your XendBit app to continue trade";
             let url = "https://wa.me/" + phoneNumber + "?text=" + message;
             const browser = this.iab.create(url, "_system", "hardwareback=yes,");
             browser.close();

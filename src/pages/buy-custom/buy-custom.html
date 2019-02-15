@@ -6,7 +6,7 @@
 -->
 <ion-header>
     <ion-navbar>
-        <ion-title>Sell-Order</ion-title>
+        <ion-title>Custom Order (Buy)</ion-title>
     </ion-navbar>
 
 </ion-header>
@@ -27,40 +27,45 @@
             <form [formGroup]="sellForm">
                 <ion-item>
                     <ion-label stacked>{{priceText}}</ion-label>
-                    <ion-input type="number" formControlName="pricePerBTC" (input)="calculateHowMuchToRecieve();"></ion-input>
+                    <ion-input readonly type="number" formControlName="pricePerBTC"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>USD to NGN Rate</ion-label>
-                    <ion-input type="number" formControlName="usdRate" (input)="calculateHowMuchToRecieve();"></ion-input>
-                </ion-item>
+                        <ion-label stacked>You can't buy more than {{hmcws | number: '.3-3'}} {{btcText}}</ion-label>
+                    </ion-item>                
                 <ion-item>
                     <ion-label stacked>{{numberOfBTCText}}</ion-label>
                     <ion-input type="number" formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <button ion-button round full color="xend" (click)="sellAll();" icon-right>Sell All {{btcText}}<ion-icon
-                            name="trending-up"></ion-icon></button>
+                    <ion-label stacked>Cost (NGN)</ion-label>
+                    <ion-input readonly type="number" formControlName="nairaValue"></ion-input>
                 </ion-item>
+                <ion-item>Pay {{totalCost | number: '.3-3'}} using any of the bank below</ion-item>
                 <ion-item>
-                    <ion-label stacked>You will get (NGN)</ion-label>
-                    <ion-input readonly type="number" formControlName="amountToRecieve"></ion-input>
-                </ion-item>
-                <ion-item *ngIf="!isOwner">
                     <ion-label stacked></ion-label>
-                    <ion-select interface='action-sheet' formControlName="beneficiaryBank" placeholder="Click to Select Beneficiary Bank">
-                        <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
+                    <ion-select interface='action-sheet' formControlName="beneficiaryBank" placeholder="Click to Select Bank"
+                        (ionChange)="bankSelected($event)">
+                        <ion-option *ngFor="let bank of xendBanks" value="{{bank.bank_name}}">{{bank.bank_name}}</ion-option>
                     </ion-select>
                 </ion-item>
-                <ion-item *ngIf="!isOwner">
-                    <ion-label stacked>{{beneficiaryAccountNumberText}}</ion-label>
-                    <ion-input type="number" formControlName="beneficiaryAccountNumber"></ion-input>
+                <ion-item>
+                    <p style="text-align: left">Bank: <b>{{bankData.bank}}</b></p>
+                    <p style="text-align: left">Account Number: <b>{{bankData.accountNumber}}</b></p>
+                    <p style="text-align: left">Account Name: <b>{{bankData.name}}</b></p>
+                    <p style="text-align: left">Reference Code: <b>{{referenceCode}}</b></p>
+                    <p style="text-align: left;">Make sure you enter the reference code above</p>
+                    <p style="text-align: left;">as the naration when paying. It will make</p>
+                    <p style="text-align: left;">it quicker to track and fufil your transaction.</p>
+                </ion-item>
+                <ion-item>
+                    <p>Click the Place Buy Order button below</p>
+                    <p></p>
                 </ion-item>
                 <ion-item>
                     <ion-label stacked>{{passwordText}}</ion-label>
                     <ion-input type="password" formControlName="password"></ion-input>
                 </ion-item>
             </form>
-
         </ion-card-content>
     </ion-card>
 
@@ -70,11 +75,11 @@
                 <ion-buttons class="bordered">
                     <ion-row>
                         <ion-col col-9>
-                            <button ion-button round full color="xend" (click)="sellBit();" icon-right>Place Sell Order<ion-icon
+                            <button ion-button round full color="xend" (click)="buyBit();" icon-right>Place Buy Order<ion-icon
                                     name="trending-up"></ion-icon></button>
                         </ion-col>
                         <ion-col col-3>
-                            <button ion-button round color="fingerprint" (click)="sellBitFingerprint();" icon-only>
+                            <button ion-button round color="fingerprint" (click)="buyBitFingerprint();" icon-only>
                                 <ion-icon name="finger-print"></ion-icon>
                             </button>
                         </ion-col>
