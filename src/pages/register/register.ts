@@ -10,6 +10,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Rx';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+
 
 import { StorageService } from '../utils/storageservice';
 
@@ -57,7 +59,11 @@ export class RegisterPage {
 
   emailRegex = '^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$';
 
-  constructor(public base64: Base64, public imageResizer: ImageResizer, private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, private mediaCapture: MediaCapture, public platform: Platform, private transfer: FileTransfer) {
+  constructor(public androidPermissions: AndroidPermissions, public base64: Base64, public imageResizer: ImageResizer, private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, private mediaCapture: MediaCapture, public platform: Platform, private transfer: FileTransfer) {
+    this.platform.ready().then(() => {
+      androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA, androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE]);
+    });
+
     this.isTrader = Constants.properties['walletType'] === 'trader';
     this.banks = Constants.properties['banks'];
     this.pageTitle = "Complete Registration";
@@ -129,7 +135,7 @@ export class RegisterPage {
         },
         (err: CaptureError) => {
           Console.log(err);
-         }
+        }
       );
   }
 
@@ -160,7 +166,7 @@ export class RegisterPage {
         this.idImagePath = filePath;
         Console.log("Encoding Into Base64");
         this.base64.encodeFile(filePath).then((base64File: string) => {
-          Console.log("Base64 Encoding Succesful: " + base64File.substr(0, 10));        
+          Console.log("Base64 Encoding Succesful: " + base64File.substr(0, 10));
           this.idImage = base64File;
         }, (err) => {
           Console.log(err);

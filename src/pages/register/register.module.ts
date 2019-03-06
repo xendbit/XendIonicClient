@@ -1,3 +1,4 @@
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { ImageResizer } from '@ionic-native/image-resizer';
 import { MediaCapture } from '@ionic-native/media-capture';
 import { FileTransfer } from '@ionic-native/file-transfer';
@@ -20,7 +21,8 @@ import { NgModule } from '@angular/core';
         FileTransfer,
         Base64,
         MediaCapture,
-        ImageResizer        
+        ImageResizer,
+        AndroidPermissions    
     ]
   })
 

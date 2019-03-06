@@ -1,5 +1,5 @@
 #!/bin/bash
-RC="`cat rc.txt`"
+RC="`cat rc_test.txt`"
 MAJOR_VERSION="`cat major_version.txt`"
 MINOR_VERSION="`cat minor_version.txt`"
 BASE_DIR=/Users/aardvocate/src/XendBitV3/mobile/XendBit
@@ -11,7 +11,7 @@ VERSION="v$MAJOR_VERSION.$MINOR_VERSION-rc$RC"
 
 cd $BASE_DIR
 echo "$VERSION"
-echo "$RC" > rc.txt
+echo "$RC" > rc_test.txt
 echo "$MINOR_VERSION" > minor_version.txt
 echo "$MAJOR_VERSION" > major_version.txt
 
@@ -64,5 +64,5 @@ mv $BAK_FILE $CONSTANTS_FILE
 
 cd $BASE_DIR
 
-scp XendBitTest.$VERSION.apk xend@xendbit.com:/var/www/html/releases/
+#scp XendBitTest.$VERSION.apk xend@xendbit.com:/var/www/html/releases/
 echo "Done"
