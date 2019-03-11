@@ -270,6 +270,7 @@ export class Constants {
             walletType: data['walletType'],
             accountType: "ADVANCED",
             country: data['country'],
+            enableWhatsapp: data['enableWhatsapp'] === 'Yes' ? true : false,
             bankCode: data['bankCode'],
             bankName: data['bankName'],
             accountNumber: data['accountNumber'],

@@ -36,7 +36,7 @@ export class StartPage {
     Console.log('ionViewDidLoad StartPage');
   }
 
-  ionViewDidEnter() {    
+  ionViewDidEnter() {
     this.loadSettings();
   }
 
@@ -45,7 +45,7 @@ export class StartPage {
   }
 
   openLogin() {
-    this.navCtrl.push("LoginPage");
+    this.navCtrl.push("RegisterPage");
   }
 
   loadSettings() {

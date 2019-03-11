@@ -39,14 +39,21 @@
                 <ion-input type="email" formControlName="email"></ion-input>
             </ion-item>
 
-            <ion-item *ngIf="!isBasic">
-                <ion-label  stacked><sup>**</sup>{{phoneNumberText}}</ion-label>
+            <ion-item>
+                <ion-label stacked><sup>**</sup>{{phoneNumberText}}</ion-label>
                 <ion-input type="number" formControlName="phoneNumber" placeholder="International Format"></ion-input>
-            </ion-item>            
+            </ion-item>
+            <ion-item>
+                    <ion-label stacked>Enable Whatsapp Messaging?</ion-label>
+                    <ion-select interface='action-sheet' formControlName="enableWhatsapp" placeholder="Enable Whatsapp Messaging?">
+                        <ion-option value="No">No</ion-option>
+                        <ion-option value="Yes">Yes</ion-option>
+                    </ion-select>                
+            </ion-item>
 
-            <ion-item *ngIf="!isBasic">
-                    <ion-label stacked></ion-label>
-                <ion-select interface='action-sheet' formControlName="country" placeholder="Click to Select Country" (ionChange)="countrySelected($event)">
+            <ion-item>
+                <ion-label stacked></ion-label>
+                <ion-select interface='action-sheet' formControlName="country" placeholder="Click to Select Country">
                     <ion-option value="Nigeria">Nigeria</ion-option>
                     <ion-option value="Kenya">Kenya</ion-option>
                     <ion-option value="Ghana">Ghana</ion-option>
@@ -54,14 +61,15 @@
                 </ion-select>
             </ion-item>
 
-            <ion-item *ngIf="!isBasic">
+            <ion-item>
                 <ion-label stacked>Bank Account Number (optional)</ion-label>
                 <ion-input type="number" formControlName="accountNumber"></ion-input>
             </ion-item>
 
-            <ion-item *ngIf="!isBasic">
-                    <ion-label stacked></ion-label>
-                <ion-select interface='action-sheet' formControlName="bank" placeholder="Click to Select Bank Name (optional)">
+            <ion-item>
+                <ion-label stacked></ion-label>
+                <ion-select interface='action-sheet' formControlName="bank"
+                    placeholder="Click to Select Bank Name (optional)">
                     <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
                 </ion-select>
             </ion-item>
@@ -69,7 +77,7 @@
 
         <ion-list no-lines>
             <ion-item>
-                    <ion-label stacked></ion-label>
+                <ion-label stacked></ion-label>
                 <ion-select interface='action-sheet' formControlName="idType" placeholder="Click to Select ID Type">
                     <ion-option *ngFor="let idType of idTypes" value="{{idType.text}}">{{idType.text}}</ion-option>
                 </ion-select>

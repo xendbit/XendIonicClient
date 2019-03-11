@@ -97,7 +97,8 @@ export class RegisterPage {
       bank: [''],
       accountNumber: [''],
       isBeneficiary: ['false'],
-      referralCode: ['']
+      referralCode: [''],
+      enableWhatsapp: ['No'],
     });
 
     this.isBasic = false;
@@ -302,6 +303,7 @@ export class RegisterPage {
     Constants.registrationData['idType'] = rf.idType;
     Constants.registrationData['idNumber'] = rf.idNumber;
     Constants.registrationData['country'] = rf.country;
+    Constants.registrationData['enableWhatsapp'] = rf.enableWhatsapp;
     Constants.registrationData['referralCode'] = referralCode;
     if (rf.bank !== undefined && rf.bank !== "") {
       Constants.registrationData['bankCode'] = rf.bank;
@@ -313,8 +315,5 @@ export class RegisterPage {
     StorageService.IS_BENEFICIARY = rf.isBeneficiary;
 
     Constants.registerOnServer();
-  }
-
-  countrySelected(country) {
   }
 }

@@ -89,6 +89,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.11",
+    "@ionic/lab": "1.0.22",
     "@types/crypto-js": "^3.1.43",
     "@types/jasmine": "^2.8.8",
     "appium": "^1.9.1",
