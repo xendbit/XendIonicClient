@@ -199,9 +199,9 @@ export class CoinsSender {
 
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
         let url = Constants.GET_UNSPENT_OUTPUTS_URL + fromAddress;
-        let amountToSend: number = amount + xendFees + +fees.blockFees;
+        //let amountToSend: number = amount;// + xendFees + +fees.blockFees;
         let postData = {
-            btcValue: amountToSend
+            btcValue: amount
         };
 
         http.post(url, postData, Constants.getWalletHeader(coin)).map(res => res.json()).subscribe(responseData => {

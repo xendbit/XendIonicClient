@@ -8,6 +8,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+import { networks } from "bitcoinjs-lib";
 
 import { StorageService } from '../utils/storageservice';
 
@@ -43,7 +44,7 @@ export class SendBitPage {
   currencyText: string;
   disableButton = false;
 
-  constructor(private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController,  public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
+  constructor(private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
     this.sendBitForm = formBuilder.group({
       amount: ['', Validators.compose([Validators.required])],
       networkAddress: ['', Validators.required],
@@ -107,17 +108,67 @@ export class SendBitPage {
       });
   }
 
+  getTransactions(showLoading) {
+    let fees = Constants.getCurrentWalletProperties();
+    if (showLoading) {
+      this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
+    }
+
+    let key = Constants.WORKING_WALLET + "Address";
+
+    let postData = {
+      password: this.ls.getItem("password"),
+      networkAddress: this.ls.getItem(key),
+      emailAddress: this.ls.getItem("emailAddress"),
+      currencyId: fees.currencyId,
+      equityId: fees.equityId
+    };
+
+    Console.log(postData);
+
+    this.http.post(Constants.GET_TX_URL, postData, Constants.getHeader())
+      .map(res => res.json())
+      .subscribe(responseData => {
+        if (showLoading) {
+          this.loading.dismiss();
+        }
+        //if (responseData.response_text === "success") {
+        if (responseData.response_code === 0) {
+          this.ls.setItem(Constants.WORKING_WALLET + "confirmedAccountBalance", responseData.result.balance);
+          let balance = +responseData.result.balance;
+          let xendFees = +fees.xendFees * balance;
+          //0.001 is added because of rounding issues.
+          Console.log("confirmedAccountBalance: " + balance);
+          let canSend = balance - fees.blockFees - xendFees;
+          if (canSend < 0) {
+            canSend = 0;
+          }
+          Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, "You can send " + canSend.toFixed(3) + " " + Constants.WORKING_WALLET);          
+        }
+      }, _error => {
+        if (showLoading) {
+          this.loading.dismiss();
+        }
+        Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+      });
+  }
+
+
   howMuchCanISend() {
     let fees = Constants.getCurrentWalletProperties();
     let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
-    let xendFees = +fees.xendFees * balance;
-    //0.001 is added because of rounding issues.
-    Console.log("confirmedAccountBalance: " + balance);
-    let canSend = balance - fees.blockFees - xendFees;
-    if (canSend < 0) {
-      canSend = 0;
+    if (balance === undefined || balance === NaN) {
+      this.getTransactions(true);
+    } else {
+      let xendFees = +fees.xendFees * balance;
+      //0.001 is added because of rounding issues.
+      Console.log("confirmedAccountBalance: " + balance);
+      let canSend = balance - fees.blockFees - xendFees;
+      if (canSend < 0) {
+        canSend = 0;
+      }
+      Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, "You can send " + canSend.toFixed(3) + " " + Constants.WORKING_WALLET);
     }
-    Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, "You can send " + canSend.toFixed(3) + " " + Constants.WORKING_WALLET);
   }
 
   sendBit() {
@@ -165,7 +216,7 @@ export class SendBitPage {
       if (fees.btcText.indexOf('ETH') > 0) {
         CoinsSender.sendCoinsEth(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET);
       } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
-        CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);      
+        CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);
       } else if (fees.currencyId !== undefined) {
         CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);
       } else if (fees.equityId !== undefined) {
@@ -173,7 +224,7 @@ export class SendBitPage {
       } else {
         let key = Constants.WORKING_WALLET + "Address";
         data['key'] = key;
-        CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, this.ls.getItem(key), Constants.NETWORK);
+        CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, this.ls.getItem(key), networks.bitcoin);
       }
       this.disableButton = false;
     }
@@ -197,7 +248,7 @@ export class SendBitPage {
     let xendFees = (amount * +fees.xendFees);
     let totalFees = xendFees + +fees.blockFees;
     let fromAddress = this.ls.getItem(data['key']);
-    let password = this.ls.getItem('password');        
+    let password = this.ls.getItem('password');
 
     let postData = {
       amountToSell: amount,
@@ -214,25 +265,25 @@ export class SendBitPage {
       currencyId: fees.currencyId,
       equityId: fees.equityId,
       directSend: true
-  }
+    }
 
-  //this is wrong
-  let url = Constants.POST_TRADE_URL;
+    //this is wrong
+    let url = Constants.POST_TRADE_URL;
 
-  this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+    this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.clearForm();
       this.loading.dismiss();
       if (responseData.response_text === "success") {
-          Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
-          Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
-          this.navCtrl.push('MyOrdersPage');
+        Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
+        Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
+        this.navCtrl.push('MyOrdersPage');
       } else {
-          Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+        Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
       }
-  }, _error => {
+    }, _error => {
       this.loading.dismiss();
       Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-  });    
+    });
   }
   sendCoinsError(data) {
     let me: SendBitPage = data['sendBitPage'];
@@ -252,7 +303,7 @@ export class SendBitPage {
       if (barcodeData.cancelled) {
         Constants.showLongerToastMessage('Barcode scanner cancelled', this.toastCtrl);
       } else {
-        this.sendBitForm.controls.networkAddress.setValue(barcodeData.text);        
+        this.sendBitForm.controls.networkAddress.setValue(barcodeData.text);
       }
     }, (_err) => {
       Constants.showLongerToastMessage('Error launching barcode scanner', this.toastCtrl);

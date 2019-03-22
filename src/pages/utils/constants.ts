@@ -239,7 +239,7 @@ static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocke
     static showPersistentToastMessage(message, toastCtrl) {
         let toast = toastCtrl.create({
             message: message,
-            duration: 10000
+            duration: 20000
         });
 
         toast.onDidDismiss(() => {
