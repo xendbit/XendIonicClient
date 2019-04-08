@@ -119,7 +119,7 @@
     <plugin name="phonegap-plugin-barcodescanner" spec="git+https://github.com/phonegap/phonegap-plugin-barcodescanner.git" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <plugin name="cordova-plugin-android-permissions" spec="1.0.0" />
+    <plugin name="cordova-plugin-crosswalk-webview" spec="~2.4.0" />
     <engine name="android" spec="6.4.0" />
     <engine name="ios" spec="4.5.5" />
-    <plugin name="cordova-plugin-crosswalk-webview" spec="~2.4.0" />
 </widget>
