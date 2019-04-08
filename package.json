@@ -131,7 +131,8 @@
       "com-badrit-base64": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "cordova-plugin-crosswalk-webview": {}
     },
     "platforms": [
       "android",
