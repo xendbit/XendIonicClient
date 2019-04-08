@@ -1,6 +1,7 @@
 # Specifies intentionally untracked files to ignore when using Git
 # http://git-scm.com/docs/gitignore
 
+rc_test.txt
 build_live.sh
 coverage/
 dist/

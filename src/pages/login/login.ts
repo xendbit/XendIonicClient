@@ -195,15 +195,12 @@ export class LoginPage {
                     } catch (e) {
                         Console.log(e);
                     }
-                    if (walletType === 'trader') {
-                        this.postKYCInfoToBlockchain(password, emailAddress);
-                        if (exchangeType === 'exchange') {
-                            this.navCtrl.push(TabsPage);
-                        } else if (exchangeType === 'equities') {
-                            this.navCtrl.push(EquitiesExchangePage);
-                        }
-                    } else {
-                        Console.log('We are coming');
+                    
+                    this.postKYCInfoToBlockchain(password, emailAddress);
+                    if (exchangeType === 'exchange') {
+                        this.navCtrl.push(TabsPage);
+                    } else if (exchangeType === 'equities') {
+                        this.navCtrl.push(EquitiesExchangePage);
                     }
                 } else {
                     this.loading.dismiss();
