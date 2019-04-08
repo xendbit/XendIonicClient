@@ -53,8 +53,8 @@ cd $BASE_DIR/platforms/android
 ./gradlew clean
 ./gradlew assemble
 cd $BASE_DIR
-jarsigner -storepass @bsolute -tsa http://timestamp.digicert.com -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore XendBit.keystore $BASE_DIR/platforms/android/build/outputs/apk/armv7/release/android-armv7-release-unsigned.apk XendBit
-/Users/aardvocate/Library/Android/sdk/build-tools/24.0.2/zipalign -v 4  $BASE_DIR/platforms/android/build/outputs/apk/armv7/release/android-armv7-release-unsigned.apk XendBit.apk
+jarsigner -storepass @bsolute -tsa http://timestamp.digicert.com -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore XendBit.keystore $BASE_DIR/platforms/android/build/outputs/apk/release/android-release-unsigned.apk XendBit
+/Users/aardvocate/Library/Android/sdk/build-tools/24.0.2/zipalign -v 4  $BASE_DIR/platforms/android/build/outputs/apk/release/android-release-unsigned.apk XendBit.apk
 
 mv XendBit.apk XendBitTest.$VERSION.apk
 #reverse the process above

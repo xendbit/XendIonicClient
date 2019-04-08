@@ -51,6 +51,9 @@ export class SellBitPage {
         beneficiaryAccountNumber: ""
     };
 
+    blockFees = 0;
+    xendFees = 0;  
+
     constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
         this.banks = Constants.properties['banks']
         this.pageTitle = "Place Sell Order"
@@ -91,6 +94,9 @@ export class SellBitPage {
 
     ionViewWillEnter() {
         this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;
+        let fees = Constants.getCurrentWalletProperties();
+        this.blockFees = +fees.blockFees;
+        this.xendFees = +fees.xendFees;        
     }
 
     ionViewDidLoad() {

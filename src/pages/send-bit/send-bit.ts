@@ -43,6 +43,8 @@ export class SendBitPage {
   hmcisWarning: string;
   currencyText: string;
   disableButton = false;
+  blockFees = 0;
+  xendFees = 0;
 
   constructor(private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
     this.sendBitForm = formBuilder.group({
@@ -54,7 +56,7 @@ export class SendBitPage {
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
-    setTimeout(function () {
+    setTimeout(function () {      
       //Wait for sometimes for storage to be ready
       app.loading.dismiss();
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
@@ -73,6 +75,8 @@ export class SendBitPage {
     this.hmcisWarning = "This is only an optimistic estimate depending on how much the block fee is, your charges may be less or more than we estimated.";
 
     let fees = Constants.getCurrentWalletProperties();
+    this.blockFees = +fees.blockFees;
+    this.xendFees = +fees.xendFees;
     this.btcText = fees.btcText;
     this.currencyText = fees.currencyText;
     this.sendBitWarningText = this.sendBitWarningText.replace('bitcoin', this.currencyText)
@@ -224,7 +228,11 @@ export class SendBitPage {
       } else {
         let key = Constants.WORKING_WALLET + "Address";
         data['key'] = key;
-        CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, this.ls.getItem(key), networks.bitcoin);
+        if(fees.btcText === 'tBTC') {
+          CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, this.ls.getItem(key), networks.testnet);
+        } else {
+          CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, this.ls.getItem(key), networks.bitcoin);
+        }
       }
       this.disableButton = false;
     }

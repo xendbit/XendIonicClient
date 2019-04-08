@@ -146,9 +146,11 @@ export class CoinsSender {
                     }
                 },
                 {
-                    text: 'Save',
+                    text: 'Confirm',
                     handler: alertData => {
-                        if(alertData['2fa'] === code) {
+                        Console.log(alertData['2fa']);
+                        Console.log(code);
+                        if(+alertData['2fa'] === code) {
                             this.continueSendingBTC(data, successCall, errorCall, coin, fromAddress, network);
                         } else {
                             Constants.showLongToastMessage("Wrong code entered. Please try again", toastCtrl);

@@ -22,6 +22,10 @@
         <ion-card-content>
             <form [formGroup]="sendBitForm">
                 <ion-item>
+                        <ion-label stacked>Block Fees: {{blockFees}}</ion-label>
+                        <ion-label stacked>XendBit Fees: {{xendFees}}</ion-label>
+                </ion-item>
+                <ion-item>
                     <ion-label stacked>{{amountToSendText}} ({{btcText}})</ion-label>
                     <ion-input formControlName="amount" type="number"></ion-input>
                 </ion-item>
