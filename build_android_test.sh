@@ -64,5 +64,5 @@ mv $BAK_FILE $CONSTANTS_FILE
 
 cd $BASE_DIR
 
-#scp XendBitTest.$VERSION.apk xend@xendbit.com:/var/www/html/releases/
+scp XendBitTest.$VERSION.apk xend@xendbit.com:/var/www/html/releases/
 echo "Done"
