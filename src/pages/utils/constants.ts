@@ -9,14 +9,14 @@ import { HDNode } from "bitcoinjs-lib";
 import { mnemonicToSeed } from "bip39";
 
 export class Constants {
-static TOMCAT_URL = "https://lb.xendbit.net";
-static APP_VERSION = "v4.6-rc31"
-static ENABLE_GUEST = false;
-static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
+    static TOMCAT_URL = "https://lb.xendbit.net";
+    static APP_VERSION = "v4.6-rc31"
+    static ENABLE_GUEST = false;
+    static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
     static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
     //static TOMCAT_URL = "http://localhost:8080";
     //static TOMCAT_URL = "https://lb.xendbit.com";
-    //static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
+    //static NOTIFICATION_SOCKET_URL = "ws://192.250.236.180:8080/notify/websocket";
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
@@ -503,10 +503,10 @@ static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocke
     static craftMultisig(data) {
         let message = data['message'];
         let coin: string = message['fromCoin'];
-        let key = coin + "Address";    
+        let key = coin + "Address";
         let ls = data['ls'];
-        let fromAddress = ls.getItem(key);   
-        let network = Constants.NETWORKS[coin]; 
+        let fromAddress = ls.getItem(key);
+        let network = Constants.NETWORKS[coin];
         CoinsSender.craftMultisig(data, Constants.askBuyerToPay, Constants.sendCoinsToBuyerError, coin, fromAddress, network);
     }
 
@@ -561,9 +561,9 @@ static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocke
                 Constants.properties['finalize_sale_order'] = sellOrder;
                 home.navCtrl.push('ShowBankPaymentPage');
             },
-             _error => {
-                 Constants.showLongToastMessage("Unable to get sell-order properties. Please try again later", home.toastCtrl);
-             });
+            _error => {
+                Constants.showLongToastMessage("Unable to get sell-order properties. Please try again later", home.toastCtrl);
+            });
     }
 
     static paySeller(message, navCtrl) {
@@ -583,8 +583,8 @@ static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocke
             "amountToRecieve": amountToRecieve,
             "trxId": trxId,
             "seller": seller
-        };        
-        
+        };
+
         navCtrl.push('BuyWithBankAccountPage');
     }
 
@@ -609,7 +609,7 @@ static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocke
         };
 
         Console.log(wsData);
-        
+
         wsConnection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((_responseData) => {
             //doNothing
         }, (_error) => {
@@ -693,7 +693,7 @@ static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocke
         //import private key
         let pk = hd.keyPair;
         let privKey = pk.toWIF();
-        let pubKeyHash = pk.getPublicKeyBuffer().toString('hex');       
+        let pubKeyHash = pk.getPublicKeyBuffer().toString('hex');
         ls.setItem(chainCode + 'PublicKey', pubKeyHash);
         let address = hd.getAddress();
         let url = Constants.RPC_PROXY + "/importprivkey/" + privKey + "/" + address + "/" + chainCode;
@@ -822,12 +822,12 @@ static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocke
 
     static decryptData(data) {
         try {
-        let coded = atob(data);
-        let part1Key = coded.substr(0, 5);
-        let part2Key = coded.substr(coded.length-5, coded.length);        
-        coded = coded.replace(part1Key, "").replace(part2Key, "");
-        return atob(coded);
-        } catch(e) {
+            let coded = atob(data);
+            let part1Key = coded.substr(0, 5);
+            let part2Key = coded.substr(coded.length - 5, coded.length);
+            coded = coded.replace(part1Key, "").replace(part2Key, "");
+            return atob(coded);
+        } catch (e) {
             return data;
         }
     }
@@ -856,16 +856,16 @@ static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocke
 
     static formatDate(date) {
         var monthNames = [
-          "JAN", "FEB", "MAR",
-          "APR", "MAY", "JUN", "JUL",
-          "AUG", "SEP", "OCT",
-          "NOV", "DEC"
+            "JAN", "FEB", "MAR",
+            "APR", "MAY", "JUN", "JUL",
+            "AUG", "SEP", "OCT",
+            "NOV", "DEC"
         ];
-      
+
         var day = date.getDate();
         var monthIndex = date.getMonth();
         var year = date.getFullYear();
-      
+
         return day + '/' + monthNames[monthIndex] + '/' + year;
-      }    
+    }
 }
