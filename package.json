@@ -80,6 +80,7 @@
     "ionic-plugin-keyboard": "^2.2.1",
     "ionicons": "3.0.0",
     "ngx-qrcode2": "^0.1.0",
+    "node-sass": "^4.12.0",
     "npx": "^10.2.0",
     "phonegap-plugin-barcodescanner": "git+https://github.com/phonegap/phonegap-plugin-barcodescanner.git",
     "rxjs": "5.5.2",
