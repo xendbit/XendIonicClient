@@ -66,7 +66,7 @@ export class MyOrdersPage {
     ionViewDidLeave(){
         this.buyOrders = undefined;
         this.isSellEnabled = false;
-        this.isBuyEnabled = true;        
+        this.isBuyEnabled = true;
     }
 
     ionViewDidEnter() {
@@ -82,6 +82,7 @@ export class MyOrdersPage {
         this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.usdRate = responseData.result.buy;
             this.btcRate = responseData.result.rate;
+            Constants.LAST_USD_RATE = this.btcRate;
             this.btcToNgn = this.btcRate * this.usdRate;
         }, error => {
             //doNothing
@@ -95,7 +96,7 @@ export class MyOrdersPage {
             this.pairSelected(this.lastValue);
         } else {
             this.isSellEnabled = true;
-            this.isBuyEnabled = false;            
+            this.isBuyEnabled = false;
             this.loadBuyOrders();
         }
         //The below code is needed when we're doing exchange.
@@ -147,14 +148,14 @@ export class MyOrdersPage {
                 emailAddress: this.ls.getItem("emailAddress"),
                 password: this.ls.getItem("password")
             };
-    
+
             this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
                 this.buyOrders = responseData.result;
                 this.loading.dismiss();
             }, _error => {
                 this.loading.dismiss();
                 Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-            });            
+            });
         }
     }
 

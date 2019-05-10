@@ -198,6 +198,7 @@ export class ShowBankPaymentPage {
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.usdRate = responseData.result.buy;
       this.btcRate = responseData.result.rate;
+      Constants.LAST_USD_RATE = this.btcRate;
       this.btcToNgn = this.btcRate / this.usdRate;
     }, error => {
       //doNothing

@@ -57,10 +57,10 @@ export class BuyBitPage {
 
     ionViewDidLoad() {
         Console.log('ionViewDidLoad BuyBitNgntPage');
-        this.loadSellers();   
+        this.loadSellers();
     }
 
-    ionViewDidEnter() {                     
+    ionViewDidEnter() {
     }
 
     loadRate() {
@@ -71,6 +71,7 @@ export class BuyBitPage {
         this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.usdRate = responseData.result.buy;
             this.btcRate = responseData.result.rate;
+            Constants.LAST_USD_RATE = this.btcRate;
             this.btcToNgn = this.btcRate * this.usdRate;
 
         }, error => {
@@ -283,7 +284,7 @@ export class BuyBitPage {
                     Constants.showLongerToastMessage("Insufficient " + coin + " balance", this.toastCtrl);
                 } else {
                     //if buyerOtherAddress starts with XND, then it's a colored coin
-                    //so we must check if they have XND balance of 1       
+                    //so we must check if they have XND balance of 1
                     Console.log(this.buyerOtherAddress);
                     if (this.buyerOtherAddress.indexOf("XND") === 0) {
                         this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Checking your Xendcoin balance...");

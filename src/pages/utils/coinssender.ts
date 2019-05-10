@@ -155,7 +155,7 @@ export class CoinsSender {
                         } else {
                             Constants.showLongToastMessage("Wrong code entered. Please try again", toastCtrl);
                             this.show2FAAlert(data, successCall, errorCall, coin, fromAddress, network, data['alertCtrl'], code);
-                        }                        
+                        }
                     }
                 }
             ]
@@ -195,15 +195,16 @@ export class CoinsSender {
         let loading = data['loading'];
         let loadingCtrl = data['loadingCtrl'];
         let toastCtrl = data['toastCtrl'];
-        let password = ls.getItem('password');        
+        let password = ls.getItem('password');
 
         let xendFees = (amount * +fees.xendFees);
+        let blockFees = +fees.blockFees / Constants.LAST_USD_RATE;
 
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
         let url = Constants.GET_UNSPENT_OUTPUTS_URL + fromAddress;
-        //let amountToSend: number = amount;// + xendFees + +fees.blockFees;
+        let amountToSend: number = amount + xendFees + blockFees;
         let postData = {
-            btcValue: amount
+            btcValue: amountToSend
         };
 
         http.post(url, postData, Constants.getWalletHeader(coin)).map(res => res.json()).subscribe(responseData => {
@@ -212,7 +213,8 @@ export class CoinsSender {
                 Constants.showLongerToastMessage(responseData.result, toastCtrl);
                 errorCall(data);
             } else {
-                let hex = CoinsSender.getTransactionHex(responseData, network, ls, amount, fees, xendFees, recipientAddress, fromAddress);
+                let hex = CoinsSender.getTransactionHex(responseData, network, ls, amount, fees, xendFees, blockFees, recipientAddress, fromAddress);
+                Console.log(hex);
                 CoinsSender.submitTx(data, coin, hex, password, loading, successCall, errorCall);
             }
         }, _error => {
@@ -222,7 +224,7 @@ export class CoinsSender {
         });
     }
 
-    static getTransactionHex(responseData, network, ls, amount, fees, xendFees, recipientAddress, fromAddress) {
+    static getTransactionHex(responseData, network, ls, amount, fees, xendFees, blockFees, recipientAddress, fromAddress) {
         var hd = HDNode.fromSeedBuffer(mnemonicToSeed(ls.getItem('mnemonic').trim()), network).derivePath("m/0/0/0");
         var keyPair = hd.keyPair;
         var txb = new TransactionBuilder(network);
@@ -235,8 +237,9 @@ export class CoinsSender {
 
         amount = Math.trunc(amount * +fees.multiplier);
         xendFees = Math.trunc(xendFees * +fees.multiplier);
+        blockFees = Math.trunc(blockFees * +fees.multiplier);
         sum = Math.trunc(sum * +fees.multiplier);
-        let blockFees = Math.trunc(+fees.blockFees * +fees.multiplier);
+
         let change = Math.trunc(sum - amount - blockFees - xendFees);
 
         if (xendFees <= Constants.DUST) {
@@ -258,38 +261,39 @@ export class CoinsSender {
             index = index + 1;
         }
 
-        let hex = txb.build().toHex();            
-        return hex;    
+        let hex = txb.build().toHex();
+        return hex;
     }
 
-    static craftMultisig(data, successCall, errorCall, coin, fromAddress, network) {  
+    static craftMultisig(data, successCall, errorCall, coin, fromAddress, network) {
         let ls = data['ls'];
         let http = data['http'];
 
         let fees = Constants.getWalletProperties(coin);
-                    
+
         let amount: number = +data['amount'];
         let recipientAddress = data['recipientAddress'];
         let loading = data['loading'];
         let loadingCtrl = data['loadingCtrl'];
-        let toastCtrl = data['toastCtrl'];     
+        let toastCtrl = data['toastCtrl'];
 
         let xendFees = (amount * +fees.xendFees);
+        let blockFees = +fees.blockFees / Constants.LAST_USD_RATE;
 
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
         let url = Constants.GET_UNSPENT_OUTPUTS_URL + fromAddress;
-        let amountToSend: number = amount + xendFees + +fees.blockFees;
+        let amountToSend: number = amount + xendFees + +blockFees;
         let postData = {
             btcValue: amountToSend
         };
 
         http.post(url, postData, Constants.getWalletHeader(coin)).map(res => res.json()).subscribe(responseData => {
             loading.dismiss();
-            if (responseData.response_text === "error") {                
+            if (responseData.response_text === "error") {
                 Constants.showLongerToastMessage(responseData.result, toastCtrl);
                 errorCall(data);
-            } else {            
-                let hex = CoinsSender.getTransactionHex(responseData, network, ls, amount, fees, xendFees, recipientAddress, fromAddress);
+            } else {
+                let hex = CoinsSender.getTransactionHex(responseData, network, ls, amount, fees, xendFees, blockFees, recipientAddress, fromAddress);
                 data['trxHex'] = hex;
                 successCall(data);
             }
@@ -297,7 +301,7 @@ export class CoinsSender {
             loading.dismiss();
             Constants.showLongerToastMessage("Error getting your transactions", toastCtrl);
             errorCall(data);
-        });                
+        });
     }
 
     static submitTx(data, coin, hex, password, loading, successCall, errorCall) {
@@ -327,3 +331,5 @@ export class CoinsSender {
         });
     }
 }
+
+//{"text":"Bitcoin","value":"BTC","symbol":"BTC","ticker_symbol":"btc","xend.fees":0.005,"block.fees":3,"xend.address":"1Bd3TqUxmL5jvmG4RU5TFjjFa88aehS9N7","xend.public_key": "036a28997453e03d0b491051c881b800ff6af6c46920c7ae8850c31f8a5420b092","multiplier":100000000, "default": "true"}

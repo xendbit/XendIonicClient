@@ -93,9 +93,9 @@ export class BuyCustomPage {
 
     ionViewDidLoad() {
         Console.log('ionViewDidLoad BuyCustomPage');
-        this.loadRate();      
+        this.loadRate();
         this.loadBalanceFromStorage();
-        this.howMuchCanWeSell();      
+        this.howMuchCanWeSell();
     }
 
     bankSelected(selectedBank) {
@@ -166,7 +166,7 @@ export class BuyCustomPage {
                     this.howMuchCanWeSell();
                 } else {
                     Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
-                }                
+                }
 
             }, _error => {
                 this.loading.dismiss();
@@ -178,18 +178,18 @@ export class BuyCustomPage {
 
     howMuchCanWeSell() {
         let fees = Constants.getCurrentWalletProperties();
-        let tickerSymbol = fees.tickerSymbol;               
+        let tickerSymbol = fees.tickerSymbol;
         let url = Constants.HOW_MUCH_CAN_WE_SELL_URL + "/" + tickerSymbol;
         this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(
             responseData => {
                 if (responseData.response_text === "success") {
-                    this.hmcws = +responseData.result;                    
+                    this.hmcws = +responseData.result;
                 } else {
                     Constants.showAlert(this.toastCtrl, "An Error Occured", responseData.result);
                 }
             },
             _error => {
-                Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");                
+                Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
             }
         );
     }
@@ -218,6 +218,7 @@ export class BuyCustomPage {
         this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
             this.usdRate = responseData.result.buy;
             this.btcRate = responseData.result.rate;
+            Constants.LAST_USD_RATE = this.btcRate;
             this.btcToNgn = this.btcRate * this.usdRate;
             this.sellForm.controls.pricePerBTC.setValue(this.btcToNgn.toFixed(4));
         }, _error => {

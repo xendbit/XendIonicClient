@@ -41,6 +41,8 @@ export class Constants {
 
     static TRADE_CANCELLED = false;
 
+    static LAST_USD_RATE = 5000;
+
     static litecoinnet: Network = {
         messagePrefix: '\x19Litecoin Signed Message:\n',
         bip32: {
@@ -527,6 +529,8 @@ export class Constants {
         data['amount'] = message['amountToSell'];
         data['recipientAddress'] = message['buyerAddress'];
 
+        console.log(data);
+
         let toCoin = message['toCoin'];
         let fees = Constants.getWalletProperties(coin);
         Console.log(fees);
@@ -693,6 +697,7 @@ export class Constants {
         //import private key
         let pk = hd.keyPair;
         let privKey = pk.toWIF();
+        Console.log(privKey);
         let pubKeyHash = pk.getPublicKeyBuffer().toString('hex');
         ls.setItem(chainCode + 'PublicKey', pubKeyHash);
         let address = hd.getAddress();

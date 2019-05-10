@@ -101,6 +101,7 @@ export class BuyWithBankAccountPage {
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.usdRate = responseData.result.buy;
       this.btcRate = responseData.result.rate;
+      Constants.LAST_USD_RATE = this.btcRate;
       this.btcToNgn = this.btcRate / this.usdRate;
     }, error => {
       //doNothing
@@ -118,7 +119,7 @@ export class BuyWithBankAccountPage {
     };
 
     Console.log(data);
-    
+
     connection.send(Constants.encryptData(JSON.stringify(data))).subscribe((_data) => {
     }, (_error) => {
     }, () => {

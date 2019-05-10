@@ -74,18 +74,19 @@ export class ReleaseCoinsPage {
 
   loadRate() {
     let fees = Constants.getCurrentWalletProperties();
-    let tickerSymbol = fees.tickerSymbol;        
+    let tickerSymbol = fees.tickerSymbol;
     let url = Constants.GET_USD_RATE_URL + tickerSymbol;
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.usdRate = responseData.result.buy;
       this.btcRate = responseData.result.rate;
+      Constants.LAST_USD_RATE = this.btcRate;
       this.btcToNgn = this.btcRate / this.usdRate;
     }, error => {
       //doNothing
     });
   }
-  
+
   confirmBankPayment() {
     let message = Constants.properties['buyWithBankMessage'];
     let connection = Constants.properties['ws_connection'];
@@ -93,7 +94,7 @@ export class ReleaseCoinsPage {
       "buyerEmailAddress": this.ls.getItem("emailAddress"),
       "action": "buyerConfirmedBankPayment",
       "trxId": message['trxId']
-    };      
+    };
 
     connection.send(Constants.encryptData(JSON.stringify(data))).subscribe((data) => {
     }, (error) => {
@@ -109,11 +110,11 @@ export class ReleaseCoinsPage {
     let data = {
       "action": "cancelBankPayment",
       "trxId": message['sellOrderTransactionId']
-    };    
+    };
     connection.send(Constants.encryptData(JSON.stringify(data))).subscribe((data) => {
     }, (error) => {
     }, () => {
     });
-    this.disableButton = true;  
+    this.disableButton = true;
   }
 }
