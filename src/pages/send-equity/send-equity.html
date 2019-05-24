@@ -22,22 +22,22 @@
         <ion-card-content>
             <form [formGroup]="sendBitForm">
                 <ion-item>
-                    <ion-label stacked>{{amountToSendText}} ({{btcText}})</ion-label>
+                    <ion-label floating>{{amountToSendText}} ({{btcText}})</ion-label>
                     <ion-input formControlName="amount" type="number"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>{{bitcoinAddressText}}</ion-label>
+                    <ion-label floating>{{bitcoinAddressText}}</ion-label>
                     <ion-input formControlName="networkAddress" type="text">{{toBitcoinAddress}}</ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>Broker Address</ion-label>
+                    <ion-label floating>Broker Address</ion-label>
                     <ion-input formControlName="brokerAccount" type="text"></ion-input>
-                </ion-item>                
+                </ion-item>
                 <ion-item>
                     <button ion-button full round color="fingerprint" (click)="scanCode();" icon-right class="white">{{scanCodeText}}<ion-icon name="barcode"></ion-icon></button>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>{{passwordText}}</ion-label>
+                    <ion-label floating>{{passwordText}}</ion-label>
                     <ion-input type="password" formControlName="password"></ion-input>
                 </ion-item>
                 <ion-item>

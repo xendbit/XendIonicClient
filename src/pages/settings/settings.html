@@ -18,7 +18,7 @@
         <ion-card-content>
             <form [formGroup]="showMnemonicForm">
                 <ion-item>
-                    <ion-label stacked>{{passwordText}}</ion-label>
+                    <ion-label floating>{{passwordText}}</ion-label>
                     <ion-input type="password" formControlName="password"></ion-input>
                 </ion-item>
                 <ion-buttons class="bordered">
@@ -32,7 +32,7 @@
 
     <ion-card>
         <ion-card-content>
-            <button color="xend" ion-button icon-right full round (click)="showMyInfo();" icon-right>My Info 
+            <button color="xend" ion-button icon-right full round (click)="showMyInfo();" icon-right>My Info
                 <ion-icon name="person"></ion-icon>
             </button>
         </ion-card-content>
@@ -44,14 +44,14 @@
                 <ion-item>
                   <ion-label>Enable 2 Factor Authentication</ion-label>
                   <ion-checkbox [(ngModel)]="enable2fa" (ionChange)="enable2FA()"></ion-checkbox>
-                </ion-item>        
+                </ion-item>
               </ion-list>
         </ion-card-content>
-    </ion-card>    
+    </ion-card>
 
     <!-- <ion-card *ngIf="canSwitchWallet">
         <ion-card-content>
-            <button color="xend" ion-button icon-right full round (click)="switchWallet();">Switch Wallet 
+            <button color="xend" ion-button icon-right full round (click)="switchWallet();">Switch Wallet
                 <ion-icon name="switch"></ion-icon>
             </button>
         </ion-card-content>

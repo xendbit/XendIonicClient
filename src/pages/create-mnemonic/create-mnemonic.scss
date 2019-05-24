@@ -5,11 +5,10 @@ page-create-mnemonic {
         flex-direction: column;
         justify-content: center;
         text-align: center;
-        color: #fff;
     }
 
     .passphrase {
-        color: #F58634;
+        color: rgb(50, 6, 121);
         font-size: 2.25em;
         font-family: sans-serif;
     }
@@ -17,15 +16,11 @@ page-create-mnemonic {
     a, p {
         border-bottom: 10px;
     }
-    
-    .ion-button {
-        color: #fff !important;
-    }
+
     br {
         margin-bottom: 40px !important;
     }
     div {
-        color: #fff;
         font-size: 15px !important;
     }
     .bottom {

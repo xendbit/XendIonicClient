@@ -12,7 +12,7 @@
 
 <ion-content padding class="white">
     <img src="assets/img/xendbit.png" alt="">
-    
+
     <ion-row>
         <ion-col>
             {{description}}
@@ -29,7 +29,7 @@
         <ion-card-content>
             <ion-row>
                 <ion-col *ngFor="let ma of mnemonicArray" col-4>
-                    <button ion-button full round color="fingerprint" [disabled]="!isEnabled(ma)" (click)="disableAndSave(ma)">{{ma}}</button>
+                    <button ion-button full medium color="xend" [disabled]="!isEnabled(ma)" (click)="disableAndSave(ma)">{{ma}}</button>
                 </ion-col>
             </ion-row>
         </ion-card-content>
@@ -38,7 +38,7 @@
     <ion-row>
         <ion-col>
             <ion-buttons class="bordered">
-                <button [disabled]="disableButton" ion-button full round color="xend" (click)="createWallet();"
+                <button [disabled]="disableButton" ion-button full large color="xend" (click)="createWallet();"
                     icon-right>{{buttonText}}<ion-icon name="cash"></ion-icon></button>
             </ion-buttons>
         </ion-col>

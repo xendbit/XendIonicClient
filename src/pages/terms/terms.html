@@ -7,17 +7,13 @@
 <ion-header>
 
     <ion-navbar>
-        <ion-buttons end>
-            <button ion-button icon-only menuToggle>
-                <ion-icon name="menu"></ion-icon>
-            </button>
-        </ion-buttons>
+        <ion-title>Terms And Agreement</ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
     <img src="assets/img/xendbit.png" alt="">
-    <button ion-button round full color="primary" (click)="acceptTermsAndAgreement();" icon-right>{{iAcceptText}}<ion-icon name="checkmark-circle"></ion-icon></button>
+    <button ion-button full large color="xend" (click)="acceptTermsAndAgreement();" icon-right>{{iAcceptText}}<ion-icon name="checkmark-circle"></ion-icon></button>
     <div class="scroller">
         <p>
             This is a binding Agreement between Digital Transactions Services Limited. (“DTSL.” or “We”) and the

@@ -28,33 +28,33 @@
         <ion-col>
             <form [formGroup]="sellForm">
                 <ion-item>
-                    <ion-label stacked>{{priceText}}</ion-label>
+                    <ion-label floating>{{priceText}}</ion-label>
                     <ion-input type="number" formControlName="pricePerBTC" (input)="calculateHowMuchToRecieve();"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>{{numberOfBTCText}}</ion-label>
+                    <ion-label floating>{{numberOfBTCText}}</ion-label>
                     <ion-input type="number" formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>You will get (NGN)</ion-label>
+                    <ion-label floating>You will get (NGN)</ion-label>
                     <ion-input readonly type="number" formControlName="amountToRecieve"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>Broker Address</ion-label>
+                    <ion-label floating>Broker Address</ion-label>
                     <ion-input type="text" formControlName="brokerAccount"></ion-input>
-                </ion-item>                
+                </ion-item>
                 <ion-item *ngIf="!isOwner">
-                    <ion-label stacked>{{beneficiaryAccountNumberText}}</ion-label>
+                    <ion-label floating>{{beneficiaryAccountNumberText}}</ion-label>
                     <ion-input type="number" formControlName="beneficiaryAccountNumber"></ion-input>
                 </ion-item>
                 <ion-item *ngIf="!isOwner">
-                    <ion-label stacked>{{beneficiaryBankText}}</ion-label>
+                    <ion-label floating>{{beneficiaryBankText}}</ion-label>
                     <ion-select interface='action-sheet' formControlName="beneficiaryBank" placeholder="Click to select bank">
                         <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
                     </ion-select>
-                </ion-item>                
+                </ion-item>
                 <ion-item>
-                    <ion-label stacked>Accepted Payment Method</ion-label>
+                    <ion-label floating>Accepted Payment Method</ion-label>
                     <ion-select interface='action-sheet' formControlName="acceptedPaymentMethods" placeholder="Click to select payment methods">
                         <ion-option *ngFor="let paymentMethod of paymentMethods" value="{{paymentMethod.value}}">
                             {{paymentMethod.text}}
@@ -62,7 +62,7 @@
                     </ion-select>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>{{passwordText}}</ion-label>
+                    <ion-label floating>{{passwordText}}</ion-label>
                     <ion-input type="password" formControlName="password"></ion-input>
                 </ion-item>
             </form>

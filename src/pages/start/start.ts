@@ -10,7 +10,7 @@ import { StorageService } from '../utils/storageservice';
 
 /*
   Generated class for the Login page.
-  
+
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 */
@@ -41,6 +41,12 @@ export class StartPage {
   }
 
   register() {
+    Constants.REG_TYPE = 'register';
+    this.navCtrl.push('TermsPage');
+  }
+
+  recover() {
+    Constants.REG_TYPE = 'recover';
     this.navCtrl.push('TermsPage');
   }
 

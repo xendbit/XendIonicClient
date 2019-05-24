@@ -15,48 +15,35 @@
     <img src="assets/img/xendbit.png" alt="">
     <form [formGroup]="loginForm">
         <ion-list no-line>
+            <ion-item></ion-item>
+            <ion-item></ion-item>
             <ion-item>
-                <ion-label stacked>{{emailAddressText}}</ion-label>
-                <ion-input type="text" placeholder="{{emailAddressText}}" formControlName="email"></ion-input>
+                <ion-label floating>{{emailAddressText}}</ion-label>
+                <ion-input type="text" formControlName="email"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label stacked>{{passwordText}}</ion-label>
-                <ion-input type="password" placeholder="{{passwordText}}" formControlName="password"></ion-input>
+                <ion-label floating>{{passwordText}}</ion-label>
+                <ion-input type="password" formControlName="password"></ion-input>
                 <button small ion-button clear full color="light" (click)="register();">{{forgotPasswordText}}</button>
             </ion-item>
             <ion-item>
                 <ion-row>
                     <ion-col col-9>
-                        <button ion-button full round color="secondary" (click)="login();">{{loginText}}</button>
+                        <button ion-button full large color="xend" (click)="login();">{{loginText}}</button>
                     </ion-col>
                     <ion-col col-3>
-                        <button ion-button full round color="fingerprint" (click)="loginWithPrint();" *ngIf="useFingerprint === true"
+                        <button ion-button full large round color="xend" (click)="loginWithPrint();" *ngIf="useFingerprint === true"
                             icon-only>
                             <ion-icon name="finger-print"></ion-icon>
                         </button>
                     </ion-col>
                 </ion-row>
             </ion-item>
-                   
-            <!-- <ion-item>
-                <ion-label stacked>Wallet Type</ion-label>
-                <ion-select interface='action-sheet' formControlName="exchangeType" placeholder="Click to select wallet type">
-                    <ion-option value="">
-                        Select wallet type
-                    </ion-option>
-                    <ion-option value="exchange">
-                        Crypto Exchange
-                    </ion-option>
-                    <ion-option value="equities">
-                        Equities Exchange
-                    </ion-option>
-                </ion-select>
-            </ion-item> -->
-          
         </ion-list>
     </form>
 
     <ion-grid>
+      <ion-row></ion-row>
         <ion-row>
             <ion-col>
                 <button small ion-button clear full color="light" (click)="resetPassword();">Forgot Password? Click Here</button>
@@ -72,7 +59,7 @@
                 <button ion-button clear full round color="xend" (click)="register();">Register</button>
             </ion-col>
             <ion-col col-6>
-                <button ion-button clear full round color="xend" (click)="register();">Recover</button>
+                <button ion-button clear full round color="xend" (click)="recover();">Recover</button>
             </ion-col>
         </ion-row>
     </ion-toolbar>

@@ -16,8 +16,10 @@ ion-label {
     font-weight: bold !important;
 }
 
-.toolbar-title-md {
-    width: 250px;
+.toolbar-title {
+    //width: 250px;
+    //text-align: center;
+    color: white;
 }
 
 .select {
@@ -52,6 +54,7 @@ ion-content {
     background-position: center;
     background-repeat: no-repeat;
     background-size: auto;
+    background-color: whitesmoke;
 }
 
 .item {
@@ -62,13 +65,22 @@ ion-content {
     text-transform: none;
 }
 
+.col {
+  color: black !important;
+}
+
 ion-item {
     text-align: center !important;
 }
 
 .tab-button-text {
-    color: black;
+    color: white !important;
     font-weight: bold;
+}
+
+.tab-button-icon {
+  color: white !important;
+  font-weight: bold;
 }
 
 ion-icon {
@@ -97,17 +109,13 @@ ion-icon {
 }
 
 .label {
-    color: white !important;
     font-size: 13px;
-}
-
-.back-button {
-    color: white;
+    text-align: left;
+    color: black;
 }
 
 .button {
     text-transform: none;
-    color: white;
 }
 
 .center {
@@ -150,33 +158,8 @@ ion-icon {
     box-shadow: 0 1px 2px rgba(0, 102, 0, 0.8);
 }
 
-.card-header {
-    color: white;
-}
-
-.card-content {
-    color: white;
-}
-
-ion-content {
-    background-color: white;
-}
-
-.tab-button-icon {
-    color: white !important;
-}
-
-.tab-button-text {
-    color: white !important;
-}
-
 .tabbar {
-    background-color: #222222 !important;
-}
-
-.toolbar-title {
-    color: white;
-    text-align: center;
+    background-color: rgb(50, 6, 121) !important;
 }
 
 .scroll-content {
@@ -189,18 +172,18 @@ textarea.text-input {
     font-size: 25px;
     font-weight: bold;
     text-align: left;
-    background-color: #eee;
+    background: none !important;
 }
 
 .text-input {
-    background-color: #eee;
+  background: none !important;
     color: black; //border: inset;
     font-size: 1em;
-    text-align: center;
+    text-align: left;
 }
 
 .toolbar-background {
-    background-color: #000;
+    background-color: rgb(50, 6, 121) !important;
 }
 
 .overlay {
@@ -212,10 +195,10 @@ textarea.text-input {
     text-transform: none !important;
 }
 
-.ion-button {
-    background-color: #F58634 !important;
+.bar-button-default {
+    color: white;
 }
 
-p {
-    color: white !important;
+.select-text {
+  text-align: left;
 }

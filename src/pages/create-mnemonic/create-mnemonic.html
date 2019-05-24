@@ -11,13 +11,13 @@
 </ion-header>
 
 <ion-content padding>
-        
+
 
     <ion-grid>
         <ion-row>
             <ion-col>
                 <div style="text-align:justify;">
-                        {{warning1Text}}.                         
+                        {{warning1Text}}.
                 </div>
                 <div style="text-align:justify;">
                         {{warning2Text}}. {{warning3Text}}.
@@ -30,14 +30,14 @@
                 <ion-card class="passphrase">
                         {{mnemonic}}
                 </ion-card>
-               
+
             </ion-col>
         </ion-row>
-
+        <ion-row></ion-row>
         <ion-row>
             <ion-col class="center">
                 <ion-buttons class="bordered">
-                    <button ion-button round full color="xend" (click)="confirmMnemonic();" icon-right><span class="written">{{iveWrittenItText}}</span><ion-icon name="paper"></ion-icon></button>
+                    <button ion-button large full color="xend" (click)="confirmMnemonic();" icon-right><span class="written">{{iveWrittenItText}}</span><ion-icon name="paper"></ion-icon></button>
                 </ion-buttons>
             </ion-col>
         </ion-row>

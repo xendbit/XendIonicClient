@@ -23,6 +23,8 @@ export class Constants {
 
     static NETWORK = networks.bitcoin;
     static WORKING_WALLET = "BTC";
+    static WORKING_TICKER_VALUE = 'btc';
+
     static CURRENT_WALLET = {
         "text": "Bitcoin",
         "value": "BTC",
@@ -33,6 +35,8 @@ export class Constants {
         "xend.address": "1HHeKfxgDe4Vqv7nJcvT1QYahksekUwkMN",
         "multiplier": 100000000
     };
+
+    static REG_TYPE = 'register';
 
     static DUST = 546;
     static vector = crypto.getRandomValues(new Uint8Array(16));

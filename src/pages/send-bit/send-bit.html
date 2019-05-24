@@ -5,57 +5,69 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-    <ion-navbar>
-        <ion-title>{{pageTitle}}</ion-title>
-    </ion-navbar>
+  <ion-navbar>
+    <ion-title>{{pageTitle}}</ion-title>
+  </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-    <ion-card>
-        <ion-card-content>
-            <p>{{sendBitWarningText}}</p>
-        </ion-card-content>
-    </ion-card>
+  <ion-card>
+    <ion-card-content>
+      <p>{{sendBitWarningText}}</p>
+    </ion-card-content>
+  </ion-card>
 
-    <ion-card>
-        <ion-card-content>
-            <form [formGroup]="sendBitForm">
-                <ion-item>
-                        <ion-label stacked>Block Fees: {{blockFees | number:'.0-7'}}</ion-label>
-                        <ion-label stacked>XendBit Fees: {{xendFees | number: '.0-7'}}</ion-label>
-                </ion-item>
-                <ion-item>
-                    <ion-label stacked>{{amountToSendText}} ({{btcText}})</ion-label>
-                    <ion-input formControlName="amount" type="number" (input)="calculateXendFees()"></ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-label stacked>{{bitcoinAddressText}}</ion-label>
-                    <ion-input formControlName="networkAddress" type="text">{{toBitcoinAddress}}</ion-input>
-                </ion-item>
-                <ion-item>
-                    <button ion-button full round color="fingerprint" (click)="scanCode();" icon-right class="white">{{scanCodeText}}<ion-icon name="barcode"></ion-icon></button>
-                </ion-item>
-                <ion-item>
-                    <ion-label stacked>{{passwordText}}</ion-label>
-                    <ion-input type="password" formControlName="password"></ion-input>
-                </ion-item>
-                <ion-item>
-                    <button ion-button full round color="xend" (click)="howMuchCanISend();" icon-right>{{howMuchCanISendText}}</button>
-                </ion-item>
-            </form>
-            <p class="very_small">{{hmcisWarning}}</p>
-        </ion-card-content>
-    </ion-card>
+  <ion-card>
+    <ion-card-content>
+      <form [formGroup]="sendBitForm">
+        <ion-item>
+          <ion-label stacked>Block Fees: {{blockFees | number:'.0-7'}}</ion-label>
+          <ion-label stacked>XendBit Fees: {{xendFees | number: '.0-7'}}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>{{amountToSendText}} ({{btcText}})</ion-label>
+          <ion-input formControlName="amount" type="number" (input)="calculateXendFees()"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>{{bitcoinAddressText}}</ion-label>
+          <ion-input formControlName="networkAddress" type="text">{{toBitcoinAddress}}</ion-input>
+        </ion-item>
+        <ion-item>
+          <button ion-button full medium color="xend" (click)="scanCode();" icon-right>{{scanCodeText}}
+            <ion-icon name="barcode"></ion-icon></button>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>{{passwordText}}</ion-label>
+          <ion-input type="password" formControlName="password"></ion-input>
+        </ion-item>
+        <ion-item>
+          <button ion-button full medium color="xend" (click)="howMuchCanISend();"
+            icon-right>{{howMuchCanISendText}}</button>
+        </ion-item>
+      </form>
+      <p class="very_small">{{hmcisWarning}}</p>
+    </ion-card-content>
+  </ion-card>
 
-    <ion-card>
-        <ion-card-content>
-            <ion-item class="center">
-                <ion-buttons class="bordered">
-                    <button [disabled]="disableButton"  ion-button round color="xend" (click)="sendBit();" icon-right>Xend<ion-icon name="send"></ion-icon></button>
-                    <button [disabled]="disableButton"  ion-button round color="fingerprint" (click)="sendBitFingerprint();" icon-only><ion-icon name="finger-print"></ion-icon></button>
-                </ion-buttons>
-            </ion-item>
-        </ion-card-content>
-    </ion-card>
+  <ion-card>
+    <ion-card-content>
+      <ion-item class="center">
+        <ion-buttons class="bordered">
+          <ion-row>
+            <ion-col col-9>
+              <button [disabled]="disableButton" ion-button large full color="xend" (click)="sendBit();" icon-right>Xend
+                <ion-icon name="send"></ion-icon></button>
+            </ion-col>
+            <ion-col col-3>
+              <button [disabled]="disableButton" ion-button large round color="fingerprint"
+                (click)="sendBitFingerprint();" icon-only>
+                <ion-icon name="finger-print"></ion-icon>
+              </button>
+            </ion-col>
+          </ion-row>
+        </ion-buttons>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -1,22 +1,10 @@
 page-register {
-    .background {
-        background-color: #3b5983;
-    }
-
     .scroll-content {
         align-content: center;
      //   display: flex;
         flex-direction: column;
         justify-content: center;
         text-align: center;
-    }
-
-    a, p, .content {
-        color: #fff !important;
-    }
-
-    form {
-        color: #fff !important;
     }
 
     .list > .item-block:first-child {
@@ -29,33 +17,12 @@ page-register {
         border:none;
     }
 
-    .text-input, {
+    .text-input {
         color: black;
         font-family: sans-serif;
-        padding: 5px; 
-        background-color: #fff;
-    }
-   
-    input::-moz-placeholder {
-        color: rgb(255, 72, 0) !important;
+        padding: 5px;
     }
 
-    input:-moz-placeholder {
-        color: rgb(255, 72, 0) !important;
-    }
-
-    *::-webkit-input-placeholder{
-        color: rgb(255, 72, 0) !important;
-    }
-
-    *:-ms-input-placeholder {
-        color: rgb(255, 72, 0) !important;
-    }
-
-    *:-moz-placeholder {
-        color: rgb(255, 72, 0) !important;
-    }
-    
     ion-icon {
         padding-right: 20px;
     }

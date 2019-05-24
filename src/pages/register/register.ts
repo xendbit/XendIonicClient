@@ -219,14 +219,28 @@ export class RegisterPage {
         return;
       }
 
-      if (rf.country === '') {
-        Constants.showLongToastMessage("Please enter your Country", this.toastCtrl);
-        return;
-      }
-
       if (rf.idNumber === '') {
         Constants.showLongToastMessage("Please enter  ID Number", this.toastCtrl);
         return;
+      }
+
+      for (let bank in this.banks) {
+        if (this.banks[bank]['bankCode'] === rf.bank) {
+          Constants.registrationData['bankName'] = this.banks[bank]['bankName'];
+          break;
+        }
+      }
+
+      if (rf.phoneNumber !== undefined) {
+        if (rf.phoneNumber.startsWith("+")) {
+          Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
+          return;
+        }
+
+        if (rf.phoneNumber.startsWith("0")) {
+          Constants.showLongerToastMessage("Phone number entered is not in international format", this.toastCtrl);
+          return;
+        }
       }
     }
 
@@ -269,25 +283,6 @@ export class RegisterPage {
   passwordPadSuccess() {
     let rf = Constants.registrationData['rf'];
 
-    for (let bank in this.banks) {
-      if (this.banks[bank]['bankCode'] === rf.bank) {
-        Constants.registrationData['bankName'] = this.banks[bank]['bankName'];
-        break;
-      }
-    }
-
-    if (rf.phoneNumber !== undefined) {
-      if (rf.phoneNumber.startsWith("+")) {
-        Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
-        return;
-      }
-
-      if (rf.phoneNumber.startsWith("0")) {
-        Constants.showLongerToastMessage("Phone number entered is not in international format", this.toastCtrl);
-        return;
-      }
-    }
-
     let referralCode = rf.referralCode;
 
     if (referralCode === undefined || referralCode === null || referralCode === '') {
@@ -302,7 +297,7 @@ export class RegisterPage {
     Constants.registrationData['bvn'] = rf.bvn;
     Constants.registrationData['idType'] = rf.idType;
     Constants.registrationData['idNumber'] = rf.idNumber;
-    Constants.registrationData['country'] = rf.country;
+    Constants.registrationData['country'] = "";
     Constants.registrationData['enableWhatsapp'] = rf.enableWhatsapp;
     Constants.registrationData['referralCode'] = referralCode;
     if (rf.bank !== undefined && rf.bank !== "") {

@@ -16,34 +16,23 @@
     <img src="assets/img/xendbit.png" alt="">
     <ion-card>
         <ion-card-content>
-            <div>
-                <p>Requires you to enter KYC Information</p>
-                <p>You will be able to</p>
-                <p></p>
-                <p>Send and receive Crytocurrency or Tokens</p>
-                <p>To buy and sell in the marketplace</p>
-                <p>Send to Bank Account</p>
-            </div>
-            <button ion-button full round color="xend" icon-right (click)="openAdvancedWallet()">{{createAdvancedWalletText}}</button>
-        </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-        <ion-card-content>
             <ion-item>
                 <p>{{recoverText}}</p>
             </ion-item>
 
             <ion-item>
-                <ion-input type="email" placeholder="Email Address" [(ngModel)]="email"></ion-input>
+                <ion-label floating>Email Address</ion-label>
+                <ion-input type="email" [(ngModel)]="email"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-input type="password" placeholder="{{passwordPlaceHolder}}" [(ngModel)]="password"></ion-input>
+                <ion-label floating>Password</ion-label>
+                <ion-input type="password" [(ngModel)]="password"></ion-input>
             </ion-item>
             <ion-item *ngIf='isReset'>
-                <ion-input type="password" placeholder="Confirm New Password" [(ngModel)]="confirmPassword"></ion-input>
+                <ion-input type="password" [(ngModel)]="confirmPassword"></ion-input>
             </ion-item>
-            <button ion-button full round color="dark" (click)="restoreWallet()">{{restoreWalletText}}</button>
+            <br />
+            <button ion-button full large color="xend" (click)="restoreWallet()">{{restoreWalletText}}</button>
         </ion-card-content>
     </ion-card>
 </ion-content>

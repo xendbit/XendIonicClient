@@ -24,7 +24,7 @@
     <ion-card>
         <ion-card-content>
             <ion-item>
-                <ion-label stacked style="text-align: center">Do you want to Buy or Sell</ion-label>
+                <ion-label floating style="text-align: center">Do you want to Buy or Sell</ion-label>
             </ion-item>
             <ion-item>
                 <ion-row>
@@ -49,11 +49,11 @@
         <ion-card-content>
             <form [formGroup]="sellForm">
                 <ion-item>
-                    <ion-label stacked>How many {{btcText}} do you want to {{type}}</ion-label>
+                    <ion-label floating>How many {{btcText}} do you want to {{type}}</ion-label>
                     <ion-input type="number" formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>Accepted Payment Method</ion-label>
+                    <ion-label floating>Accepted Payment Method</ion-label>
                     <ion-select interface='actionsheet' formControlName="acceptedPaymentMethod" placeholder="Click to select payment methods"
                         (ionChange)="paymentMethodSelected($event)">
                         <ion-option *ngFor="let paymentMethod of paymentMethods" value="{{paymentMethod.value}}">
@@ -62,19 +62,19 @@
                     </ion-select>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>Rate</ion-label>
+                    <ion-label floating>Rate</ion-label>
                     <ion-input type="number" formControlName="pricePerBTC" (input)="calculateHowMuchToRecieve();"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>You will {{getOrPay}} ({{selectedPaymentMethod}})</ion-label>
+                    <ion-label floating>You will {{getOrPay}} ({{selectedPaymentMethod}})</ion-label>
                     <ion-input disabled type="number" formControlName="amountToRecieve"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>It will be {{sentOrDeducted}}</ion-label>
+                    <ion-label floating>It will be {{sentOrDeducted}}</ion-label>
                     <ion-input disabled type="text" formControlName="recipientOtherAddress"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>Password</ion-label>
+                    <ion-label floating>Password</ion-label>
                     <ion-input type="password" formControlName="password"></ion-input>
                 </ion-item>
             </form>

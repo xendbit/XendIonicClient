@@ -18,18 +18,18 @@
         <ion-card-content>
             <form [formGroup]="donateForm">
                 <ion-item>
-                    <ion-label stacked>{{amountToSendText}} ({{btcText}})</ion-label>
+                    <ion-label floating>{{amountToSendText}} ({{btcText}})</ion-label>
                     <ion-input formControlName="amount" type="number"></ion-input>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>{{bitcoinAddressText}}</ion-label>
-                    <ion-input formControlName="networkAddress" type="text"></ion-input>                    
+                    <ion-label floating>{{bitcoinAddressText}}</ion-label>
+                    <ion-input formControlName="networkAddress" type="text"></ion-input>
                 </ion-item>
                 <ion-item>
                     <button ion-button full round color="fingerprint" (click)="askBeneficiaryForAddress()">Ask Beneficiary For Address</button>
                 </ion-item>
                 <ion-item>
-                    <ion-label stacked>{{passwordText}}</ion-label>
+                    <ion-label floating>{{passwordText}}</ion-label>
                     <ion-input type="password" formControlName="password"></ion-input>
                 </ion-item>
                 <ion-item>
@@ -49,5 +49,5 @@
                 </ion-buttons>
             </ion-item>
         </ion-card-content>
-    </ion-card>    
+    </ion-card>
 </ion-content>

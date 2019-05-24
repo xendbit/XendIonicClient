@@ -22,18 +22,18 @@
           </button>
         </ion-card-content>
       </ion-card>
-      
+
   <ion-card>
     <ion-card-content>
         <p>Transaction Information</p>
         <p><b>Bank Name: </b> {{bankName}}</p>
         <p><b>Account Number: </b> {{accountNumber}}</p>
-        <p><b>Amount (Naira): </b> {{totalAmount}}</p>         
-        <p><b>Reference Code: </b> {{referenceCode}}</p>      
+        <p><b>Amount (Naira): </b> {{totalAmount}}</p>
+        <p><b>Reference Code: </b> {{referenceCode}}</p>
         <p></p>
 
-        <p></p>        
-        <button [disabled]="disableButton" ion-button full round color="xend" (click)="confirmBankPayment();">Confirm</button>        
+        <p></p>
+        <button [disabled]="disableButton" ion-button full large color="xend" (click)="confirmBankPayment();">Confirm</button>
       </ion-card-content>
     </ion-card>
 </ion-content>

@@ -320,12 +320,13 @@ export class SellBitPage {
   }
 
   calculateHowMuchToRecieve() {
+    let fees = Constants.getCurrentWalletProperties();
     this.rate = this.sellForm.value.pricePerBTC;
     let usdRate = this.sellForm.value.usdRate;
     let toSell = +this.sellForm.value.numberOfBTC;
     if (this.rate !== 0 && toSell !== 0) {
       let toRecieve = toSell * this.rate * usdRate;
-      this.xendFees = toSell * +this.xendFees;
+      this.xendFees = toSell * +fees.xendFees;
       this.sellForm.controls.amountToRecieve.setValue(toRecieve.toFixed(3));
     }
   }

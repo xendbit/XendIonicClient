@@ -86,14 +86,6 @@ export class GettingStartedPage {
     Console.log('ionViewDidLoad GettingStartedPage');
   }
 
-  openBasicWallet() {
-    Constants.registrationData['walletType'] = this.walletType;
-    StorageService.ACCOUNT_TYPE = "BASIC";
-    StorageService.IS_BENEFICIARY = false;
-    this.ls.setItem("accountType", "BASIC");
-    this.navCtrl.push('WarningPage');
-  }
-
   openAdvancedWallet() {
     Constants.registrationData['walletType'] = this.walletType;
     StorageService.ACCOUNT_TYPE = "ADVANCED";
@@ -132,7 +124,7 @@ export class GettingStartedPage {
         'email': this.email,
         'shouldRegister': 'false',
         'password': this.password
-      };      
+      };
       this.navCtrl.push('ConfirmMnemonicPage', data);
     }
   }

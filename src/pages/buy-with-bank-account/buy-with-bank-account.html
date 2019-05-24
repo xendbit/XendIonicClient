@@ -33,9 +33,9 @@
       <p>Reference Code: <b>{{referenceCode}}</b></p>
       <p></p>
       <p>You have 10 minutes to complete this trade, after 10 mins, the trade will be cancelled automatically</p>
-      <button [disabled]="disableButton" ion-button full round color="xend" (click)="confirmBankPayment();">Confirm Bank Payment</button>
-      <button [disabled]="disableButton" ion-button full round color="danger" (click)="cancelTrade();">Cancel Trade</button>
-      <button ion-button full round color="primary" (click)="sendExternalMessage();">Chat With Seller</button>
+      <button [disabled]="disableButton" ion-button full large color="xend" (click)="confirmBankPayment();">Confirm Bank Payment</button>
+      <button [disabled]="disableButton" ion-button full large color="danger" (click)="cancelTrade();">Cancel Trade</button>
+      <button ion-button full large color="xend" (click)="sendExternalMessage();">Chat With Seller</button>
     </ion-card-content>
   </ion-card>
 </ion-content>

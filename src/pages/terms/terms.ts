@@ -1,7 +1,10 @@
+import { StorageService } from './../utils/storageservice';
+import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
-import {Console} from '../utils/console';
+import { Console } from '../utils/console';
 import { NavController, NavParams, IonicPage } from 'ionic-angular';
 import { Http } from '@angular/http';
+import { Storage } from '@ionic/storage';
 
 /*
   Generated class for the Terms page.
@@ -17,19 +20,29 @@ import { Http } from '@angular/http';
 
 export class TermsPage {
 
- iAcceptText: string;
- pageTitle: string;
+  iAcceptText: string;
+  pageTitle: string;
+  ls: StorageService;
 
-  constructor(public http:Http, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public storage: Storage, public http: Http, public navCtrl: NavController, public navParams: NavParams) {
     this.iAcceptText = "I Accept";
     this.pageTitle = "Terms and Agreement";
-   }
+  }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad TermsPage');    
+    Console.log('ionViewDidLoad TermsPage');
+    this.ls = new StorageService(this.storage);
   }
 
   acceptTermsAndAgreement() {
-    this.navCtrl.push('GettingStartedPage');         
+    if (Constants.REG_TYPE === 'recover') {
+      this.navCtrl.push('GettingStartedPage');
+    } else {
+      Constants.registrationData['walletType'] = 'ADVANCED';
+      StorageService.ACCOUNT_TYPE = "ADVANCED";
+      StorageService.IS_BENEFICIARY = false;
+      this.ls.setItem("accountType", "ADVANCED");
+      this.navCtrl.push('WarningPage');
+    }
   }
 }
