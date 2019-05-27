@@ -123,12 +123,12 @@ export class DonatePage {
             this.disableButton = true;
             if (fees.btcText.indexOf('ETH') >= 0) {
                 CoinsSender.sendCoinsEth(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET);
-            } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
-                CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);            
+            } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDOR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
+                CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);
             } else if (fees.currencyId !== undefined) {
                 CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);
             } else if (fees.equityId !== undefined) {
-                CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);        
+                CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);
             } else {
                 let key = Constants.WORKING_WALLET + "Address";
                 CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, this.ls.getItem(key), Constants.NETWORK);
@@ -193,7 +193,7 @@ export class DonatePage {
     howMuchCanISend() {
         let fees = Constants.getCurrentWalletProperties();
         let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
-        //0.001 is added because of rounding issues.        
+        //0.001 is added because of rounding issues.
         let canSend = balance - +fees.blockFees;
         if (canSend < 0) {
             canSend = 0;

@@ -177,7 +177,7 @@ export class HomePage {
           Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
         } else if (coin === "NXT") {
           Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else if (coin === "ARDR") {
+        } else if (coin === "ARDOR") {
           Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
         } else if (coin === "IGNIS") {
           Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);

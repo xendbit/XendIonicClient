@@ -101,7 +101,7 @@ export class SendBitPage {
         Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
       } else if (coin === "NXT") {
         Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-      } else if (coin === "ARDR") {
+      } else if (coin === "ARDOR") {
         Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
       } else if (coin === "IGNIS") {
         Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
@@ -273,7 +273,7 @@ export class SendBitPage {
       Console.log(fees.btcText);
       if (fees.btcText.indexOf('ETH') > 0) {
         CoinsSender.sendCoinsEth(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET);
-      } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
+      } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDOR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
         CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);
       } else if (fees.currencyId !== undefined) {
         CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);

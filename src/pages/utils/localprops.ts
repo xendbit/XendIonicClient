@@ -162,7 +162,7 @@ export class LocalProps {
                 "xend.address": "XND-K6XR-LLBK-JW4S-3VPGD",
                 "multiplier": 100,
                 "equityId": "4134378730692706703"
-            },       
+            },
             {
                 "text": "TTN",
                 "value": "TTN",
@@ -173,7 +173,7 @@ export class LocalProps {
                 "xend.address": "XND-K6XR-LLBK-JW4S-3VPGD",
                 "multiplier": 100,
                 "equityId": "9861148193713367452"
-            },       
+            },
             {
                 "text": "ANB",
                 "value": "ANB",
@@ -200,9 +200,9 @@ export class LocalProps {
             },
             {
                 "text": "tArdor",
-                "value": "ARDR",
-                "symbol": "tARDR",
-                "ticker_symbol": "ardr",
+                "value": "ARDOR",
+                "symbol": "tARDOR",
+                "ticker_symbol": "ardor",
                 "xend.fees": 0.000625,
                 "block.fees": 1,
                 "xend.address": "ARDOR-PFGR-KXYW-EEU9-CNQCF",
@@ -219,7 +219,7 @@ export class LocalProps {
                 "xend.address": "ARDOR-PFGR-KXYW-EEU9-CNQCF",
                 "multiplier": 100000000,
                 "chain": 2
-            },  
+            },
             {
                 "text": "tNXT",
                 "value": "NXT",
@@ -230,7 +230,7 @@ export class LocalProps {
                 "xend.address": "NXT-PFGR-KXYW-EEU9-CNQCF",
                 "multiplier": 100000000,
                 "chain": 2
-            },  
+            },
             {
                 "text": "Lithereum",
                 "value": "LITH",
@@ -287,5 +287,5 @@ export class LocalProps {
             }
         ],
         "dummy.value": "Dummy"
-    }    
+    }
 }

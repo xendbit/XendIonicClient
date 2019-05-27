@@ -9,7 +9,7 @@ import { HDNode } from "bitcoinjs-lib";
 import { mnemonicToSeed } from "bip39";
 
 export class Constants {
-    static TOMCAT_URL = "https://lb.xendbit.net";
+    static TOMCAT_URL = "https://lb.xendbit.com";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
     static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
@@ -545,7 +545,7 @@ export class Constants {
         } else {
             if (fees.btcText.indexOf('ETH') > 0) {
                 CoinsSender.sendCoinsEth(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin);
-            } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
+            } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDOR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
                 CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
             } else if (fees.currencyId !== undefined) {
                 CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);

@@ -3,7 +3,7 @@ import { Constants } from './../utils/constants';
 
 import { StorageService } from './../utils/storageservice';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, LoadingController, Loading, AlertController, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, ToastController, LoadingController, Loading, AlertController, IonicPage, ActionSheetController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -26,8 +26,9 @@ export class LandingPage {
   totalAssets = 0;
   loadWalletDelay = 500;
   count = 0;
+  unloadedWallets = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController) {
     this.ls = Constants.storageService;
     this.wallets = Constants.properties['wallets'];
   }
@@ -36,16 +37,20 @@ export class LandingPage {
   }
 
   ionViewDidEnter() {
-    Console.log("Entered");
+    let localWallets = this.ls.getItem('localWallets');
+    if (localWallets === undefined) {
+      this.ls.setItem('localWallets', []);
+    }
     this.reloadWallets();
   }
 
   reloadWallets() {
     if (this.count === 0) {
       this.loadedWallets = [];
+      this.unloadedWallets = [];
       let temp = Object.assign([], this.wallets);
       for (let wallet of temp) {
-        if (wallet.default === "true") {
+        if (this.shouldDisplayWallet(wallet)) {
           let index = this.wallets.indexOf(wallet);
           this.wallets.splice(index, 1);
           if (wallet['usdRate'] === undefined) {
@@ -68,13 +73,16 @@ export class LandingPage {
       Constants.properties['wallets'] = this.wallets;
       this.count = 0;
       this.loadWallets();
+    } else {
+      Constants.showLongToastMessage('Wallets Loading is in progress...Please wait', this.toastCtrl);
     }
   }
 
   loadWallets() {
     let wallet = this.wallets[this.count];
-    if (wallet == undefined) {
+    if (wallet === undefined) {
       this.count = 0;
+      Constants.showLongToastMessage('All wallets balance loaded succesfully', this.toastCtrl);
       return;
     }
     let working_wallet = wallet['value'];
@@ -99,7 +107,7 @@ export class LandingPage {
         setTimeout(function () {
           app.refresh(wallet);
         }, this.loadWalletDelay);
-      } else if (working_wallet === 'ARDR') {
+      } else if (working_wallet === 'ARDOR') {
         Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
         setTimeout(function () {
@@ -178,11 +186,83 @@ export class LandingPage {
       });
   }
 
+  shouldDisplayWallet(wallet) {
+    let localWallets = this.ls.getItem('localWallets');
+
+    for (let w of localWallets) {
+      if (w['value'] === wallet['value']) {
+        return true;
+      }
+    }
+
+    if (wallet.confirmedAccountBalance > 0) {
+      return true;
+    }
+
+    if (wallet.default === "true") {
+      return true;
+    }
+
+    return false;
+  }
+
+  removeItem(wallet) {
+    let localWallets = this.ls.getItem('localWallets');
+
+    let index = localWallets.indexOf(wallet);
+    localWallets.splice(index, 1);
+    this.ls.setItem('localWallets', localWallets);
+
+    index = this.loadedWallets.indexOf(wallet);
+    this.loadedWallets.splice(index, 1);
+
+    this.unloadedWallets.push(wallet);
+
+    this.reloadWallets();
+    Constants.showLongToastMessage(wallet['value'] + ' Removed. Reloading...', this.toastCtrl);
+  }
+
+  showUnloadedWallets() {
+    let localWallets = this.ls.getItem('localWallets');
+    let buttons = [];
+    for (let uw of this.unloadedWallets) {
+      let button = {
+        text: uw['text'],
+        handler: () => {
+          localWallets.push(uw);
+          this.ls.setItem('localWallets', localWallets);
+          this.reloadWallets();
+          Constants.showLongToastMessage('New Wallet Added. Reloading...', this.toastCtrl);
+        }
+      }
+
+      buttons.push(button);
+    }
+
+    let button = {
+      text: 'Cancel',
+      role: 'cancel',
+      handler: () => {
+        console.log('Cancel clicked');
+      }
+    };
+
+    buttons.push(button);
+
+    const actionSheet = this.actionSheetCtrl.create({
+      title: 'Add New Wallet',
+      buttons: buttons
+    });
+    actionSheet.present();
+  }
+
   loadRate(wallet) {
     let working_wallet = wallet['value'];
-    if (wallet.confirmedAccountBalance === 0 && wallet.default !== "true") {
+    let shouldDisplay = this.shouldDisplayWallet(wallet);
+    if (!shouldDisplay) {
       this.count = this.count + 1;
       this.loadWallets();
+      this.unloadedWallets.push(wallet);
     } else {
       let fees = Constants.getWalletProperties(working_wallet);
       let tickerSymbol = fees.tickerSymbol;

@@ -54,7 +54,7 @@ export class ConfirmMnemonicPage {
     this.password = this.navParams.get('password');
     Console.log("Password: " + this.password);
     this.passphrase = this.navParams.get('mnemonic');
-   
+
     let splitted = this.passphrase.split(" ");
 
     let pushed = [];
@@ -69,7 +69,7 @@ export class ConfirmMnemonicPage {
         break;
       }
     }
-        
+
     this.shouldRegister = this.navParams.get("shouldRegister");
     this.isRestore = this.navParams.get("type") === "restore";
     this.isUpgrade = this.navParams.get("type") === "upgrade";
@@ -88,7 +88,7 @@ export class ConfirmMnemonicPage {
 
     if (this.isUpgrade) {
       this.buttonText = "Upgrade Account";
-    }    
+    }
   }
 
   disableAndSave(ma) {
@@ -113,7 +113,7 @@ export class ConfirmMnemonicPage {
     for(let wallet of allWallets) {
       if(wallet.value === 'BTC' || wallet.value === 'LTC' || wallet.value === 'BTCTEST' || wallet.value === 'LTCTEST') {
         Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, wallet.value);
-      } else if(wallet.value === 'XND' || wallet.value === 'IGNIS' || wallet.value === 'ARDR' || wallet.value === 'NXT') {
+      } else if(wallet.value === 'XND' || wallet.value === 'IGNIS' || wallet.value === 'ARDOR' || wallet.value === 'NXT') {
         Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, wallet.value);
       } else if(wallet.value === 'NGNT') {
         Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
@@ -151,11 +151,11 @@ export class ConfirmMnemonicPage {
             passphrase: this.passphrase,
             refCode: action
           };
-        
+
           this.http.post(url, requestData, Constants.getHeader())
             .map(res => res.json())
-            .subscribe(responseData => {              
-              if (responseData.response_text === "success") {                
+            .subscribe(responseData => {
+              if (responseData.response_text === "success") {
                 this.loading.dismiss();
                 this.ls.setItem('mnemonic', this.passphrase);
 

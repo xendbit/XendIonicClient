@@ -63,7 +63,7 @@ export class SwitchWalletPage {
       setTimeout(function () {
         app.home.refresh(true);
       }, 2500);
-    } else if (Constants.WORKING_WALLET === 'XND' || Constants.WORKING_WALLET === 'NXT' || Constants.WORKING_WALLET === 'ARDR' || Constants.WORKING_WALLET === 'IGNIS') {
+    } else if (Constants.WORKING_WALLET === 'XND' || Constants.WORKING_WALLET === 'NXT' || Constants.WORKING_WALLET === 'ARDOR' || Constants.WORKING_WALLET === 'IGNIS') {
       Console.log("Switching Wallet to " + Constants.WORKING_WALLET);
       this.home.showXendBalance = false;
       Constants.xndWallet(this.ls, this.home.loading, this.home.loadingCtrl, this.home.http, this.home.toastCtrl, Constants.WORKING_WALLET);

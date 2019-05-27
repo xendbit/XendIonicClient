@@ -153,7 +153,7 @@ export class ShowBankPaymentPage {
             let fees = Constants.getCurrentWalletProperties();
             if (this.fromCoin.indexOf('ETH') >= 0) {
               CoinsSender.sendCoinsEth(data, this.successCall, this.errorCall, this.fromCoin);
-            } else if (this.fromCoin === 'XND' || this.fromCoin === "NXT" || this.fromCoin === "ARDR" || this.fromCoin === "IGNIS") {
+            } else if (this.fromCoin === 'XND' || this.fromCoin === "NXT" || this.fromCoin === "ARDOR" || this.fromCoin === "IGNIS") {
               CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
             } else if (fees.currencyId !== undefined) {
               CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
