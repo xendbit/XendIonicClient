@@ -253,8 +253,8 @@ export class LoginPage {
   }
 
   resetPassword() {
-    Constants.REG_TYPE = 'recover';
-    this.navCtrl.push('GettingStartedPage', { 'type': 'resetPassword' });
+    Constants.REG_TYPE = 'reset';
+    this.navCtrl.push('GettingStartedPage');
   }
 
   initProps() {

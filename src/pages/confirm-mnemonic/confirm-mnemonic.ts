@@ -73,7 +73,7 @@ export class ConfirmMnemonicPage {
     this.shouldRegister = this.navParams.get("shouldRegister");
     this.isRestore = this.navParams.get("type") === "restore";
     this.isUpgrade = this.navParams.get("type") === "upgrade";
-    this.isReset = this.navParams.get("type") === "resetPassword";
+    this.isReset = (Constants.REG_TYPE === 'reset')
 
     this.isNew = this.navParams.get("type") == "new";
     this.ls = Constants.storageService;
@@ -124,7 +124,6 @@ export class ConfirmMnemonicPage {
   }
 
   loginOnServer() {
-
     let postData = {
       passphrase: this.confirmMnemonic
     };

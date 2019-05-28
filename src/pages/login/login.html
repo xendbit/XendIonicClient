@@ -24,7 +24,7 @@
             <ion-item>
                 <ion-label floating>{{passwordText}}</ion-label>
                 <ion-input type="password" formControlName="password"></ion-input>
-                <button small ion-button clear full color="light" (click)="register();">{{forgotPasswordText}}</button>
+                <button small ion-button clear full color="xend" (click)="register();">{{forgotPasswordText}}</button>
             </ion-item>
             <ion-item>
                 <ion-row>
@@ -39,17 +39,11 @@
                     </ion-col>
                 </ion-row>
             </ion-item>
+            <ion-item>
+                <button small ion-button clear color="xend" (click)="resetPassword();">Forgot Password? Click Here</button>
+            </ion-item>
         </ion-list>
     </form>
-
-    <ion-grid>
-      <ion-row></ion-row>
-        <ion-row>
-            <ion-col>
-                <button small ion-button clear full color="light" (click)="resetPassword();">Forgot Password? Click Here</button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
 </ion-content>
 
 <ion-footer>

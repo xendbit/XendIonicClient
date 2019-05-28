@@ -42,7 +42,6 @@ export class PasswordPage {
 
   gotoNextPage() {
     //^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$
-    console.log(this);
     if (this.password !== this.confirmPassword) {
       Console.log("Passwords don't match");
       Constants.showLongToastMessage("Passwords did not match", this.toastCtrl);

@@ -25,10 +25,11 @@
                 <ion-input type="email" [(ngModel)]="email"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label floating>Password</ion-label>
+                <ion-label floating>{{passwordPlaceHolder}}</ion-label>
                 <ion-input type="password" [(ngModel)]="password"></ion-input>
             </ion-item>
             <ion-item *ngIf='isReset'>
+                <ion-label floating>Confirm Password</ion-label>
                 <ion-input type="password" [(ngModel)]="confirmPassword"></ion-input>
             </ion-item>
             <br />
