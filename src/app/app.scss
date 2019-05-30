@@ -202,3 +202,10 @@ textarea.text-input {
 .select-text {
   text-align: left;
 }
+
+.fab-image {
+  right: calc(env(safe-area-inset-right) + 10px);
+  bottom: 10px;
+  width: 100px;
+  position: absolute;
+}

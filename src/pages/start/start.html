@@ -5,34 +5,34 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-    <ion-navbar hideBackButton="true">
-        <ion-title>Welcome</ion-title>
-    </ion-navbar>
+  <ion-navbar hideBackButton="true">
+    <ion-title>Welcome</ion-title>
+  </ion-navbar>
 </ion-header>
 
 <ion-content>
-    <img src="assets/img/xendbit.png" alt="logo" class="padded">
+  <img src="assets/img/xendbit.png" alt="logo" class="padded">
 
-    <ion-grid class="center-y">
-        <ion-row>
-            <ion-col>
-                <button ion-button full large color="xend" (click)="openLogin()">Login</button>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col>
-                <button ion-button full large color="xend" (click)="recover()">Recover Account</button>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col>
-                <button ion-button full large color="xend" (click)="register()">Register New Account</button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-    <ion-footer>
-        <ion-toolbar>
-            <button ion-button clear full color="light" class="footer">XendBit Version: {{appVersion}} &copy;DTSL</button>
-        </ion-toolbar>
-    </ion-footer>
+  <ion-grid class="center-y">
+    <ion-row>
+      <ion-col>
+        <button ion-button full large color="xend" (click)="openLogin()">Login</button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button full large color="xend" (click)="recover()">Recover Account</button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button full large color="xend" (click)="register()">Register New Account</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <button ion-button clear full color="light" class="footer">XendBit Version: {{appVersion}} &copy;DTSL</button>
+  </ion-toolbar>
+</ion-footer>
