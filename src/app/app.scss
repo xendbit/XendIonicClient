@@ -47,13 +47,17 @@ ion-col {
 
 .card-content {
     padding: 0 !important;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 ion-content {
     background-image: url("../assets/img/bg_lb.png") !important;
-    background-position: center;
+    //background-position: center;
+    //background-repeat: no-repeat;
+    //background-size: auto;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-size: auto;
     background-color: whitesmoke;
 }
 
@@ -109,9 +113,16 @@ ion-icon {
 }
 
 .label {
-    font-size: 13px;
+    font-size: 15px;
     text-align: left;
-    color: black;
+    color: black !important;
+}
+
+p {
+  color: black !important;
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 2;
 }
 
 .button {
