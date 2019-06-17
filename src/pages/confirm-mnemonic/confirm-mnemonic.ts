@@ -194,9 +194,8 @@ export class ConfirmMnemonicPage {
       this.ls.clear();
       this.ls.setItem('mnemonic', this.passphrase);
 
-      this.createWallets();
-
       if (this.isRestore) {
+        this.createWallets();
         return;
       } else {
         Constants.registrationData['loadingCtrl'] = this.loadingCtrl;
@@ -233,6 +232,7 @@ export class ConfirmMnemonicPage {
           }
 
           Constants.registrationData['mnemonic'] = this.passphrase;
+          this.createWallets();
           this.presentActionSheet();
         }
       }

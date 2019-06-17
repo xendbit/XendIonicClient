@@ -77,8 +77,8 @@
                 <ion-input formControlName="idNumber" type="text"></ion-input>
             </ion-item>
             <ion-item>
-                <button item-center ion-button icon-only class="center" (click)="capturePassport()">
-                    <ion-icon name="camera"></ion-icon>Picture of ID
+                <button full item-center ion-button icon-only class="center" (click)="capturePassport()">
+                    <ion-icon name="camera"></ion-icon>Take Picture of ID
                 </button>
                 <p>{{idImagePath}}</p>
             </ion-item>
@@ -104,7 +104,7 @@
     <ion-row>
         <ion-col class="center">
             <ion-buttons class="bordered">
-                <button ion-button full large color="xend" (click)="register();" icon-right>{{nextText}}
+                <button ion-button full medium color="xend" (click)="register();" icon-right>{{nextText}}
                     <ion-icon name="contact"></ion-icon>
                 </button>
             </ion-buttons>
