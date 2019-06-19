@@ -125,8 +125,16 @@ p {
   line-height: 2;
 }
 
+.no-border {
+  border: none !important;
+  box-shadow: none !important;
+}
+
 .button {
     text-transform: none;
+    border: solid thin #f59338;
+    border-radius: 10px !important;
+    box-shadow: 1px 1px #f59338;
 }
 
 .center {
