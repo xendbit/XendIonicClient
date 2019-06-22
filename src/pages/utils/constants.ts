@@ -132,6 +132,8 @@ export class Constants {
 
     static SETTINGS_URL = Constants.XEND_BASE_URL + "en.ng.json?x_session_id=" + Constants.currentTime;
 
+    static CHART_URL = "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol={{symbol}}&market=USD&apikey=MIX93213R84R24Z9";
+
     static LONGER_TOAST_DURATION = 5000;
     static LONG_TOAST_DURATION = 5000;
     static WAIT_FOR_STORAGE_TO_BE_READY_DURATION = 1000;

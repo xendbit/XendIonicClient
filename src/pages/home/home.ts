@@ -8,7 +8,7 @@ import { Platform, ActionSheetController, ModalController, AlertController, NavC
 import { Clipboard } from '@ionic-native/clipboard';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-
+declare var Highcharts: any;
 
 @IonicPage()
 @Component({
@@ -153,6 +153,7 @@ export class HomePage {
 
 
   ionViewDidLoad() {
+    this.loadCharts();
     Console.log('ionViewDidLoad HomePage');
     if (this.ls.getItem("exchangeType") === 'exchange') {
       this.cryptoSellOrderText = 'Sell';
@@ -188,6 +189,60 @@ export class HomePage {
         }
       }
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION)
+  }
+
+  loadCharts() {
+    let fees = Constants.getCurrentWalletProperties();
+    //let tickerSymbol = fees.tickerSymbol;
+    let tickerSymbol = 'BTC';
+    let url = Constants.CHART_URL.replace("{{symbol}}", tickerSymbol.toUpperCase());
+    Console.log(url);
+    this.http.get(url).map(res => res.json()).subscribe(data => {
+      let dates = Object.keys(data['Time Series (Digital Currency Daily)']);
+      dates.sort();
+      let jsonData = data['Time Series (Digital Currency Daily)'];
+      data = [];
+      for(let date of dates) {
+        let dateLong = new Date(date).getTime();
+        let value = +jsonData[date]["4a. close (USD)"];
+        let singleValue = [dateLong, value];
+        Console.log(singleValue);
+        data.push(singleValue);
+      }
+
+      Highcharts.stockChart('container', {
+        chart: {
+          alignTicks: false
+        },
+        rangeSelector: {
+          selected: 1
+        },
+        title: {
+          text: 'Bitcoin Price Chart'
+        },
+        series: [{
+          type: 'line',
+          name: 'Bitcoin Price Chart',
+          data: data,
+          tooltip: {
+            valueDecimals: 2
+          },
+          dataGrouping: {
+            units: [[
+              'week', // unit name
+              [1] // allowed multiples
+            ], [
+              'month',
+              [1, 2, 3, 4, 6]
+            ]]
+          }
+        }]
+      });
+    }, _error => {
+      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+      Console.log("Can not pull data from server");
+      //this.platform.exitApp();
+    });
   }
 
   ionViewDidEnter() {

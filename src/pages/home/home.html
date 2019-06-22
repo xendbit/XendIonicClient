@@ -1,73 +1,60 @@
 <ion-header>
-    <ion-navbar>
-        <ion-title>
-            {{pageTitle}}
-        </ion-title>
-    </ion-navbar>
+  <ion-navbar>
+    <ion-title>
+      {{pageTitle}}
+    </ion-title>
+  </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-    <ion-card>
-        <ion-card-header>
-            <ion-grid>
-              <ion-row>
-                <ion-col col-6>
-                  <ion-item>
-                    <ion-avatar item-start>
-                    <img src="https://xendbit.com/coins/{{wtv}}.png">
-                    </ion-avatar>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-                <ion-row style="font-size: 17px;">
-                    <ion-col col-10>Account Balance</ion-col>
-                    <ion-col col-2 (click)="refresh(true);">
-                        <ion-icon name="refresh" color="fingerprint"></ion-icon>
-                    </ion-col>
-                </ion-row>
-                <ion-row style="font-size: 17px;">
-                  <ion-col col-12>{{confirmedAccountBalance | number: '.3-5'}} {{btcText}}</ion-col>
-                </ion-row>
-                <ion-row style="font-size: 12px;">
-                    <ion-col col-6>Escrow</ion-col>
-                    <!-- <ion-col *ngIf="showXendBalance" col-6 style="color:#F58634">Xendcoin</ion-col> -->
-                </ion-row>
-                <ion-row style="font-size: 12px;">
-                    <ion-col col-6>{{escrow | number: '.3-5'}} {{btcText}}</ion-col>
-                    <!-- <ion-col *ngIf="showXendBalance" col-6 style="color:#F58634">{{xendBalance | number: '.3-3'}} XND</ion-col> -->
-                </ion-row>
-                <!-- <ion-row>
-                    <button *ngIf="isAdvanced" ion-button full round small color="xend" (click)="buyBit();" icon-right>Buy {{btcText}}
-                        <ion-icon name="card"></ion-icon>
-                    </button>
-                </ion-row> -->
-            </ion-grid>
-        </ion-card-header>
-    </ion-card>
+  <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <ion-avatar item-start>
+          <img src="https://xendbit.com/coins/{{wtv}}.png">
+        </ion-avatar>
+        <ion-row style="font-size: 14px;">
+            <ion-col>Balance: {{confirmedAccountBalance | number: '.3-5'}} {{btcText}}</ion-col>
+          </ion-row>
+          <ion-row>
+              <ion-col>Escrow: {{escrow | number: '.3-5'}} {{btcText}}</ion-col>
+          </ion-row>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 
-    <ion-card>
-        <ion-card-header>
-            <h3>{{yourBTCWalletText}}</h3>
-        </ion-card-header>
-        <ion-card-content>
-            <button ion-button icon-left clear big (click)="copyBitcoinAddress();">
-                {{networkAddress}}
-            </button>
-            <ngx-qrcode (click)="copyBitcoinAddress();" [qrc-element-type]="qrType" [qrc-value]="qrValue" [qrc-class]="qrCssClass">
-            </ngx-qrcode>
-            <ion-row>
-                <ion-col col-6>
-                    <button *ngIf="!isEquities" color="xend" ion-button full medium (click)="exchange('Sell');" icon-right>{{cryptoSellOrderText}} {{btcText}}
-                        <ion-icon name="log-out"></ion-icon>
-                    </button>
-                </ion-col>
-                <ion-col col-6>
-                    <button *ngIf="!isEquities" color="xend" ion-button full medium (click)="exchange('Buy');" icon-right>{{cryptoBuyOrderText}} {{btcText}}
-                        <ion-icon name="log-in"></ion-icon>
-                    </button>
-                </ion-col>
-            </ion-row>
-        </ion-card-content>
-    </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <h3>{{yourBTCWalletText}}</h3>
+    </ion-card-header>
+    <ion-card-content>
+      <button ion-button icon-left clear big (click)="copyBitcoinAddress();">
+        {{networkAddress}}
+      </button>
+      <ngx-qrcode (click)="copyBitcoinAddress();" [qrc-element-type]="qrType" [qrc-value]="qrValue"
+        [qrc-class]="qrCssClass">
+      </ngx-qrcode>
+      <ion-row>
+        <ion-col col-6>
+          <button *ngIf="!isEquities" color="xend" ion-button full medium (click)="exchange('Sell');"
+            icon-right>{{cryptoSellOrderText}} {{btcText}}
+            <ion-icon name="log-out"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col col-6>
+          <button *ngIf="!isEquities" color="xend" ion-button full medium (click)="exchange('Buy');"
+            icon-right>{{cryptoBuyOrderText}} {{btcText}}
+            <ion-icon name="log-in"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <div id="container" style="display: block;"></div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

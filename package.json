@@ -74,6 +74,7 @@
     "crypto-js": "^3.1.9-1",
     "eth-lightwallet": "git+https://github.com/segun/eth-lightwallet.git",
     "ethereumjs-tx": "^1.3.3",
+    "highcharts": "^7.1.2",
     "info.protonet.imageresizer": "^0.1.1",
     "install": "^0.10.2",
     "ionic-angular": "3.9.2",
