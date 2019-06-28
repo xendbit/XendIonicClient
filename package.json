@@ -1,8 +1,8 @@
 {
-  "name": "XendBitV3",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "name": "XendBit",
+  "version": "3.4.6622",
+  "author": "Digital Transactions Services Ltd.",
+  "homepage": "http://xendbit.com/",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
