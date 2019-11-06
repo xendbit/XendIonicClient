@@ -41,7 +41,7 @@ import { mnemonicToSeed } from "bip39";
 
 export class Constants {
 static TOMCAT_URL = "https://lb.xendbit.com";' > /tmp/temp
-echo "static APP_VERSION = \"$VERSION\"i;" >> /tmp/temp
+echo "static APP_VERSION = \"$VERSION\";" >> /tmp/temp
 echo "static ENABLE_GUEST = false;" >> /tmp/temp
 echo "static NOTIFICATION_SOCKET_URL = \"ws://192.250.236.180:8080/notify/websocket\";" >> /tmp/temp
 
