@@ -156,6 +156,8 @@ export class DonatePage {
     askBeneficiaryForAddress() {
         let ws = Constants.properties['ws_connection'];
 
+        console.log(ws);
+
         let data = {
             "donorEmailAddress": this.ls.getItem("emailAddress"),
             "beneficiaryEmailAddress": this.beneficiary.emailAddress,

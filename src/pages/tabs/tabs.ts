@@ -20,7 +20,7 @@ export class TabsPage {
   // should be each tab's root Page
   tab1Root: any = 'LandingPage';
   tab2Root: any = 'MyOrdersPage';
-  tab3Root: any = 'SendBitPage';
+  tab3Root: any = 'ViewBeneficiariesPage';
   tab4Root: any = 'HistoryPage';
   tab5Root: any = 'SettingsPage';
 
@@ -38,7 +38,7 @@ export class TabsPage {
     this.isAdvanced = false;
     if(StorageService.ACCOUNT_TYPE === "ADVANCED") {
       this.isAdvanced = true;
-    }    
+    }
   }
 
   initProps() {
@@ -46,6 +46,6 @@ export class TabsPage {
     this.buyText = "Buy";
     this.sendText = "Xend";
     this.send2BankText = "Xend2Bank";
-    this.settingsText = "More..";    
+    this.settingsText = "More..";
   }
 }

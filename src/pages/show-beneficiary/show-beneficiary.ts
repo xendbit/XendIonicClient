@@ -15,7 +15,7 @@ import { Storage } from '@ionic/storage';
  * Ionic pages and navigation.
  */
 
-@IonicPage() 
+@IonicPage()
 @Component({
   selector: 'page-show-beneficiary',
   templateUrl: 'show-beneficiary.html',
@@ -31,7 +31,7 @@ export class ShowBeneficiaryPage {
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage, public toastCtrl: ToastController) {
     this.beneficiary = Constants.registrationData['beneficiary'];
     Console.log(this.beneficiary);
-    this.dateRegistered = new Date(this.beneficiary.dateRegistered).toLocaleString();    
+    this.dateRegistered = new Date(this.beneficiary.dateRegistered).toLocaleString();
 
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
@@ -40,7 +40,7 @@ export class ShowBeneficiaryPage {
       //Wait for sometimes for storage to be ready
       app.loading.dismiss();
       app.loadImage(app.beneficiary);
-    }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);    
+    }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
   ionViewDidLoad() {
@@ -49,8 +49,8 @@ export class ShowBeneficiaryPage {
 
   makeDonation() {
     Console.log('makeDonation');
-    this.viewCtrl.dismiss();    
-    Constants.registrationData['viewBeneficiaries'].navCtrl.push('DonatePage');
+    this.viewCtrl.dismiss();
+    Constants.registrationData['viewBeneficiaries'].navCtrl.push('SendBitPage');
   }
 
   disposeDialog() {
@@ -78,8 +78,8 @@ export class ShowBeneficiaryPage {
       }, error => {
         Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
       }
-    )    
-  }  
-    
+    )
+  }
+
 
 }

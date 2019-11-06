@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>View Beneficiaries</ion-title>
+    <ion-title>View Borrower</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -16,16 +16,16 @@
 <ion-content padding>
     <ion-card>
         <ion-card-header>
-          Beneficiaries
+          Borrowers
         </ion-card-header>
         <ion-card-content>
             <ion-grid>
                 <ion-row *ngFor="let beneficiary of beneficiaries" (click)=showDetails(beneficiary)>
                     <ion-col col-12>
-                        <button ion-button full small round color="xend">{{beneficiary.kyc.name}}</button>
+                        <button ion-button full medium round color="xend">{{beneficiary.fullname}} </button>
                     </ion-col>
                 </ion-row>
-            </ion-grid>          
+            </ion-grid>
         </ion-card-content>
-    </ion-card>  
+    </ion-card>
 </ion-content>

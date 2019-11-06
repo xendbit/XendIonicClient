@@ -16,31 +16,40 @@
 <ion-content padding>
   <ion-card>
     <ion-card-header>
-      Beneficiary Information
+      Borrower Information
     </ion-card-header>
     <ion-card-content style="text-align: left;">
-      <p>Fullname: <span class="bold">{{beneficiary.kyc.name}}</span></p>
+      <p>Fullname: <span class="bold">{{beneficiary.fullname}}</span></p>
       <hr />
       <p>Member Since: <span class="bold">{{dateRegistered}}</span></p>
       <hr />
       <p>Email Address: <span class="bold">{{beneficiary.emailAddress}}</span></p>
       <hr />
-      <p>ID Type: <span class="bold">{{beneficiary.kyc.idType}}</span></p>      
+      <p>ID Type: <span class="bold">{{beneficiary.kyc.idType}}</span></p>
       <hr />
-      <p>ID Number: <span class="bold">{{beneficiary.kyc.idNumber}}</span></p>      
+      <p>ID Number: <span class="bold">{{beneficiary.kyc.idNumber}}</span></p>
+      <p>Country of Residence: <span class="bold">{{beneficiary.kyc.countryOfResidence}}</span></p>
       <hr />
       <p>ID Image</p>
       <img [src]="dataImage" alt="Image is loading....">
     </ion-card-content>
   </ion-card>
   <ion-card>
-      <ion-card-content>
-          <ion-item class="center">
-              <ion-buttons class="bordered">
-                  <button  ion-button round color="fingerprint" (click)="makeDonation();" icon-right>Donate<ion-icon name="send"></ion-icon></button>
-                  <button  ion-button round color="danger" (click)="disposeDialog();" icon-only><ion-icon name="close"></ion-icon></button>
-              </ion-buttons>
-          </ion-item>
-      </ion-card-content>
-  </ion-card>  
+    <ion-card-content>
+      <ion-item class="center">
+        <ion-buttons class="bordered">
+          <ion-row>
+            <ion-col col-9>
+              <button ion-button round full color="fingerprint" (click)="makeDonation();" icon-right>Lend<ion-icon
+                  name="send"></ion-icon></button>
+            </ion-col>
+            <ion-col col-3>
+              <button ion-button round full color="danger" (click)="disposeDialog();" icon-right>Back<ion-icon
+                  name="arrow-back"></ion-icon></button>
+            </ion-col>
+          </ion-row>
+        </ion-buttons>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
