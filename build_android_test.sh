@@ -49,13 +49,15 @@ cat /tmp/temp | cat - $WORKING_FILE > temp && mv temp $WORKING_FILE
 mv $WORKING_FILE $CONSTANTS_FILE
 cd $BASE_DIR
 
-ionic cordova build android --release
+export CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL=https://services.gradle.org/distributions/gradle-4.4-all.zip
+ionic cordova build android --release --verbose -- -- --minSdkVersion=19
 cd $BASE_DIR/platforms/android
 ./gradlew clean
 ./gradlew assemble
 cd $BASE_DIR
-jarsigner -storepass @bsolute -tsa http://timestamp.digicert.com -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore XendBit.keystore $BASE_DIR/platforms/android/build/outputs/apk/release/android-release-unsigned.apk XendBit
-/Users/aardvocate/Library/Android/sdk/build-tools/24.0.2/zipalign -v 4  $BASE_DIR/platforms/android/build/outputs/apk/release/android-release-unsigned.apk XendBit.apk
+jarsigner -storepass @bsolute -tsa http://timestamp.digicert.com -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore XendBit.keystore $BASE_DIR/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk XendBit
+
+/Users/aardvocate/Library/Android/sdk/build-tools/24.0.2/zipalign -v 4  $BASE_DIR/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk XendBit.apk
 
 mv XendBit.apk XendBitTest.$VERSION.apk
 #reverse the process above
@@ -65,5 +67,4 @@ mv $BAK_FILE $CONSTANTS_FILE
 
 cd $BASE_DIR
 
-scp XendBitTest.$VERSION.apk xend@xendbit.com:/var/www/html/releases/
 echo "Done"
