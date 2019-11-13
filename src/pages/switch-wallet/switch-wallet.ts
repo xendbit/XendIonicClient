@@ -77,14 +77,6 @@ export class SwitchWalletPage {
       setTimeout(function () {
         app.home.refresh(true);
       }, 2500);
-    } else {
-      Console.log("Switching Wallet to " + Constants.WORKING_WALLET);
-      this.home.showXendBalance = true;
-      Constants.btcWallet(this.ls, this.home.loading, this.home.loadingCtrl, this.home.http, this.home.toastCtrl, Constants.WORKING_WALLET);
-      let app = this;
-      setTimeout(function () {
-        app.home.refresh(true);
-      }, 2500);
     }
   }
 }

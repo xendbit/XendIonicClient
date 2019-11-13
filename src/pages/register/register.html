@@ -43,23 +43,23 @@
                 <ion-label floating><sup>**</sup>{{phoneNumberText}}</ion-label>
                 <ion-input type="number" formControlName="phoneNumber"></ion-input>
             </ion-item>
-            <ion-item>
+            <!-- <ion-item>
                     <ion-label floating>Enable Whatsapp Messaging?</ion-label>
                     <ion-select interface='action-sheet' formControlName="enableWhatsapp" placeholder="Enable Whatsapp Messaging?">
                         <ion-option value="No">No</ion-option>
                         <ion-option value="Yes">Yes</ion-option>
                     </ion-select>
-            </ion-item>
+            </ion-item> -->
 
             <ion-item>
-                <ion-label floating>Bank Account Number (optional)</ion-label>
+                <ion-label floating>Bank Account Number</ion-label>
                 <ion-input type="number" formControlName="accountNumber"></ion-input>
             </ion-item>
 
             <ion-item>
                 <ion-label floating></ion-label>
                 <ion-select interface='action-sheet' formControlName="bank"
-                    placeholder="Click to Select Bank Name (optional)">
+                    placeholder="Click to Select Bank Name">
                     <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
                 </ion-select>
             </ion-item>
@@ -89,16 +89,6 @@
                 <ion-input type="text" formControlName="referralCode"></ion-input>
             </ion-item>
         </ion-list>
-        <!-- <ion-list no-lines>
-            <ion-item>Become a Beneficiary</ion-item>
-            <p>
-                If you accept to be a beneficiary, Donors will be able to view all your information.
-            </p>
-            <ion-item>
-                <ion-label floating>Make my information public</ion-label>
-                <ion-checkbox (click)="checkValue()" formControlName="isBeneficiary"></ion-checkbox>
-            </ion-item>
-        </ion-list> -->
     </form>
 
     <ion-row>

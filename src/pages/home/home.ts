@@ -172,9 +172,7 @@ export class HomePage {
         let wallet = wallets[w];
         let coin = wallet['value'];
 
-        if (coin.indexOf("ETH") >= 0) {
-          Constants.ethWallet(app.ls);
-        } else if (coin === "XND") {
+        if (coin === "XND") {
           Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
         } else if (coin === "NXT") {
           Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
@@ -184,8 +182,6 @@ export class HomePage {
           Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
         } else if (wallet['currencyId'] !== undefined) {
           Constants.tokenWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else {
-          Constants.btcWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
         }
       }
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION)
@@ -202,7 +198,7 @@ export class HomePage {
       dates.sort();
       let jsonData = data['Time Series (Digital Currency Daily)'];
       data = [];
-      for(let date of dates) {
+      for (let date of dates) {
         let dateLong = new Date(date).getTime();
         let value = +jsonData[date]["4a. close (USD)"];
         let singleValue = [dateLong, value];

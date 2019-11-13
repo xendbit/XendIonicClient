@@ -107,8 +107,6 @@ export class SendBitPage {
         Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
       } else if (wallet['currencyId'] !== undefined) {
         Constants.tokenWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-      } else {
-        Constants.btcWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
       }
     }
 

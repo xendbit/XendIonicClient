@@ -125,12 +125,6 @@ export class LandingPage {
         setTimeout(function () {
           app.refresh(wallet);
         }, this.loadWalletDelay);
-      } else {
-        Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
-        let app = this;
-        setTimeout(function () {
-          app.refresh(wallet);
-        }, this.loadWalletDelay);
       }
     } else if (this.ls.getItem("exchangeType") === 'equities') {
       if (wallet['equityId'] !== undefined) {

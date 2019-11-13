@@ -196,12 +196,10 @@ export class LoginPage {
             Console.log(e);
           }
 
-          this.postKYCInfoToBlockchain(password, emailAddress);
-          if (exchangeType === 'exchange') {
-            this.navCtrl.push(TabsPage);
-          } else if (exchangeType === 'equities') {
-            this.navCtrl.push(EquitiesExchangePage);
-          }
+          //this.postKYCInfoToBlockchain(password, emailAddress);
+          Constants.IS_LOGGED_IN = true;
+          //TODO:Push Home Page that shows list of registered beneficiaries.
+
         } else {
           this.loading.dismiss();
           Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
