@@ -18,11 +18,10 @@ export class TabsPage {
  settingsText: string;
   // this tells the tabs component which Pages
   // should be each tab's root Page
-  tab1Root: any = 'LandingPage';
-  tab2Root: any = 'MyOrdersPage';
-  tab3Root: any = 'ViewBeneficiariesPage';
-  tab4Root: any = 'HistoryPage';
-  tab5Root: any = 'SettingsPage';
+  tab1Root: any = 'ViewBeneficiariesPage';
+  tab2Root: any = 'RegisterPage';
+  tab3Root: any = 'HistoryPage';
+  tab4Root: any = 'SettingsPage';
 
  isAdvanced: boolean = false;
 

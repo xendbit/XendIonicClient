@@ -15,6 +15,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 import { StorageService } from '../utils/storageservice';
 
+declare var genwallet: any;
 
 /*
  Generated class for the Register page.
@@ -113,7 +114,24 @@ export class RegisterPage {
   }
 
   ionViewWillEnter() {
-    this.mnemonic = this.navParams.get("mnemonic");
+    if (Constants.IS_LOGGED_IN) {
+      let result = genwallet();
+      Console.log(result);
+      Constants.registrationData['mnemonic'] = result.mnemonic;
+      this.mnemonic =result.mnemonic;
+      let allWallets = Constants.properties['wallets'];
+
+      for (let wallet of allWallets) {
+        if (wallet.value === 'XND' || wallet.value === 'IGNIS' || wallet.value === 'ARDOR' || wallet.value === 'NXT') {
+          Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, wallet.value);
+        } else if (wallet.value === 'NGNT') {
+          Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
+        }
+      }
+
+    } else {
+      this.mnemonic = this.navParams.get("mnemonic");
+    }
   }
 
   ionViewDidEnter() {

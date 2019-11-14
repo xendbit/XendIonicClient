@@ -199,7 +199,7 @@ export class LoginPage {
           //this.postKYCInfoToBlockchain(password, emailAddress);
           Constants.IS_LOGGED_IN = true;
           //TODO:Push Home Page that shows list of registered beneficiaries.
-
+          this.navCtrl.push(TabsPage);
         } else {
           this.loading.dismiss();
           Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
