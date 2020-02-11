@@ -118,19 +118,10 @@ export class RegisterPage {
       let result = genwallet();
       Console.log(result);
       Constants.registrationData['mnemonic'] = result.mnemonic;
-      this.mnemonic =result.mnemonic;
-      let allWallets = Constants.properties['wallets'];
-
-      for (let wallet of allWallets) {
-        if (wallet.value === 'XND' || wallet.value === 'IGNIS' || wallet.value === 'ARDOR' || wallet.value === 'NXT') {
-          Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, wallet.value);
-        } else if (wallet.value === 'NGNT') {
-          Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
-        }
-      }
-
+      this.mnemonic = result.mnemonic;
     } else {
       this.mnemonic = this.navParams.get("mnemonic");
+      Constants.registrationData['mnemonic'] = this.mnemonic;
     }
   }
 

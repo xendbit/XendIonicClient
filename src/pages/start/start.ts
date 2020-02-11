@@ -52,6 +52,7 @@ export class StartPage {
 
   openLogin() {
     this.navCtrl.push("LoginPage");
+    //this.navCtrl.push("RegisterPage");
   }
 
   loadSettings() {

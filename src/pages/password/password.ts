@@ -17,7 +17,7 @@ import { Constants } from '../utils/constants';
 export class PasswordPage {
 
   allnumbers = [];
-  password;
+  password: string = "";
   confirmPassword;
   displayed: string = "";
   numbers = [];
@@ -26,35 +26,64 @@ export class PasswordPage {
   completeRegistrationText: string;
   enterPasswordText: string;
   importantNoticeText: string;
+  disableButton: boolean = true;
+
+  rows = [
+    ['1', '2', '3'],
+    ['4', '5', '6'],
+    ['7', '8', '9'],
+    ['DEL', '0', 'CLS']
+  ]
 
   constructor(public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams) {
-    this.pageTitle = "Enter Your Password";
-    this.passwordWarningText = "Select Your Password. You need it for transactions. It will also be used to encrypt your Passphrase. So make sure you don't forget it. Make sure no one is watching.";
-    this.numbers = Constants.properties['password.page.numbers.pad'];
+    this.pageTitle = "Enter Your PIN";
+    this.passwordWarningText = "Please Select Your PIN.";
     this.completeRegistrationText = "Complete Registration";
-    this.enterPasswordText = "Enter Your Password";
-    this.importantNoticeText = Constants.properties['important.notice'];
   }
 
   ionViewDidLoad() {
     Console.log('ionViewDidLoad PasswordPage');
   }
 
-  gotoNextPage() {
-    //^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$
-    if (this.password !== this.confirmPassword) {
-      Console.log("Passwords don't match");
-      Constants.showLongToastMessage("Passwords did not match", this.toastCtrl);
+  isEnabled(val) {
+    if (val === 'DEL' || val === 'CLS') {
+      return false;
     } else {
-      let found = this.password.search(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
-      if (found < 0) {
-        Console.log("Passwords invalid");
-        Constants.showLongToastMessage("Please enter a valid password", this.toastCtrl);
+      if(this.password.length === 6) {
+        this.disableButton = false;
+        return true;
       } else {
-        Console.log("Password is OK");
-        Constants.registrationData['password'] = this.password;
-        Constants.passwordPadSuccessCallback();
+        this.disableButton = true;
       }
     }
+  }
+
+  clicked(val) {
+    if (val === 'DEL') {
+      if (this.password !== "") {
+        this.password = this.password.substr(0, (this.password.length - 1));
+      }
+    } else if (val === 'CLS') {
+      this.password = "";
+    } else {
+      this.password += val;
+    }
+  }
+
+  gotoNextPage() {
+    Constants.registrationData['password'] = this.password;
+    Constants.passwordPadSuccessCallback();
+    //^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$
+    // if (this.password !== this.confirmPassword) {
+    //   Constants.showLongToastMessage("Passwords did not match", this.toastCtrl);
+    // } else {
+    //   let found = this.password.search(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
+    //   if (found < 0) {
+    //     Constants.showLongToastMessage("Please enter a valid password", this.toastCtrl);
+    //   } else {
+    //     Constants.registrationData['password'] = this.password;
+    //     Constants.passwordPadSuccessCallback();
+    //   }
+    // }
   }
 }

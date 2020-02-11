@@ -259,12 +259,24 @@ export class Constants {
     return toast;
   }
 
-  static completeRegistration() {
+  static completeRegistration(xendAccount) {
     let data = Constants.registrationData;
     let ls = data['ls'];
 
-    let mnemonicCode = Constants.normalizeMnemonicCode(ls);
-    let xendNetworkAddress = ls.getItem('XNDAddress');
+    let mnemonicCode = "";
+    if (Constants.IS_LOGGED_IN) {
+      mnemonicCode = Constants.registrationData['mnemonic'];
+    } else {
+      mnemonicCode = Constants.normalizeMnemonicCode(ls);
+    }
+    let xendNetworkAddress = xendAccount.accountRS;
+
+    let agentEmail = "";
+    if (Constants.IS_LOGGED_IN) {
+      agentEmail = ls.getItem("emailAddress");
+    } else {
+      agentEmail = data['email'];
+    }
 
     let dateRegistered = "" + new Date().getTime();
     let postData = {
@@ -288,10 +300,9 @@ export class Constants {
       beneficiary: data['isBeneficiary'],
       passphrase: mnemonicCode,
       xendNetworkAddress: xendNetworkAddress,
-      referralCode: data['referralCode']
+      referralCode: data['referralCode'],
+      agentEmail: agentEmail
     };
-
-    Console.log(postData);
 
     let url = data['url'];
     let http = data['http'];
@@ -304,19 +315,20 @@ export class Constants {
       responseData => {
         if (responseData.response_text === "success") {
           loading.dismiss();
-          ls.setItem("emailAddress", data['email']);
-          ls.setItem("password", data['password']);
-          ls.setItem("isRegistered", "true");
           if (data['updateInfo']) {
             Constants.showPersistentToastMessage("Update Successful.", toastCtrl);
             data['navCtrl'].pop();
             return;
           } else {
-            Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
+            Constants.showPersistentToastMessage("Registration Successful", toastCtrl);
             if (Constants.IS_LOGGED_IN) {
-              //TODO: Push NFC Page
+              Constants.registrationData['userPassphrase'] = responseData.user.passphrase;
+              data['navCtrl'].push('BarcodePrinterPage', {'userPassphrase': responseData.user.passphrase});
             } else {
               data['navCtrl'].push('LoginPage');
+              ls.setItem("emailAddress", data['email']);
+              ls.setItem("password", data['password']);
+              ls.setItem("isRegistered", "true");
             }
           }
         } else {
@@ -333,18 +345,18 @@ export class Constants {
   static registerOnServer() {
     let data = Constants.registrationData;
 
-    if (data['updateInfo']) {
-      Constants.completeRegistration();
-      return;
-    }
-
     let ls = data['ls'];
     let http = data['http'];
     let toastCtrl = data['toastCtrl'];
     let loading = data['loading'];
     let loadingCtrl = data['loadingCtrl'];
 
-    let mnemonicCode = Constants.normalizeMnemonicCode(ls);
+    let mnemonicCode = "";
+    if (Constants.IS_LOGGED_IN) {
+      mnemonicCode = Constants.registrationData['mnemonic'];
+    } else {
+      mnemonicCode = Constants.normalizeMnemonicCode(ls);
+    }
     let url = Constants.XND_ACCOUNT_ID_URL + "/XND";
 
     let requestData = {
@@ -358,11 +370,15 @@ export class Constants {
       let accountId = data.result.account;
       let publicKey = data.result.publicKey;
 
-      ls.setItem('XNDAddress', accountRS);
-      ls.setItem('XNDId', accountId);
-      ls.setItem('XNDPublicKey', publicKey);
+      if (Constants.IS_LOGGED_IN) {
+
+      } else {
+        ls.setItem('XNDAddress', accountRS);
+        ls.setItem('XNDId', accountId);
+        ls.setItem('XNDPublicKey', publicKey);
+      }
       loading.dismiss();
-      Constants.completeRegistration();
+      Constants.completeRegistration(data.result);
     }, error => {
       Constants.showLongerToastMessage("Error getting your account id from the server: " + error, toastCtrl);
       loading.dismiss();
