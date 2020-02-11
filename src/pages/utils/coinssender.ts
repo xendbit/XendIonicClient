@@ -6,50 +6,47 @@ import Web3 from 'web3';
 
 export class CoinsSender {
 
-    static sendCoinsXnd(data, successCall, errorCall, fees) {
+    static sendCoinsXnd(data, successCall, errorCall) {
         let amount = data['amount'];
-        let recipientAddress = data['recipientAddress'];
+        let userCode = data['userCode'];
+        let sellerCode = data['sellerCode'];
         let loading = data['loading'];
         let loadingCtrl = data['loadingCtrl'];
-        let ls = data['ls'];
         let toastCtrl = data['toastCtrl'];
         let http = data['http'];
-        let password = ls.getItem('password');
-        let brokerAccount = data['brokerAccount'];
+        let password = data['password'];
 
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
-        let mnemonicCode = Constants.normalizeMnemonicCode(ls);
 
-        let val = Math.round(Math.floor(+amount) * +fees.multiplier)
-        let xendFees = Math.floor(amount * +fees.xendFees * +fees.multiplier);
-        let xendAddress = fees.xendAddress;
 
         let url = Constants.PUSH_TX_URL;
 
         let requestData = {
-            emailAddress: ls.getItem("emailAddress"),
             password: password,
-            toAddress: recipientAddress,
-            btcValue: val,
-            passphrase: mnemonicCode,
-            currencyId: fees.currencyId,
-            equityId: fees.equityId,
-            xendFees: xendFees,
-            xendAddress: xendAddress,
-            brokerAccount: brokerAccount,
-            networkAddress: ls.getItem("XNDAddress")
+            btcValue: amount,
+            userCode: userCode,
+            sellerCode: sellerCode
         };
 
-        http.post(url, requestData, Constants.getWalletHeader(fees.btcText)).map(res => res.json()).subscribe(responseData => {
+        http.post(url, requestData, Constants.getWalletHeader("XND")).map(res => res.json()).subscribe(responseData => {
             loading.dismiss();
+            Console.log(responseData);
+            if(responseData.response_text === 'error') {
+              Constants.showLongerToastMessage(responseData.result, toastCtrl);
+              errorCall(data);
+              return;
+            }
+
             if (responseData.result.broadcasted === true) {
-                Constants.showLongerToastMessage("Transaction Successful. The assets have been transfered.", toastCtrl);
+                Constants.showLongerToastMessage("Transaction Successful.", toastCtrl);
                 successCall(data);
+                return;
             }
 
             if ("errorDescription" in responseData.result) {
                 Constants.showLongerToastMessage(responseData.result.errorDescription, toastCtrl);
                 errorCall(data);
+                return;
             }
         }, error => {
             loading.dismiss();

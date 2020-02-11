@@ -22,8 +22,8 @@ export class Constants {
   static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
 
   static NETWORK = networks.bitcoin;
-  static WORKING_WALLET = "BTC";
-  static WORKING_TICKER_VALUE = 'btc';
+  static WORKING_WALLET = "XND";
+  static WORKING_TICKER_VALUE = 'XND';
 
   static IS_LOGGED_IN = false;
 
@@ -505,7 +505,7 @@ export class Constants {
     } else if (coin.indexOf("ETH") >= 0) {
       CoinsSender.sendCoinsEth(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, coin);
     } else {
-      CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, fees);
+      CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError);
     }
   }
 
@@ -570,11 +570,11 @@ export class Constants {
       if (fees.btcText.indexOf('ETH') > 0) {
         CoinsSender.sendCoinsEth(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin);
       } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDOR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
-        CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
+        CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError);
       } else if (fees.currencyId !== undefined) {
-        CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
+        CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError);
       } else if (fees.equityId !== undefined) {
-        CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
+        CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError);
       } else {
         let network = Constants.NETWORKS[coin];
         CoinsSender.sendCoinsBtc(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin, fromAddress, network);

@@ -25,6 +25,7 @@ export class StartPage {
   pageTitle: string;
   ss: StorageService;
   appVersion: string;
+  userType = "agent"
 
   constructor(public storage: Storage, public alertCtrl: AlertController, public platform: Platform, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController) {
     this.ss = new StorageService(storage);
@@ -38,6 +39,10 @@ export class StartPage {
 
   ionViewDidEnter() {
     this.loadSettings();
+  }
+
+  pos() {
+    this.navCtrl.push("SendBitPage");
   }
 
   register() {

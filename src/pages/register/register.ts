@@ -97,6 +97,8 @@ export class RegisterPage {
       country: [''],
       bank: ['', Validators.required],
       accountNumber: ['', Validators.required],
+      bvn: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
       isBeneficiary: ['false'],
       referralCode: [''],
       enableWhatsapp: ['No'],
