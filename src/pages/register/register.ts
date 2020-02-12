@@ -204,6 +204,7 @@ export class RegisterPage {
   }
 
   register() {
+    Console.log('DOB: ' + this.registerForm.value.dateOfBirth);
     let isValid = false;
     let rf = this.registerForm.value;
 
@@ -252,6 +253,16 @@ export class RegisterPage {
           Constants.showLongerToastMessage("Phone number entered is not in international format", this.toastCtrl);
           return;
         }
+      }
+
+      if (rf.dateOfBirth === '') {
+        Constants.showLongToastMessage("Enter valid date of birth", this.toastCtrl);
+        return;
+      }
+
+      if (rf.bvn === '') {
+        Constants.showLongToastMessage("Enter valid BVN", this.toastCtrl);
+        return;
       }
     }
 
@@ -309,6 +320,8 @@ export class RegisterPage {
     Constants.registrationData['bvn'] = rf.bvn;
     Constants.registrationData['idType'] = rf.idType;
     Constants.registrationData['idNumber'] = rf.idNumber;
+    Constants.registrationData['bvn'] = rf.bvn;
+    Constants.registrationData['dateOfBirth'] = new Date(rf.dateOfBirth).getTime();
     Constants.registrationData['country'] = "";
     Constants.registrationData['enableWhatsapp'] = rf.enableWhatsapp;
     Constants.registrationData['referralCode'] = referralCode;

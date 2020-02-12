@@ -97,7 +97,7 @@ export class GettingStartedPage {
   }
 
   restoreWallet() {
-    let found = this.password.search(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
+    //let found = this.password.search(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
 
     let data = {
       mnemonic: '',
@@ -111,10 +111,6 @@ export class GettingStartedPage {
       return;
     } else if (this.password === '') {
       Constants.showLongerToastMessage('Please enter your password', this.toastCtrl);
-      return;
-    } else if (found < 0) {
-      Console.log("Password invalid");
-      Constants.showLongToastMessage("Please enter a valid password", this.toastCtrl);
       return;
     } else if (this.isReset) {
 
