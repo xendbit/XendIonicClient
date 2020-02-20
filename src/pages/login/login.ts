@@ -257,7 +257,7 @@ export class LoginPage {
 
   initProps() {
     this.emailAddressText = "Email Address";
-    this.passwordText = "Wallet Password";
+    this.passwordText = "Pin";
     this.loginText = "Log In";
     this.registerText = "Register";
     this.dontHaveAccountText = "Don't have an account? Register One";

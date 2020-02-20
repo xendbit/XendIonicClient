@@ -12,8 +12,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 
 
+
 @NgModule({
-  declarations: [             
+  declarations: [
     MyApp,
     TabsPage,
     EquitiesExchangePage,
@@ -22,7 +23,7 @@ import { HttpModule } from '@angular/http';
   imports: [
     IonicModule.forRoot(MyApp),
     BrowserModule,
-    HttpModule,    
+    HttpModule,
     IonicStorageModule.forRoot({
       name: '__mydb',
       driverOrder: ['sqlite', 'localstorage', 'indexeddb', 'websql']
@@ -30,16 +31,16 @@ import { HttpModule } from '@angular/http';
     )
   ],
   bootstrap: [IonicApp],
-  entryComponents: [         
+  entryComponents: [
     MyApp,
     TabsPage,
     EquitiesExchangePage,
-    StartPage    
+    StartPage
   ],
   providers: [
-    { provide: ErrorHandler, useClass: MyExceptionHandler }, 
+    { provide: ErrorHandler, useClass: MyExceptionHandler },
     SplashScreen,
-    StatusBar,              
+    StatusBar,
   ]
 })
 export class AppModule { }

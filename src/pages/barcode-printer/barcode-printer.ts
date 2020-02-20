@@ -1,5 +1,8 @@
+import { Constants } from './../utils/constants';
+import { Console } from './../utils/console';
+import { NFC, Ndef } from '@ionic-native/nfc';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
 /**
  * Generated class for the BarcodePrinterPage page.
@@ -20,16 +23,49 @@ export class BarcodePrinterPage {
   qrType = 'img';
   qrValue = "";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public nfc: NFC, public ndef: Ndef, public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams) {
     this.qrValue = this.navParams.get('userPassphrase');
   }
 
+  initializeNFC() {
+    this.nfc.addNdefListener(() => {
+      Console.log('successfully attached ndef listener');
+    }, (err) => {
+      Console.log('error attaching ndef listener: ');
+      Console.log(err);
+    }).subscribe((event) => {
+      Console.log('received ndef message. the tag contains: ');
+      Console.log(event.tag);
+      Console.log('decoded tag id: ');
+      Console.log(this.nfc.bytesToHexString(event.tag.id));
+
+      try {
+        Console.log(this.nfc.bytesToString(event.tag.ndefMessage[0].payload));
+      } catch (err) {
+        Console.log(err);
+      }
+    });
+
+  }
+
   ionViewDidLoad() {
-    console.log('ionViewDidLoad BarcodePrinterPage');
+    Console.log('ionViewDidLoad BarcodePrinterPage');
+    this.initializeNFC();
   }
 
   printUserCode() {
 
+  }
+
+  writeCard() {
+    Console.log('Writing info to card: ' + this.qrValue);
+    let message = this.ndef.textRecord(this.qrValue);
+    this.nfc.write([message]).then((_success) => {
+      Console.log("Write Successfully")
+      Constants.showLongToastMessage("Card Written Successfully", this.toastCtrl);
+    }).catch((_error) => {
+      Console.log(_error);
+    });
   }
 
   finish() {

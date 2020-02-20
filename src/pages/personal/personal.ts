@@ -1,5 +1,4 @@
 import { Base64 } from '@ionic-native/base64';
-import { FileTransfer } from '@ionic-native/file-transfer';
 import { MediaCapture, CaptureImageOptions, MediaFile, CaptureError } from '@ionic-native/media-capture';
 import { ImageResizer, ImageResizerOptions } from '@ionic-native/image-resizer';
 import { Console } from '../utils/console';
@@ -57,7 +56,7 @@ export class PersonalPage {
 
   emailRegex = '^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$';
 
-  constructor(public base64: Base64, public imageResizer: ImageResizer, private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, private mediaCapture: MediaCapture, private transfer: FileTransfer) {
+  constructor(public base64: Base64, public imageResizer: ImageResizer, private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, private mediaCapture: MediaCapture) {
     this.isTrader = Constants.properties['walletType'] === 'trader';
     this.banks = Constants.properties['banks'];
     this.pageTitle = "Complete Registration";
@@ -76,8 +75,6 @@ export class PersonalPage {
     this.idTypes = Constants.properties['id.types'];
     this.idImageText = "ID Image";
     this.country = 1;
-
-    Constants.registrationData['fileTransferObject'] = this.transfer.create();
 
     this.registerForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.maxLength(255), Validators.pattern(this.emailRegex), Validators.required])],
@@ -256,7 +253,7 @@ export class PersonalPage {
       Constants.registrationData['tp'] = 'LoginPage';
       Constants.registrationData['idImage'] = this.idImage;
       Constants.registrationData['url'] = url;
-      Constants.registrationData['registrationType'] = registrationType;      
+      Constants.registrationData['registrationType'] = registrationType;
 
       this.passwordPadSuccess();
     } else {
@@ -279,8 +276,8 @@ export class PersonalPage {
     }
 
     Console.log(rf.phoneNumber);
-    
-    if (rf.phoneNumber !== undefined) {      
+
+    if (rf.phoneNumber !== undefined) {
       if (rf.phoneNumber.startsWith("+")) {
         Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
         return;
@@ -312,7 +309,7 @@ export class PersonalPage {
     Constants.registrationData['updateInfo'] = true;
     StorageService.IS_BENEFICIARY = rf.isBeneficiary;
 
-    Constants.registerOnServer();    
+    Constants.registerOnServer();
   }
 
   countrySelected(country) {

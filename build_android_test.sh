@@ -1,4 +1,5 @@
 #!/bin/bash
+mv *.apk backup/
 RC="`cat rc_test.txt`"
 MAJOR_VERSION="`cat major_version.txt`"
 MINOR_VERSION="`cat minor_version.txt`"

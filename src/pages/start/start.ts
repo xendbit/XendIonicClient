@@ -7,7 +7,6 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { StorageService } from '../utils/storageservice';
 
-
 /*
   Generated class for the Login page.
 
