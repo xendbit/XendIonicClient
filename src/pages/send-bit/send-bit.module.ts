@@ -1,8 +1,8 @@
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { SendBitPage } from './send-bit';
-import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import { IonicPageModule } from 'ionic-angular';
 import { NgModule } from '@angular/core';
+import { NFC, Ndef } from '@ionic-native/nfc';
 
 @NgModule({
     declarations: [
@@ -15,8 +15,9 @@ import { NgModule } from '@angular/core';
         SendBitPage
     ],
     providers: [
-        FingerprintAIO,
-        BarcodeScanner
+        BarcodeScanner,
+        NFC,
+        Ndef
     ]
   })
 

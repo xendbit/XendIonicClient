@@ -1,3 +1,4 @@
+import { NFC, Ndef } from '@ionic-native/nfc';
 import { CoinsSender } from './../utils/coinssender';
 import { Constants } from './../utils/constants';
 import { Console } from './../utils/console';
@@ -7,9 +8,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
-import { networks } from "bitcoinjs-lib";
-
 import { StorageService } from '../utils/storageservice';
 
 /*
@@ -30,8 +28,9 @@ export class SendBitPage {
   loading: Loading
   userCode: string;
   useFingerprint: boolean = false;
+  showToast = false;
 
-  constructor(private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
+  constructor(public nfc: NFC, public ndef: Ndef, private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
     this.sendBitForm = formBuilder.group({
       amount: ['', Validators.compose([Validators.required])],
       userCode: ['', Validators.required],
@@ -49,10 +48,42 @@ export class SendBitPage {
   }
 
   ionViewDidEnter() {
+    this.showToast = true;
   }
 
+  initializeNFC() {
+    this.nfc.addNdefListener(() => {
+      Console.log('successfully attached ndef listener');
+    }, (err) => {
+      Console.log('error attaching ndef listener: ');
+      Console.log(err);
+    }).subscribe((event) => {
+      Console.log('received ndef message. the tag contains: ');
+      Console.log(event.tag);
+      Console.log('decoded tag id: ');
+      Console.log(this.nfc.bytesToHexString(event.tag.id));
+
+      try {
+        let decodedMessage = this.nfc.bytesToString(event.tag.ndefMessage[0].payload);
+        decodedMessage = decodedMessage.replace("\u0002en", "");
+        Console.log(decodedMessage);
+        this.sendBitForm.controls.userCode.setValue(decodedMessage);
+        if(this.showToast) {
+          Constants.showLongToastMessage("User Code Read Successfully", this.toastCtrl);
+        }
+      } catch (err) {
+        Console.log(err);
+      }
+    });
+
+  }
+
+  ionViewDidLeave(){
+    this.showToast = false;
+  }
 
   ionViewDidLoad() {
+    this.initializeNFC();
     Console.log('ionViewDidLoad SendBitPage');
     let coin = 'XND';
     Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, coin);

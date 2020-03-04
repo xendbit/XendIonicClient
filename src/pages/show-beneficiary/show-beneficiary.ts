@@ -7,6 +7,7 @@ import { NavController, NavParams, Loading, LoadingController, AlertController, 
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Storage } from '@ionic/storage';
+import { NFC, Ndef } from '@ionic-native/nfc';
 
 /**
  * Generated class for the ShowBeneficiaryPage page.
@@ -28,7 +29,7 @@ export class ShowBeneficiaryPage {
   dataImage = "";
   loading: Loading;
 
-  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage, public toastCtrl: ToastController) {
+  constructor(public nfc:NFC, public ndef: Ndef, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage, public toastCtrl: ToastController) {
     this.beneficiary = Constants.registrationData['beneficiary'];
     Console.log(this.beneficiary);
     this.dateRegistered = new Date(this.beneficiary.dateRegistered).toLocaleString();
@@ -43,14 +44,49 @@ export class ShowBeneficiaryPage {
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
+  initializeNFC() {
+    this.nfc.addNdefListener(() => {
+      Console.log('successfully attached ndef listener');
+    }, (err) => {
+      Console.log('error attaching ndef listener: ');
+      Console.log(err);
+    }).subscribe((event) => {
+      Console.log('received ndef message. the tag contains: ');
+      Console.log(event.tag);
+      Console.log('decoded tag id: ');
+      Console.log(this.nfc.bytesToHexString(event.tag.id));
+
+      try {
+        Console.log(this.nfc.bytesToString(event.tag.ndefMessage[0].payload));
+      } catch (err) {
+        Console.log(err);
+      }
+    });
+
+  }
+
+
   ionViewDidLoad() {
     Console.log('ionViewDidLoad ShowBeneficiaryPage');
+    this.initializeNFC();
   }
 
   makeDonation() {
     Console.log('makeDonation');
     this.viewCtrl.dismiss();
     Constants.registrationData['viewBeneficiaries'].navCtrl.push('SendBitPage');
+  }
+
+  writeCard() {
+    let  value = this.beneficiary.passphrase;
+    Console.log('Writing info to card: ' + value);
+    let message = this.ndef.textRecord(value);
+    this.nfc.write([message]).then((_success) => {
+      Console.log("Write Successfully")
+      Constants.showLongToastMessage("Card Written Successfully", this.toastCtrl);
+    }).catch((_error) => {
+      Console.log(_error);
+    });
   }
 
   disposeDialog() {

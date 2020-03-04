@@ -28,7 +28,7 @@
       <p>ID Type: <span class="bold">{{beneficiary.kyc.idType}}</span></p>
       <hr />
       <p>ID Number: <span class="bold">{{beneficiary.kyc.idNumber}}</span></p>
-      <p>Country of Residence: <span class="bold">{{beneficiary.kyc.countryOfResidence}}</span></p>
+      <p>Wallet Address: <span class="bold">{{beneficiary.xendNetworkAddress}}</span></p>
       <hr />
       <p>ID Image</p>
       <img [src]="dataImage" alt="Image is loading....">
@@ -39,9 +39,15 @@
       <ion-item class="center">
         <ion-buttons class="bordered">
           <ion-row>
-            <ion-col>
+            <ion-col col-6>
               <button ion-button round full color="danger" (click)="disposeDialog();" icon-right>Back<ion-icon
                   name="arrow-back"></ion-icon></button>
+            </ion-col>
+            <ion-col col-6>
+              <button color="xend" ion-button full medium (click)="writeCard()" icon-right>
+                Write Card
+                <ion-icon name="card"></ion-icon>
+              </button>
             </ion-col>
           </ion-row>
         </ion-buttons>
