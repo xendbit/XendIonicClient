@@ -85,8 +85,8 @@ export class SendBitPage {
   ionViewDidLoad() {
     this.initializeNFC();
     Console.log('ionViewDidLoad SendBitPage');
-    let coin = 'XND';
-    Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, coin);
+    let coin = 'ETH';
+    Constants.ethWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, coin);
   }
 
   sendBit() {

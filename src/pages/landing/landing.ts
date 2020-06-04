@@ -88,7 +88,7 @@ export class LandingPage {
     let working_wallet = wallet['value'];
     if (this.ls.getItem("exchangeType") === 'exchange') {
       if (working_wallet.indexOf("ETH") >= 0) {
-        Constants.ethWallet(this.ls);
+        Constants.ethWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);

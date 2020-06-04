@@ -59,7 +59,7 @@ export class HomePage {
   cryptoSellOrderText = 'Sell';
   cryptoBuyOrderText = 'Buy';
   fiatSellOrderText = 'Fiat Sell-Order';
-  wtv = 'btc';
+  wtv = 'eth';
 
   constructor(public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public toastCtrl: ToastController, public localNotifications: LocalNotifications, public actionSheetCtrl: ActionSheetController) {
     this.clipboard = new Clipboard();
@@ -167,23 +167,7 @@ export class HomePage {
     let app = this;
     setTimeout(function () {
       //Do all wallets.
-      let wallets = Constants.properties['wallets'];
-      for (let w in wallets) {
-        let wallet = wallets[w];
-        let coin = wallet['value'];
-
-        if (coin === "XND") {
-          Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else if (coin === "NXT") {
-          Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else if (coin === "ARDOR") {
-          Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else if (coin === "IGNIS") {
-          Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else if (wallet['currencyId'] !== undefined) {
-          Constants.tokenWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        }
-      }
+      Constants.ethWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, 'ETH');
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION)
   }
 
