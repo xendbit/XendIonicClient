@@ -96,7 +96,7 @@ export class SendBitPage {
       let coin = wallet['value'];
 
       if (coin.indexOf("ETH") >= 0) {
-        Constants.ethWallet(app.ls);
+        Constants.ethWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
       } else if (coin === "XND") {
         Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
       } else if (coin === "NXT") {

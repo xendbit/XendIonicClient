@@ -58,7 +58,7 @@ export class SwitchWalletPage {
     if (Constants.WORKING_WALLET.indexOf("ETH") >= 0) {
       this.home.showXendBalance = false;
       Console.log("Switching Wallet to " + Constants.WORKING_WALLET);
-      Constants.ethWallet(this.ls);
+      Constants.ethWallet(this.ls, this.home.loading, this.home.loadingCtrl, this.home.http, this.home.toastCtrl, Constants.WORKING_WALLET);
       let app = this;
       setTimeout(function () {
         app.home.refresh(true);

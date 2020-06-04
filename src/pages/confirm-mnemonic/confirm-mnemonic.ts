@@ -48,7 +48,7 @@ export class ConfirmMnemonicPage {
     this.pageTitle = "Confirm The Passphrase";
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     console.log(this.navParams);
     this.email = this.navParams.get('email');
     this.password = this.navParams.get('password');
@@ -108,19 +108,10 @@ export class ConfirmMnemonicPage {
   }
 
   createWallets() {
-    let allWallets = Constants.properties['wallets'];
-
-    for(let wallet of allWallets) {
-      if(wallet.value === 'BTC' || wallet.value === 'LTC' || wallet.value === 'BTCTEST' || wallet.value === 'LTCTEST') {
-        Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, wallet.value);
-      } else if(wallet.value === 'XND' || wallet.value === 'IGNIS' || wallet.value === 'ARDOR' || wallet.value === 'NXT') {
-        Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, wallet.value);
-      } else if(wallet.value === 'NGNT') {
-        Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
-      } else if(wallet.value === 'ETH' || wallet.value === 'ETHTEST') {
-        Constants.ethWallet(this.ls);
-      }
-    }
+    let allWallets = [];
+    allWallets.push(Constants.CURRENT_WALLET);
+    Console.log(allWallets);
+    Constants.ethWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'ETH');
   }
 
   loginOnServer() {

@@ -9,31 +9,31 @@ import { HDNode } from "bitcoinjs-lib";
 import { mnemonicToSeed } from "bip39";
 
 export class Constants {
-    static TOMCAT_URL = "http://localhost:8080";
-    static APP_VERSION = "v4.6-rc31";
+    //static TOMCAT_URL = "https://lb.xendbit.net";
+    static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
     static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
-    static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
-    //static TOMCAT_URL = "https://lb.xendbit.net";
-    //static TOMCAT_URL = "https://lb.xendbit.com";
+    static GETH_PROXY = "http://ethqoufb6-dns-reg1.eastus.cloudapp.azure.com:8540";// "http://rinkeby.xendbit.com:8546";
+    //static TOMCAT_URL = "http://localhost:8080";
+    static TOMCAT_URL = "https://lb.xendbit.com";
     //static NOTIFICATION_SOCKET_URL = "ws://192.250.236.180:8080/notify/websocket";
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
 
     static NETWORK = networks.bitcoin;
-    static WORKING_WALLET = "BTC";
-    static WORKING_TICKER_VALUE = 'btc';
+    static WORKING_WALLET = "ETH";
+    static WORKING_TICKER_VALUE = 'eth';
 
     static CURRENT_WALLET = {
-        "text": "Bitcoin",
-        "value": "BTC",
-        "symbol": "BTC",
-        "ticker_symbol": "btc",
+        "text": "Ethereum",
+        "value": "ETH",
+        "symbol": "ETH",
+        "ticker_symbol": "eth",
         "xend.fees": 0.000625,
-        "block.fees": 0.003571,
-        "xend.address": "1HHeKfxgDe4Vqv7nJcvT1QYahksekUwkMN",
-        "multiplier": 100000000
+        "block.fees": 0.0008,
+        "xend.address": "0x5b61c8d90ca057d707d3a615dcacb7f03d372bce",
+        "multiplier": 1000000000000000000
     };
 
     static REG_TYPE = 'register';
@@ -116,6 +116,7 @@ export class Constants {
     static SEND_CONFIRMATION_EMAIL_URL = Constants.SERVER_URL + "user/send-confirmation-email";
     static ADD_KYC_URL = Constants.SERVER_URL + "user/add/kyc";
     static XND_ACCOUNT_ID_URL = Constants.SERVER_URL + "user/get-account-id";
+    static GET_ADDRESS_URL = Constants.SERVER_URL + "user/get-address";
     static LOAD_BENEFICIARIES_URL = Constants.SERVER_URL + "user/beneficiaries";
     static GET_IMAGE_URL = Constants.IMAGER_URL + "get-image";
     static BECOME_BENEFICIARY_URL = Constants.SERVER_URL + "user/become-beneficiary";
@@ -689,92 +690,40 @@ export class Constants {
         return Constants.getWalletProperties(Constants.WORKING_WALLET);
     }
 
-    static btcWallet(ls: StorageService, _loading, _loadingCtrl, http, _toastCtrl, chainCode) {
-        let network = Constants.NETWORKS[chainCode];
-        let passphrase = ls.getItem('mnemonic');
-
-        if (ls.getItem(chainCode + "Address") !== undefined && ls.getItem(chainCode + "Address") !== "") {
-            //return;
-        }
-
-        var hd = HDNode.fromSeedBuffer(mnemonicToSeed(passphrase), network).derivePath("m/0/0/0");
-        Constants.registrationData['networkAddress'] = hd.getAddress();
-        ls.setItem(chainCode + 'Address', hd.getAddress());
-        //import private key
-        let pk = hd.keyPair;
-        let privKey = pk.toWIF();
-        Console.log(privKey);
-        let pubKeyHash = pk.getPublicKeyBuffer().toString('hex');
-        ls.setItem(chainCode + 'PublicKey', pubKeyHash);
-        let address = hd.getAddress();
-        let url = Constants.RPC_PROXY + "/importprivkey/" + privKey + "/" + address + "/" + chainCode;
-        http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(_success => { }, _error => { });
-
+    static btcWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, chainCode) {
     }
+
     static xndWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, chainCode) {
-        if (ls.getItem(chainCode + "Id") !== undefined && ls.getItem(chainCode + "Id") !== "") {
-            return;
-        }
+        // if (ls.getItem(chainCode + "Id") !== undefined && ls.getItem(chainCode + "Id") !== "") {
+        //     return;
+        // }
 
-        let mnemonicCode = Constants.normalizeMnemonicCode(ls);
+        // let mnemonicCode = Constants.normalizeMnemonicCode(ls);
 
-        let url = Constants.XND_ACCOUNT_ID_URL + "/" + chainCode;
+        // let url = Constants.XND_ACCOUNT_ID_URL + "/" + chainCode;
 
-        let requestData = {
-            "passphrase": mnemonicCode
-        };
+        // let requestData = {
+        //     "passphrase": mnemonicCode
+        // };
 
-        loading = Constants.showLoading(loading, loadingCtrl, "Please wait");
+        // loading = Constants.showLoading(loading, loadingCtrl, "Please wait");
 
-        http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(data => {
-            let accountRS = data.result.accountRS;
-            let accountId = data.result.account;
-            let publicKey = data.result.publicKey;
+        // http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(data => {
+        //     let accountRS = data.result.accountRS;
+        //     let accountId = data.result.account;
+        //     let publicKey = data.result.publicKey;
 
-            ls.setItem(chainCode + 'Address', accountRS);
-            ls.setItem(chainCode + 'Id', accountId);
-            ls.setItem(chainCode + 'PublicKey', publicKey);
-            loading.dismiss();
-        }, error => {
-            Constants.showLongerToastMessage("Error getting your account id from the server: " + error, toastCtrl);
-            loading.dismiss();
-        });
+        //     ls.setItem(chainCode + 'Address', accountRS);
+        //     ls.setItem(chainCode + 'Id', accountId);
+        //     ls.setItem(chainCode + 'PublicKey', publicKey);
+        //     loading.dismiss();
+        // }, error => {
+        //     Constants.showLongerToastMessage("Error getting your account id from the server: " + error, toastCtrl);
+        //     loading.dismiss();
+        // });
     }
 
     static tokenWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, coin) {
-        if (ls.getItem("XNDId") !== undefined && ls.getItem("XNDId") !== "") {
-            let accountRS = ls.getItem('XNDAddress')
-            let accountId = ls.getItem('XNDId')
-            let publicKey = ls.getItem('XNDPublicKey')
-            ls.setItem(coin + 'Address', accountRS);
-            ls.setItem(coin + 'Id', accountId);
-            ls.setItem(coin + 'PublicKey', publicKey);
-            return;
-        }
-
-        let mnemonicCode = Constants.normalizeMnemonicCode(ls);
-
-        let url = Constants.XND_ACCOUNT_ID_URL + "/XND";
-
-        let requestData = {
-            "passphrase": mnemonicCode
-        };
-
-        loading = Constants.showLoading(loading, loadingCtrl, "Please wait");
-
-        http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(data => {
-            let accountRS = data.result.accountRS;
-            let accountId = data.result.account;
-            let publicKey = data.result.publicKey;
-
-            ls.setItem(coin + 'Address', accountRS);
-            ls.setItem(coin + 'Id', accountId);
-            ls.setItem(coin + 'PublicKey', publicKey);
-            loading.dismiss();
-        }, error => {
-            Constants.showLongerToastMessage("Error getting your account id from the server: " + error, toastCtrl);
-            loading.dismiss();
-        });
     }
 
     static normalizeMnemonicCode(ls: StorageService) {
@@ -787,7 +736,7 @@ export class Constants {
         return mnemonicCode;
     }
 
-    static ethWallet(ls: StorageService) {
+    static ethWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, chainCode) {
         if (ls.getItem("ETHAddress") !== undefined && ls.getItem("ETHAddress") !== "") {
             let ethAddress = ls.getItem('ETHAddress');
             ls.setItem("ETHTESTAddress", ethAddress);
@@ -795,28 +744,27 @@ export class Constants {
         }
 
         let mnemonicCode = Constants.normalizeMnemonicCode(ls);
-        keystore.createVault({
-            password: 'password',
-            seedPhrase: mnemonicCode,
-            //salt: fixture.salt,     // Optionally provide a salt.
-            // A unique salt will be generated otherwise.
-            hdPathString: "m/44'/60'/0'/0"    // Optional custom HD Path String
-        }, function (err, ks) {
-            // Some methods will require providing the `pwDerivedKey`,
-            // Allowing you to only decrypt private keys on an as-needed basis.
-            // You can generate that value with this convenient method:
-            ks.keyFromPassword('password', function (err, pwDerivedKey) {
-                if (err) throw err;
 
-                // generate five new address/private key pairs
-                // the corresponding private keys are also encrypted
-                ks.generateNewAddress(pwDerivedKey, 1);
-                var addr = ks.getAddresses();
-                ls.setItem("ETHAddress", addr[0]);
-                ls.setItem("ETHTESTAddress", addr[0]);
-                var privateKey = ks.exportPrivateKey(addr[0], pwDerivedKey);
-                ls.setItem('ETHPrivateKey', privateKey);
-            });
+        let url = Constants.GET_ADDRESS_URL + "/" + chainCode;
+
+        let requestData = {
+            "passphrase": mnemonicCode
+        };
+
+        loading = Constants.showLoading(loading, loadingCtrl, "Please wait");
+
+        http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(data => {
+            let encPassphrase = data.result.mnemonicCode;
+            let address = data.result.chainAddress;
+            let encPrivateKey = data.result.wif;
+
+            ls.setItem(chainCode + 'Address', address);
+            ls.setItem(chainCode + 'Passphrase', encPassphrase);
+            ls.setItem(chainCode + 'WIF', encPrivateKey);
+            loading.dismiss();
+        }, error => {
+            Constants.showLongerToastMessage("Error getting your account id from the server: " + error, toastCtrl);
+            loading.dismiss();
         });
     }
 
