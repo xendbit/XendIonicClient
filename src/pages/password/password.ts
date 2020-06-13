@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Console } from '../utils/console';
 import { NavController, NavParams, ToastController, IonicPage } from 'ionic-angular';
 import { Constants } from '../utils/constants';
+import { StorageService } from '../utils/storageservice';
 
 /*
   Generated class for the Pin page.
@@ -49,7 +50,7 @@ export class PasswordPage {
     if (val === 'DEL' || val === 'CLS') {
       return false;
     } else {
-      if(this.password.length === 6) {
+      if (this.password.length === 6) {
         this.disableButton = false;
         return true;
       } else {
@@ -72,7 +73,38 @@ export class PasswordPage {
 
   gotoNextPage() {
     Constants.registrationData['password'] = this.password;
-    Constants.passwordPadSuccessCallback();
+
+    let rf = Constants.registrationData['rf'];
+
+    let referralCode = rf.referralCode;
+
+    if (referralCode === undefined || referralCode === null || referralCode === '') {
+      referralCode = 'XENDBIT';
+    }
+
+    Constants.registrationData['email'] = rf.email;
+    Constants.registrationData['phoneNumber'] = rf.phoneNumber;
+    Constants.registrationData['surName'] = rf.surName;
+    Constants.registrationData['firstName'] = rf.firstName;
+    Constants.registrationData['middleName'] = rf.middleName;
+    Constants.registrationData['bvn'] = rf.bvn;
+    Constants.registrationData['idType'] = rf.idType;
+    Constants.registrationData['idNumber'] = rf.idNumber;
+    Constants.registrationData['bvn'] = rf.bvn;
+    Constants.registrationData['dateOfBirth'] = "" + new Date(rf.dateOfBirth).getTime();
+    Constants.registrationData['country'] = "";
+    Constants.registrationData['enableWhatsapp'] = rf.enableWhatsapp;
+    Constants.registrationData['referralCode'] = referralCode;
+    if (rf.bank !== undefined && rf.bank !== "") {
+      Constants.registrationData['bankCode'] = rf.bank;
+    } else {
+      Constants.registrationData['bankCode'] = "000";
+    }
+    Constants.registrationData['accountNumber'] = rf.accountNumber;
+    Constants.registrationData['isBeneficiary'] = Constants.IS_LOGGED_IN;
+    StorageService.IS_BENEFICIARY = rf.isBeneficiary;
+
+    Constants.registerOnServer();
     //^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$
     // if (this.password !== this.confirmPassword) {
     //   Constants.showLongToastMessage("Passwords did not match", this.toastCtrl);

@@ -53,8 +53,7 @@ export class BarcodePrinterPage {
     this.initializeNFC();
   }
 
-  printUserCode() {
-
+  printUserCode() {    
   }
 
   writeCard() {
@@ -66,19 +65,5 @@ export class BarcodePrinterPage {
     }).catch((_error) => {
       Console.log(_error);
     });
-  }
-
-  finish() {
-
-  }
-
-  copyBitcoinAddress() {
-    // if (this.isShowingQr) {
-    //   this.qrCssClass = "hide";
-    //   this.isShowingQr = false;
-    // } else {
-    //   this.qrCssClass = "show";
-    //   this.isShowingQr = true;
-    // }
   }
 }

@@ -39,7 +39,7 @@ export class Constants {
     static REG_TYPE = 'register';
 
     static IS_LOGGED_IN = false;
-    
+
     static DUST = 546;
     static vector = crypto.getRandomValues(new Uint8Array(16));
 
@@ -265,7 +265,7 @@ export class Constants {
         let ls = data['ls'];
 
         let mnemonicCode = Constants.normalizeMnemonicCode(ls);
-        let xendNetworkAddress = ls.getItem('XNDAddress');
+        let xendNetworkAddress = "N/A";
 
         let dateRegistered = "" + new Date().getTime();
         let postData = {
@@ -289,7 +289,10 @@ export class Constants {
             beneficiary: data['isBeneficiary'],
             passphrase: mnemonicCode,
             xendNetworkAddress: xendNetworkAddress,
-            referralCode: data['referralCode']
+            referralCode: data['referralCode'],
+            dob: data['dateOfBirth'],
+            bvn: data['bvn'],
+            agentEmail: ls.getItem("emailAddress")
         };
 
         Console.log(postData);
@@ -305,16 +308,28 @@ export class Constants {
             responseData => {
                 if (responseData.response_text === "success") {
                     loading.dismiss();
-                    ls.setItem("emailAddress", data['email']);
-                    ls.setItem("password", data['password']);
-                    ls.setItem("isRegistered", "true");
-                    if (data['updateInfo']) {
+
+                    Console.log("ILI: " + Constants.IS_LOGGED_IN);
+                    Console.log("Nav Ctrl: " + data['navCtrl']);
+
+                    if (Constants.IS_LOGGED_IN) {
+                        Constants.showPersistentToastMessage("Beneficiary Registration Successful.", toastCtrl);
+                        data['navCtrl'].push('BarcodePrinterPage');
+                        return;
+                    } else if (data['updateInfo']) {
+                        ls.setItem("emailAddress", data['email']);
+                        ls.setItem("password", data['password']);
+                        ls.setItem("isRegistered", "true");    
                         Constants.showPersistentToastMessage("Update Successful.", toastCtrl);
                         data['navCtrl'].pop();
                         return;
                     } else {
+                        ls.setItem("emailAddress", data['email']);
+                        ls.setItem("password", data['password']);
+                        ls.setItem("isRegistered", "true");    
                         Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
                         data['navCtrl'].push('LoginPage');
+                        return;
                     }
                 } else {
                     Constants.showPersistentToastMessage(responseData.result, toastCtrl);
@@ -328,42 +343,7 @@ export class Constants {
     }
 
     static registerOnServer() {
-        let data = Constants.registrationData;
-
-        if (data['updateInfo']) {
-            Constants.completeRegistration();
-            return;
-        }
-
-        let ls = data['ls'];
-        let http = data['http'];
-        let toastCtrl = data['toastCtrl'];
-        let loading = data['loading'];
-        let loadingCtrl = data['loadingCtrl'];
-
-        let mnemonicCode = Constants.normalizeMnemonicCode(ls);
-        let url = Constants.XND_ACCOUNT_ID_URL + "/XND";
-
-        let requestData = {
-            "passphrase": mnemonicCode
-        };
-
-        loading = Constants.showLoading(loading, loadingCtrl, "Please wait");
-
-        http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(data => {
-            let accountRS = data.result.accountRS;
-            let accountId = data.result.account;
-            let publicKey = data.result.publicKey;
-
-            ls.setItem('XNDAddress', accountRS);
-            ls.setItem('XNDId', accountId);
-            ls.setItem('XNDPublicKey', publicKey);
-            loading.dismiss();
-            Constants.completeRegistration();
-        }, error => {
-            Constants.showLongerToastMessage("Error getting your account id from the server: " + error, toastCtrl);
-            loading.dismiss();
-        });
+        Constants.completeRegistration();
     }
 
     static getHeader() {

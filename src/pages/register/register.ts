@@ -17,6 +17,7 @@ import { StorageService } from '../utils/storageservice';
 
 declare var genwallet: any;
 
+// TODO: Do  not override settings if it's a beneficiary registration.
 /*
  Generated class for the Register page.
 
@@ -162,9 +163,9 @@ export class RegisterPage {
       this.idImage = base64Image;
       this.idImagePath = "data:image";
       Console.log(base64Image);
-     }, (err) => {
+    }, (err) => {
       // Handle error
-     });
+    });
   }
 
   __capturePassport() {
@@ -312,7 +313,6 @@ export class RegisterPage {
 
       Constants.registrationData['loading'] = this.loading;
       Constants.registrationData['loadingCtrl'] = this.loadingCtrl;
-      Constants.registrationData['navCtrl'] = this.navCtrl;
       Constants.registrationData['rf'] = rf;
       Constants.registrationData['http'] = this.http;
       Constants.registrationData['ls'] = this.ls;
@@ -325,10 +325,9 @@ export class RegisterPage {
       Constants.registrationData['idImage'] = this.idImage;
       Constants.registrationData['url'] = url;
       Constants.registrationData['registrationType'] = registrationType;
+      Constants.passwordPadSuccessCallback = this.passwordPadSuccess;
 
       this.navCtrl.push('PasswordPage');
-
-      Constants.passwordPadSuccessCallback = this.passwordPadSuccess;
     } else {
       Constants.showLongToastMessage("Please fill form properly", this.toastCtrl);
     }
@@ -339,36 +338,6 @@ export class RegisterPage {
   }
 
   passwordPadSuccess() {
-    let rf = Constants.registrationData['rf'];
 
-    let referralCode = rf.referralCode;
-
-    if (referralCode === undefined || referralCode === null || referralCode === '') {
-      referralCode = 'XENDBIT';
-    }
-
-    Constants.registrationData['email'] = rf.email;
-    Constants.registrationData['phoneNumber'] = rf.phoneNumber;
-    Constants.registrationData['surName'] = rf.surName;
-    Constants.registrationData['firstName'] = rf.firstName;
-    Constants.registrationData['middleName'] = rf.middleName;
-    Constants.registrationData['bvn'] = rf.bvn;
-    Constants.registrationData['idType'] = rf.idType;
-    Constants.registrationData['idNumber'] = rf.idNumber;
-    Constants.registrationData['bvn'] = rf.bvn;
-    Constants.registrationData['dateOfBirth'] = new Date(rf.dateOfBirth).getTime();
-    Constants.registrationData['country'] = "";
-    Constants.registrationData['enableWhatsapp'] = rf.enableWhatsapp;
-    Constants.registrationData['referralCode'] = referralCode;
-    if (rf.bank !== undefined && rf.bank !== "") {
-      Constants.registrationData['bankCode'] = rf.bank;
-    } else {
-      Constants.registrationData['bankCode'] = "000";
-    }
-    Constants.registrationData['accountNumber'] = rf.accountNumber;
-    Constants.registrationData['isBeneficiary'] = Constants.IS_LOGGED_IN;
-    StorageService.IS_BENEFICIARY = rf.isBeneficiary;
-
-    Constants.registerOnServer();
   }
 }
