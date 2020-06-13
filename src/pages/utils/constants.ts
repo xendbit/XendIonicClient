@@ -9,14 +9,13 @@ import { HDNode } from "bitcoinjs-lib";
 import { mnemonicToSeed } from "bip39";
 
 export class Constants {
-    //static TOMCAT_URL = "https://lb.xendbit.net";
+    static TOMCAT_URL = "https://lb.xendbit.com";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
     static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
-    static GETH_PROXY = "http://ethqoufb6-dns-reg1.eastus.cloudapp.azure.com:8540";// "http://rinkeby.xendbit.com:8546";
-    //static TOMCAT_URL = "http://localhost:8080";
-    static TOMCAT_URL = "https://lb.xendbit.com";
+    
     //static NOTIFICATION_SOCKET_URL = "ws://192.250.236.180:8080/notify/websocket";
+    static GETH_PROXY = "http://ethqoufb6-dns-reg1.eastus.cloudapp.azure.com:8540";// "http://rinkeby.xendbit.com:8546";    
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
@@ -314,7 +313,8 @@ export class Constants {
 
                     if (Constants.IS_LOGGED_IN) {
                         Constants.showPersistentToastMessage("Beneficiary Registration Successful.", toastCtrl);
-                        data['navCtrl'].push('BarcodePrinterPage');
+                        Constants.registrationData['userPassphrase'] = responseData.user.passphrase;
+                        data['navCtrl'].push('BarcodePrinterPage', {'userPassphrase': responseData.user.passphrase});                                  
                         return;
                     } else if (data['updateInfo']) {
                         ls.setItem("emailAddress", data['email']);

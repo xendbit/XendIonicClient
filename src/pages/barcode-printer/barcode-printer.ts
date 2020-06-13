@@ -2,7 +2,7 @@ import { Constants } from './../utils/constants';
 import { Console } from './../utils/console';
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, Platform } from 'ionic-angular';
 
 /**
  * Generated class for the BarcodePrinterPage page.
@@ -23,11 +23,15 @@ export class BarcodePrinterPage {
   qrType = 'img';
   qrValue = "";
 
-  constructor(public nfc: NFC, public ndef: Ndef, public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public platform: Platform, public nfc: NFC, public ndef: Ndef, public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams) {
     this.qrValue = this.navParams.get('userPassphrase');
   }
 
   initializeNFC() {
+    if(this.platform.is('core') || this.platform.is('mobileweb')) {
+      return;
+    }
+    
     this.nfc.addNdefListener(() => {
       Console.log('successfully attached ndef listener');
     }, (err) => {

@@ -3,7 +3,7 @@ mv *.apk backup/
 RC="`cat rc_test.txt`"
 MAJOR_VERSION="`cat major_version.txt`"
 MINOR_VERSION="`cat minor_version.txt`"
-BASE_DIR=/Users/aardvocate/src/XendBitV3/mobile/XendBit
+BASE_DIR=$(pwd)
 
 RC=$((RC + 1))
 #MAJOR_VERSION=$((MAJOR_VERSION + 1))

@@ -3,7 +3,7 @@ import { StorageService } from './../utils/storageservice';
 import { Console } from './../utils/console';
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
-import { NavController, NavParams, Loading, LoadingController, AlertController, ViewController, IonicPage, ToastController } from 'ionic-angular';
+import { NavController, NavParams, Loading, LoadingController, AlertController, ViewController, IonicPage, ToastController, Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Storage } from '@ionic/storage';
@@ -29,7 +29,7 @@ export class ShowBeneficiaryPage {
   dataImage = "";
   loading: Loading;
 
-  constructor(public nfc:NFC, public ndef: Ndef, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage, public toastCtrl: ToastController) {
+  constructor(public platform: Platform, public nfc:NFC, public ndef: Ndef, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage, public toastCtrl: ToastController) {
     this.beneficiary = Constants.registrationData['beneficiary'];
     Console.log(this.beneficiary);
     this.dateRegistered = new Date(this.beneficiary.dateRegistered).toLocaleString();
@@ -45,6 +45,10 @@ export class ShowBeneficiaryPage {
   }
 
   initializeNFC() {
+    if(this.platform.is('core') || this.platform.is('mobileweb')) {
+      return;
+    }
+    
     this.nfc.addNdefListener(() => {
       Console.log('successfully attached ndef listener');
     }, (err) => {
