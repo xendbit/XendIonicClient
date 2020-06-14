@@ -19,7 +19,7 @@ export class CoinsSender {
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
 
 
-        let url = Constants.PUSH_TX_URL;
+        let url = Constants.SEND_TOKEN_URL;
 
         let requestData = {
             password: password,
@@ -28,7 +28,7 @@ export class CoinsSender {
             sellerCode: sellerCode
         };
 
-        http.post(url, requestData, Constants.getWalletHeader("XND")).map(res => res.json()).subscribe(responseData => {
+        http.post(url, requestData, Constants.getWalletHeader("NGNC")).map(res => res.json()).subscribe(responseData => {
             loading.dismiss();
             Console.log(responseData);
             if(responseData.response_text === 'error') {
@@ -37,15 +37,9 @@ export class CoinsSender {
               return;
             }
 
-            if (responseData.result.broadcasted === true) {
+            if (responseData.response_text === 'success') {
                 Constants.showLongerToastMessage("Transaction Successful.", toastCtrl);
                 successCall(data);
-                return;
-            }
-
-            if ("errorDescription" in responseData.result) {
-                Constants.showLongerToastMessage(responseData.result.errorDescription, toastCtrl);
-                errorCall(data);
                 return;
             }
         }, error => {

@@ -3,7 +3,7 @@ import { CoinsSender } from './../utils/coinssender';
 import { Constants } from './../utils/constants';
 import { Console } from './../utils/console';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, Loading, LoadingController, AlertController, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, ToastController, Loading, LoadingController, AlertController, IonicPage, Platform } from 'ionic-angular';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -30,7 +30,7 @@ export class SendBitPage {
   useFingerprint: boolean = false;
   showToast = false;
 
-  constructor(public nfc: NFC, public ndef: Ndef, private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
+  constructor(public platform: Platform, public nfc: NFC, public ndef: Ndef, private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
     this.sendBitForm = formBuilder.group({
       amount: ['', Validators.compose([Validators.required])],
       userCode: ['', Validators.required],
@@ -52,6 +52,13 @@ export class SendBitPage {
   }
 
   initializeNFC() {
+    Console.log("is_core: " + this.platform.is('core'));
+    Console.log("is_mobileweb: " + this.platform.is('mobileweb'));
+    
+    if(this.platform.is('core') || this.platform.is('mobileweb')) {
+      return;
+    }
+
     this.nfc.addNdefListener(() => {
       Console.log('successfully attached ndef listener');
     }, (err) => {

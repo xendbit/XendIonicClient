@@ -100,6 +100,7 @@ export class Constants {
     static GET_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/sell-orders";
     static GET_UNSPENT_OUTPUTS_URL = Constants.SERVER_URL + "exchange/utxos/";
     static PUSH_TX_URL = Constants.SERVER_URL + "exchange/pushtx";
+    static SEND_TOKEN_URL = Constants.SERVER_URL + "exchange/send-token";
     static GET_USER_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-sell-orders"
     static GET_USER_BUY_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-buy-orders"
     static UPDATE_USER_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-sell-orders/update"
