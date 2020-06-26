@@ -137,8 +137,6 @@ export class SendBitPage {
     me.sendBitForm.controls.userCode.setValue("");
     me.sendBitForm.controls.password.setValue("");
     me.sendBitForm.controls.sellerCode.setValue("");
-
-
   }
 
   addToExchangeTable(data) {

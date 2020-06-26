@@ -267,6 +267,10 @@ export class Constants {
         let mnemonicCode = Constants.normalizeMnemonicCode(ls);
         let xendNetworkAddress = "N/A";
 
+        if(Constants.IS_LOGGED_IN) {
+            mnemonicCode = Constants.registrationData['mnemonic']
+        }
+
         let dateRegistered = "" + new Date().getTime();
         let postData = {
             password: data['password'],

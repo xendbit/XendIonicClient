@@ -45,9 +45,9 @@ export class ShowBeneficiaryPage {
   }
 
   initializeNFC() {
-    if(this.platform.is('core') || this.platform.is('mobileweb')) {
-      return;
-    }
+    // if(this.platform.is('core') || this.platform.is('mobileweb')) {
+    //   return;
+    // }
     
     this.nfc.addNdefListener(() => {
       Console.log('successfully attached ndef listener');

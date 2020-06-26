@@ -28,9 +28,9 @@ export class BarcodePrinterPage {
   }
 
   initializeNFC() {
-    if(this.platform.is('core') || this.platform.is('mobileweb')) {
-      return;
-    }
+    // if(this.platform.is('core') || this.platform.is('mobileweb')) {
+    //   return;
+    // }
     
     this.nfc.addNdefListener(() => {
       Console.log('successfully attached ndef listener');
@@ -69,5 +69,9 @@ export class BarcodePrinterPage {
     }).catch((_error) => {
       Console.log(_error);
     });
+  }
+
+  finish() {
+    this.navCtrl.push("RegisterPage");
   }
 }
