@@ -46,7 +46,8 @@ export class StartPage {
 
   register() {
     Constants.REG_TYPE = 'register';
-    this.navCtrl.push('TermsPage');
+    this.navCtrl.push('RegisterPaginated');    
+    //this.navCtrl.push('TermsPage');
   }
 
   recover() {
@@ -61,7 +62,7 @@ export class StartPage {
 
   loadSettings() {
     Console.log(Constants.SETTINGS_URL);
-    this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(data => {
+    this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(data => {      
       Constants.properties = data;
     }, _error => {
       Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
