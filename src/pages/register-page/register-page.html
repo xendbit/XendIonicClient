@@ -59,46 +59,69 @@
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label floating><sup>**</sup>State</ion-label>
-        <ion-select interface='action-sheet' formControlName="state" (ionChange)="stateSelected($event)">
+        <ion-label floating><sup>**</sup></ion-label>
+        <ion-select interface='action-sheet' formControlName="state" (ionChange)="stateSelected($event)" placeholder="Click to Select State">
           <ion-option *ngFor="let state of states" value="{{state.name}}">{{state.name}}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label floating><sup>**</sup>Lga</ion-label>
-        <ion-select interface='action-sheet' formControlName="lga">
+        <ion-label floating><sup>**</sup></ion-label>
+        <ion-select interface='action-sheet' formControlName="lga" placeholder="Click to Select LGA">
           <ion-option *ngFor="let lga of selectedLGAs" value="{{lga.name}}">{{lga.name}}</ion-option>
         </ion-select>
       </ion-item>
     </ion-list>
   </form>
 
-  <form [formGroup]="registerPageTwoForm" *ngIf="page === 2">    
-      <ion-list no-lines>
-        <ion-item>
-          <ion-label floating><sup>**</sup>Market Cluster</ion-label>
-          <ion-input formControlName="cluster" type="text"></ion-input>          
-        </ion-item>
-        <ion-item>
-          <ion-label floating><sup>**</sup>Association</ion-label>
-          <ion-input formControlName="association" type="text"></ion-input>          
-        </ion-item>   
-        <ion-item>
-          <ion-label floating><sup>**</sup>Trade Type</ion-label>
-          <ion-select interface='action-sheet' formControlName="tradeType" (ionChange)="tradeTypeSelected($event)">
-            <ion-option *ngFor="let tradeType of tradeTypes" value="{{tradeType.typeId}}">{{tradeType.tradeType}}</ion-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-label floating><sup>**</sup>Trade Subtype</ion-label>
-          <ion-select interface='action-sheet' formControlName="tradeSubType">
-            <ion-option *ngFor="let tradeSubtype of selectedTradeSubtypes" value="{{tradeSubtype.subTypeId}}">{{tradeSubtype.subtype}}</ion-option>
-          </ion-select>
-        </ion-item>             
-      </ion-list>
+  <form [formGroup]="registerPageTwoForm" *ngIf="page === 2">
+    <ion-list no-lines>
+      <ion-item>
+        <ion-label floating><sup>**</sup>Market Cluster</ion-label>
+        <ion-input formControlName="cluster" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating><sup>**</sup>Association</ion-label>
+        <ion-input formControlName="association" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating><sup>**</sup></ion-label>
+        <ion-select interface='action-sheet' formControlName="tradeType" (ionChange)="tradeTypeSelected($event)" placeholder="Click to Select Trade Type">
+          <ion-option *ngFor="let tradeType of tradeTypes" value="{{tradeType.typeId}}">{{tradeType.tradeType}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label floating><sup>**</sup></ion-label>
+        <ion-select interface='action-sheet' formControlName="tradeSubType" placeholder="Click to Select Trade Sub Type">
+          <ion-option *ngFor="let tradeSubtype of selectedTradeSubtypes" value="{{tradeSubtype.subTypeId}}">{{tradeSubtype.subtype}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
   </form>
 
   <form [formGroup]="registerPageThreeForm" *ngIf="page === 3">
+    <ion-list no-lines>
+      <ion-item>
+        <ion-label floating><sup>**</sup>Account Name</ion-label>
+        <ion-input formControlName="accountName" type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating><sup>**</sup>Bank Account Number</ion-label>
+        <ion-input type="number" formControlName="accountNumber"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating></ion-label>
+        <ion-select interface='action-sheet' formControlName="bank" placeholder="Click to Select Bank Name">
+          <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating><sup>**</sup>BVN</ion-label>
+        <ion-input formControlName="bvn" type="number"></ion-input>
+      </ion-item>
+    </ion-list>
   </form>
 
   <form [formGroup]="registerPageFourForm" *ngIf="page === 4">
@@ -109,4 +132,22 @@
 
   <form [formGroup]="registerPageSixForm" *ngIf="page === 6">
   </form>
+
+  <ion-row>
+    <ion-col class="center" col-6>
+      <ion-buttons class="bordered">
+        <button ion-button full medium color="xend">
+          <ion-icon name="return-left"></ion-icon>
+          &nbsp;&nbsp;Previous
+        </button>
+      </ion-buttons>
+    </ion-col>
+    <ion-col class="center" col-6>
+      <ion-buttons class="bordered">
+        <button ion-button full medium color="xend">Next&nbsp;&nbsp;
+          <ion-icon name="return-right"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-col>
+  </ion-row>
 </ion-content>

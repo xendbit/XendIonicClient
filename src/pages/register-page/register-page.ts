@@ -27,7 +27,7 @@ export class RegisterPaginated {
   registerPageFiveForm;
   registerPageSixForm;
 
-  page = 2;
+  page = 3;
   lastPage = 6;
 
   states = [];
@@ -36,6 +36,7 @@ export class RegisterPaginated {
   tradeTypes = [];
   tradeSubtypes = [];
   selectedTradeSubtypes = [];
+  banks = [];
 
   lat: number;
   long: number;
@@ -46,6 +47,8 @@ export class RegisterPaginated {
 
     this.tradeSubtypes = Constants.properties['trade.subtypes'];
     this.tradeTypes = Constants.properties['trade.types']
+
+    this.banks = Constants.properties['banks'];
 
     Console.log("--- States ---");
     Console.log(this.states);
