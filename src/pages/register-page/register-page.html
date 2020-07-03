@@ -73,8 +73,7 @@
     </ion-list>
   </form>
 
-  <form [formGroup]="registerPageTwoForm" *ngIf="page === 2">
-    <form [formGroup]="registerPageOneForm" *ngIf="page === 1">
+  <form [formGroup]="registerPageTwoForm" *ngIf="page === 2">    
       <ion-list no-lines>
         <ion-item>
           <ion-label floating><sup>**</sup>Market Cluster</ion-label>
@@ -83,9 +82,20 @@
         <ion-item>
           <ion-label floating><sup>**</sup>Association</ion-label>
           <ion-input formControlName="association" type="text"></ion-input>          
-        </ion-item>        
+        </ion-item>   
+        <ion-item>
+          <ion-label floating><sup>**</sup>Trade Type</ion-label>
+          <ion-select interface='action-sheet' formControlName="tradeType" (ionChange)="tradeTypeSelected($event)">
+            <ion-option *ngFor="let tradeType of tradeTypes" value="{{tradeType.typeId}}">{{tradeType.tradeType}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label floating><sup>**</sup>Trade Subtype</ion-label>
+          <ion-select interface='action-sheet' formControlName="tradeSubType">
+            <ion-option *ngFor="let tradeSubtype of selectedTradeSubtypes" value="{{tradeSubtype.subTypeId}}">{{tradeSubtype.subtype}}</ion-option>
+          </ion-select>
+        </ion-item>             
       </ion-list>
-    </form>
   </form>
 
   <form [formGroup]="registerPageThreeForm" *ngIf="page === 3">

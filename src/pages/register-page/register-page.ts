@@ -27,24 +27,31 @@ export class RegisterPaginated {
   registerPageFiveForm;
   registerPageSixForm;
 
-  page = 1;  
+  page = 2;
   lastPage = 6;
 
   states = [];
   lgas = [];
   selectedLGAs = [];
+  tradeTypes = [];
+  tradeSubtypes = [];
+  selectedTradeSubtypes = [];
+
   lat: number;
   long: number;
 
-  constructor(private geolocation: Geolocation, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {    
+  constructor(private geolocation: Geolocation, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
     this.states = Constants.properties['states'];
     this.lgas = Constants.properties['lgas'];
+
+    this.tradeSubtypes = Constants.properties['trade.subtypes'];
+    this.tradeTypes = Constants.properties['trade.types']
 
     Console.log("--- States ---");
     Console.log(this.states);
 
     this.registerPageOneForm = this.formBuilder.group({
-      firstName: ['',  Validators.required],
+      firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       middleName: [''],
       phoneNumber: ['', Validators.required],
@@ -57,37 +64,37 @@ export class RegisterPaginated {
     });
 
     this.registerPageTwoForm = this.formBuilder.group({
-      cluster: ['',  Validators.required],
-      association: ['',  Validators.required],
-      gpsCoordinate: ['',  Validators.required],
-      tradeType: ['',  Validators.required],
-      tradeSubType: ['',  Validators.required],
-    });    
+      cluster: ['', Validators.required],
+      association: ['', Validators.required],
+      gpsCoordinate: ['', Validators.required],
+      tradeType: ['', Validators.required],
+      tradeSubType: ['', Validators.required],
+    });
 
     this.registerPageThreeForm = this.formBuilder.group({
-      accountName: ['',  Validators.required],
-      accountNumber: ['',  Validators.required],
-      bank: ['',  Validators.required],
-      bvn: ['',  Validators.required],
-    });        
+      accountName: ['', Validators.required],
+      accountNumber: ['', Validators.required],
+      bank: ['', Validators.required],
+      bvn: ['', Validators.required],
+    });
 
     this.registerPageFourForm = this.formBuilder.group({
-      nextOfKin1: ['',  Validators.required],
-      nextOfKin2: ['',  Validators.required],
-      nextOfKin3: ['',  Validators.required],
-    });            
+      nextOfKin1: ['', Validators.required],
+      nextOfKin2: ['', Validators.required],
+      nextOfKin3: ['', Validators.required],
+    });
 
     this.registerPageFiveForm = this.formBuilder.group({
-      guarantor1: ['',  Validators.required],
-      guarantor2: ['',  Validators.required],
-      guarantor3: ['',  Validators.required],
-    });                
+      guarantor1: ['', Validators.required],
+      guarantor2: ['', Validators.required],
+      guarantor3: ['', Validators.required],
+    });
 
     this.registerPageSixForm = this.formBuilder.group({
-      idType: ['',  Validators.required],
-      idNumber: ['',  Validators.required],
-      idExpiry: ['',  Validators.required],
-    });             
+      idType: ['', Validators.required],
+      idNumber: ['', Validators.required],
+      idExpiry: ['', Validators.required],
+    });
   }
 
   ionViewDidLoad() {
@@ -96,9 +103,35 @@ export class RegisterPaginated {
       this.lat = resp.coords.latitude;
       this.long = resp.coords.longitude
       Console.log(resp);
-     }).catch((error) => {
-       console.log('Error getting location', error);
-     });    
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+  }
+
+  tradeTypeSelected(value) {
+    console.log("Trade type selected: " + value);
+    let tradeType = this.findTradeTypeById(value);
+    this.selectedTradeSubtypes = this.findTradeSubtypeByTypeId(tradeType.typeId);
+  }
+
+
+  findTradeTypeById(tradeTypeId) {
+    for (let tradeType of this.tradeTypes) {
+      if (tradeType.typeId === tradeTypeId) {
+        return tradeType;
+      }
+    }
+  }
+
+  findTradeSubtypeByTypeId(tradeTypeId) {
+    let found = [];
+    for (let tradeSubtype of this.tradeSubtypes) {
+      if (tradeSubtype.typeId === tradeTypeId) {
+        found.push(tradeSubtype);
+      }
+    }
+
+    return found;
   }
 
   stateSelected(value) {
@@ -108,8 +141,8 @@ export class RegisterPaginated {
 
   findLGAByStateId(id) {
     let found = [];
-    for(let lga of this.lgas) {
-      if(lga.state_id === id) {
+    for (let lga of this.lgas) {
+      if (lga.state_id === id) {
         found.push(lga);
       }
     }
@@ -118,8 +151,8 @@ export class RegisterPaginated {
   }
 
   findStateByName(name) {
-    for(let state of this.states) {
-      if(state.name === name) {
+    for (let state of this.states) {
+      if (state.name === name) {
         return state;
       }
     }
