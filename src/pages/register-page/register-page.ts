@@ -25,10 +25,9 @@ export class RegisterPaginated {
   registerPageThreeForm;
   registerPageFourForm;
   registerPageFiveForm;
-  registerPageSixForm;
 
-  page = 3;
-  lastPage = 6;
+  page = 5;
+  lastPage = 5;
 
   states = [];
   lgas = [];
@@ -37,6 +36,7 @@ export class RegisterPaginated {
   tradeSubtypes = [];
   selectedTradeSubtypes = [];
   banks = [];
+  idTypes = []
 
   lat: number;
   long: number;
@@ -49,6 +49,7 @@ export class RegisterPaginated {
     this.tradeTypes = Constants.properties['trade.types']
 
     this.banks = Constants.properties['banks'];
+    this.idTypes = Constants.properties['id.types'];
 
     Console.log("--- States ---");
     Console.log(this.states);
@@ -85,15 +86,13 @@ export class RegisterPaginated {
       nextOfKin1: ['', Validators.required],
       nextOfKin2: ['', Validators.required],
       nextOfKin3: ['', Validators.required],
-    });
-
-    this.registerPageFiveForm = this.formBuilder.group({
       guarantor1: ['', Validators.required],
       guarantor2: ['', Validators.required],
       guarantor3: ['', Validators.required],
+
     });
 
-    this.registerPageSixForm = this.formBuilder.group({
+    this.registerPageFiveForm = this.formBuilder.group({
       idType: ['', Validators.required],
       idNumber: ['', Validators.required],
       idExpiry: ['', Validators.required],

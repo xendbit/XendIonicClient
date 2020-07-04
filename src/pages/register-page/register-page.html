@@ -36,8 +36,8 @@
         <ion-input formControlName="phoneNumber" type="tel"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating><sup>**</sup></ion-label>
-        <ion-select interface='action-sheet' formControlName="gender" placeholder="Click to Select Gender">
+        <ion-label floating><sup>**</sup>Gender</ion-label>
+        <ion-select interface='action-sheet' formControlName="gender" placeholder="">
           <ion-option value="male">Male</ion-option>
           <ion-option value="female">Female</ion-option>
         </ion-select>
@@ -59,14 +59,14 @@
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label floating><sup>**</sup></ion-label>
-        <ion-select interface='action-sheet' formControlName="state" (ionChange)="stateSelected($event)" placeholder="Click to Select State">
+        <ion-label floating><sup>**</sup>State</ion-label>
+        <ion-select interface='action-sheet' formControlName="state" (ionChange)="stateSelected($event)" placeholder="">
           <ion-option *ngFor="let state of states" value="{{state.name}}">{{state.name}}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label floating><sup>**</sup></ion-label>
-        <ion-select interface='action-sheet' formControlName="lga" placeholder="Click to Select LGA">
+        <ion-label floating><sup>**</sup>LGA</ion-label>
+        <ion-select interface='action-sheet' formControlName="lga" placeholder="">
           <ion-option *ngFor="let lga of selectedLGAs" value="{{lga.name}}">{{lga.name}}</ion-option>
         </ion-select>
       </ion-item>
@@ -84,14 +84,14 @@
         <ion-input formControlName="association" type="text"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating><sup>**</sup></ion-label>
-        <ion-select interface='action-sheet' formControlName="tradeType" (ionChange)="tradeTypeSelected($event)" placeholder="Click to Select Trade Type">
+        <ion-label floating><sup>**</sup>Trade Type</ion-label>
+        <ion-select interface='action-sheet' formControlName="tradeType" (ionChange)="tradeTypeSelected($event)" placeholder="">
           <ion-option *ngFor="let tradeType of tradeTypes" value="{{tradeType.typeId}}">{{tradeType.tradeType}}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label floating><sup>**</sup></ion-label>
-        <ion-select interface='action-sheet' formControlName="tradeSubType" placeholder="Click to Select Trade Sub Type">
+        <ion-label floating><sup>**</sup>Trade Subtype</ion-label>
+        <ion-select interface='action-sheet' formControlName="tradeSubType" placeholder="">
           <ion-option *ngFor="let tradeSubtype of selectedTradeSubtypes" value="{{tradeSubtype.subTypeId}}">{{tradeSubtype.subtype}}</ion-option>
         </ion-select>
       </ion-item>
@@ -111,8 +111,8 @@
       </ion-item>
 
       <ion-item>
-        <ion-label floating></ion-label>
-        <ion-select interface='action-sheet' formControlName="bank" placeholder="Click to Select Bank Name">
+        <ion-label floating>Bank Name</ion-label>
+        <ion-select interface='action-sheet' formControlName="bank" placeholder="">
           <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
         </ion-select>
       </ion-item>
@@ -125,12 +125,52 @@
   </form>
 
   <form [formGroup]="registerPageFourForm" *ngIf="page === 4">
+    <ion-list no-lines>
+      <ion-item>
+        <ion-label floating><sup>**</sup>NOK 1</ion-label>
+        <ion-input formControlName="nextOfKin1" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating><sup>**</sup>NOK 2</ion-label>
+        <ion-input formControlName="nextOfKin2" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating><sup>**</sup>NOK 3</ion-label>
+        <ion-input formControlName="nextOfKin3" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating><sup>**</sup>Guarantor 1</ion-label>
+        <ion-input formControlName="guarantor1" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating><sup>**</sup>Guarantor 2</ion-label>
+        <ion-input formControlName="guarantor2" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating><sup>**</sup>Guarantor 3</ion-label>
+        <ion-input formControlName="guarantor3" type="text"></ion-input>
+      </ion-item>
+    </ion-list>
   </form>
 
   <form [formGroup]="registerPageFiveForm" *ngIf="page === 5">
-  </form>
-
-  <form [formGroup]="registerPageSixForm" *ngIf="page === 6">
+    <ion-list no-lines>
+      <ion-item>
+        <ion-label floating><sup>**</sup>ID Type</ion-label>
+        <ion-select interface='action-sheet' formControlName="idType" placeholder="">
+          <ion-option *ngFor="let idType of idTypes" value="{{idType.text}}">{{idType.text}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label floating><sup>**</sup>ID Number</ion-label>
+        <ion-input formControlName="idNumber" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label><sup>**</sup>ID Expiry Date</ion-label>
+        <ion-datetime displayFormat="YYYY-MM-DD" placeholder="Select ID Expiry Date" formControlName="idExpiry">
+        </ion-datetime>
+      </ion-item>
+    </ion-list>
   </form>
 
   <ion-row>
