@@ -28,10 +28,6 @@ export class BarcodePrinterPage {
   }
 
   initializeNFC() {
-    // if(this.platform.is('core') || this.platform.is('mobileweb')) {
-    //   return;
-    // }
-    
     this.nfc.addNdefListener(() => {
       Console.log('successfully attached ndef listener');
     }, (err) => {
@@ -54,13 +50,13 @@ export class BarcodePrinterPage {
 
   ionViewDidLoad() {
     Console.log('ionViewDidLoad BarcodePrinterPage');
-    this.initializeNFC();
   }
 
-  printUserCode() {    
+  printUserCode() {
   }
 
   writeCard() {
+    this.initializeNFC();
     Console.log('Writing info to card: ' + this.qrValue);
     let message = this.ndef.textRecord(this.qrValue);
     this.nfc.write([message]).then((_success) => {
@@ -72,6 +68,6 @@ export class BarcodePrinterPage {
   }
 
   finish() {
-    this.navCtrl.push("RegisterPage");
+    this.navCtrl.push("RegisterPaginated");
   }
 }

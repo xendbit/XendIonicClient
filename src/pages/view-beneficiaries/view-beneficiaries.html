@@ -22,7 +22,7 @@
             <ion-grid>
                 <ion-row *ngFor="let beneficiary of beneficiaries" (click)=showDetails(beneficiary)>
                     <ion-col col-12>
-                        <button ion-button full medium round color="xend">{{beneficiary.fullname}} </button>
+                        <button ion-button full medium round color="xend">{{beneficiary.firstName}} {{beneficiary.lastName}}</button>
                     </ion-col>
                 </ion-row>
             </ion-grid>

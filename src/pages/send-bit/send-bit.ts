@@ -54,7 +54,7 @@ export class SendBitPage {
   initializeNFC() {
     Console.log("is_core: " + this.platform.is('core'));
     Console.log("is_mobileweb: " + this.platform.is('mobileweb'));
-    
+
     if(this.platform.is('core') || this.platform.is('mobileweb')) {
       return;
     }

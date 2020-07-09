@@ -48,7 +48,7 @@ export class ShowBeneficiaryPage {
     // if(this.platform.is('core') || this.platform.is('mobileweb')) {
     //   return;
     // }
-    
+
     this.nfc.addNdefListener(() => {
       Console.log('successfully attached ndef listener');
     }, (err) => {
@@ -72,7 +72,6 @@ export class ShowBeneficiaryPage {
 
   ionViewDidLoad() {
     Console.log('ionViewDidLoad ShowBeneficiaryPage');
-    this.initializeNFC();
   }
 
   makeDonation() {
@@ -82,6 +81,7 @@ export class ShowBeneficiaryPage {
   }
 
   writeCard() {
+    this.initializeNFC();
     let  value = this.beneficiary.passphrase;
     Console.log('Writing info to card: ' + value);
     let message = this.ndef.textRecord(value);

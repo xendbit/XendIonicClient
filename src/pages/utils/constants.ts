@@ -1,21 +1,18 @@
-import { keystore } from "eth-lightwallet";
 import { StorageService } from "./storageservice";
 import { Console } from "./console";
 import { Headers } from "@angular/http";
 import { networks, Network } from "bitcoinjs-lib";
 import { LocalProps } from "./localprops";
 import { CoinsSender } from "./coinssender";
-import { HDNode } from "bitcoinjs-lib";
-import { mnemonicToSeed } from "bip39";
 
 export class Constants {
     static TOMCAT_URL = "https://lb.xendbit.com";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
     static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
-    
+
     //static NOTIFICATION_SOCKET_URL = "ws://192.250.236.180:8080/notify/websocket";
-    static GETH_PROXY = "http://ethqoufb6-dns-reg1.eastus.cloudapp.azure.com:8540";// "http://rinkeby.xendbit.com:8546";    
+    static GETH_PROXY = "http://ethqoufb6-dns-reg1.eastus.cloudapp.azure.com:8540";// "http://rinkeby.xendbit.com:8546";
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
@@ -109,6 +106,7 @@ export class Constants {
     static UPDATE_TRADE_URL = Constants.SERVER_URL + "exchange/update-exchange-status";
 
     static NEW_USER_URL = Constants.SERVER_URL + "user/new";
+    static NEW_BENEFICIARY_URL = Constants.SERVER_URL + "user/beneficiary/new";
     static UPDATE_USER_INFO_URL = Constants.SERVER_URL + "user/update";
     static RESTORE_USER_URL = Constants.SERVER_URL + "user/restore";
     static UPGRADE_USER_URL = Constants.SERVER_URL + "user/upgrade";
@@ -153,6 +151,7 @@ export class Constants {
 
     static passwordPadSuccessCallback: any;
     static registrationData = {};
+    static otherData = {};
 
     static properties = LocalProps.properties;
 
@@ -260,6 +259,38 @@ export class Constants {
         return toast;
     }
 
+    static registerBeneficiary() {
+        let postData = Constants.registrationData;
+        let otherData = Constants.otherData;
+
+        let url = Constants.NEW_BENEFICIARY_URL;
+        let http = otherData['http'];
+        let toastCtrl = otherData['toastCtrl'];
+        let loading = otherData['loading'];
+        let loadingCtrl = otherData['loadingCtrl'];
+        loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
+
+        Console.log(postData);
+
+        http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(
+            responseData => {
+                loading.dismiss();
+                if (responseData.response_text === 'success') {
+                    Constants.showPersistentToastMessage("Beneficiary Registration Successful.", toastCtrl);
+                    Constants.registrationData['userPassphrase'] = responseData.beneficiary.encryptedPassphrase;
+                    otherData['navCtrl'].push('BarcodePrinterPage', { 'userPassphrase': responseData.beneficiary.encryptedPassphrase });
+                } else if (responseData.response_text === 'error') {
+                    Constants.showPersistentToastMessage(responseData.result, toastCtrl);
+                }
+            },
+            error => {
+                loading.dismiss();
+                Constants.showPersistentToastMessage("Can not register beneficiary at this time: " + error, toastCtrl);
+
+            }
+        );
+    }
+
     static completeRegistration() {
         let data = Constants.registrationData;
         let ls = data['ls'];
@@ -267,7 +298,7 @@ export class Constants {
         let mnemonicCode = Constants.normalizeMnemonicCode(ls);
         let xendNetworkAddress = "N/A";
 
-        if(Constants.IS_LOGGED_IN) {
+        if (Constants.IS_LOGGED_IN) {
             mnemonicCode = Constants.registrationData['mnemonic']
         }
 
@@ -319,19 +350,19 @@ export class Constants {
                     if (Constants.IS_LOGGED_IN) {
                         Constants.showPersistentToastMessage("Beneficiary Registration Successful.", toastCtrl);
                         Constants.registrationData['userPassphrase'] = responseData.user.passphrase;
-                        data['navCtrl'].push('BarcodePrinterPage', {'userPassphrase': responseData.user.passphrase});                                  
+                        data['navCtrl'].push('BarcodePrinterPage', { 'userPassphrase': responseData.user.passphrase });
                         return;
                     } else if (data['updateInfo']) {
                         ls.setItem("emailAddress", data['email']);
                         ls.setItem("password", data['password']);
-                        ls.setItem("isRegistered", "true");    
+                        ls.setItem("isRegistered", "true");
                         Constants.showPersistentToastMessage("Update Successful.", toastCtrl);
                         data['navCtrl'].pop();
                         return;
                     } else {
                         ls.setItem("emailAddress", data['email']);
                         ls.setItem("password", data['password']);
-                        ls.setItem("isRegistered", "true");    
+                        ls.setItem("isRegistered", "true");
                         Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
                         data['navCtrl'].push('LoginPage');
                         return;
@@ -463,7 +494,6 @@ export class Constants {
         data['alertCtrl'] = home.alertCtrl;
 
         let coin: string = message['toCoin'];
-        let fees = Constants.getWalletProperties(coin);
 
         if (coin.indexOf("BTC") >= 0) {
             let network = Constants.NETWORKS[coin];

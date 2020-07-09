@@ -71,7 +71,11 @@ export class PasswordPage {
     }
   }
 
-  gotoNextPage() {
+  registerBeneficiary() {
+    Constants.registerBeneficiary();
+  }
+
+  __gotoNextPage() {
     Constants.registrationData['password'] = this.password;
 
     let rf = Constants.registrationData['rf'];

@@ -19,16 +19,16 @@
       Borrower Information
     </ion-card-header>
     <ion-card-content style="text-align: left;">
-      <p>Fullname: <span class="bold">{{beneficiary.fullname}}</span></p>
+      <p>Fullname: <span class="bold">{{beneficiary.firstName}} {{beneficiary.lastName}}</span></p>
       <hr />
       <p>Member Since: <span class="bold">{{dateRegistered}}</span></p>
       <hr />
-      <p>Email Address: <span class="bold">{{beneficiary.emailAddress}}</span></p>
+      <p>Email Address: <span class="bold">{{beneficiary.phoneNumber}}</span></p>
       <hr />
-      <p>ID Type: <span class="bold">{{beneficiary.kyc.idType}}</span></p>
+      <p>ID Type: <span class="bold">{{beneficiary.idType}}</span></p>
       <hr />
-      <p>ID Number: <span class="bold">{{beneficiary.kyc.idNumber}}</span></p>
-      <p>Wallet Address: <span class="bold">{{beneficiary.xendNetworkAddress}}</span></p>
+      <p>ID Number: <span class="bold">{{beneficiary.idNumber}}</span></p>
+      <p>Wallet Address: <span class="bold">{{beneficiary.networkAddress}}</span></p>
       <hr />
       <p>ID Image</p>
       <img [src]="dataImage" alt="Image is loading....">
