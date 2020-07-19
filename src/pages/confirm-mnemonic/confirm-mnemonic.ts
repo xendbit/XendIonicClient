@@ -59,13 +59,13 @@ export class ConfirmMnemonicPage {
 
     let pushed = [];
     while (true) {
-      let x = Math.ceil(Math.random() * 12) - 1;
-      if (x < 12 && pushed.indexOf(x) < 0) {
+      let x = Math.ceil(Math.random() * Constants.MNEMONIC_LENGTH) - 1;
+      if (x < Constants.MNEMONIC_LENGTH && pushed.indexOf(x) < 0) {
         this.mnemonicArray.push(splitted[x]);
         pushed.push(x);
       }
 
-      if (pushed.length === 12) {
+      if (pushed.length === Constants.MNEMONIC_LENGTH) {
         break;
       }
     }
@@ -147,7 +147,7 @@ export class ConfirmMnemonicPage {
             .subscribe(responseData => {
               if (responseData.response_text === "success") {
                 this.loading.dismiss();
-                this.ls.setItem('mnemonic', this.passphrase);
+                this.ls.setItem('mnemonic', this.confirmMnemonic);
 
                 this.createWallets();
 
@@ -183,7 +183,7 @@ export class ConfirmMnemonicPage {
       this.loginOnServer();
     } else {
       this.ls.clear();
-      this.ls.setItem('mnemonic', this.passphrase);
+      this.ls.setItem('mnemonic', this.confirmMnemonic);
 
       if (this.isRestore) {
         this.createWallets();
@@ -207,7 +207,7 @@ export class ConfirmMnemonicPage {
 
         Constants.registrationData['url'] = url;
 
-        let minus13thWord = this.passphrase.split(" ").splice(0, 12).join(' ');
+        let minus13thWord = this.passphrase.split(" ").splice(0, Constants.MNEMONIC_LENGTH).join(' ');
 
         if (this.isRestore) {
           //this.getAccountType();
@@ -222,7 +222,7 @@ export class ConfirmMnemonicPage {
             return;
           }
 
-          Constants.registrationData['mnemonic'] = this.passphrase;
+          Constants.registrationData['mnemonic'] = this.confirmMnemonic;
           this.createWallets();
           this.presentActionSheet();
         }

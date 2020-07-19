@@ -21,6 +21,7 @@ export class Constants {
     static NETWORK = networks.bitcoin;
     static WORKING_WALLET = "ETH";
     static WORKING_TICKER_VALUE = 'eth';
+    static MNEMONIC_LENGTH = 2;
 
     static CURRENT_WALLET = {
         "text": "Ethereum",
