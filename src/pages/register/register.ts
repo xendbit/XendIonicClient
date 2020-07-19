@@ -326,6 +326,8 @@ export class RegisterPage {
       Constants.registrationData['registrationType'] = registrationType;
       Constants.passwordPadSuccessCallback = this.passwordPadSuccess;
 
+      Constants.otherData['is_beneficiary'] = false;
+
       this.navCtrl.push('PasswordPage');
     } else {
       Constants.showLongToastMessage("Please fill form properly", this.toastCtrl);

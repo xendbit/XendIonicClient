@@ -52,13 +52,13 @@
         <ion-input formControlName="address" type="text"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating><sup>**</sup>Diability Type</ion-label>
+        <ion-label floating><sup></sup>Diability Type</ion-label>
         <ion-select interface='action-sheet' formControlName="disabilityType" (ionChange)="disabilityTypeSelected($event)" placeholder="">
           <ion-option *ngFor="let disabilityType of disabilityTypes" value="{{disabilityType.typeId}}">{{disabilityType.type}}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label floating><sup>**</sup>Disability Subtype</ion-label>
+        <ion-label floating><sup></sup>Disability Subtype</ion-label>
         <ion-select interface='action-sheet' formControlName="disabilitySubtype" placeholder="">
           <ion-option *ngFor="let disabilitySubtype of selectedDisabilitySubTypes" value="{{disabilitySubtype.subTypeId}}">{{disabilitySubtype.subType}}</ion-option>
         </ion-select>
@@ -179,6 +179,13 @@
         <ion-label>Share My Information</ion-label>
         <ion-checkbox formControlName="smi"></ion-checkbox>
       </ion-item>
+      <ion-item>
+        <button full item-center ion-button icon-only class="center" (click)="capturePassport()">
+          <ion-icon name="camera"></ion-icon>Take Picture of Beneficiary
+        </button>
+        <p>{{idImagePath}}</p>
+      </ion-item>
+
     </ion-list>
   </form>
 
@@ -199,7 +206,7 @@
       </ion-buttons>
 
       <ion-buttons class="bordered" *ngIf="page === 5">
-        <button ion-button full medium color="xend" (click)="submit()">Submit&nbsp;&nbsp;
+        <button ion-button full medium color="xend" (click)="submit()">Next&nbsp;&nbsp;
           <ion-icon name="return"></ion-icon>
         </button>
       </ion-buttons>

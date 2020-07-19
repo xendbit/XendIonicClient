@@ -60,7 +60,7 @@ jarsigner -storepass @bsolute -tsa http://timestamp.digicert.com -verbose -sigal
 
 /Users/aardvocate/Library/Android/sdk/build-tools/24.0.2/zipalign -v 4  $BASE_DIR/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk XendBit.apk
 
-mv XendBit.apk XendBitTest.$VERSION.apk
+mv XendBit.apk XendCreditTest.$VERSION.apk
 #reverse the process above
 
 cd $BASE_DIR/src/pages/utils/

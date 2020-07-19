@@ -29,6 +29,8 @@ export class PasswordPage {
   importantNoticeText: string;
   disableButton: boolean = true;
 
+  isBeneficiary = false;
+
   rows = [
     ['1', '2', '3'],
     ['4', '5', '6'],
@@ -44,6 +46,7 @@ export class PasswordPage {
 
   ionViewDidLoad() {
     Console.log('ionViewDidLoad PasswordPage');
+    this.isBeneficiary = Constants.otherData['is_beneficiary'];
   }
 
   isEnabled(val) {
@@ -72,10 +75,11 @@ export class PasswordPage {
   }
 
   registerBeneficiary() {
+    Console.log("Register Clicked");
     Constants.registerBeneficiary();
   }
 
-  __gotoNextPage() {
+  gotoNextPage() {
     Constants.registrationData['password'] = this.password;
 
     let rf = Constants.registrationData['rf'];
