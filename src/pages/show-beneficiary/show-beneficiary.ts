@@ -33,6 +33,7 @@ export class ShowBeneficiaryPage {
     this.beneficiary = Constants.registrationData['beneficiary'];
     Console.log(this.beneficiary);
     this.dateRegistered = new Date(this.beneficiary.dateRegistered).toLocaleString();
+    Console.log(this.dateRegistered);
 
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
@@ -102,18 +103,17 @@ export class ShowBeneficiaryPage {
     let url = Constants.GET_IMAGE_URL;
     let key = Constants.WORKING_WALLET + "Address";
 
-    Console.log(beneficiary.kyc.proofOfIdentity);
+    Console.log(beneficiary.proofOfIdentity);
 
     let requestData = {
       password: this.ls.getItem("password"),
       networkAddress: this.ls.getItem(key),
       emailAddress: this.ls.getItem("emailAddress"),
-      idImage: beneficiary.kyc.proofOfIdentity
+      idImage: beneficiary.proofOfIdentity
     }
 
     this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
-        Console.log(responseData);
         this.dataImage = 'data:image/jpeg;base64,' + responseData.result;
       }, error => {
         Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
