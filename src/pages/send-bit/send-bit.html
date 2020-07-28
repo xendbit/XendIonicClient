@@ -21,6 +21,10 @@
     <ion-card-content>
       <form [formGroup]="sendBitForm">
         <ion-item>
+          <ion-label floating>Product Name</ion-label>
+          <ion-input formControlName="product" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
           <ion-label floating>Enter Amount</ion-label>
           <ion-input formControlName="amount" type="number"></ion-input>
         </ion-item>
