@@ -35,7 +35,8 @@ export class SendBitPage {
       amount: ['', Validators.compose([Validators.required])],
       userCode: ['', Validators.required],
       sellerCode: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      product: ['']
     });
 
     this.ls = Constants.storageService;
@@ -103,6 +104,7 @@ export class SendBitPage {
     let password = bv.password;
     let sellerCode = bv.sellerCode;
     let userCode = bv.userCode;
+    let product = bv.product;
 
     if (amountToSend === 0) {
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
@@ -116,6 +118,7 @@ export class SendBitPage {
       data['password'] = password;
       data['sellerCode'] = sellerCode;
       data['userCode'] = userCode;
+      data['product'] = product;
 
       data['loading'] = this.loading;
       data['loadingCtrl'] = this.loadingCtrl;

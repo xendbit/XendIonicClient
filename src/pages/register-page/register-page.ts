@@ -105,12 +105,12 @@ export class RegisterPaginated {
     });
 
     this.registerPageFourForm = this.formBuilder.group({
-      nextOfKin1: ['', Validators.required],
-      nextOfKin2: ['', Validators.required],
-      nextOfKin3: ['', Validators.required],
-      guarantor1: ['', Validators.required],
-      guarantor2: ['', Validators.required],
-      guarantor3: ['', Validators.required],
+      nokFirstName: ['', Validators.required],
+      nokLastName: ['', Validators.required],
+      nokPhoneNumber: ['', Validators.required],
+      guarantorFirstName: ['', Validators.required],
+      guarantorLastName: ['', Validators.required],
+      guarantorPhoneNumber: ['', Validators.required],
     });
 
     this.registerPageFiveForm = this.formBuilder.group({
@@ -189,12 +189,12 @@ export class RegisterPaginated {
     Constants.registrationData['bvn'] = rf.bvn;
 
     rf = this.registerPageFourForm.value;
-    Constants.registrationData['nextOfKin1'] = rf.nextOfKin1;
-    Constants.registrationData['nextOfKin2'] = rf.nextOfKin2;
-    Constants.registrationData['nextOfKin3'] = rf.nextOfKin3;
-    Constants.registrationData['guarantor1'] = rf.guarantor1;
-    Constants.registrationData['guarantor2'] = rf.guarantor2;
-    Constants.registrationData['guarantor3'] = rf.guarantor3;
+    Constants.registrationData['nokFirstName'] = rf.nokFirstName;
+    Constants.registrationData['nokLastName'] = rf.nokLastName;
+    Constants.registrationData['nokPhoneNumber'] = rf.nokPhoneNumber;
+    Constants.registrationData['guarantorFirstName'] = rf.guarantorFirstName;
+    Constants.registrationData['guarantorLastName'] = rf.guarantorLastName;
+    Constants.registrationData['guarantorPhoneNumber'] = rf.guarantorPhoneNumber;
 
     rf = this.registerPageFiveForm.value;
     Constants.registrationData['idType'] = rf.idType;
@@ -337,12 +337,12 @@ export class RegisterPaginated {
         }
 
         rf = this.registerPageFourForm.value;
-        if (rf.nextOfKin1 === rf.nextOfKin2 || rf.nextOfKin1 === rf.nextOfKin3 || rf.nextOfKin2 === rf.nextOfKin3) {
+        if (rf.nokFirstName === rf.nokLastName || rf.nokFirstName === rf.nokPhoneNumber || rf.nokLastName === rf.nokPhoneNumber) {
           Constants.showLongToastMessage("All next of kin must be unique", this.toastCtrl);
           return false;
         }
 
-        if (rf.guarantor1 === rf.guarantor2 || rf.guarantor1 === rf.guarantor3 || rf.guarantor2 === rf.guarantor3) {
+        if (rf.guarantorFirstName === rf.guarantorLastName || rf.guarantorFirstName === rf.guarantorPhoneNumber || rf.guarantorLastName === rf.guarantorPhoneNumber) {
           Constants.showLongToastMessage("All guarantors must be unique", this.toastCtrl);
           return false;
         }

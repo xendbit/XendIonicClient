@@ -15,6 +15,7 @@ export class CoinsSender {
         let toastCtrl = data['toastCtrl'];
         let http = data['http'];
         let password = data['password'];
+        let product = data['product'];
 
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
 
@@ -25,7 +26,8 @@ export class CoinsSender {
             password: password,
             btcValue: amount,
             userCode: userCode,
-            sellerCode: sellerCode
+            sellerCode: sellerCode,
+            //product: product,
         };
 
         http.post(url, requestData, Constants.getWalletHeader("NGNC")).map(res => res.json()).subscribe(responseData => {
