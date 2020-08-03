@@ -3,6 +3,7 @@ import { Console } from '../utils/console';
 import { NavController, NavParams, ToastController, IonicPage } from 'ionic-angular';
 import { Constants } from '../utils/constants';
 import { StorageService } from '../utils/storageservice';
+import { KeyEventsPlugin } from '@angular/platform-browser/src/dom/events/key_events';
 
 /*
   Generated class for the Pin page.
@@ -28,6 +29,7 @@ export class PasswordPage {
   enterPasswordText: string;
   importantNoticeText: string;
   disableButton: boolean = true;
+  ls: StorageService;
 
   isBeneficiary = false;
 
@@ -42,6 +44,8 @@ export class PasswordPage {
     this.pageTitle = "Enter Your PIN";
     this.passwordWarningText = "Please Select Your PIN.";
     this.completeRegistrationText = "Complete Registration";
+
+    this.ls = Constants.storageService;
   }
 
   ionViewDidLoad() {
@@ -77,6 +81,21 @@ export class PasswordPage {
   registerBeneficiary() {
     Console.log("Register Clicked");
     Constants.registerBeneficiary();
+  }
+
+  saveBeneficiary() {
+    let postData = Constants.registrationData;
+
+    let phone = postData['phoneNumber'];
+
+    Console.log(postData);
+    let app = this;
+
+    app.ls.setItem('postData-' + phone, postData);
+
+    this.navCtrl.popToRoot();
+
+    Constants.showLongToastMessage("Beneficiary Data saved succeffully. It will be uploaded when you are connected to the internet", this.toastCtrl);
   }
 
   gotoNextPage() {

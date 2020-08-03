@@ -6,7 +6,8 @@ import { LocalProps } from "./localprops";
 import { CoinsSender } from "./coinssender";
 
 export class Constants {
-    static TOMCAT_URL = "https://lb.xendbit.com";
+    static TOMCAT_URL = "http://192.250.236.180:8080";
+    //static TOMCAT_URL = "https://lb.xendbit.com";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
     static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
@@ -259,6 +260,33 @@ export class Constants {
 
         toast.present();
         return toast;
+    }
+
+    static registerSaved(ls, postData, otherData, phone) {
+
+      let url = Constants.NEW_BENEFICIARY_URL;
+      let http = otherData['http'];
+      let toastCtrl = otherData['toastCtrl'];
+
+      Console.log(url);
+      Console.log(postData);
+      Console.log(otherData);
+
+      http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(
+          responseData => {
+              if (responseData.response_text === 'success') {
+                Constants.showPersistentToastMessage("Beneficiary Registration Successful.", toastCtrl);
+                ls.removeItem(phone);
+              } else if (responseData.response_text === 'error') {
+                Constants.showPersistentToastMessage('Background registration of beneficiary failed: ' + responseData.result, toastCtrl);
+                Console.log(responseData);
+              }
+          },
+          error => {
+            Console.log(error);
+          }
+      );
+
     }
 
     static registerBeneficiary() {

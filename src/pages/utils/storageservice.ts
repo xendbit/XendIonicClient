@@ -40,7 +40,7 @@ export class StorageService {
         if (this.data['isGuest'] === true || this.data['isGuest'] === 'true') {
             let key2 = 'guest' + key;
             key = key2;
-        }            
+        }
         if(key === "mnemonic" || key === "password")    {
             itemData = Constants.encryptData(itemData);
         }
@@ -60,6 +60,23 @@ export class StorageService {
         }
 
         return itemData;
+    }
+
+    removeItem(key) {
+      delete this.data[key];
+      this.ns.set("store", this.data);
+    }
+
+    postDataKeys() {
+      let retData = [];
+      let keys = Object.keys(this.data);
+      for (let key of keys) {
+        if(key.indexOf('postData') >= 0) {
+          retData.push(key);
+        }
+      }
+
+      return retData;
     }
 
     clear() {

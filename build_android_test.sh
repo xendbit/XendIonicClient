@@ -28,7 +28,7 @@ cp $CONSTANTS_FILE $BAK_FILE
 #tail -n +2 prints all file expect the first line
 #tail -n +3 prints all file expect the first 2 lines
 
-tail -n +16 $CONSTANTS_FILE > $WORKING_FILE
+tail -n +17 $CONSTANTS_FILE > $WORKING_FILE
 #add the server base url and the first line of file
 echo 'import { keystore } from "eth-lightwallet";
 import { StorageService } from "./storageservice";
@@ -41,7 +41,7 @@ import { HDNode } from "bitcoinjs-lib";
 import { mnemonicToSeed } from "bip39";
 
 export class Constants {
-static TOMCAT_URL = "https://lb.xendbit.com";' > /tmp/temp
+static TOMCAT_URL = "http://192.250.236.180:8080";' > /tmp/temp
 echo "static APP_VERSION = \"$VERSION\";" >> /tmp/temp
 echo "static ENABLE_GUEST = false;" >> /tmp/temp
 echo "static NOTIFICATION_SOCKET_URL = \"ws://192.250.236.180:8080/notify/websocket\";" >> /tmp/temp
