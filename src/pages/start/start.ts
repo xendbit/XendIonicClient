@@ -62,7 +62,7 @@ export class StartPage {
           }
         }
       }
-    }, 5000);
+    }, 60000);
   }
 
   ionViewDidEnter() {

@@ -86,7 +86,7 @@ export class RegisterPage {
 
     this.registerForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.maxLength(255), Validators.pattern(this.emailRegex), Validators.required])],
-      phoneNumber: [''],
+      phoneNumber: ['', Validators.compose([Validators.minLength(11), Validators.maxLength(11), Validators.required])],
       idType: ['',],
       idNumber: ['',],
       surName: ['', Validators.required],
@@ -95,7 +95,7 @@ export class RegisterPage {
       country: [''],
       bank: ['', Validators.required],
       accountNumber: ['', Validators.required],
-      bvn: ['', Validators.required],
+      bvn: ['', Validators.compose([Validators.minLength(11), Validators.maxLength(11), Validators.required])],
       dateOfBirth: ['', Validators.required],
       isBeneficiary: ['false'],
       referralCode: [''],
@@ -275,16 +275,13 @@ export class RegisterPage {
         }
       }
 
-      if (rf.phoneNumber !== undefined) {
-        if (rf.phoneNumber.startsWith("+")) {
-          Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
-          return;
-        }
+      let dob = rf.dateOfBirth;
+      let age = new Date(dob);
+      var myAge = ~~((Date.now() - age.getTime()) / (31557600000));
 
-        if (rf.phoneNumber.startsWith("0")) {
-          Constants.showLongerToastMessage("Phone number entered is not in international format", this.toastCtrl);
-          return;
-        }
+      if (myAge < 18) {
+        Constants.showLongToastMessage("Agent must be at least 18 years old", this.toastCtrl);
+        return;
       }
 
       if (rf.dateOfBirth === '') {
