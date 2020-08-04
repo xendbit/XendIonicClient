@@ -107,10 +107,10 @@ export class RegisterPaginated {
     this.registerPageFourForm = this.formBuilder.group({
       nokFirstName: ['', Validators.required],
       nokLastName: ['', Validators.required],
-      nokPhoneNumber: ['', Validators.required],
+      nokPhoneNumber: ['', Validators.compose([Validators.minLength(11), Validators.maxLength(11), Validators.required])],
       guarantorFirstName: ['', Validators.required],
       guarantorLastName: ['', Validators.required],
-      guarantorPhoneNumber: ['', Validators.required],
+      guarantorPhoneNumber: ['', Validators.compose([Validators.minLength(11), Validators.maxLength(11), Validators.required])],
     });
 
     this.registerPageFiveForm = this.formBuilder.group({
