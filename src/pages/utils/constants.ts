@@ -6,8 +6,7 @@ import { LocalProps } from "./localprops";
 import { CoinsSender } from "./coinssender";
 
 export class Constants {
-    static TOMCAT_URL = "http://192.250.236.180:8080";
-    //static TOMCAT_URL = "https://lb.xendbit.com";
+    static TOMCAT_URL = "https://lb.xendbit.com";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
     static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
