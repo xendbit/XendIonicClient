@@ -81,7 +81,12 @@ export class ShowBeneficiaryPage {
     Constants.registrationData['viewBeneficiaries'].navCtrl.push('SendBitPage');
   }
 
-  writeCard() {
+  collectPayment() {
+    Console.log("Collect Payment");
+    this.navCtrl.push('CollectPaymentPage');
+  }
+
+  __writeCard() {
     this.initializeNFC();
     let  value = this.beneficiary.passphrase;
     Console.log('Writing info to card: ' + value);

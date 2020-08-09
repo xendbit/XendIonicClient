@@ -11,22 +11,22 @@ import { StorageService } from '../utils/storageservice';
 })
 
 export class TabsPage {
- homeText: string;
- buyText: string;
- sendText: string;
- send2BankText: string;
- settingsText: string;
+  homeText: string;
+  buyText: string;
+  sendText: string;
+  send2BankText: string;
+  settingsText: string;
   // this tells the tabs component which Pages
   // should be each tab's root Page
   tab1Root: any = 'ViewBeneficiariesPage';
   tab2Root: any = 'RegisterPaginated';
-  tab3Root: any = 'HistoryPage';
-  tab4Root: any = 'SettingsPage';
+  //tab3Root: any = 'HistoryPage';
+  tab3Root: any = 'SettingsPage';
 
- isAdvanced: boolean = false;
+  isAdvanced: boolean = false;
 
-  constructor( public http: Http, public alertCtrl: AlertController, public platform: Platform) {
-    if(Constants.properties === undefined) {
+  constructor(public http: Http, public alertCtrl: AlertController, public platform: Platform) {
+    if (Constants.properties === undefined) {
       //do nothing
     } else {
       this.initProps();
@@ -35,7 +35,7 @@ export class TabsPage {
 
   ionViewDidEnter() {
     this.isAdvanced = false;
-    if(StorageService.ACCOUNT_TYPE === "ADVANCED") {
+    if (StorageService.ACCOUNT_TYPE === "ADVANCED") {
       this.isAdvanced = true;
     }
   }
