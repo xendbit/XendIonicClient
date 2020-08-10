@@ -1,0 +1,54 @@
+<!--
+  Generated template for the SetupPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Setup</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card class="absolute-center">
+    <ion-card-header>
+      Select Login Type
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-col col-6>
+          <button [disabled]="typeIsAgent" ion-button full color="xend" (click)="selectLoginType('agent');" class="big-button">Agent</button>
+        </ion-col>
+
+        <ion-col col-6>
+          <button [disabled]="typeIsPOS" ion-button full color="xend" (click)="selectLoginType('pos');" class="big-button">POS</button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="typeIsPOS" >
+        <ion-col col-6>
+        <ion-item>
+          <ion-label floating>Enter Merchant Code</ion-label>
+          <ion-input type="text" [(ngModel)]="merchantCode"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button full large color="xend" (click)="pos()">Login</button>
+      </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="typeIsAgent" >
+        <ion-col col-6>
+          <button ion-button full large color="xend" (click)="openLogin()">Login</button>
+        </ion-col>
+        <ion-col col-6>
+          <button ion-button full large color="xend" (click)="register()">Register</button>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

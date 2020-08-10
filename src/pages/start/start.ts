@@ -67,6 +67,22 @@ export class StartPage {
 
   ionViewDidEnter() {
     this.loadSettings();
+    let type = this.ss.getItem('login-type');
+    Console.log('Type in Start: ' + type);
+    if (type === null || type === undefined || type.length === 0) {
+      this.navCtrl.push('SetupPage');
+    } else if (type === 'pos') {
+      let mc = this.ss.getItem('merchantCode');
+      if (mc === null || mc === undefined || mc.length === 0) {
+        this.navCtrl.push('SetupPage');
+      } else {
+        this.pos();
+      }
+    } else if (type === 'agent') {
+      this.openLogin();
+    } else {
+      this.navCtrl.push('SetupPage');
+    }
   }
 
   pos() {

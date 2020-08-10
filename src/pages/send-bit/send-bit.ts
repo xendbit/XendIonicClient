@@ -34,9 +34,8 @@ export class SendBitPage {
     this.sendBitForm = formBuilder.group({
       amount: ['', Validators.compose([Validators.required])],
       userCode: ['', Validators.required],
-      sellerCode: ['', Validators.required],
       password: ['', Validators.required],
-      product: ['']
+      product: ['', Validators.required]
     });
 
     this.ls = Constants.storageService;
@@ -102,7 +101,7 @@ export class SendBitPage {
     let bv = this.sendBitForm.value;
     let amountToSend = +bv.amount;
     let password = bv.password;
-    let sellerCode = bv.sellerCode;
+    let sellerCode = this.ls.getItem('merchantCode');
     let userCode = bv.userCode;
     let product = bv.product;
 
