@@ -29,8 +29,11 @@ export class SendBitPage {
   userCode: string;
   useFingerprint: boolean = false;
   showToast = false;
+  products;
 
   constructor(public platform: Platform, public nfc: NFC, public ndef: Ndef, private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
+    this.products = Constants.properties['products'];
+
     this.sendBitForm = formBuilder.group({
       amount: ['', Validators.compose([Validators.required])],
       userCode: ['', Validators.required],

@@ -20,10 +20,12 @@
   <ion-card>
     <ion-card-content>
       <form [formGroup]="sendBitForm">
-        <!-- <ion-item>
+        <ion-item>
           <ion-label floating>Product Name</ion-label>
-          <ion-input formControlName="product" type="text"></ion-input>
-        </ion-item> -->
+          <ion-select interface='action-sheet' formControlName="product" placeholder="">
+            <ion-option *ngFor="let product of products" value="{{product.name}}">{{product.name}}</ion-option>
+          </ion-select>
+        </ion-item>
         <ion-item>
           <ion-label floating>Enter Amount</ion-label>
           <ion-input formControlName="amount" type="number"></ion-input>
