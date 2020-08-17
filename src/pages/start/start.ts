@@ -34,6 +34,8 @@ export class StartPage {
   }
 
   ionViewDidLoad() {
+    Console.log("is_core: " + this.platform.is('core'));
+    Console.log("is_mobileweb: " + this.platform.is('mobileweb'));
     let otherData = {};
     otherData['loading'] = this.loading;
     otherData['loadingCtrl'] = this.loadingCtrl;
@@ -53,7 +55,6 @@ export class StartPage {
       if (keys !== undefined) {
         for (let key of keys) {
           let postData = app.ss.getItem(key);
-          Console.log(postData);
           if (postData === null || postData === undefined) {
             app.ss.setItem('keys', keys);
           } else {

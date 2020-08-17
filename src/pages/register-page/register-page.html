@@ -180,10 +180,17 @@
         <ion-checkbox formControlName="smi"></ion-checkbox>
       </ion-item>
       <ion-item>
+        <button full item-center ion-button icon-only class="center" (click)="captureIdImage()">
+          <ion-icon name="camera"></ion-icon>Take Picture of ID Card
+        </button>
+        <p>{{idImagePath}}</p>
+      </ion-item>
+
+      <ion-item>
         <button full item-center ion-button icon-only class="center" (click)="capturePassport()">
           <ion-icon name="camera"></ion-icon>Take Picture of Beneficiary
         </button>
-        <p>{{idImagePath}}</p>
+        <p>{{photoImagePath}}</p>
       </ion-item>
 
     </ion-list>

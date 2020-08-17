@@ -88,7 +88,6 @@ export class PasswordPage {
 
     let phone = postData['phoneNumber'];
 
-    Console.log(postData);
     let app = this;
 
     app.ls.setItem('postData-' + phone, postData);
