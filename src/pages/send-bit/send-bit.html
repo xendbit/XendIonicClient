@@ -27,19 +27,19 @@
           </ion-select>
         </ion-item>
         <ion-item>
-          <ion-label floating>Enter Amount</ion-label>
+          <ion-label floating>Amount</ion-label>
           <ion-input formControlName="amount" type="number"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label floating>Enter User Code</ion-label>
+          <ion-label floating>Beneficiary Code</ion-label>
           <ion-input type="password" formControlName="userCode">{{userCode}}</ion-input>
         </ion-item>
         <ion-item>
-          <button ion-button full medium color="xend" (click)="scanCode();" icon-right>Scan User Code
+          <button ion-button full medium color="xend" (click)="scanCode();" icon-right>Scan Beneficiary Code
             <ion-icon name="barcode"></ion-icon></button>
         </ion-item>
         <ion-item>
-          <ion-label floating>Enter User Pin</ion-label>
+          <ion-label floating>Beneficiary Pin</ion-label>
           <ion-input type="password" formControlName="password"></ion-input>
         </ion-item>
       </form>

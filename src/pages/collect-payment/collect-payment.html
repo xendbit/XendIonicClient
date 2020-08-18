@@ -22,22 +22,21 @@
       <form [formGroup]="collectPaymentForm">
         <ion-list no-lines>
           <ion-item>
-            <ion-label floating>Enter Amount</ion-label>
+            <ion-label floating>Amount</ion-label>
             <ion-input formControlName="amount" type="number"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label floating>Enter User Code</ion-label>
+            <ion-label floating>Beneficiary Code</ion-label>
             <ion-input type="password" formControlName="userCode">{{userCode}}</ion-input>
           </ion-item>
           <ion-item>
-            <button ion-button full medium color="xend" (click)="scanCode();" icon-right>Scan User Code
+            <button ion-button full medium color="xend" (click)="scanCode();" icon-right>Scan Beneficiary Code
               <ion-icon name="barcode"></ion-icon></button>
           </ion-item>
           <ion-item>
-            <ion-label floating>Enter User Pin</ion-label>
+            <ion-label floating>Beneficiary Pin</ion-label>
             <ion-input type="password" formControlName="password"></ion-input>
           </ion-item>
-          <ion-item>
         </ion-list>
       </form>
     </ion-card-content>
@@ -48,7 +47,7 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-            <button ion-button medium full color="xend" (click)="sendBit();" icon-right>Collect Payment
+            <button ion-button medium full color="xend" (click)="sendPayment();" icon-right>Collect Payment
               <ion-icon name="send"></ion-icon></button>
           </ion-col>
         </ion-row>

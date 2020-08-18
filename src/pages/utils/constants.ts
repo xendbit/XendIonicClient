@@ -6,7 +6,7 @@ import { LocalProps } from "./localprops";
 import { CoinsSender } from "./coinssender";
 
 export class Constants {
-    static TOMCAT_URL = "https://lb.xendbit.com";
+    static TOMCAT_URL = "http://192.250.236.180:8080";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
     static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
@@ -123,6 +123,7 @@ export class Constants {
     static GET_IMAGE_URL = Constants.IMAGER_URL + "get-image";
     static BECOME_BENEFICIARY_URL = Constants.SERVER_URL + "user/become-beneficiary";
     static GET_13TH_WORD = Constants.SERVER_URL + "user/get-last-word";
+    static REPAY_LOAN_URL = Constants.SERVER_URL + "beneficiary/repay-loan";
 
     static SEND_2_BANK_URL = Constants.SERVER_URL + "send2bank/new";
     static GET_SEND_2_BANK_REQUEST_URL = Constants.SERVER_URL + "send2bank/tx/";

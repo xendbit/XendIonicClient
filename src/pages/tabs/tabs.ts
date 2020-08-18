@@ -11,17 +11,12 @@ import { StorageService } from '../utils/storageservice';
 })
 
 export class TabsPage {
-  homeText: string;
-  buyText: string;
-  sendText: string;
-  send2BankText: string;
-  settingsText: string;
   // this tells the tabs component which Pages
   // should be each tab's root Page
   tab1Root: any = 'ViewBeneficiariesPage';
   tab2Root: any = 'RegisterPaginated';
-  //tab3Root: any = 'HistoryPage';
-  tab3Root: any = 'SettingsPage';
+  tab3Root: any = 'CollectPaymentPage';
+  tab4Root: any = 'SettingsPage';
 
   isAdvanced: boolean = false;
 
@@ -41,10 +36,5 @@ export class TabsPage {
   }
 
   initProps() {
-    this.homeText = "Home";
-    this.buyText = "Buy";
-    this.sendText = "Xend";
-    this.send2BankText = "Xend2Bank";
-    this.settingsText = "More..";
   }
 }
