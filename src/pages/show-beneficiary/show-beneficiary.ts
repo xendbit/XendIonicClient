@@ -26,7 +26,8 @@ export class ShowBeneficiaryPage {
   ls: StorageService;
   dateRegistered = "";
   beneficiary;
-  dataImage = "";
+  idDataImage = "";
+  photoDataImage = "";
   loading: Loading;
 
   constructor(public platform: Platform, public nfc:NFC, public ndef: Ndef, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage, public toastCtrl: ToastController) {
@@ -41,7 +42,7 @@ export class ShowBeneficiaryPage {
     setTimeout(function () {
       //Wait for sometimes for storage to be ready
       app.loading.dismiss();
-      app.loadImage(app.beneficiary);
+      app.loadImages(app.beneficiary);
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
@@ -103,7 +104,7 @@ export class ShowBeneficiaryPage {
     this.viewCtrl.dismiss();
   }
 
-  loadImage(beneficiary) {
+  loadImages(beneficiary) {
     Console.log("loadImage called");
     let url = Constants.GET_IMAGE_URL;
     let key = Constants.WORKING_WALLET + "Address";
@@ -115,15 +116,31 @@ export class ShowBeneficiaryPage {
       networkAddress: this.ls.getItem(key),
       emailAddress: this.ls.getItem("emailAddress"),
       idImage: beneficiary.proofOfIdentity
-    }
+    };
 
     this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
-        this.dataImage = 'data:image/jpeg;base64,' + responseData.result;
+        this.idDataImage = 'data:image/jpeg;base64,' + responseData.result;
+      }, _error => {
+        Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+      }
+    );
+
+    requestData = {
+      password: this.ls.getItem("password"),
+      networkAddress: this.ls.getItem(key),
+      emailAddress: this.ls.getItem("emailAddress"),
+      idImage: beneficiary.photoImage
+    };
+
+    this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(
+      responseData => {
+        this.idDataImage = 'data:image/jpeg;base64,' + responseData.result;
       }, error => {
         Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
       }
     )
+
   }
 
 
