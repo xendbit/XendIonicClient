@@ -172,8 +172,6 @@ export class HomePage {
   }
 
   loadCharts() {
-    let fees = Constants.getCurrentWalletProperties();
-    //let tickerSymbol = fees.tickerSymbol;
     let tickerSymbol = 'BTC';
     let url = Constants.CHART_URL.replace("{{symbol}}", tickerSymbol.toUpperCase());
     Console.log(url);

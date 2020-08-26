@@ -3,7 +3,6 @@ import { Console } from '../utils/console';
 import { NavController, NavParams, ToastController, IonicPage } from 'ionic-angular';
 import { Constants } from '../utils/constants';
 import { StorageService } from '../utils/storageservice';
-import { KeyEventsPlugin } from '@angular/platform-browser/src/dom/events/key_events';
 
 /*
   Generated class for the Pin page.

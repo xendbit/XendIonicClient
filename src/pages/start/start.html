@@ -13,41 +13,11 @@
 <ion-content>
   <img src="assets/img/xendbit.png" alt="logo" class="padded">
 
-  <ion-grid class="center-y">
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label floating>Click to select yout user type</ion-label>
-        <ion-select interface='action-sheet' [(ngModel)]="userType" placeholder="Click to select yout user type">
-          <ion-option value="agent">Agent</ion-option>
-          <ion-option value="pos">Point of Sale</ion-option>
-          <ion-option value="beneficiary">Beneficiary</ion-option>
-        </ion-select>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="userType === 'agent' || userType === 'beneficiary'">
-      <ion-col>
-        <button ion-button full large color="xend" (click)="openLogin()">Login</button>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="userType === 'agent' || userType === 'beneficiary'">
-      <ion-col>
-        <button ion-button full large color="xend" (click)="recover()">Recover Account</button>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="userType === 'agent'">
-      <ion-col>
-        <button ion-button full large color="xend" (click)="register()">Register New Account</button>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="userType === 'pos'">
-      <ion-col>
-        <button ion-button full large color="xend" (click)="pos()">POS</button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="center-y">
+    Please wait we prepare your products.....
+  </div>
 </ion-content>
+
 <ion-footer>
   <ion-toolbar>
     <button ion-button clear full color="light" class="footer no-border">XendBit Version: {{appVersion}}

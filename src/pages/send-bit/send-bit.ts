@@ -75,7 +75,7 @@ export class SendBitPage {
 
       try {
         let decodedMessage = this.nfc.bytesToString(event.tag.ndefMessage[0].payload);
-        decodedMessage = decodedMessage.replace("\u0002en", "");
+        decodedMessage = Constants.unicodeToChar(decodedMessage);
         Console.log(decodedMessage);
         this.sendBitForm.controls.userCode.setValue(decodedMessage);
         if(this.showToast) {
@@ -104,7 +104,7 @@ export class SendBitPage {
     let bv = this.sendBitForm.value;
     let amountToSend = +bv.amount;
     let password = bv.password;
-    let sellerCode = this.ls.getItem('merchantCode');
+    let sellerCode = this.ls.getItem('distributorCode');
     let userCode = bv.userCode;
     let product = bv.product;
 

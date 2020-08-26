@@ -1,0 +1,44 @@
+<!--
+  Generated template for the ProductsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Products</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header>
+      <ion-label class="title">Shop Here</ion-label>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <button ion-button full large color="xend" (click)="checkout()">
+          <ion-icon name="cart"></ion-icon>&nbsp;&nbsp;&nbsp;Checkout
+        </button>
+      </ion-item>
+      <hr />
+      <ion-row *ngFor="let rows of selectedProducts">
+        <ion-col style="padding: 0;" *ngFor="let product of rows" col-4>
+            <img src="https://xendbit.com/products/{{manufacturerId}}/{{product.image}}">
+            <ion-label style="text-align: center">&#8358;{{product.price}}</ion-label>
+            <ion-input [(ngModel)]="product.quantity" style="padding-right: 20px;" placeholder="Quantity" class="bordered" type="number"></ion-input>
+        </ion-col>
+      </ion-row>
+      <hr />
+      <ion-item>
+        <button ion-button full large color="xend" (click)="checkout()">
+          <ion-icon name="cart"></ion-icon>&nbsp;&nbsp;&nbsp;Checkout
+        </button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

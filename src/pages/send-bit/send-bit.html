@@ -31,8 +31,8 @@
           <ion-input formControlName="amount" type="number"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label floating>Beneficiary Code</ion-label>
-          <ion-input type="password" formControlName="userCode">{{userCode}}</ion-input>
+          <ion-label stacked>Beneficiary Code</ion-label>
+          <ion-input [disbaled]="true" type="password" formControlName="userCode">{{userCode}}</ion-input>
         </ion-item>
         <ion-item>
           <button ion-button full medium color="xend" (click)="scanCode();" icon-right>Scan Beneficiary Code

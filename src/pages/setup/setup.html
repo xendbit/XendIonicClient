@@ -16,7 +16,7 @@
 <ion-content padding>
   <ion-card class="absolute-center">
     <ion-card-header>
-      Select Login Type
+      Select Type of Wallet
     </ion-card-header>
     <ion-card-content>
       <ion-row>
@@ -25,27 +25,42 @@
         </ion-col>
 
         <ion-col col-6>
-          <button [disabled]="typeIsPOS" ion-button full color="xend" (click)="selectLoginType('pos');" class="big-button">POS</button>
+          <button [disabled]="typeIsPOS" ion-button full color="xend" (click)="selectLoginType('pos');" class="big-button">Distributor</button>
         </ion-col>
       </ion-row>
 
-      <ion-row *ngIf="typeIsPOS" >
-        <ion-col col-6>
-        <ion-item>
-          <ion-label floating>Enter Merchant Code</ion-label>
-          <ion-input type="text" [(ngModel)]="merchantCode"></ion-input>
-        </ion-item>
-      </ion-col>
-      <ion-col col-6>
-        <button ion-button full large color="xend" (click)="pos()">Login</button>
-      </ion-col>
+      <ion-row *ngIf="typeIsPOS">
+        <ion-col>
+          <ion-item>
+            <ion-label floating>Enter Distributor Code</ion-label>
+            <ion-input type="text" [(ngModel)]="distributorCode"></ion-input>
+          </ion-item>
+        </ion-col>
       </ion-row>
 
-      <ion-row *ngIf="typeIsAgent" >
-        <ion-col col-6>
+      <ion-row *ngIf="typeIsPOS">
+        <ion-col>
+          <ion-label stacked>Select Manufacturer</ion-label>
+          <ion-select interface='action-sheet' [(ngModel)]="manufacturerId" placeholder="Tap Here to select">
+            <ion-option *ngFor="let manufacturer of manufacturers" value="{{manufacturer.id}}">{{manufacturer.name}}</ion-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="typeIsPOS">
+        <ion-col>
+          <button ion-button full large color="xend" (click)="pos()">Login</button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="typeIsAgent">
+        <ion-col>
           <button ion-button full large color="xend" (click)="openLogin()">Login</button>
         </ion-col>
-        <ion-col col-6>
+      </ion-row>
+
+      <ion-row *ngIf="typeIsAgent">
+        <ion-col col-12>
           <button ion-button full large color="xend" (click)="register()">Register</button>
         </ion-col>
       </ion-row>

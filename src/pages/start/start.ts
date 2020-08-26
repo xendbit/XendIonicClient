@@ -46,7 +46,6 @@ export class StartPage {
     otherData['navCtrl'] = this.navCtrl;
 
     this.appVersion = Constants.APP_VERSION;
-    Console.log('ionViewDidLoad StartPage');
     let app = this;
     setInterval(() => {
       console.dir(app.ss);
@@ -68,26 +67,10 @@ export class StartPage {
 
   ionViewDidEnter() {
     this.loadSettings();
-    let type = this.ss.getItem('login-type');
-    Console.log('Type in Start: ' + type);
-    if (type === null || type === undefined || type.length === 0) {
-      this.navCtrl.push('SetupPage');
-    } else if (type === 'pos') {
-      let mc = this.ss.getItem('merchantCode');
-      if (mc === null || mc === undefined || mc.length === 0) {
-        this.navCtrl.push('SetupPage');
-      } else {
-        this.pos();
-      }
-    } else if (type === 'agent') {
-      this.openLogin();
-    } else {
-      this.navCtrl.push('SetupPage');
-    }
   }
 
   pos() {
-    this.navCtrl.push("SendBitPage");
+    this.navCtrl.push("ProductsPage");
   }
 
   register() {
@@ -108,7 +91,27 @@ export class StartPage {
   loadSettings() {
     Console.log(Constants.SETTINGS_URL);
     this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(data => {
+      Console.log("Settings loaded successfully");
       Constants.properties = data;
+      let type = this.ss.getItem('login-type');
+      Console.log('Type in Start: ' + type);
+      if (type === null || type === undefined || type.length === 0) {
+        this.navCtrl.push('SetupPage');
+      } else if (type === 'pos') {
+        let mc = this.ss.getItem('distributorCode');
+        let manId = this.ss.getItem('manufacturerId');
+        if (mc === null || mc === undefined || mc.length === 0) {
+          this.navCtrl.push('SetupPage');
+        } else if (manId === null || manId === undefined || manId.length === 0) {
+          this.navCtrl.push('SetupPage');
+        } else {
+          this.pos();
+        }
+      } else if (type === 'agent') {
+        this.openLogin();
+      } else {
+        this.navCtrl.push('SetupPage');
+      }
     }, _error => {
       Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
       Console.log("Can not pull data from server");

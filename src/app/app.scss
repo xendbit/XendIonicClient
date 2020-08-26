@@ -13,60 +13,60 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 ion-label {
-    font-weight: bold !important;
+  font-weight: bold !important;
 }
 
 .toolbar-title {
-    //width: 250px;
-    //text-align: center;
-    color: white;
+  //width: 250px;
+  //text-align: center;
+  color: white;
 }
 
 .select {
-    font-size: 12px !important;
+  font-size: 12px !important;
 }
 
 h1 {
-    color: lightseagreen;
+  color: lightseagreen;
 }
 
 .white {
-    color: black;
-    font-weight: bolder;
+  color: black;
+  font-weight: bolder;
 }
 
 ion-col {
-    color: black;
-    font-weight: bold;
+  color: black;
+  font-weight: bold;
 }
 
 .card {
-    background-color: rgba(0, 0, 0, 0) !important;
-    padding: 0 !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  padding: 0 !important;
 }
 
 .card-content {
-    padding: 0 !important;
-    font-size: 15px;
-    font-weight: bold;
+  padding: 0 !important;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 ion-content {
-    background-image: url("../assets/img/bg_lb.png") !important;
-    //background-position: center;
-    //background-repeat: no-repeat;
-    //background-size: auto;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-color: whitesmoke;
+  background-image: url("../assets/img/bg_lb.png") !important;
+  //background-position: center;
+  //background-repeat: no-repeat;
+  //background-size: auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: whitesmoke;
 }
 
 .item {
-    border-color: rgba(0, 0, 0, 0);
-    background-color: rgba(0, 0, 0, 0);
-    color: lightseagreen;
-    font-weight: bold;
-    text-transform: none;
+  border-color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  color: lightseagreen;
+  font-weight: bold;
+  text-transform: none;
 }
 
 .col {
@@ -74,12 +74,12 @@ ion-content {
 }
 
 ion-item {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 .tab-button-text {
-    color: white !important;
-    font-weight: bold;
+  color: white !important;
+  font-weight: bold;
 }
 
 .tab-button-icon {
@@ -88,34 +88,34 @@ ion-item {
 }
 
 ion-icon {
-    font-size: 24px;
+  font-size: 24px;
 }
 
 .small {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .title-x {
-    font-size: 1.2em;
+  font-size: 1.2em;
 }
 
 .big {
-    font-size: 5em;
-    font-family: sans-serif;
-    font-weight: bold;
+  font-size: 5em;
+  font-family: sans-serif;
+  font-weight: bold;
 }
 
 .bigger {
-    font-size: 5.5em;
-    font-family: sans-serif;
-    font-weight: bold;
-    color: yellow;
+  font-size: 5.5em;
+  font-family: sans-serif;
+  font-weight: bold;
+  color: yellow;
 }
 
 .label {
-    font-size: 15px;
-    text-align: left;
-    color: black !important;
+  font-size: 15px;
+  text-align: left;
+  color: black !important;
 }
 
 p {
@@ -131,91 +131,92 @@ p {
 }
 
 .button {
-    text-transform: none;
-    border: solid thin #f59338;
-    border-radius: 10px !important;
-    box-shadow: 1px 1px #f59338;
+  text-transform: none;
+  border: solid thin #f59338;
+  border-radius: 10px !important;
+  box-shadow: 1px 1px #f59338;
 }
 
 .center {
-    padding-right: 20px;
+  padding-right: 20px;
 }
 
 .smallest {
-    font-size: 11px;
+  font-size: 11px;
 }
 
 .very_small {
-    font-size: 12px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+  font-size: 12px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .history {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .danger {
-    color: red;
+  color: red;
 }
 
 .green {
-    color: lightseagreen;
+  color: lightseagreen;
 }
 
 .blue {
-    color: #387ef5;
+  color: #387ef5;
 }
 
 .bitcoin_address {
-    font-size: 0.7em;
-    color: black;
-    font-weight: bold; //font-style: italic;
-    font-family: 'Times New Roman', Times, serif;
+  font-size: 0.7em;
+  color: black;
+  font-weight: bold; //font-style: italic;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .card {
-    box-shadow: 0 1px 2px rgba(0, 102, 0, 0.8);
+  box-shadow: 0 1px 2px rgba(0, 102, 0, 0.8);
 }
 
 .tabbar {
-    background-color: rgb(50, 6, 121) !important;
+  background-color: rgb(50, 6, 121) !important;
 }
 
 .scroll-content {
-    padding-left: 5px !important;
-    padding-right: 5px !important;
+  padding-left: 5px !important;
+  padding-right: 5px !important;
 }
 
 textarea.text-input {
-    width: 100%;
-    font-size: 25px;
-    font-weight: bold;
-    text-align: left;
-    background: none !important;
+  width: 100%;
+  font-size: 25px;
+  font-weight: bold;
+  text-align: left;
+  background: none !important;
 }
 
 .text-input {
   background: none !important;
-    color: black; //border: inset;
-    font-size: 1em;
-    text-align: left;
+  color: black; //border: inset;
+  font-size: 1em;
+  text-align: left;
+  border: inset !important;
 }
 
 .toolbar-background {
-    background-color: rgb(50, 6, 121) !important;
+  background-color: rgb(50, 6, 121) !important;
 }
 
 .overlay {
-    border-color: rgba(0, 0, 0, 1);
-    background-color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 1);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .alert-button {
-    text-transform: none !important;
+  text-transform: none !important;
 }
 
 .bar-button-default {
-    color: white;
+  color: white;
 }
 
 .select-text {

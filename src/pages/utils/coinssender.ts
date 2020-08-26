@@ -15,7 +15,6 @@ export class CoinsSender {
         let toastCtrl = data['toastCtrl'];
         let http = data['http'];
         let password = data['password'];
-        let product = data['product'];
 
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
 

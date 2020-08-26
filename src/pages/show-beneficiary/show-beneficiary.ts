@@ -106,19 +106,11 @@ export class ShowBeneficiaryPage {
 
   loadImages(beneficiary) {
     Console.log("loadImage called");
-    let url = Constants.GET_IMAGE_URL;
-    let key = Constants.WORKING_WALLET + "Address";
+    let url = Constants.GET_IMAGE_URL + "/" + beneficiary.proofOfIdentity;
 
     Console.log(beneficiary.proofOfIdentity);
 
-    let requestData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem(key),
-      emailAddress: this.ls.getItem("emailAddress"),
-      idImage: beneficiary.proofOfIdentity
-    };
-
-    this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(
+    this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
         this.idDataImage = 'data:image/jpeg;base64,' + responseData.result;
       }, _error => {
@@ -126,14 +118,8 @@ export class ShowBeneficiaryPage {
       }
     );
 
-    requestData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem(key),
-      emailAddress: this.ls.getItem("emailAddress"),
-      idImage: beneficiary.photoImage
-    };
-
-    this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(
+    url = Constants.GET_IMAGE_URL + "/" + beneficiary.photoImage;
+    this.http.post(url, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
         this.idDataImage = 'data:image/jpeg;base64,' + responseData.result;
       }, error => {

@@ -1,4 +1,3 @@
-import { EquitiesExchangePage } from './../equities-exchange/equities-exchange';
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
 import { Console } from '../utils/console';
@@ -196,7 +195,7 @@ export class LoginPage {
             Console.log(e);
           }
 
-          Constants.IS_LOGGED_IN = true;          
+          Constants.IS_LOGGED_IN = true;
           this.navCtrl.push(TabsPage);
         } else {
           this.loading.dismiss();

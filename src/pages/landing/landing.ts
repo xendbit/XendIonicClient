@@ -1,4 +1,3 @@
-import { Console } from './../utils/console';
 import { Constants } from './../utils/constants';
 
 import { StorageService } from './../utils/storageservice';
