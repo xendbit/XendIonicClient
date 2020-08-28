@@ -205,6 +205,7 @@ export class LoginPage {
           if (responseData.response_code === 601) {
             //account is not activated
             this.showResendConfirmationEmailDialog();
+          } else if (responseData.response_code === 601) {
           }
         }
       },

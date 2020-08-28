@@ -21,11 +21,15 @@
     <ion-card-content>
       <ion-row>
         <ion-col col-6>
-          <button [disabled]="typeIsAgent" ion-button full color="xend" (click)="selectLoginType('agent');" class="big-button">Agent</button>
+          <button [disabled]="typeIsAgent" ion-button full color="xend" (click)="selectLoginType('agent');" class="big-button">
+            <ion-icon ios="ios-person" md="md-person"></ion-icon> &nbsp;&nbsp;&nbsp;Agent
+          </button>
         </ion-col>
 
         <ion-col col-6>
-          <button [disabled]="typeIsPOS" ion-button full color="xend" (click)="selectLoginType('pos');" class="big-button">Distributor</button>
+          <button [disabled]="typeIsPOS" ion-button full color="xend" (click)="selectLoginType('pos');" class="big-button">
+            <ion-icon ios="ios-people" md="md-people"></ion-icon> &nbsp;&nbsp;&nbsp;Distributor
+          </button>
         </ion-col>
       </ion-row>
 

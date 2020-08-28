@@ -106,20 +106,8 @@
   <form [formGroup]="registerPageThreeForm" *ngIf="page === 3">
     <ion-list no-lines>
       <ion-item>
-        <ion-label floating><sup>**</sup>Account Name</ion-label>
-        <ion-input formControlName="accountName" type="text"></ion-input>
-      </ion-item>
-
-      <ion-item>
         <ion-label floating><sup>**</sup>Bank Account Number</ion-label>
         <ion-input type="number" formControlName="accountNumber"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label floating><sup>**</sup>Bank Name</ion-label>
-        <ion-select interface='action-sheet' formControlName="bank" placeholder="">
-          <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
-        </ion-select>
       </ion-item>
 
       <ion-item>

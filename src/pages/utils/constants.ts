@@ -6,14 +6,14 @@ import { LocalProps } from "./localprops";
 import { CoinsSender } from "./coinssender";
 
 export class Constants {
-  static TOMCAT_URL = "http://192.168.0.119:8080";
-  //static TOMCAT_URL = "http://192.250.236.180:8080";
+  //static TOMCAT_URL = "http://192.168.0.119:8080";
   static APP_VERSION = "v4.6-rc31"
   static ENABLE_GUEST = false;
   static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
 
+  static TOMCAT_URL = "https://lb.xendbit.com";
+  //static TOMCAT_URL = "http://192.250.236.180:8080";
   //static NOTIFICATION_SOCKET_URL = "ws://192.250.236.180:8080/notify/websocket";
-
   static GETH_PROXY = "http://ethqoufb6-dns-reg1.eastus.cloudapp.azure.com:8540";// "http://rinkeby.xendbit.com:8546";
   static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
   static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
