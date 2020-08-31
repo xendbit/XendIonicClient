@@ -84,6 +84,7 @@ export class PasswordPage {
 
   saveBeneficiary() {
     let postData = Constants.registrationData;
+    postData['password'] = this.password;
 
     let phone = postData['phoneNumber'];
 
