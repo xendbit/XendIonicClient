@@ -119,7 +119,7 @@ export class ShowBeneficiaryPage {
     );
 
     url = Constants.GET_IMAGE_URL + "/" + beneficiary.photoImage;
-    this.http.post(url, Constants.getHeader()).map(res => res.json()).subscribe(
+    this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
         this.idDataImage = 'data:image/jpeg;base64,' + responseData.result;
       }, error => {

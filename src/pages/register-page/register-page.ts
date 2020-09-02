@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, Loading, LoadingController, Platform } from 'ionic-angular';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Console } from '../utils/console';
 import { Constants } from '../utils/constants';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -48,7 +48,8 @@ export class RegisterPaginated {
   selectedDisabilitySubTypes = [];
   banks = [];
   bank = 'Sterling Bank';
-  idTypes = []
+  idTypes = [];
+  bankData = {};
 
   idImagePath: string = undefined;
   idImage: string;
@@ -83,9 +84,9 @@ export class RegisterPaginated {
     this.disabilitySubtypes = Constants.properties['disability.subtypes'];
 
     this.registerPageOneForm = this.formBuilder.group({
-      firstName: ['', Validators.compose([Validators.required, Validators.minLength(3)])],
-      lastName: ['', Validators.compose([Validators.required, Validators.minLength(3)])],
-      middleName: [''],
+      firstName: new FormControl({ value: '', disabled: true }),
+      lastName: new FormControl({ value: '', disabled: true }),
+      middleName: new FormControl({ value: '', disabled: true }),
       phoneNumber: ['', Validators.compose([Validators.minLength(11), Validators.maxLength(11), Validators.required])],
       gender: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
@@ -105,8 +106,8 @@ export class RegisterPaginated {
     });
 
     this.registerPageThreeForm = this.formBuilder.group({
-      accountNumber: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.required])],
-      bvn: ['', Validators.compose([Validators.minLength(11), Validators.maxLength(11), Validators.required])],
+      accountNumber: new FormControl({ value: '', disabled: true }),
+      bvn: new FormControl({ value: '', disabled: true }),
     });
 
     this.registerPageFourForm = this.formBuilder.group({
@@ -201,9 +202,9 @@ export class RegisterPaginated {
 
     Constants.registrationData = {};
 
-    Constants.registrationData['firstName'] = rf.firstName;
-    Constants.registrationData['lastName'] = rf.lastName;
-    Constants.registrationData['middleName'] = rf.middleName;
+    Constants.registrationData['firstName'] = this.bankData['firstName'];
+    Constants.registrationData['lastName'] = this.bankData['lastName'];
+    Constants.registrationData['middleName'] = this.bankData['middleName'];
     Constants.registrationData['phoneNumber'] = rf.phoneNumber;
     Constants.registrationData['gender'] = rf.gender;
     Constants.registrationData['dateOfBirth'] = new Date(rf.dateOfBirth).getTime();
@@ -222,9 +223,9 @@ export class RegisterPaginated {
 
     rf = this.registerPageThreeForm.value;
     Constants.registrationData['accountName'] = "";
-    Constants.registrationData['accountNumber'] = rf.accountNumber;
-    Constants.registrationData['bank'] = this.bank;
-    Constants.registrationData['bvn'] = rf.bvn;
+    Constants.registrationData['accountNumber'] = this.bankData['accountNumber'];
+    Constants.registrationData['bank'] = this.bankData['bank'];
+    Constants.registrationData['bvn'] = this.bankData['bvn'];
 
     rf = this.registerPageFourForm.value;
     Constants.registrationData['nokFirstName'] = rf.nokFirstName;
@@ -259,12 +260,26 @@ export class RegisterPaginated {
     Constants.otherData['obv'] = Observable;
     Constants.otherData['navCtrl'] = this.navCtrl;
 
+    this.bankData = Constants.registrationData;
+    this.registerPageOneForm.controls.firstName.setValue(this.bankData['firstName']);
+    this.registerPageOneForm.controls.lastName.setValue(this.bankData['lastName']);
+    this.registerPageOneForm.controls.middleName.setValue(this.bankData['middleName']);
+    this.registerPageThreeForm.controls.accountNumber.setValue(this.bankData['accountNumber']);
+    this.registerPageThreeForm.controls.bvn.setValue(this.bankData['bvn']);
+    this.bank = this.bankData['bank'];
+
     this.page = 1;
-    this.registerPageOneForm.reset();
-    this.registerPageTwoForm.reset();
-    this.registerPageThreeForm.reset();
-    this.registerPageFourForm.reset();
-    this.registerPageFiveForm.reset();
+    if (this.bankData === {}) {
+      this.registerPageOneForm.reset();
+      this.registerPageTwoForm.reset();
+      this.registerPageThreeForm.reset();
+      this.registerPageFourForm.reset();
+      this.registerPageFiveForm.reset();
+    }
+  }
+
+  ionViewDidEnter() {
+    Console.log("ionViewDidEnter entered");
   }
 
   ionViewDidLoad() {
@@ -369,11 +384,6 @@ export class RegisterPaginated {
         }
         break;
       case 3:
-        if (!this.registerPageThreeForm.valid) {
-          Constants.showLongToastMessage("Please fill all required fields. Required fields are marked with **", this.toastCtrl);
-          return false;
-        }
-
         break;
       case 4:
         if (!this.registerPageFourForm.valid) {
@@ -413,6 +423,7 @@ export class RegisterPaginated {
     this.page -= 1;
     if (this.page < 1) {
       this.page = 1;
+      this.navCtrl.popToRoot();
     }
   }
 

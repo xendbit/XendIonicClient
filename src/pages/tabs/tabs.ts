@@ -14,7 +14,8 @@ export class TabsPage {
   // this tells the tabs component which Pages
   // should be each tab's root Page
   tab1Root: any = 'ViewBeneficiariesPage';
-  tab2Root: any = 'RegisterPaginated';
+  tab2Root: any = 'NewBankAccountPage';
+  //tab2Root: any = 'RegisterPaginated';
   tab3Root: any = 'CollectPaymentPage';
   tab4Root: any = 'SettingsPage';
 

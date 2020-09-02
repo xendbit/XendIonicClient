@@ -94,6 +94,7 @@ export class PasswordPage {
 
     this.navCtrl.popToRoot();
 
+    Constants.registrationData = {};
     Constants.showLongToastMessage("Beneficiary Data saved succeffully. It will be uploaded when you are connected to the internet", this.toastCtrl);
   }
 

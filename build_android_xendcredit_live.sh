@@ -1,6 +1,6 @@
 #!/bin/bash
 mv *.apk backup/
-RC="`cat rc_test.txt`"
+RC="`cat rc.txt`"
 MAJOR_VERSION="`cat major_version.txt`"
 MINOR_VERSION="`cat minor_version.txt`"
 BASE_DIR=$(pwd)
@@ -12,7 +12,7 @@ VERSION="v$MAJOR_VERSION.$MINOR_VERSION-rc$RC"
 
 cd $BASE_DIR
 echo "$VERSION"
-echo "$RC" > rc_test.txt
+echo "$RC" > rc.txt
 echo "$MINOR_VERSION" > minor_version.txt
 echo "$MAJOR_VERSION" > major_version.txt
 
@@ -58,7 +58,8 @@ jarsigner -storepass @bsolute -tsa http://timestamp.digicert.com -verbose -sigal
 
 /Users/aardvocate/Library/Android/sdk/build-tools/24.0.2/zipalign -v 4  $BASE_DIR/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk XendBit.apk
 
-mv XendBit.apk XendCreditTest.$VERSION.apk
+mv XendBit.apk XendCredit.$VERSION.apk
+cp XendCredit.$VERSION.apk ~/Dropbox/XendCredit/prod/
 #reverse the process above
 
 cd $BASE_DIR/src/pages/utils/
