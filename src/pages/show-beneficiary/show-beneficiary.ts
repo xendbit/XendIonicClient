@@ -26,11 +26,11 @@ export class ShowBeneficiaryPage {
   ls: StorageService;
   dateRegistered = "";
   beneficiary;
-  idDataImage = "";
-  photoDataImage = "";
+  idi = "";
+  pdi = "";
   loading: Loading;
 
-  constructor(public platform: Platform, public nfc:NFC, public ndef: Ndef, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage, public toastCtrl: ToastController) {
+  constructor(public platform: Platform, public nfc: NFC, public ndef: Ndef, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage, public toastCtrl: ToastController) {
     this.beneficiary = Constants.registrationData['beneficiary'];
     Console.log(this.beneficiary);
     this.dateRegistered = new Date(this.beneficiary.dateRegistered).toLocaleString();
@@ -89,7 +89,7 @@ export class ShowBeneficiaryPage {
 
   writeCard() {
     this.initializeNFC();
-    let  value = this.beneficiary.passphrase;
+    let value = this.beneficiary.passphrase;
     Console.log('Writing info to card: ' + value);
     let message = this.ndef.textRecord(value);
     this.nfc.write([message]).then((_success) => {
@@ -104,30 +104,43 @@ export class ShowBeneficiaryPage {
     this.viewCtrl.dismiss();
   }
 
-  loadImages(beneficiary) {
-    Console.log("loadImage called");
-    let url = Constants.GET_IMAGE_URL + "/" + beneficiary.proofOfIdentity;
+  loadIdImage(code) {
+    Console.log("load ID Image called");
+    let url = Constants.GET_IMAGE_URL + "/" + code;
 
-    Console.log(beneficiary.proofOfIdentity);
+    Console.log(url);
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
-        this.idDataImage = 'data:image/jpeg;base64,' + responseData.result;
+        this.idi = 'data:image/jpeg;base64,' + responseData.result;
       }, _error => {
         Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
       }
     );
+  }
 
-    url = Constants.GET_IMAGE_URL + "/" + beneficiary.photoImage;
-    this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(
-      responseData => {
-        this.idDataImage = 'data:image/jpeg;base64,' + responseData.result;
-      }, error => {
+  loadBeneficiaryImage(code) {
+    Console.log("load Photo Image called");
+    let url = Constants.GET_IMAGE_URL + "/" + code;
+    Console.log(url);
+    this.http.get(url, Constants.getHeader()).map(res2 => res2.json()).subscribe(
+      responseData2 => {
+        this.pdi = 'data:image/jpeg;base64,' + responseData2.result;
+      }, _error => {
         Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
       }
     )
 
   }
 
+  loadImages(beneficiary) {
+    Console.log("Loading Images");
+    setTimeout(() => {
+      this.loadBeneficiaryImage(beneficiary.photoImage);
+    }, 1000);
+    setTimeout(() => {
+      this.loadIdImage(beneficiary.proofOfIdentity);
+    }, 1000);
 
+  }
 }

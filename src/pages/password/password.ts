@@ -92,9 +92,10 @@ export class PasswordPage {
 
     app.ls.setItem('postData-' + phone, postData);
 
+    Constants.registrationData = {};
+
     this.navCtrl.popToRoot();
 
-    Constants.registrationData = {};
     Constants.showLongToastMessage("Beneficiary Data saved succeffully. It will be uploaded when you are connected to the internet", this.toastCtrl);
   }
 

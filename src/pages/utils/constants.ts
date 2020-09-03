@@ -401,6 +401,7 @@ export class Constants {
             ls.setItem("password", data['password']);
             ls.setItem("isRegistered", "true");
             Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
+            Constants.registrationData = {}
             data['navCtrl'].push('LoginPage');
             return;
           }

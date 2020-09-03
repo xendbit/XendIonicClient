@@ -49,19 +49,19 @@ export class GettingStartedPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController) {
     this.pageTitle = "Select Account Type";
     this.restoreText = "Restore";
-    this.restoreWalletText = "Restore Wallet";
-    this.basicWalletText = "Basic Wallet";
+    this.restoreWalletText = "Restore Account";
+    this.basicWalletText = "Basic Account";
     this.canSendCoinsText = "SEND, RECEIVE & TRANSFER COINS";
     this.canNotConvertCashText = "Can not convert cash to coins";
     this.canNotConvertCoinsText = "Can not convert coins to cash";
-    this.createBasicWalletText = "Create Basic Wallet";
-    this.advancedWalletText = "Advanced Wallet";
+    this.createBasicWalletText = "Create Basic Account";
+    this.advancedWalletText = "Advanced Account";
     this.canConvertCashText = "Can convert cash to coins";
     this.canConvertCoinsText = "Can convert coins to cash";
-    this.createAdvancedWalletText = "Create Wallet";
+    this.createAdvancedWalletText = "Create Account";
     this.doesNotRequireKYCText = "Does not require KYC";
     this.requireKYCText = "Requires Full KYC Documents";
-    this.recoverText = "RECOVER OR MIGRATE WALLET";
+    this.recoverText = "RECOVER OR MIGRATE ACCOUNT";
     this.ls = Constants.storageService;
   }
 

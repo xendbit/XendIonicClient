@@ -79,10 +79,10 @@ export class ConfirmMnemonicPage {
     this.ls = Constants.storageService;
 
     if (this.shouldRegister === 'true') {
-      this.buttonText = "Create Wallet";
+      this.buttonText = "Create Account";
       this.description = "Let's confirm you have written down your Passphrase correctly. Please click the words in the order they were shown on the previous page.";
     } else {
-      this.buttonText = "Restore Wallet";
+      this.buttonText = "Restore Account";
       this.description = "Enter the Passphrase you were asked to write down during initial configuration/registration.";
     }
 

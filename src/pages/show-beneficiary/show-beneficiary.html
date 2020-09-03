@@ -23,18 +23,17 @@
       <hr />
       <p>Member Since: <span class="bold">{{dateRegistered}}</span></p>
       <hr />
-      <p>Email Address: <span class="bold">{{beneficiary.phoneNumber}}</span></p>
+      <p>Phone Number: <span class="bold">{{beneficiary.phoneNumber}}</span></p>
       <hr />
       <p>ID Type: <span class="bold">{{beneficiary.idType}}</span></p>
       <hr />
       <p>ID Number: <span class="bold">{{beneficiary.idNumber}}</span></p>
-      <p>Wallet Address: <span class="bold">{{beneficiary.networkAddress}}</span></p>
-      <hr />
-      <p>Beneficiary Id</p>
-      <img [src]="idDataImage" alt="Image is loading....">
       <hr />
       <p>Beneficiary Photo</p>
-      <img [src]="photDataImage" alt="Image is loading....">
+      <img [src]="pdi" alt="Image is loading....">
+      <p>Beneficiary Id</p>
+      <img [src]="idi" alt="Image is loading....">
+      <hr />
     </ion-card-content>
   </ion-card>
   <ion-card>

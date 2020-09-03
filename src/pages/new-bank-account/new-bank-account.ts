@@ -25,6 +25,7 @@ export class NewBankAccountPage {
   loading: Loading;
   banks = [];
   bankData = {};
+  storedAccountNumber = undefined;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public http: Http, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
     this.newBankAccountForm = this.formBuilder.group({
@@ -44,11 +45,13 @@ export class NewBankAccountPage {
 
   ionViewWillEnter() {
     this.bankData = Constants.registrationData;
+    console.log(this.bankData);
     this.newBankAccountForm.controls.lastName.setValue(this.bankData['lastName']);
     this.newBankAccountForm.controls.firstName.setValue(this.bankData['firstName']);
     this.newBankAccountForm.controls.middleName.setValue(this.bankData['middleName']);
     this.newBankAccountForm.controls.bvn.setValue(this.bankData['bvn']);
     this.newBankAccountForm.controls.bank.setValue(this.bankData['bank']);
+    this.storedAccountNumber = this.bankData['accountNumber'];
   }
 
   showAccountNumber(accountNumber) {
@@ -70,23 +73,23 @@ export class NewBankAccountPage {
   }
 
   createAccount() {
-    let storedAccountNumber = Constants.registrationData['accountNumber'];
-    if (storedAccountNumber === undefined || storedAccountNumber === '') {
-      if (!this.newBankAccountForm.valid) {
-        Constants.showLongToastMessage("Please fill all required fields. Required fields are marked with **", this.toastCtrl);
-        return false;
-      }
+    if (!this.newBankAccountForm.valid) {
+      Constants.showLongToastMessage("Please fill all required fields. Required fields are marked with **", this.toastCtrl);
+      return false;
+    }
 
-      let rf = this.newBankAccountForm.value;
-      let postData = {};
-      postData['firstName'] = rf.firstName;
-      postData['lastName'] = rf.lastName;
-      postData['middleName'] = rf.middleName;
-      postData['bvn'] = rf.bvn;
-      postData['bank'] = rf.bank;
+    let rf = this.newBankAccountForm.value;
+    let postData = {};
+    postData['firstName'] = rf.firstName;
+    postData['lastName'] = rf.lastName;
+    postData['middleName'] = rf.middleName;
+    postData['bvn'] = rf.bvn;
+    postData['bank'] = rf.bank;
+    postData['accountNumber'] = this.storedAccountNumber;
 
-      Constants.registrationData = postData;
+    Constants.registrationData = postData;
 
+    if (this.storedAccountNumber === undefined || this.storedAccountNumber === '') {
       // call the server
       console.log(postData);
       let url = Constants.NEW_BANK_ACCOUNT_URL;
@@ -111,6 +114,7 @@ export class NewBankAccountPage {
             this.showError();
           }
           //Go to register page
+          this.newBankAccountForm.reset();
           this.navCtrl.push('RegisterPaginated');
         }
       }, error => {
