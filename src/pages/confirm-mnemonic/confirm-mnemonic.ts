@@ -108,19 +108,8 @@ export class ConfirmMnemonicPage {
   }
 
   createWallets() {
-    let allWallets = Constants.properties['wallets'];
-
-    for(let wallet of allWallets) {
-      if(wallet.value === 'BTC' || wallet.value === 'LTC' || wallet.value === 'BTCTEST' || wallet.value === 'LTCTEST') {
-        Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, wallet.value);
-      } else if(wallet.value === 'XND' || wallet.value === 'IGNIS' || wallet.value === 'ARDOR' || wallet.value === 'NXT') {
-        Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, wallet.value);
-      } else if(wallet.value === 'NGNT') {
-        Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, "NGNT");
-      } else if(wallet.value === 'ETH' || wallet.value === 'ETHTEST') {
-        Constants.ethWallet(this.ls);
-      }
-    }
+    // TODO: Create BTC and ETH Wallets on Server
+    // TODO: On login, check if user have the wallets, if yes, return them if no, create the,
   }
 
   loginOnServer() {

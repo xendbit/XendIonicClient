@@ -9,12 +9,12 @@ import { HDNode } from "bitcoinjs-lib";
 import { mnemonicToSeed } from "bip39";
 
 export class Constants {
-    static TOMCAT_URL = "https://lb.xendbit.net";
+    //static TOMCAT_URL = "https://lb.xendbit.net";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
     static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
     static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
-    //static TOMCAT_URL = "http://localhost:8080";
+    static TOMCAT_URL = "http://localhost:8080";
     //static TOMCAT_URL = "https://lb.xendbit.com";
     //static NOTIFICATION_SOCKET_URL = "ws://192.250.236.180:8080/notify/websocket";
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
@@ -325,42 +325,7 @@ export class Constants {
     }
 
     static registerOnServer() {
-        let data = Constants.registrationData;
-
-        if (data['updateInfo']) {
-            Constants.completeRegistration();
-            return;
-        }
-
-        let ls = data['ls'];
-        let http = data['http'];
-        let toastCtrl = data['toastCtrl'];
-        let loading = data['loading'];
-        let loadingCtrl = data['loadingCtrl'];
-
-        let mnemonicCode = Constants.normalizeMnemonicCode(ls);
-        let url = Constants.XND_ACCOUNT_ID_URL + "/XND";
-
-        let requestData = {
-            "passphrase": mnemonicCode
-        };
-
-        loading = Constants.showLoading(loading, loadingCtrl, "Please wait");
-
-        http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(data => {
-            let accountRS = data.result.accountRS;
-            let accountId = data.result.account;
-            let publicKey = data.result.publicKey;
-
-            ls.setItem('XNDAddress', accountRS);
-            ls.setItem('XNDId', accountId);
-            ls.setItem('XNDPublicKey', publicKey);
-            loading.dismiss();
-            Constants.completeRegistration();
-        }, error => {
-            Constants.showLongerToastMessage("Error getting your account id from the server: " + error, toastCtrl);
-            loading.dismiss();
-        });
+      Constants.completeRegistration();
     }
 
     static getHeader() {
@@ -689,136 +654,12 @@ export class Constants {
         return Constants.getWalletProperties(Constants.WORKING_WALLET);
     }
 
-    static btcWallet(ls: StorageService, _loading, _loadingCtrl, http, _toastCtrl, chainCode) {
-        let network = Constants.NETWORKS[chainCode];
-        let passphrase = ls.getItem('mnemonic');
-
-        if (ls.getItem(chainCode + "Address") !== undefined && ls.getItem(chainCode + "Address") !== "") {
-            //return;
-        }
-
-        var hd = HDNode.fromSeedBuffer(mnemonicToSeed(passphrase), network).derivePath("m/0/0/0");
-        Constants.registrationData['networkAddress'] = hd.getAddress();
-        ls.setItem(chainCode + 'Address', hd.getAddress());
-        //import private key
-        let pk = hd.keyPair;
-        let privKey = pk.toWIF();
-        Console.log(privKey);
-        let pubKeyHash = pk.getPublicKeyBuffer().toString('hex');
-        ls.setItem(chainCode + 'PublicKey', pubKeyHash);
-        let address = hd.getAddress();
-        let url = Constants.RPC_PROXY + "/importprivkey/" + privKey + "/" + address + "/" + chainCode;
-        http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(_success => { }, _error => { });
-
-    }
-    static xndWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, chainCode) {
-        if (ls.getItem(chainCode + "Id") !== undefined && ls.getItem(chainCode + "Id") !== "") {
-            return;
-        }
-
-        let mnemonicCode = Constants.normalizeMnemonicCode(ls);
-
-        let url = Constants.XND_ACCOUNT_ID_URL + "/" + chainCode;
-
-        let requestData = {
-            "passphrase": mnemonicCode
-        };
-
-        loading = Constants.showLoading(loading, loadingCtrl, "Please wait");
-
-        http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(data => {
-            let accountRS = data.result.accountRS;
-            let accountId = data.result.account;
-            let publicKey = data.result.publicKey;
-
-            ls.setItem(chainCode + 'Address', accountRS);
-            ls.setItem(chainCode + 'Id', accountId);
-            ls.setItem(chainCode + 'PublicKey', publicKey);
-            loading.dismiss();
-        }, error => {
-            Constants.showLongerToastMessage("Error getting your account id from the server: " + error, toastCtrl);
-            loading.dismiss();
-        });
-    }
-
-    static tokenWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, coin) {
-        if (ls.getItem("XNDId") !== undefined && ls.getItem("XNDId") !== "") {
-            let accountRS = ls.getItem('XNDAddress')
-            let accountId = ls.getItem('XNDId')
-            let publicKey = ls.getItem('XNDPublicKey')
-            ls.setItem(coin + 'Address', accountRS);
-            ls.setItem(coin + 'Id', accountId);
-            ls.setItem(coin + 'PublicKey', publicKey);
-            return;
-        }
-
-        let mnemonicCode = Constants.normalizeMnemonicCode(ls);
-
-        let url = Constants.XND_ACCOUNT_ID_URL + "/XND";
-
-        let requestData = {
-            "passphrase": mnemonicCode
-        };
-
-        loading = Constants.showLoading(loading, loadingCtrl, "Please wait");
-
-        http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(data => {
-            let accountRS = data.result.accountRS;
-            let accountId = data.result.account;
-            let publicKey = data.result.publicKey;
-
-            ls.setItem(coin + 'Address', accountRS);
-            ls.setItem(coin + 'Id', accountId);
-            ls.setItem(coin + 'PublicKey', publicKey);
-            loading.dismiss();
-        }, error => {
-            Constants.showLongerToastMessage("Error getting your account id from the server: " + error, toastCtrl);
-            loading.dismiss();
-        });
-    }
 
     static normalizeMnemonicCode(ls: StorageService) {
-        // let mnemonicCode = ls.getItem('mnemonic');
-
-        // let lastIndex = mnemonicCode.lastIndexOf(" ");
-
-        // mnemonicCode = mnemonicCode.substr(0, lastIndex).trim();
         let mnemonicCode = ls.getItem('mnemonic');
         return mnemonicCode;
     }
 
-    static ethWallet(ls: StorageService) {
-        if (ls.getItem("ETHAddress") !== undefined && ls.getItem("ETHAddress") !== "") {
-            let ethAddress = ls.getItem('ETHAddress');
-            ls.setItem("ETHTESTAddress", ethAddress);
-            return;
-        }
-
-        let mnemonicCode = Constants.normalizeMnemonicCode(ls);
-        keystore.createVault({
-            password: 'password',
-            seedPhrase: mnemonicCode,
-            //salt: fixture.salt,     // Optionally provide a salt.
-            // A unique salt will be generated otherwise.
-            hdPathString: "m/44'/60'/0'/0"    // Optional custom HD Path String
-        }, function (err, ks) {
-            // Some methods will require providing the `pwDerivedKey`,
-            // Allowing you to only decrypt private keys on an as-needed basis.
-            // You can generate that value with this convenient method:
-            ks.keyFromPassword('password', function (err, pwDerivedKey) {
-                if (err) throw err;
-
-                // generate five new address/private key pairs
-                // the corresponding private keys are also encrypted
-                ks.generateNewAddress(pwDerivedKey, 1);
-                var addr = ks.getAddresses();
-                ls.setItem("ETHAddress", addr[0]);
-                ls.setItem("ETHTESTAddress", addr[0]);
-                var privateKey = ks.exportPrivateKey(addr[0], pwDerivedKey);
-                ls.setItem('ETHPrivateKey', privateKey);
-            });
-        });
-    }
 
     static encryptData(data) {
         let key = Constants.makeid();

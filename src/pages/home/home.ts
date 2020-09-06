@@ -173,19 +173,9 @@ export class HomePage {
         let coin = wallet['value'];
 
         if (coin.indexOf("ETH") >= 0) {
-          Constants.ethWallet(app.ls);
-        } else if (coin === "XND") {
-          Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else if (coin === "NXT") {
-          Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else if (coin === "ARDOR") {
-          Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else if (coin === "IGNIS") {
-          Constants.xndWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else if (wallet['currencyId'] !== undefined) {
-          Constants.tokenWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
-        } else {
-          Constants.btcWallet(app.ls, app.loading, app.loadingCtrl, app.http, app.toastCtrl, coin);
+
+        } else if (coin.indexOf("BTC") >= 0) {
+
         }
       }
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION)

@@ -1,3 +1,4 @@
+import { PreImage } from './../utils/preimage';
 import { Base64 } from '@ionic-native/base64';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { MediaCapture, CaptureImageOptions, MediaFile, CaptureError } from '@ionic-native/media-capture';
@@ -87,15 +88,15 @@ export class RegisterPage {
 
     this.registerForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.maxLength(255), Validators.pattern(this.emailRegex), Validators.required])],
-      phoneNumber: [''],
-      idType: ['',],
-      idNumber: ['',],
+      phoneNumber: ['', Validators.compose([Validators.maxLength(11), Validators.minLength(11), Validators.required])],
+      idType: ['', Validators.required],
+      idNumber: ['', Validators.required],
       surName: ['', Validators.required],
       firstName: ['', Validators.required],
       middleName: [''],
       country: [''],
-      bank: [''],
-      accountNumber: [''],
+      bank: ['', Validators.required],
+      accountNumber: ['', Validators.required],
       isBeneficiary: ['false'],
       referralCode: [''],
       enableWhatsapp: ['No'],
@@ -125,6 +126,11 @@ export class RegisterPage {
   }
 
   capturePassport() {
+    if (this.platform.is('core') || this.platform.is('mobileweb')) {
+      this.idImagePath = "path";
+      this.idImage = PreImage.idImage;
+      return;
+    }
     Console.log("Capturing Passport");
     let options: CaptureImageOptions = { limit: 1 };
     this.mediaCapture.captureImage(options)
@@ -224,22 +230,15 @@ export class RegisterPage {
         return;
       }
 
+      if (rf.accountNumber === '') {
+        Constants.showLongToastMessage("Please enter  Account Number", this.toastCtrl);
+        return;
+      }
+
       for (let bank in this.banks) {
         if (this.banks[bank]['bankCode'] === rf.bank) {
           Constants.registrationData['bankName'] = this.banks[bank]['bankName'];
           break;
-        }
-      }
-
-      if (rf.phoneNumber !== undefined) {
-        if (rf.phoneNumber.startsWith("+")) {
-          Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
-          return;
-        }
-
-        if (rf.phoneNumber.startsWith("0")) {
-          Constants.showLongerToastMessage("Phone number entered is not in international format", this.toastCtrl);
-          return;
         }
       }
     }

@@ -88,45 +88,36 @@ export class LandingPage {
     let working_wallet = wallet['value'];
     if (this.ls.getItem("exchangeType") === 'exchange') {
       if (working_wallet.indexOf("ETH") >= 0) {
-        Constants.ethWallet(this.ls);
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);
         }, this.loadWalletDelay);
       } else if (working_wallet === 'XND') {
-        //this.showXendBalance = false;
-        Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);
         }, this.loadWalletDelay);
       } else if (working_wallet === 'NXT') {
-        //this.showXendBalance = false;
-        Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);
         }, this.loadWalletDelay);
       } else if (working_wallet === 'ARDOR') {
-        Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);
         }, this.loadWalletDelay);
       } else if (working_wallet === 'IGNIS') {
-        Constants.xndWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);
         }, this.loadWalletDelay);
       } else if (wallet['currencyId'] !== undefined) {
-        Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);
         }, this.loadWalletDelay);
       } else {
-        Constants.btcWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);
@@ -134,13 +125,11 @@ export class LandingPage {
       }
     } else if (this.ls.getItem("exchangeType") === 'equities') {
       if (wallet['equityId'] !== undefined) {
-        Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);
         }, this.loadWalletDelay);
       } else if (wallet['currencyId'] !== undefined) {
-        Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
         setTimeout(function () {
           app.refresh(wallet);
