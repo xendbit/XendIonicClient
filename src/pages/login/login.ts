@@ -103,22 +103,6 @@ export class LoginPage {
     }
   }
 
-  postKYCInfoToBlockchain(password, emailAddress) {
-    let url = Constants.ADD_KYC_URL;
-    let mnemonicCode = Constants.normalizeMnemonicCode(this.ls);
-    let xendNetworkAddress = this.ls.getItem('XNDAddress');
-    let requestData = {
-      emailAddress: emailAddress,
-      password: password,
-      passphrase: mnemonicCode,
-      networkAddress: xendNetworkAddress
-    };
-
-    this.http.post(url, requestData, Constants.getHeader())
-      .map(res => res.json())
-      .subscribe(_responseData => { }, error => { });
-  }
-
   showResendConfirmationEmailDialog() {
     const confirm = this.alertCtrl.create({
       title: 'Resend Confirmation Email?',
@@ -180,7 +164,9 @@ export class LoginPage {
       .subscribe(responseData => {
         if (responseData.response_text === "success") {
           this.loading.dismiss();
-          let user = responseData.result.user;
+          let user = responseData["result"]["user"];
+          Console.log("LOgged In User: " + user);
+          Constants.LOGGED_IN_USER = user;
           let walletType = user['walletType'];
           ls.setItem('walletType', walletType);
           ls.setItem("lastLoginTime", new Date().getTime() + "");
@@ -196,12 +182,7 @@ export class LoginPage {
             Console.log(e);
           }
 
-          this.postKYCInfoToBlockchain(password, emailAddress);
-          if (exchangeType === 'exchange') {
-            this.navCtrl.push(TabsPage);
-          } else if (exchangeType === 'equities') {
-            this.navCtrl.push(EquitiesExchangePage);
-          }
+          this.navCtrl.push(TabsPage);
         } else {
           this.loading.dismiss();
           Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);

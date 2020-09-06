@@ -76,6 +76,8 @@ export class Constants {
         "LTCTEST": Constants.litecointestnet
     };
 
+    static LOGGED_IN_USER = undefined;
+
     static LOGGING_ENABLED = true;
     static ABI = [{ "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "to", "type": "address" }, { "name": "xendFees", "type": "uint256" }], "name": "send", "outputs": [{ "name": "success", "type": "bool" }], "payable": true, "stateMutability": "payable", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }];
     static CODE = "0x6060604052341561000f57600080fd5b336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506102268061005e6000396000f30060606040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806341c0e1b514610051578063d0679d3414610066575b600080fd5b341561005c57600080fd5b6100646100b5565b005b61009b600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091908035906020019091905050610146565b604051808215151515815260200191505060405180910390f35b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415610144576000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16ff5b565b60008082340390508373ffffffffffffffffffffffffffffffffffffffff166108fc829081150290604051600060405180830381858888f19350505050151561018e57600080fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166108fc849081150290604051600060405180830381858888f1935050505015156101ef57600080fd5b6001915050929150505600a165627a7a723058203d469e21c7d1d812eddd2452c0b423fd82141f44aea4bc8d2a2b43b9d19b022a0029";
@@ -341,9 +343,6 @@ export class Constants {
     }
 
     static getWalletHeader(wallet: string) {
-        if (wallet.startsWith("t")) {
-            wallet = wallet.replace("t", "");
-        }
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('apiKey', 'oalkuisnetgauyno');
