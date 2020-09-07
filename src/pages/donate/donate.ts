@@ -150,7 +150,6 @@ export class DonatePage {
         let me: DonatePage = data['sendBitPage'];
         me.disableButton = false;
         Constants.showLongerToastMessage('Error Sending Coin', me.toastCtrl);
-        Console.log("Errored Out");
     }
 
     askBeneficiaryForAddress() {
@@ -185,7 +184,6 @@ export class DonatePage {
             })
             .catch((error: any) => {
                 //doNothing
-                Console.log(error);
                 Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
             });
     }

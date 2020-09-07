@@ -138,7 +138,6 @@ export class SendBitPage {
       })
       .catch((error: any) => {
         //doNothing
-        Console.log(error);
         Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
       });
   }
@@ -159,7 +158,6 @@ export class SendBitPage {
       equityId: fees.equityId
     };
 
-    Console.log(postData);
 
     this.http.post(Constants.GET_TX_URL, postData, Constants.getHeader())
       .map(res => res.json())
@@ -173,7 +171,6 @@ export class SendBitPage {
           let balance = +responseData.result.balance;
           this.xendFees = +fees.xendFees * balance;
           //0.001 is added because of rounding issues.
-          Console.log("confirmedAccountBalance: " + balance);
           let canSend = balance - this.blockFees - this.xendFees;
           if (canSend < 0) {
             canSend = 0;
@@ -196,7 +193,6 @@ export class SendBitPage {
       this.getTransactions(true);
     } else {
       this.xendFees = +fees.xendFees * balance;
-      Console.log("confirmedAccountBalance: " + balance);
       let canSend = balance - this.blockFees - this.xendFees;
 
       //Correct for rounding error
@@ -225,9 +221,6 @@ export class SendBitPage {
 
     this.xendFees = +fees.xendFees * amountToSend;
 
-    Console.log(amountToSend + this.blockFees + this.xendFees);
-    Console.log(balance);
-
     if (amountToSend === 0) {
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
     } else if (amountToSend + this.blockFees + this.xendFees > balance) {
@@ -253,8 +246,6 @@ export class SendBitPage {
       data['alertCtrl'] = this.alertCtrl;
 
       this.disableButton = true;
-      Console.log(fees);
-      Console.log(fees.btcText);
       if (fees.btcText.indexOf('ETH') > 0) {
         CoinsSender.sendCoinsEth(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET);
       } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDOR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
@@ -277,7 +268,6 @@ export class SendBitPage {
   }
 
   sendCoinsSuccess(data) {
-    Console.log("Success Code Called");
     let me: SendBitPage = data['sendBitPage'];
     console.dir(data);
     console.dir(me);
@@ -335,7 +325,6 @@ export class SendBitPage {
     let me: SendBitPage = data['sendBitPage'];
     me.disableButton = false;
     Constants.showLongerToastMessage('Error Sending Coin', me.toastCtrl);
-    Console.log("Errored Out");
   }
 
   clearForm() {

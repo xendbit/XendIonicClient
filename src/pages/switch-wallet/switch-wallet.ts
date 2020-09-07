@@ -49,7 +49,6 @@ export class SwitchWalletPage {
       this.wallets.push(by3);
     }
 
-    Console.log(this.wallets);
   }
 
   switchWallet(wallet) {

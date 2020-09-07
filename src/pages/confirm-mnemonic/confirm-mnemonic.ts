@@ -49,10 +49,8 @@ export class ConfirmMnemonicPage {
   }
 
   ionViewWillEnter(){
-    console.log(this.navParams);
     this.email = this.navParams.get('email');
     this.password = this.navParams.get('password');
-    Console.log("Password: " + this.password);
     this.passphrase = this.navParams.get('mnemonic');
 
     let splitted = this.passphrase.split(" ");

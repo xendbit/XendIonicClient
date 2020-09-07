@@ -128,7 +128,6 @@ export class HomePage {
     let tickerSymbol = this.wallet['ticker_symbol'];
     let symbol = this.wallet['text'];
     let url = Constants.CHART_URL.replace("{{symbol}}", tickerSymbol.toUpperCase());
-    Console.log(url);
     this.http.get(url).map(res => res.json()).subscribe(data => {
       let dates = Object.keys(data['Time Series (Digital Currency Daily)']);
       dates.sort();
@@ -207,8 +206,6 @@ export class HomePage {
       emailAddress: this.ls.getItem("emailAddress"),
     };
 
-    Console.log(postData);
-
     this.http.post(Constants.GET_TX_URL, postData, Constants.getHeader())
       .map(res => res.json())
       .subscribe(responseData => {
@@ -220,7 +217,6 @@ export class HomePage {
           this.utx = [];
           this.ctx = [];
           this.confirmedAccountBalance = responseData.result.balance
-          Console.log("confirmedAccountBalance: " + this.confirmedAccountBalance);
           this.ls.setItem(Constants.WORKING_WALLET + "confirmedAccountBalance", responseData.result.balance);
           this.totalReceived = responseData.result.received
           this.totalSent = responseData.result.spent
@@ -281,7 +277,6 @@ export class HomePage {
   }
 
   sellBit() {
-    Console.log("sellBit");
     this.getTransactions(false);
     if (this.ls.getItem("bankCode") === "000" || this.ls.getItem('bankCode') === undefined) {
       Constants.showAlert(this.toastCtrl, "Feature Unavailable", "This feature is not available because you didn't provide bank details during registration.");

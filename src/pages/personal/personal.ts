@@ -256,7 +256,7 @@ export class PersonalPage {
       Constants.registrationData['tp'] = 'LoginPage';
       Constants.registrationData['idImage'] = this.idImage;
       Constants.registrationData['url'] = url;
-      Constants.registrationData['registrationType'] = registrationType;      
+      Constants.registrationData['registrationType'] = registrationType;
 
       this.passwordPadSuccess();
     } else {
@@ -278,9 +278,7 @@ export class PersonalPage {
       }
     }
 
-    Console.log(rf.phoneNumber);
-    
-    if (rf.phoneNumber !== undefined) {      
+    if (rf.phoneNumber !== undefined) {
       if (rf.phoneNumber.startsWith("+")) {
         Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
         return;
@@ -312,7 +310,7 @@ export class PersonalPage {
     Constants.registrationData['updateInfo'] = true;
     StorageService.IS_BENEFICIARY = rf.isBeneficiary;
 
-    Constants.registerOnServer();    
+    Constants.registerOnServer();
   }
 
   countrySelected(country) {

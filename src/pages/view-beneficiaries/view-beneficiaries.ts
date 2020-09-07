@@ -31,7 +31,7 @@ export class ViewBeneficiariesPage {
     setTimeout(function () {
       //Wait for sometimes for storage to be ready
       app.loading.dismiss();
-    }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);    
+    }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
   ionViewDidEnter(){
@@ -49,7 +49,7 @@ export class ViewBeneficiariesPage {
     let requestData = {
       password: this.ls.getItem("password"),
       networkAddress: this.ls.getItem(key),
-      emailAddress: this.ls.getItem("emailAddress")      
+      emailAddress: this.ls.getItem("emailAddress")
     }
 
     let loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
@@ -58,7 +58,6 @@ export class ViewBeneficiariesPage {
       responseData => {
         loading.dismiss();
         this.beneficiaries = responseData['result'];
-        Console.log(responseData);
       }, error => {
         loading.dismiss();
         Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
@@ -70,6 +69,6 @@ export class ViewBeneficiariesPage {
     Constants.registrationData['beneficiary'] = beneficiary;
     Constants.registrationData['viewBeneficiaries'] = this;
     let modal = this.modalCtrl.create('ShowBeneficiaryPage',{},{showBackdrop:true, enableBackdropDismiss:true});
-    modal.present();     
+    modal.present();
   }
 }

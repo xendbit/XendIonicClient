@@ -76,7 +76,6 @@ export class CreateMnemonicPage {
             this.fullMnemonic = result.mnemonic + " " + lastWord;
             this.mnemonic = splitted.join(' ');
             Console.log(this.fullMnemonic);
-            Console.log(this.mnemonic);
           } else {
             throw(responseData.response_text);
           }

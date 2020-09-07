@@ -6,17 +6,17 @@ export class WSConnection {
     static startListeningForNotifications(home) {
         let app = home;
         Console.log(Constants.NOTIFICATION_SOCKET_URL);
-    
+
         let ws = new $WebSocket(Constants.NOTIFICATION_SOCKET_URL);
         let data = {
           "emailAddress": app.emailAddress,
           "action": "setEmailAddress",
         };
-    
+
         ws.connect(true);
-    
+
         Constants.properties['ws_connection'] = ws;
-    
+
         ws.send(Constants.encryptData(JSON.stringify(data))).subscribe((data) => {
           //doNothing
         }, (error) => {
@@ -24,15 +24,13 @@ export class WSConnection {
         }, () => {
           //doNothing
         });
-    
+
         Console.log("Connected: OKAY");
         Constants.properties['ws_connection'] = ws;
-  
+
         // Log messages from the server
         ws.onMessage((msg: MessageEvent) => {
-          Console.log(msg.data);
           let message = JSON.parse(msg.data);
-          Console.log(message);
           if (message['action'] === 'startTrade') {
             Constants.startTrade(message, app, ws);
             app.localNotifications.hasPermission().then((value) => {
@@ -46,7 +44,7 @@ export class WSConnection {
               //doNothing
             })
           } else if(message['action'] === 'notOnline') {
-            Constants.showAlert(app.alertCtrl, "User not online", "The user is not online");  
+            Constants.showAlert(app.alertCtrl, "User not online", "The user is not online");
           } else if(message['action'] === 'orderInProgress')          {
             Constants.showAlert(app.alertCtrl, "Trade not possible", "Another user is currently interested in the order. Please refresh and check another order");
           } else if (message['action'] === 'accountNotApproved') {
@@ -54,20 +52,20 @@ export class WSConnection {
           } else if (message['action'] === 'cancelTrade') {
             Constants.showAlert(app.alertCtrl, "Trade Cancelled", "User cancelled the trade");
           } else if(message['action'] === 'sendCoinsToSeller') {
-            Constants.sendCoinsToSeller(message, app, ws, message['buyerOtherAddress']);     
-          } else if(message['action'] === 'paySeller') {            
+            Constants.sendCoinsToSeller(message, app, ws, message['buyerOtherAddress']);
+          } else if(message['action'] === 'paySeller') {
             Constants.paySeller(message, app.navCtrl);
-          } else if(message['action'] === 'errorSendingToSeller') {      
+          } else if(message['action'] === 'errorSendingToSeller') {
             Constants.showAlert(app.alertCtrl, "Urgent!!!", "We can not send coins to the seller from your wallet, even though the seller has sent coins to you. Please make sure you have sufficient balance. We will retry again in about 5 mins. Thank you");
           } else if(message['action'] === 'success') {
             Constants.showLongerToastMessage("Trade Successful. Please refresh page to see new balance", app.toastCtrl);
-          } else if(message['action'] === 'buyerConfirmedBankPayment') {  
-            let alertMessage = "Buyer " + message['buyerFullname'] + " notified that they have paid you " + message['amountToRecieve'] + " for your " + message['fromCoin'] + " Please check your bank for confirmation. You have to go to My Sell Orders on the home page and click on confirm (to release the coins to they buyer) once you get confirmation from the bank that the money has been paid."
+          } else if(message['action'] === 'buyerConfirmedBankPayment') {
+            let alertMessage = "Buyer " + message['buyerFullname'] + " notified that they have paid you " + message['amountToRecieve'] + " for your " + message['fromCoin'] + " Please check your bank for confirmation. You have to go to My Sell Orders on the home page and click on confirm (to release the coins to the buyer) once you get confirmation from the bank that the money has been paid."
             Constants.showAlert(app.alertCtrl, "Buyer Paid You", alertMessage);
             Constants.releaseCoins(message, app);
-          } else if(message['action'] === 'provideAddressToDonor') {  
+          } else if(message['action'] === 'provideAddressToDonor') {
             Constants.askBeneficiaryForAddress(message, app);
-          } else if(message['action'] === 'addressProvidedToDonor') {  
+          } else if(message['action'] === 'addressProvidedToDonor') {
             let donatePage = Constants.properties['donatePage'];
             let coin = message['coin'];
             donatePage.donateForm.controls.networkAddress.setValue(message['address']);
@@ -79,5 +77,5 @@ export class WSConnection {
           { autoApply: false }
         );
       }
-        
+
 }

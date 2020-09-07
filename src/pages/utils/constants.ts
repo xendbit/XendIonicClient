@@ -12,11 +12,11 @@ export class Constants {
     //static TOMCAT_URL = "https://lb.xendbit.net";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
-    static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
+    //static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
     static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
     static TOMCAT_URL = "http://localhost:8080";
     //static TOMCAT_URL = "https://lb.xendbit.com";
-    //static NOTIFICATION_SOCKET_URL = "ws://192.250.236.180:8080/notify/websocket";
+    static NOTIFICATION_SOCKET_URL = "ws://localhost:8080/notify/websocket";
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
@@ -292,7 +292,6 @@ export class Constants {
             referralCode: data['referralCode']
         };
 
-        Console.log(postData);
 
         let url = data['url'];
         let http = data['http'];
@@ -476,11 +475,9 @@ export class Constants {
     static craftMultisig(data) {
         let message = data['message'];
         let coin: string = message['fromCoin'];
-        let key = coin + "Address";
         let ls = data['ls'];
-        let fromAddress = ls.getItem(key);
-        let network = Constants.NETWORKS[coin];
-        CoinsSender.craftMultisig(data, Constants.askBuyerToPay, Constants.sendCoinsToBuyerError, coin, fromAddress, network);
+        let fromAddress = Constants.WALLET['chain_address'];
+        CoinsSender.confirmSellerHaveCoins(data, Constants.askBuyerToPay, Constants.sendCoinsToBuyerError, coin, fromAddress, Constants.WALLET);
     }
 
     static startTrade(message, home, connection) {
@@ -500,28 +497,26 @@ export class Constants {
         data['amount'] = message['amountToSell'];
         data['recipientAddress'] = message['buyerAddress'];
 
-        console.log(data);
 
         let toCoin = message['toCoin'];
-        let fees = Constants.getWalletProperties(coin);
-        Console.log(fees);
 
         let bankPaymentMethodsValues = Constants.properties['payment.methods'].map(x => x.value);
         if (bankPaymentMethodsValues.indexOf(toCoin) >= 0) {
             Constants.sellerConfirmTrade(data, home);
         } else {
-            if (fees.btcText.indexOf('ETH') > 0) {
-                CoinsSender.sendCoinsEth(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin);
-            } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDOR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
-                CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
-            } else if (fees.currencyId !== undefined) {
-                CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
-            } else if (fees.equityId !== undefined) {
-                CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
-            } else {
-                let network = Constants.NETWORKS[coin];
-                CoinsSender.sendCoinsBtc(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin, fromAddress, network);
-            }
+          //sending coins should happen on the server now.
+            // if (fees.btcText.indexOf('ETH') > 0) {
+            //     CoinsSender.sendCoinsEth(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin);
+            // } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDOR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
+            //     CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
+            // } else if (fees.currencyId !== undefined) {
+            //     CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
+            // } else if (fees.equityId !== undefined) {
+            //     CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
+            // } else {
+            //     let network = Constants.NETWORKS[coin];
+            //     CoinsSender.sendCoinsBtc(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin, fromAddress, network);
+            // }
         }
     }
 
@@ -570,20 +565,14 @@ export class Constants {
         let buyerEmailAddress = message['buyerEmailAddress'];
         let buyerOtherAddress = message['buyerOtherAddress'];
         let buyerAddress = message['buyerAddress'];
-        let trxHex = data['trxHex'];
-
-        let ecHex = Constants.encryptData(trxHex);
 
         let wsData = {
             "trxId": message['trxId'],
             "buyerEmailAddress": buyerEmailAddress,
             "buyerOtherAddress": buyerOtherAddress,
             "buyerAddress": buyerAddress,
-            "trxHex": ecHex,
             "action": "askBuyerToPay"
         };
-
-        Console.log(wsData);
 
         wsConnection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((_responseData) => {
             //doNothing
@@ -719,5 +708,20 @@ export class Constants {
         var year = date.getFullYear();
 
         return day + '/' + monthNames[monthIndex] + '/' + year;
+    }
+
+    static getWalletFormatted(w) {
+      let chain = w['chain'];
+      let chainAddress = w['chainAddress'];
+
+      let wallet = {};
+      wallet['ticker_symbol'] = chain.toLowerCase();
+      wallet['symbol'] = chain;
+      wallet['text'] = chain;
+      wallet['value'] = chain;
+      wallet['chain_address'] = chainAddress;
+      wallet['token'] = w['token'];
+
+      return wallet;
     }
 }

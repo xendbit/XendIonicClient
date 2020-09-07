@@ -48,7 +48,6 @@ export class ShowBankPaymentPage {
 
     let data = Constants.properties['finalize_sale_order'];
     this.sellOrder = data;
-    Console.log(data);
     let sellerToAddress = data['sellerToAddress'];
     let splitted = sellerToAddress.split(":");
 
@@ -85,7 +84,6 @@ export class ShowBankPaymentPage {
   successCall(data) {
     let app: ShowBankPaymentPage = data['page'];
     app.disableButton = true;
-    Console.log(app.sellOrder);
     //ok, we need to call server "update-exchange-status";
     let url = Constants.UPDATE_TRADE_URL;
     let requestData = {
@@ -105,7 +103,6 @@ export class ShowBankPaymentPage {
   errorCall(data) {
     let app: ShowBankPaymentPage = data['page'];
     app.disableButton = true;
-    Console.log(app.sellOrder);
     //ok, we need to call server "update-exchange-status";
     let url = Constants.UPDATE_TRADE_URL;
     let requestData = {
@@ -140,29 +137,22 @@ export class ShowBankPaymentPage {
             let data = {};
             data['amount'] = this.amountToSend
             data['recipientAddress'] = this.buyerAddress;
-            data['loading'] = this.loading;
-            data['loadingCtrl'] = this.loadingCtrl;
-            data['ls'] = this.ls;
-            data['toastCtrl'] = this.toastCtrl;
-            data['http'] = this.http;
-            data['page'] = this;
-            data['trxId'] = this.sellOrder;
-            data['brokerAccount'] = this.brokerAccount;
-            data['alertCtrl'] = this.alertCtrl;
+            data['sellOrder'] = this.sellOrder;
 
-            let fees = Constants.getCurrentWalletProperties();
-            if (this.fromCoin.indexOf('ETH') >= 0) {
-              CoinsSender.sendCoinsEth(data, this.successCall, this.errorCall, this.fromCoin);
-            } else if (this.fromCoin === 'XND' || this.fromCoin === "NXT" || this.fromCoin === "ARDOR" || this.fromCoin === "IGNIS") {
-              CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
-            } else if (fees.currencyId !== undefined) {
-              CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
-            } else if (fees.equityId !== undefined) {
-              CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
-            } else {
-              let key = this.fromCoin + "Address";
-              CoinsSender.sendCoinsBtc(data, this.successCall, this.errorCall, this.fromCoin, this.ls.getItem(key), Constants.NETWORKS[this.fromCoin]);
-            }
+            // TODO: Coins must now be sent from the server
+
+            // if (this.fromCoin.indexOf('ETH') >= 0) {
+            //   CoinsSender.sendCoinsEth(data, this.successCall, this.errorCall, this.fromCoin);
+            // } else if (this.fromCoin === 'XND' || this.fromCoin === "NXT" || this.fromCoin === "ARDOR" || this.fromCoin === "IGNIS") {
+            //   CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
+            // } else if (fees.currencyId !== undefined) {
+            //   CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
+            // } else if (fees.equityId !== undefined) {
+            //   CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall, fees);
+            // } else {
+            //   let key = this.fromCoin + "Address";
+            //   CoinsSender.sendCoinsBtc(data, this.successCall, this.errorCall, this.fromCoin, this.ls.getItem(key), Constants.NETWORKS[this.fromCoin]);
+            // }
           }
         }
       ]

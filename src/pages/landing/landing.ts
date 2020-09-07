@@ -43,17 +43,7 @@ export class LandingPage {
     // chainAddress: "0x21e5eafd04c99ae16ac529da67745c62e543966e"
     this.loadedWallets = [];
     for (let w of this.wallets) {
-      let chain = w['chain'];
-      let chainAddress = w['chainAddress'];
-
-      let wallet = {};
-      wallet['ticker_symbol'] = chain.toLowerCase();
-      wallet['symbol'] = chain;
-      wallet['text'] = chain;
-      wallet['value'] = chain;
-      wallet['chain_address'] = chainAddress;
-      wallet['token'] = w['token'];
-
+      let wallet = Constants.getWalletFormatted(w);
       this.getTransactions(wallet);
     }
   }
@@ -64,8 +54,6 @@ export class LandingPage {
       networkAddress: wallet['chain_address'],
       emailAddress: this.ls.getItem("emailAddress")
     };
-
-    Console.log(postData);
 
     this.http.post(Constants.GET_TX_URL, postData, Constants.getWalletHeader(wallet['value']))
       .map(res => res.json())

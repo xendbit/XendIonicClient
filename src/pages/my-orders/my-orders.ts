@@ -49,8 +49,6 @@ export class MyOrdersPage {
         let fees = Constants.getCurrentWalletProperties();
         this.currentWallet = fees;
 
-        Console.log(fees);
-        Console.log(this.currentWallet);
         this.loadRate();
 
         this.ls = Constants.storageService;
@@ -180,8 +178,6 @@ export class MyOrdersPage {
             this.currencyPairs.push(pair);
         }
 
-        Console.log(this.currencyPairs);
-
         let url = Constants.GET_USER_SELL_ORDERS_TX_URL;
 
         let postData = {
@@ -203,7 +199,6 @@ export class MyOrdersPage {
     }
 
     finalizeSale(sellOrder) {
-        Console.log('Sell Order: ' + sellOrder);
         Constants.properties['finalize_sale_order'] = sellOrder;
         this.navCtrl.push('ShowBankPaymentPage');
     }

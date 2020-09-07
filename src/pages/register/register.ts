@@ -136,8 +136,6 @@ export class RegisterPage {
     this.mediaCapture.captureImage(options)
       .then(
         (data: MediaFile[]) => {
-          Console.log("Passport Captured with data: " + data);
-          Console.log("Path: " + data[0]['fullPath']);
           this.resizeImage(data[0]['fullPath']);
         },
         (err: CaptureError) => {
@@ -149,7 +147,6 @@ export class RegisterPage {
   resizeImage(uri) {
     Console.log("Resizing Image");
     this.idImagePath = uri;
-    Console.log("Platform is iOS: " + this.platform.is('ios'));
     if (this.platform.is('ios')) {
       uri = normalizeURL(uri);
       this.toDataUrl(uri, function (myBase64) {
@@ -166,14 +163,10 @@ export class RegisterPage {
         fileName: fileName
       };
 
-      Console.log("Resizing Options: " + options);
 
       this.imageResizer.resize(options).then((filePath: string) => {
-        Console.log("Resizing Succesful. New Path is: " + filePath);
         this.idImagePath = filePath;
-        Console.log("Encoding Into Base64");
         this.base64.encodeFile(filePath).then((base64File: string) => {
-          Console.log("Base64 Encoding Succesful: " + base64File.substr(0, 10));
           this.idImage = base64File;
         }, (err) => {
           Console.log(err);

@@ -67,8 +67,6 @@ export class GettingStartedPage {
 
   ionViewWillEnter() {
     this.isReset = (Constants.REG_TYPE === 'reset');
-    Console.log(this.isReset);
-    Console.log(Constants.REG_TYPE);
     if (this.isReset) {
       this.passwordPlaceHolder = "New Password";
     }
@@ -113,7 +111,6 @@ export class GettingStartedPage {
       Constants.showLongerToastMessage('Please enter your password', this.toastCtrl);
       return;
     } else if (found < 0) {
-      Console.log("Password invalid");
       Constants.showLongToastMessage("Please enter a valid password", this.toastCtrl);
       return;
     } else if (this.isReset) {

@@ -148,8 +148,6 @@ export class CoinsSender {
                 {
                     text: 'Confirm',
                     handler: alertData => {
-                        Console.log(alertData['2fa']);
-                        Console.log(code);
                         if(+alertData['2fa'] === code) {
                             this.continueSendingBTC(data, successCall, errorCall, coin, fromAddress, network);
                         } else {
@@ -214,7 +212,6 @@ export class CoinsSender {
                 errorCall(data);
             } else {
                 let hex = CoinsSender.getTransactionHex(responseData, network, ls, amount, fees, xendFees, blockFees, recipientAddress, fromAddress);
-                Console.log(hex);
                 CoinsSender.submitTx(data, coin, hex, password, loading, successCall, errorCall);
             }
         }, _error => {
@@ -224,6 +221,8 @@ export class CoinsSender {
         });
     }
 
+
+    // TODO: Delete this method
     static getTransactionHex(responseData, network, ls, amount, fees, xendFees, blockFees, recipientAddress, fromAddress) {
         var hd = HDNode.fromSeedBuffer(mnemonicToSeed(ls.getItem('mnemonic').trim()), network).derivePath("m/0/0/0");
         var keyPair = hd.keyPair;
@@ -265,11 +264,9 @@ export class CoinsSender {
         return hex;
     }
 
-    static craftMultisig(data, successCall, errorCall, coin, fromAddress, network) {
+    static confirmSellerHaveCoins(data, successCall, errorCall, coin, fromAddress, wallet) {
         let ls = data['ls'];
         let http = data['http'];
-
-        let fees = Constants.getWalletProperties(coin);
 
         let amount: number = +data['amount'];
         let recipientAddress = data['recipientAddress'];
@@ -277,8 +274,8 @@ export class CoinsSender {
         let loadingCtrl = data['loadingCtrl'];
         let toastCtrl = data['toastCtrl'];
 
-        let xendFees = (amount * +fees.xendFees);
-        let blockFees = +fees.blockFees / Constants.LAST_USD_RATE;
+        let xendFees = (amount * wallet['token']['xendFees']);
+        let blockFees = wallet['token']['blockFees'];
 
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
         let url = Constants.GET_UNSPENT_OUTPUTS_URL + fromAddress;
@@ -293,8 +290,6 @@ export class CoinsSender {
                 Constants.showLongerToastMessage(responseData.result, toastCtrl);
                 errorCall(data);
             } else {
-                let hex = CoinsSender.getTransactionHex(responseData, network, ls, amount, fees, xendFees, blockFees, recipientAddress, fromAddress);
-                data['trxHex'] = hex;
                 successCall(data);
             }
         }, _error => {

@@ -57,8 +57,6 @@ export class HistoryPage {
   loadTransactions() {
     this.startDate = new Date(this.startDate);
     this.endDate = new Date(this.endDate);
-    Console.log(this.startDate.getTime());
-    Console.log(this.endDate.getTime());
     this.getTransactions(true);
   }
 
@@ -69,7 +67,6 @@ export class HistoryPage {
 
   getTransactions(showLoading) {
     let fees = Constants.getCurrentWalletProperties();
-    Console.log(fees);
     if (showLoading) {
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     }
@@ -84,7 +81,6 @@ export class HistoryPage {
       equityId: fees.equityId,
     };
 
-    Console.log(postData);
     let url = Constants.GET_TX_URL + this.startDate.getTime() + "/" + this.endDate.getTime();
     this.http.post(url, postData, Constants.getHeader())
       .map(res => res.json())
@@ -97,7 +93,6 @@ export class HistoryPage {
           this.utx = [];
           this.ctx = [];
           this.confirmedAccountBalance = responseData.result.balance
-          Console.log("confirmedAccountBalance: " + this.confirmedAccountBalance);
           this.ls.setItem(Constants.WORKING_WALLET + "confirmedAccountBalance", responseData.result.balance);
           this.totalReceived = responseData.result.received
           this.totalSent = responseData.result.spent
@@ -115,9 +110,7 @@ export class HistoryPage {
               incoming: txData.incoming,
               time: new Date(txData.time)
             }
-            Console.log(tx);
-            Console.log(new Date(txData.time));
-            
+
             this.checkTransaction(tx);
           }
         }

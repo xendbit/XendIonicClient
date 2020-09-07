@@ -74,7 +74,6 @@ export class BuyWithBankAccountPage {
 
   sendExternalMessage() {
     let data = Constants.properties['buyWithBankMessage'];
-    console.log(data);
     let seller = data.seller;
     let phoneNumber = seller.kyc.phoneNumber;
     //let phoneNumber = '2348025943549';
@@ -117,8 +116,6 @@ export class BuyWithBankAccountPage {
       "action": "buyerConfirmedBankPayment",
       "trxId": message['trxId'],
     };
-
-    Console.log(data);
 
     connection.send(Constants.encryptData(JSON.stringify(data))).subscribe((_data) => {
     }, (_error) => {
