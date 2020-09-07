@@ -24,8 +24,6 @@ export class LandingPage {
   loadedWallets = [];
   loading: Loading
   totalAssets = 0;
-  loadWalletDelay = 500;
-  count = 0;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController) {
     this.ls = Constants.storageService;
@@ -36,6 +34,7 @@ export class LandingPage {
 
   ionViewDidEnter() {
     this.wallets = Constants.LOGGED_IN_USER['addressMappings'];
+    this.totalAssets = 0;
     this.reloadWallets();
   }
 
@@ -44,15 +43,15 @@ export class LandingPage {
     // chainAddress: "0x21e5eafd04c99ae16ac529da67745c62e543966e"
     this.loadedWallets = [];
     for (let w of this.wallets) {
-      let chain = w['chain'].toLowerCase();
+      let chain = w['chain'];
       let chainAddress = w['chainAddress'];
 
       let wallet = {};
-      wallet['ticker_symbol'] = chain;
+      wallet['ticker_symbol'] = chain.toLowerCase();
       wallet['symbol'] = chain;
       wallet['text'] = chain;
-      wallet['value'] = chain.toUpperCase();
-      wallet['chainAddress'] = chainAddress;
+      wallet['value'] = chain;
+      wallet['chain_address'] = chainAddress;
 
       this.getTransactions(wallet);
     }
@@ -61,7 +60,7 @@ export class LandingPage {
   getTransactions(wallet) {
     let postData = {
       password: this.ls.getItem("password"),
-      networkAddress: wallet['chainAddress'],
+      networkAddress: wallet['chain_address'],
       emailAddress: this.ls.getItem("emailAddress")
     };
 
@@ -98,6 +97,7 @@ export class LandingPage {
 
   openHomePage(wallet) {
     Constants.WORKING_WALLET = wallet['chain'];
+    Constants.WALLET = wallet;
     Constants.WORKING_TICKER_VALUE = wallet['ticker_symbol'];
     this.navCtrl.push('HomePage');
   }

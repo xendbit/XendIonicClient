@@ -23,6 +23,7 @@ export class Constants {
 
     static NETWORK = networks.bitcoin;
     static WORKING_WALLET = "BTC";
+    static WALLET = undefined;
     static WORKING_TICKER_VALUE = 'btc';
 
     static CURRENT_WALLET = {

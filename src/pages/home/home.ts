@@ -60,6 +60,7 @@ export class HomePage {
   cryptoBuyOrderText = 'Buy';
   fiatSellOrderText = 'Fiat Sell-Order';
   wtv = 'btc';
+  wallet = undefined;
 
   constructor(public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public toastCtrl: ToastController, public localNotifications: LocalNotifications, public actionSheetCtrl: ActionSheetController) {
     this.clipboard = new Clipboard();
@@ -67,14 +68,14 @@ export class HomePage {
     this.initProps();
     Constants.properties['home'] = this;
     Console.log("Working Wallet: " + Constants.WORKING_WALLET);
-    this.wtv = Constants.WORKING_TICKER_VALUE;;
+    this.wtv = Constants.WORKING_TICKER_VALUE;
+    this.wallet = Constants.WALLET;
+    console.log(this.wallet);
   }
 
   loadRate() {
-    let fees = Constants.getCurrentWalletProperties();
-    let tickerSymbol = fees.tickerSymbol;
+    let tickerSymbol = this.wallet['ticker_symbol'];
     let url = Constants.GET_USD_RATE_URL + tickerSymbol;
-
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.usdRate = responseData.result.buy;
       this.btcRate = responseData.result.rate;
@@ -83,30 +84,6 @@ export class HomePage {
     }, error => {
       //doNothing
     });
-  }
-
-  getXndBalance() {
-    if (this.ls.getItem("XNDAddress") === undefined || this.ls.getItem("XNDAddress") === "") {
-      return;
-    }
-    let postData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem("XNDAddress"),
-      emailAddress: this.ls.getItem("emailAddress")
-    };
-
-    this.http.post(Constants.GET_TX_URL, postData, Constants.getWalletHeader("XND"))
-      .map(res => res.json())
-      .subscribe(responseData => {
-        if (responseData.response_code === 0) {
-          this.utx = [];
-          this.ctx = [];
-          this.xendBalance = responseData.result.balance
-          this.ls.setItem("xendBalance", responseData.result.balance);
-        }
-      }, error => {
-        //doNothing
-      });
   }
 
   copyBitcoinAddress() {
@@ -118,34 +95,22 @@ export class HomePage {
       this.isShowingQr = true;
     }
     this.clipboard.copy(this.networkAddress);
-    let fees = Constants.getCurrentWalletProperties();
-    let message = "Coin Address Copied".replace("Coin", fees.currencyText);
+    let message = "Coin Address Copied".replace("Coin", this.wallet['symbol']);
     Constants.showLongToastMessage(message, this.toastCtrl);
   }
 
   refresh(showLoading) {
     let app = this;
     setTimeout(function () {
-      let key = Constants.WORKING_WALLET + "Address";
-      Console.log(key);
-      app.qrValue = app.ls.getItem(key);
+      app.qrValue = app.wallet['chain_address']
       app.emailAddress = app.ls.getItem('emailAddress');
       WSConnection.startListeningForNotifications(app);
-      app.networkAddress = app.ls.getItem(key);
-      Constants.NETWORK = Constants.NETWORKS[Constants.WORKING_WALLET];
-      let fees = Constants.getCurrentWalletProperties();
-      app.currencyText = fees.currencyText;
-      app.btcText = fees.btcText;
+      app.networkAddress = app.wallet['chain_address']
+      app.currencyText = app.wallet['value'];
+      app.btcText = app.wallet['value'];
 
       app.yourBTCWalletText = "My Coin Wallet".replace('Coin', app.btcText);
 
-      Console.log(app.yourBTCWalletText);
-
-      app.yourBTCWalletText = app.yourBTCWalletText.replace('/t*BTC/gi', app.btcText);
-      Console.log(app.yourBTCWalletText);
-      if (app.showXendBalance == true) {
-        app.getXndBalance();
-      }
       app.getTransactions(showLoading);
       app.loadRate();
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
@@ -155,36 +120,14 @@ export class HomePage {
   ionViewDidLoad() {
     this.loadCharts();
     Console.log('ionViewDidLoad HomePage');
-    if (this.ls.getItem("exchangeType") === 'exchange') {
-      this.cryptoSellOrderText = 'Sell';
-      this.cryptoBuyOrderText = 'Buy';
-      this.fiatSellOrderText = 'Fiat Sell-Order'
-    } else {
-      this.cryptoSellOrderText = 'Sell';
-      this.cryptoBuyOrderText = 'Buy';
-      this.fiatSellOrderText = 'Sell Equities'
-    }
-    let app = this;
-    setTimeout(function () {
-      //Do all wallets.
-      let wallets = Constants.properties['wallets'];
-      for (let w in wallets) {
-        let wallet = wallets[w];
-        let coin = wallet['value'];
-
-        if (coin.indexOf("ETH") >= 0) {
-
-        } else if (coin.indexOf("BTC") >= 0) {
-
-        }
-      }
-    }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION)
+    this.cryptoSellOrderText = 'Sell';
+    this.cryptoBuyOrderText = 'Buy';
+    this.fiatSellOrderText = 'Fiat Sell-Order'
   }
 
   loadCharts() {
-    let fees = Constants.getCurrentWalletProperties();
-    //let tickerSymbol = fees.tickerSymbol;
-    let tickerSymbol = 'BTC';
+    let tickerSymbol = this.wallet['ticker_symbol'];
+    let symbol = this.wallet['text'];
     let url = Constants.CHART_URL.replace("{{symbol}}", tickerSymbol.toUpperCase());
     Console.log(url);
     this.http.get(url).map(res => res.json()).subscribe(data => {
@@ -192,11 +135,10 @@ export class HomePage {
       dates.sort();
       let jsonData = data['Time Series (Digital Currency Daily)'];
       data = [];
-      for(let date of dates) {
+      for (let date of dates) {
         let dateLong = new Date(date).getTime();
         let value = +jsonData[date]["4a. close (USD)"];
         let singleValue = [dateLong, value];
-        Console.log(singleValue);
         data.push(singleValue);
       }
 
@@ -208,11 +150,11 @@ export class HomePage {
           selected: 1
         },
         title: {
-          text: 'Bitcoin Price Chart'
+          text: symbol + ' Price Chart'
         },
         series: [{
           type: 'line',
-          name: 'Bitcoin Price Chart',
+          name: symbol + ' Price Chart',
           data: data,
           tooltip: {
             valueDecimals: 2
@@ -238,22 +180,17 @@ export class HomePage {
   ionViewDidEnter() {
     Console.log('ionViewDidEnter HomePage');
     this.isAdvanced = false;
-    this.isEquities = this.ls.getItem("exchangeType") !== 'exchange';
 
     this.refresh(false);
+
     if (StorageService.ACCOUNT_TYPE === "ADVANCED") {
       this.isAdvanced = true;
     }
 
-    if (this.ls.getItem("exchangeType") === 'exchange') {
-      this.cryptoSellOrderText = 'Sell';
-      this.cryptoBuyOrderText = 'Buy';
-      this.fiatSellOrderText = 'Fiat Sell Order'
-    } else {
-      this.cryptoSellOrderText = 'Sell';
-      this.cryptoBuyOrderText = 'Buy';
-      this.fiatSellOrderText = 'Sell Equities'
-    }
+    this.cryptoSellOrderText = 'Sell';
+    this.cryptoBuyOrderText = 'Buy';
+    this.fiatSellOrderText = 'Fiat Sell Order'
+
   }
 
   ionViewWillLeave() {
@@ -261,20 +198,14 @@ export class HomePage {
   }
 
   getTransactions(showLoading) {
-    let fees = Constants.getCurrentWalletProperties();
-    Console.log(fees);
     if (showLoading) {
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     }
 
-    let key = Constants.WORKING_WALLET + "Address";
-
     let postData = {
       password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem(key),
+      networkAddress: this.wallet['chain_address'],
       emailAddress: this.ls.getItem("emailAddress"),
-      currencyId: fees.currencyId,
-      equityId: fees.equityId
     };
 
     Console.log(postData);
@@ -297,8 +228,6 @@ export class HomePage {
 
           this.escrow = responseData.result.escrow === 0 ? 0 : (responseData.result.escrow)
 
-          let key = Constants.WORKING_WALLET + "Address";
-          this.networkAddress = this.ls.getItem(key);
           for (let txData of responseData.result.transactions) {
             let tx = {
               tx: txData.hash,
