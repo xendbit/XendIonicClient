@@ -52,6 +52,7 @@ export class LandingPage {
       wallet['text'] = chain;
       wallet['value'] = chain;
       wallet['chain_address'] = chainAddress;
+      wallet['token'] = w['token'];
 
       this.getTransactions(wallet);
     }

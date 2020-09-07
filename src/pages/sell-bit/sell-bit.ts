@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, ActionSheetController, AlertController, IonicPage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
+import { min } from 'rxjs/operator/min';
 
 /**
  * Generated class for the SellBitPage page.
@@ -52,7 +53,11 @@ export class SellBitPage {
   };
 
   blockFees = 0;
+  sliderValue = 5;
+  minBlockFees = 0;
+  maxBlockFees = 0;
   xendFees = 0;
+  wallet = undefined;
 
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
     this.banks = Constants.properties['banks']
@@ -66,9 +71,9 @@ export class SellBitPage {
     this.beneficiaryBankText = "Beneficiary Bank";
     this.passwordText = "Wallet Password";
 
-    let fees = Constants.getCurrentWalletProperties();
-    this.currencyText = fees.currencyText;
-    this.btcText = fees.btcText;
+    this.wallet = Constants.WALLET;
+    this.currencyText = this.wallet['value'];
+    this.btcText = this.wallet['value'];
     this.priceText = this.priceText.replace('Coin', this.btcText);
     this.numberOfBTCText = this.numberOfBTCText.replace('Coin', this.btcText);
 
@@ -94,9 +99,10 @@ export class SellBitPage {
 
   ionViewWillEnter() {
     this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;
-    let fees = Constants.getCurrentWalletProperties();
-    this.blockFees = +fees.blockFees;
-    this.xendFees = +fees.xendFees;
+    this.blockFees = +this.wallet['token']['blockFees'] * this.sliderValue;
+    this.minBlockFees = +this.wallet['token']['minBlockFees'];
+    this.maxBlockFees = +this.wallet['token']['maxBlockFees'];
+    this.xendFees = +this.wallet['token']['xendFees'];
   }
 
   ionViewDidLoad() {
@@ -118,6 +124,7 @@ export class SellBitPage {
     let price = +sb.pricePerBTC;
     let password = sb.password;
     let coinAmount = +sb.numberOfBTC;
+    this.blockFees = this.minBlockFees * this.sliderValue;
 
     if (coinAmount === 0) {
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
@@ -206,8 +213,6 @@ export class SellBitPage {
 
     let rate = +sb.pricePerBTC;
 
-    let fees = Constants.getCurrentWalletProperties();
-
     let btcValue = coinAmount;
 
     let totalFees = (+this.xendFees * btcValue) + +this.blockFees;
@@ -227,18 +232,16 @@ export class SellBitPage {
       rate: rate,
       emailAddress: this.ls.getItem("emailAddress"),
       password: password,
-      networkAddress: sellerFromAddress,
-      currencyId: fees.currencyId,
-      equityId: fees.equityId
+      networkAddress: sellerFromAddress
     }
 
     //this is wrong
     let url = Constants.POST_TRADE_URL;
 
     this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.clearForm();
       this.loading.dismiss();
       if (responseData.response_text === "success") {
+        this.clearForm();
         Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
         Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
         this.navCtrl.push('MyOrdersPage');
@@ -252,15 +255,11 @@ export class SellBitPage {
   }
 
   sellAll() {
-    let fees = Constants.getCurrentWalletProperties();
     let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
-    this.xendFees = +fees.xendFees * balance;
+    this.xendFees = +this.wallet['token']['xendFees'] * balance;
+    this.blockFees = this.minBlockFees * this.sliderValue;
 
-    Console.log("confirmedAccountBalance: " + balance);
     let canSend = balance - this.blockFees - this.xendFees;
-
-    //Correct for rounding error
-    canSend = canSend - 0.001;
 
     if (canSend < 0) {
       canSend = 0;
@@ -287,15 +286,13 @@ export class SellBitPage {
   }
 
   loadRate() {
-    let fees = Constants.getCurrentWalletProperties();
-    let tickerSymbol = fees.tickerSymbol;
+    let tickerSymbol = this.wallet['ticker_symbol'];
     let url = Constants.GET_USD_RATE_URL + tickerSymbol;
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.usdRate = responseData.result.buy;
       this.btcRate = responseData.result.rate;
       Constants.LAST_USD_RATE = this.btcRate;
-      this.blockFees = +fees.blockFees / Constants.LAST_USD_RATE;
       this.btcToNgn = this.btcRate * this.usdRate;
       this.sellForm.controls.pricePerBTC.setValue(this.btcRate.toFixed(4));
       this.sellForm.controls.usdRate.setValue(this.usdRate.toFixed(4));
@@ -305,28 +302,24 @@ export class SellBitPage {
   }
 
   loadBalanceFromStorage() {
-    let key = Constants.WORKING_WALLET + "Address";
-    this.networkAddress = this.ls.getItem(key);
+    this.networkAddress = this.wallet['chain_address'];
     if (this.networkAddress !== null) {
       this.confirmedAccountBalance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     }
   }
 
   clearForm() {
-    //this.sellForm.controls.pricePerBTC.setValue("");
-    this.sellForm.controls.numberOfBTC.setValue("");
-    this.sellForm.controls.usdRate.setValue("");
-    this.sellForm.controls.password.setValue("");
+    this.sellForm.reset();
   }
 
   calculateHowMuchToRecieve() {
-    let fees = Constants.getCurrentWalletProperties();
+    this.blockFees = this.minBlockFees * this.sliderValue;
     this.rate = this.sellForm.value.pricePerBTC;
     let usdRate = this.sellForm.value.usdRate;
     let toSell = +this.sellForm.value.numberOfBTC;
     if (this.rate !== 0 && toSell !== 0) {
       let toRecieve = toSell * this.rate * usdRate;
-      this.xendFees = toSell * +fees.xendFees;
+      this.xendFees = toSell * +this.wallet['token']['xendFees'];
       this.sellForm.controls.amountToRecieve.setValue(toRecieve.toFixed(3));
     }
   }

@@ -70,7 +70,6 @@ export class HomePage {
     Console.log("Working Wallet: " + Constants.WORKING_WALLET);
     this.wtv = Constants.WORKING_TICKER_VALUE;
     this.wallet = Constants.WALLET;
-    console.log(this.wallet);
   }
 
   loadRate() {
