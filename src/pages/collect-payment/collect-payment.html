@@ -19,26 +19,24 @@
 <ion-content padding>
   <ion-card>
     <ion-card-content>
-      <form [formGroup]="collectPaymentForm">
-        <ion-list no-lines>
-          <ion-item>
-            <ion-label floating>Amount</ion-label>
-            <ion-input formControlName="amount" type="number"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label floating>Beneficiary Code</ion-label>
-            <ion-input type="password" formControlName="userCode">{{userCode}}</ion-input>
-          </ion-item>
-          <ion-item>
-            <button ion-button full medium color="xend" (click)="scanCode();" icon-right>Scan Beneficiary Code
-              <ion-icon name="barcode"></ion-icon></button>
-          </ion-item>
-          <ion-item>
-            <ion-label floating>Beneficiary Pin</ion-label>
-            <ion-input type="password" formControlName="password"></ion-input>
-          </ion-item>
-        </ion-list>
-      </form>
+      <ion-list no-lines>
+        <ion-item>
+          <ion-label floating>Amount</ion-label>
+          <ion-input type="number" [(ngModel)]="amount"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Beneficiary Code</ion-label>
+          <ion-input type="password" [(ngModel)]="beneficiaryCode"></ion-input>
+        </ion-item>
+        <ion-item>
+          <button ion-button full medium color="xend" (click)="scanCode();" icon-right>Scan Beneficiary Code
+            <ion-icon name="barcode"></ion-icon></button>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Beneficiary Pin</ion-label>
+          <ion-input type="password" [(ngModel)]="beneficiaryPassword"></ion-input>
+        </ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 

@@ -17,7 +17,7 @@ export class TabsPage {
   tab2Root: any = 'NewBankAccountPage';
   //tab2Root: any = 'RegisterPaginated';
   tab3Root: any = 'CollectPaymentPage';
-  tab4Root: any = 'SettingsPage';
+  //tab4Root: any = 'SettingsPage';
 
   isAdvanced: boolean = false;
 

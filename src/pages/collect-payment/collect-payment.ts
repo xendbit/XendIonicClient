@@ -4,8 +4,10 @@ import { StorageService } from './../utils/storageservice';
 import { Constants } from './../utils/constants';
 import { FormBuilder, Validators } from "@angular/forms";
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, Loading, ToastController, LoadingController, AlertController } from "ionic-angular";
+import { IonicPage, NavController, NavParams, Loading, ToastController, LoadingController, AlertController, Platform } from "ionic-angular";
 import 'rxjs/add/operator/map';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { NFC, Ndef } from '@ionic-native/nfc';
 
 /**
  * Generated class for the CollectPaymentPage page.
@@ -21,35 +23,72 @@ import 'rxjs/add/operator/map';
 })
 
 export class CollectPaymentPage {
-  collectPaymentForm;
   ls: StorageService;
   loading: Loading;
+  beneficiaryCode;
+  beneficiaryPassword;
+  amount;
 
-  constructor(public formBuilder: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public http: Http, public alertCtrl: AlertController) {
-    this.collectPaymentForm = this.formBuilder.group({
-      amount: ['', Validators.required],
-      userCode: ['', Validators.required],
-      password: ['', Validators.required],
-    });
-
+  constructor(public platform: Platform, public formBuilder: FormBuilder, public barcodeScanner: BarcodeScanner, public nfc: NFC, public ndef: Ndef, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public http: Http, public alertCtrl: AlertController) {
     this.ls = Constants.storageService;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CollectPaymentPage');
+    this.initializeNFC();
+  }
+
+  initializeNFC() {
+    Console.log("is_core: " + this.platform.is('core'));
+    Console.log("is_mobileweb: " + this.platform.is('mobileweb'));
+
+    if (this.platform.is('core') || this.platform.is('mobileweb')) {
+      return;
+    }
+
+    this.nfc.addNdefListener(() => {
+      Console.log('successfully attached ndef listener');
+    }, (err) => {
+      Console.log('error attaching ndef listener: ');
+      Console.log(err);
+    }).subscribe((event) => {
+      Console.log('received ndef message. the tag contains: ');
+      Console.log(event.tag);
+      Console.log('decoded tag id: ');
+      Console.log(this.nfc.bytesToHexString(event.tag.id));
+
+      try {
+        let decodedMessage = this.nfc.bytesToString(event.tag.ndefMessage[0].payload);
+        decodedMessage = Constants.unicodeToChar(decodedMessage);
+        Console.log(decodedMessage);
+        this.beneficiaryCode = decodedMessage;
+        Constants.showLongToastMessage("Beneficiary Code Read Successfully, Tap OK to continue", this.toastCtrl);
+      } catch (err) {
+        Console.log(err);
+      }
+    });
+  }
+
+  scanCode() {
+    this.barcodeScanner.scan().then((barcodeData) => {
+      if (barcodeData.cancelled) {
+        Constants.showLongerToastMessage('Barcode scanner cancelled', this.toastCtrl);
+      } else {
+        this.beneficiaryCode = barcodeData.text;
+      }
+    }, (_err) => {
+      Constants.showLongerToastMessage('Error launching barcode scanner', this.toastCtrl);
+    });
   }
 
   sendPayment() {
-    let isValid = false;
-    let bv = this.collectPaymentForm.value;
-    let amountToSend = +bv.amount;
-    let password = bv.password;
-    let userCode = bv.userCode;
+    let isValid = true;
+    let amountToSend = this.amount;
+    let password = this.beneficiaryPassword;
+    let userCode = this.beneficiaryCode;
 
     if (amountToSend === 0) {
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
-    } else if (this.collectPaymentForm.valid) {
-      isValid = true;
     }
 
     if (isValid) {
@@ -74,7 +113,9 @@ export class CollectPaymentPage {
 
         if (responseData.response_text === 'success') {
           Constants.showLongerToastMessage("Transaction Successful.", this.toastCtrl);
-          this.collectPaymentForm.reset();
+          this.amount = 0;
+          this.beneficiaryCode = "";
+          this.beneficiaryPassword = "";
           return;
         }
       }, error => {
