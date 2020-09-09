@@ -33,12 +33,15 @@ export class HistoryPage {
   totalReceived;
   totalSent;
   escrow;
+  wallet = undefined;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public http: Http) {
     this.historyText = "History";
     this.clipboard = new Clipboard();
     this.ls = Constants.storageService;
+
+    this.wallet = Constants.WALLET;
   }
 
   ionViewDidLoad() {
@@ -66,19 +69,14 @@ export class HistoryPage {
   }
 
   getTransactions(showLoading) {
-    let fees = Constants.getCurrentWalletProperties();
     if (showLoading) {
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     }
 
-    let key = Constants.WORKING_WALLET + "Address";
-
     let postData = {
       password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem(key),
+      networkAddress: this.wallet['chain_address'],
       emailAddress: this.ls.getItem("emailAddress"),
-      currencyId: fees.currencyId,
-      equityId: fees.equityId,
     };
 
     let url = Constants.GET_TX_URL + this.startDate.getTime() + "/" + this.endDate.getTime();
@@ -99,8 +97,7 @@ export class HistoryPage {
 
           this.escrow = responseData.result.escrow === 0 ? 0 : (responseData.result.escrow)
 
-          let key = Constants.WORKING_WALLET + "Address";
-          this.networkAddress = this.ls.getItem(key);
+          this.networkAddress = this.wallet['chain_address'];
           for (let txData of responseData.result.transactions) {
             let tx = {
               tx: txData.hash,

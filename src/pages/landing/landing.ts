@@ -34,6 +34,10 @@ export class LandingPage {
 
   ionViewDidEnter() {
     this.wallets = Constants.LOGGED_IN_USER['addressMappings'];
+    let wallet = Constants.getWalletFormatted(this.wallets[0]);
+    Constants.WORKING_WALLET = wallet['chain'];
+    Constants.WALLET = wallet;
+    Constants.WORKING_TICKER_VALUE = wallet['ticker_symbol'];
     this.totalAssets = 0;
     this.reloadWallets();
   }

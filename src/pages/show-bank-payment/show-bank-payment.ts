@@ -32,6 +32,8 @@ export class ShowBankPaymentPage {
   totalAmount = 0;
   amountToSend = 0;
   fromCoin: string;
+  blockFees = 0;
+  xendFees = 0;
 
   referenceCode: string;
   buyerAddress: string;
@@ -47,6 +49,7 @@ export class ShowBankPaymentPage {
     this.banks = Constants.properties['banks'];
 
     let data = Constants.properties['finalize_sale_order'];
+    console.log(data);
     this.sellOrder = data;
     let sellerToAddress = data['sellerToAddress'];
     let splitted = sellerToAddress.split(":");
@@ -63,8 +66,9 @@ export class ShowBankPaymentPage {
     this.referenceCode = data['trxId'];
     this.buyerAddress = data['buyerFromAddress'];
     this.amountToSend = data['amountToSell'];
-    this.brokerAccount = data['brokerAccount'];
     this.fromCoin = data['fromCoin'];
+    this.blockFees = data['blockFees'];
+    this.xendFees = data['xendFees'];
 
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
@@ -81,42 +85,61 @@ export class ShowBankPaymentPage {
     Console.log('ionViewDidLoad ShowBankPaymentPage');
   }
 
-  successCall(data) {
-    let app: ShowBankPaymentPage = data['page'];
-    app.disableButton = true;
+  successCall() {
+    this.disableButton = true;
     //ok, we need to call server "update-exchange-status";
     let url = Constants.UPDATE_TRADE_URL;
     let requestData = {
-      "sellOrderTransactionId": app.sellOrder['trxId'],
+      "sellOrderTransactionId": this.sellOrder['trxId'],
       "status": "SUCCESS",
-      emailAddress: app.ls.getItem("emailAddress"),
-      password: app.ls.getItem("password")
+      emailAddress: this.ls.getItem("emailAddress"),
+      password: this.ls.getItem("password")
     };
 
-    app.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+    this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(_responseData => {
       //doNothing
+      this.navCtrl.pop();
     }, _error => {
-      Constants.showLongerToastMessage("We have released coins to the buyer, but we can't update the status of your transaction. Please speak to an admin immediately", app.toastCtrl);
+      this.navCtrl.pop();
+      Constants.showLongerToastMessage("We have released coins to the buyer, but we can't update the status " +
+        "of your transaction. Please speak to an admin immediately", this.toastCtrl);
     })
   }
 
-  errorCall(data) {
-    let app: ShowBankPaymentPage = data['page'];
-    app.disableButton = true;
+  errorCall() {
+    this.disableButton = true;
     //ok, we need to call server "update-exchange-status";
     let url = Constants.UPDATE_TRADE_URL;
     let requestData = {
-      "sellOrderTransactionId": app.sellOrder['trxId'],
+      "sellOrderTransactionId": this.sellOrder['trxId'],
       "status": "SELLER_SENDING_ERROR",
-      emailAddress: app.ls.getItem("emailAddress"),
-      password: app.ls.getItem("password")
+      emailAddress: this.ls.getItem("emailAddress"),
+      password: this.ls.getItem("password")
     };
 
-    app.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      //doNothing
-    }, error => {
-      Constants.showLongerToastMessage("We have released coins to the buyer, but we can't update the status of your transaction. Please speak to an admin immediately", app.toastCtrl);
+    this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(_responseData => {
+      this.navCtrl.pop();
+      Constants.showLongerToastMessage("We can not send coins to buyer at this time. Please speak to an admin immediately", this.toastCtrl);
+    }, _error => {
+      this.navCtrl.pop();
+      Constants.showLongerToastMessage("We can not send coins to buyer at this time. Please speak to an admin immediately", this.toastCtrl);
     })
+  }
+
+  sendCoins(data) {
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
+    let url = Constants.SEND_COINS_URL
+
+    this.http.post(url, data, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+      this.loading.dismiss();
+      if (responseData.response_text === "success") {
+        this.successCall();
+      } else {
+        this.errorCall();
+      }
+    }, _error => {
+      this.loading.dismiss();
+    });
   }
 
   presentAlert() {
@@ -135,9 +158,14 @@ export class ShowBankPaymentPage {
           text: 'Yes',
           handler: () => {
             let data = {};
-            data['amount'] = this.amountToSend
-            data['recipientAddress'] = this.buyerAddress;
-            data['sellOrder'] = this.sellOrder;
+            data['amountToRecieve'] = this.amountToSend
+            data['buyerToAddress'] = this.buyerAddress;
+            data['blockFees'] = this.blockFees;
+            data['xendFees'] = this.xendFees;
+            data['emailAddress'] = this.ls.getItem("emailAddress");
+            data['password'] = this.ls.getItem("password");
+            this.sendCoins(data);
+
 
             // TODO: Coins must now be sent from the server
 
@@ -162,22 +190,6 @@ export class ShowBankPaymentPage {
 
   confirmBankPayment() {
     this.presentAlert();
-  }
-
-  updateOrder(transactionId) {
-    let url = Constants.UPDATE_USER_SELL_ORDERS_TX_URL;
-    let postData = {
-      emailAddress: this.ls.getItem("emailAddress"),
-      sellOrderTransactionId: transactionId,
-      status: "sold",
-      password: this.ls.getItem("password")
-    };
-
-    this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      //doNothing
-    }, error => {
-      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-    });
   }
 
   loadRate() {

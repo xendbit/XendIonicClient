@@ -223,6 +223,8 @@ export class SellBitPage {
 
     let postData = {
       amountToSell: btcValue,
+      xendFees: this.xendFees,
+      blockFees: this.blockFees,
       fees: totalFees,
       amountToRecieve: amountToRecieve,
       sellerFromAddress: sellerFromAddress,

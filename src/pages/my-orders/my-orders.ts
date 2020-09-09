@@ -45,9 +45,11 @@ export class MyOrdersPage {
     isBuyEnabled = true;
     lastValue: string;
 
+    wallet = undefined;
+
     constructor(public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
-        let fees = Constants.getCurrentWalletProperties();
-        this.currentWallet = fees;
+        this.wallet = Constants.WALLET;
+        this.currentWallet = this.wallet;
 
         this.loadRate();
 
@@ -73,8 +75,7 @@ export class MyOrdersPage {
     }
 
     loadRate() {
-        let fees = Constants.getCurrentWalletProperties();
-        let tickerSymbol = fees.tickerSymbol;
+        let tickerSymbol = this.wallet['ticker_symbol'];
         let url = Constants.GET_USD_RATE_URL + tickerSymbol;
 
         this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
@@ -164,14 +165,14 @@ export class MyOrdersPage {
         /**
          * The commented code is only neccessary if/when we are doing exchange
          */
-        // let wallets = Constants.properties['wallets'];
-        // for (let w in wallets) {
-        //     let wallet = wallets[w];
-        //     if (wallet['value'] !== Constants.WORKING_WALLET) {
-        //         let pair = Constants.WORKING_WALLET + " -> " + wallets[w].value;
-        //         this.currencyPairs.push(pair);
-        //     }
-        // }
+        let wallets = Constants.LOGGED_IN_USER['addressMappings'];
+        for (let w of wallets) {
+          let wallet = Constants.getWalletFormatted(w);
+            if (wallet['value'] !== Constants.WORKING_WALLET) {
+                let pair = Constants.WORKING_WALLET + " -> " + wallet['value  '];
+                this.currencyPairs.push(pair);
+            }
+        }
 
         for (let bpm of Constants.properties['payment.methods']) {
             let pair = Constants.WORKING_WALLET + " -> " + bpm.value;

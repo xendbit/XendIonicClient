@@ -101,13 +101,13 @@ export class Constants {
 
     static GET_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/sell-orders";
     static GET_UNSPENT_OUTPUTS_URL = Constants.SERVER_URL + "exchange/utxos/";
-    static PUSH_TX_URL = Constants.SERVER_URL + "exchange/pushtx";
     static GET_USER_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-sell-orders"
     static GET_USER_BUY_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-buy-orders"
     static UPDATE_USER_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-sell-orders/update"
     static GET_MARKET_DATA_URL = Constants.SERVER_URL + "exchange/market-data"
     static RESOLVE_ACCOUNT_URL = Constants.SERVER_URL + "exchange/account/verify";
     static UPDATE_TRADE_URL = Constants.SERVER_URL + "exchange/update-exchange-status";
+    static SEND_COINS_URL = Constants.SERVER_URL + "exchange/send-coins";
 
     static NEW_USER_URL = Constants.SERVER_URL + "user/new";
     static UPDATE_USER_INFO_URL = Constants.SERVER_URL + "user/update";
@@ -118,10 +118,8 @@ export class Constants {
     static LOGIN_URL = Constants.SERVER_URL + "user/login";
     static SEND_CONFIRMATION_EMAIL_URL = Constants.SERVER_URL + "user/send-confirmation-email";
     static ADD_KYC_URL = Constants.SERVER_URL + "user/add/kyc";
-    static XND_ACCOUNT_ID_URL = Constants.SERVER_URL + "user/get-account-id";
     static LOAD_BENEFICIARIES_URL = Constants.SERVER_URL + "user/beneficiaries";
     static GET_IMAGE_URL = Constants.IMAGER_URL + "get-image";
-    static BECOME_BENEFICIARY_URL = Constants.SERVER_URL + "user/become-beneficiary";
     static GET_13TH_WORD = Constants.SERVER_URL + "user/get-last-word";
 
     static SEND_2_BANK_URL = Constants.SERVER_URL + "send2bank/new";
