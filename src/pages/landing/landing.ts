@@ -22,8 +22,10 @@ export class LandingPage {
   ls: StorageService;
   wallets = [];
   loadedWallets = [];
+  loadingWallets = [];
   loading: Loading
   totalAssets = 0;
+  numberOfWallets = 0;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController) {
     this.ls = Constants.storageService;
@@ -34,6 +36,7 @@ export class LandingPage {
 
   ionViewDidEnter() {
     this.wallets = Constants.LOGGED_IN_USER['addressMappings'];
+    this.numberOfWallets = this.wallets.length;
     let wallet = Constants.getWalletFormatted(this.wallets[0]);
     Constants.WORKING_WALLET = wallet['chain'];
     Constants.WALLET = wallet;
@@ -45,7 +48,9 @@ export class LandingPage {
   reloadWallets() {
     // chain: "ETH"
     // chainAddress: "0x21e5eafd04c99ae16ac529da67745c62e543966e"
-    this.loadedWallets = [];
+    this.loadedWallets = this.ls.getItem("loadedWallets");
+    this.loadingWallets = [];
+    this.totalAssets = 0;
     for (let w of this.wallets) {
       let wallet = Constants.getWalletFormatted(w);
       this.getTransactions(wallet);
@@ -79,10 +84,16 @@ export class LandingPage {
     Console.log(url);
 
     this.http.get(url, Constants.getWalletHeader(working_wallet)).map(res => res.json()).subscribe(responseData => {
-        wallet['usdRate'] = responseData.result.rate;
-        wallet['usdBalance'] = responseData.result.rate * wallet['confirmedAccountBalance'];
-        this.totalAssets += wallet['usdBalance'];
-        this.loadedWallets.push(wallet);
+      wallet['usdRate'] = responseData.result.rate;
+      wallet['usdBalance'] = responseData.result.rate * wallet['confirmedAccountBalance'];
+      this.totalAssets += wallet['usdBalance'];
+      this.loadingWallets.push(wallet);
+
+      console.log(this.loadingWallets.length, this.numberOfWallets)
+      if (this.loadingWallets.length === this.numberOfWallets) {
+        this.loadedWallets = this.loadingWallets;
+        this.ls.setItem("loadedWallets", this.loadedWallets);
+      }
     }, _error => {
       //doNothing
     });
@@ -96,6 +107,10 @@ export class LandingPage {
   }
 
   isEmpty() {
-    return this.loadedWallets.length === 0;
+    try {
+      return this.loadedWallets.length === 0;
+    } catch (_error) {
+      return 0;
+    }
   }
 }
