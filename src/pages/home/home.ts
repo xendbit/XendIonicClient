@@ -53,7 +53,6 @@ export class HomePage {
   emailAddress: string;
   showXendBalance = true;
   isAdvanced = false;
-  isEquities = false;
   isBeneficiary = false;
 
   cryptoSellOrderText = 'Sell';
@@ -271,8 +270,10 @@ export class HomePage {
     if (type === 'Sell') {
       this.getTransactions(false);
       this.navCtrl.push('SellBitPage');
-    } else {
+    } else if (type === 'Buy') {
       this.navCtrl.push('BuyBitPage');
+    } else if (type === 'Send') {
+      this.navCtrl.push('SendBitPage');
     }
   }
 

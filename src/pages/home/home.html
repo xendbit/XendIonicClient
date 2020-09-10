@@ -36,16 +36,22 @@
         [qrc-class]="qrCssClass">
       </ngx-qrcode>
       <ion-row>
-        <ion-col col-6>
-          <button *ngIf="!isEquities" color="xend" ion-button full medium (click)="exchange('Sell');"
-            icon-right>{{cryptoSellOrderText}} {{btcText}}
+        <ion-col col-4>
+          <button color="xend" ion-button full medium (click)="exchange('Sell');"
+            icon-right>{{cryptoSellOrderText}}
             <ion-icon name="log-out"></ion-icon>
           </button>
         </ion-col>
-        <ion-col col-6>
-          <button *ngIf="!isEquities" color="xend" ion-button full medium (click)="exchange('Buy');"
-            icon-right>{{cryptoBuyOrderText}} {{btcText}}
+        <ion-col col-4>
+          <button color="xend" ion-button full medium (click)="exchange('Buy');"
+            icon-right>{{cryptoBuyOrderText}}
             <ion-icon name="log-in"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col col-4>
+          <button color="xend" ion-button full medium (click)="exchange('Send');"
+            icon-right>Send
+            <ion-icon name="send"></ion-icon>
           </button>
         </ion-col>
       </ion-row>
