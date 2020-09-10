@@ -31,14 +31,14 @@
                 <ion-col>
                     <ion-item (click)="openTransactionInWebpage(tx.tx);" *ngIf="tx.incoming == true" class="blue smallest">
                         <ion-icon item-left name="cloud-download"></ion-icon>
-                        {{tx.time | date: 'short'}}
-                        <ion-badge item-right>{{tx.value | number: '.2-5'}}</ion-badge>
+                        {{tx.time | date: 'mediumDate'}}
+                        <ion-badge item-right>{{tx.value | number: '.2-8'}}</ion-badge>
                     </ion-item>
 
                     <ion-item (click)="openTransactionInWebpage(tx.tx);" *ngIf="tx.incoming == false" class="blue smallest">
                         <ion-icon item-left name="cloud-upload"></ion-icon>
-                        {{tx.time | date: 'short'}}
-                        <ion-badge item-right>{{tx.value | number: '.2-5'}}</ion-badge>
+                        {{tx.time | date: 'mediumDate'}}
+                        <ion-badge item-right>{{tx.value | number: '.2-8'}}</ion-badge>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -47,14 +47,14 @@
                 <ion-col>
                     <ion-item (click)="openTransactionInWebpage(tx.tx);" *ngIf="tx.incoming == true" class=" green smallest">
                         <ion-icon item-left name="arrow-round-forward"></ion-icon>
-                        {{tx.time | date: 'short'}}
-                        <ion-badge item-right color="secondary">{{tx.value | number: '.2-5'}}</ion-badge>
+                        {{tx.time | date: 'mediumDate'}}
+                        <ion-badge item-right color="secondary">{{tx.value | number: '.2-8'}}</ion-badge>
                     </ion-item>
 
                     <ion-item (click)="openTransactionInWebpage(tx.tx);" *ngIf="tx.incoming == false" class="danger smallest">
                         <ion-icon item-left name="arrow-round-back"></ion-icon>
-                        {{tx.time | date: 'short'}}
-                        <ion-badge color="danger" item-right>{{tx.value | number: '.2-5'}}</ion-badge>
+                        {{tx.time | date: 'mediumDate'}}
+                        <ion-badge color="danger" item-right>{{tx.value | number: '.2-8'}}</ion-badge>
                     </ion-item>
                 </ion-col>
             </ion-row>

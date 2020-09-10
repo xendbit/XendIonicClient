@@ -330,9 +330,7 @@ export class Constants {
 
     static getHeader() {
         let wallet = Constants.WORKING_WALLET;
-        if (wallet.startsWith("t")) {
-            wallet = wallet.replace("t", "");
-        }
+
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('apiKey', 'oalkuisnetgauyno');
@@ -457,7 +455,7 @@ export class Constants {
                 {
                     text: 'Continue?',
                     handler: () => {
-                        Constants.craftMultisig(data);
+                        Constants.continue(data);
                     }
                 }, {
                     text: 'Cancel',
@@ -470,7 +468,7 @@ export class Constants {
         actionSheet.present();
     }
 
-    static craftMultisig(data) {
+    static continue(data) {
         let message = data['message'];
         let coin: string = message['fromCoin'];
         let ls = data['ls'];

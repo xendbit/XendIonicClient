@@ -24,7 +24,7 @@ export class CoinsSender {
         let xendFees = Math.floor(amount * +fees.xendFees * +fees.multiplier);
         let xendAddress = fees.xendAddress;
 
-        let url = Constants.PUSH_TX_URL;
+        let url = "";//Constants.PUSH_TX_URL;
 
         let requestData = {
             emailAddress: ls.getItem("emailAddress"),
@@ -303,7 +303,7 @@ export class CoinsSender {
         let ls = data['ls'];
         let http = data['http'];
         let toastCtrl = data['toastCtrl'];
-        let url = Constants.PUSH_TX_URL;
+        let url = "";//Constants.PUSH_TX_URL;
         let requestData = {
             emailAddress: ls.getItem("emailAddress"),
             password: password,
