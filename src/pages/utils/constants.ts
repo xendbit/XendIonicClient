@@ -571,7 +571,7 @@ export class Constants {
     let ls = data['ls'];
     let fromAddress = ls.getItem(key);
     let network = Constants.NETWORKS[coin];
-    CoinsSender.craftMultisig(data, Constants.askBuyerToPay, Constants.sendCoinsToBuyerError, coin, fromAddress, network);
+    //CoinsSender.craftMultisig(data, Constants.askBuyerToPay, Constants.sendCoinsToBuyerError, coin, fromAddress, network);
   }
 
   static startTrade(message, home, connection) {
