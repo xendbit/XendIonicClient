@@ -59,13 +59,13 @@
         </ion-row>
         <ion-row *ngFor="let buyer of buyOrders; let i = index" [ngClass]="(i % 2 == 0) ? 'odd' : 'even'">
             <ion-col col-3 class="colgrid">
-                {{buyer.amount | number: '.0-3'}}
+                {{buyer.amount | number: '.0-2'}}
             </ion-col>
             <ion-col col-3 class="colgrid">
-                {{buyer.bitcoinAmount | number: '.0-3'}}
+                {{buyer.bitcoinAmount | number: '.0-7'}}
             </ion-col>
             <ion-col col-3 class="colgrid">
-                {{(buyer.amount/buyer.bitcoinAmount) | number: '.0-3'}}
+                {{(buyer.amount/buyer.bitcoinAmount) | number: '.0-2'}}
             </ion-col>
             <ion-col col-3 class="colgrid">
                 {{buyer.status}}
@@ -83,13 +83,13 @@
         </ion-row>
         <ion-row *ngFor="let seller of sellersPairs; let i = index" [ngClass]="(i % 2 == 0) ? 'odd' : 'even'">
             <ion-col col-3 class="colgrid">
-                {{seller.amountToSell | number: '.0-3'}}
+                {{seller.amountToSell | number: '.0-7'}}
             </ion-col>
             <ion-col col-3 class="colgrid">
-                {{seller.amountToRecieve | number: '.0-3'}}
+                {{seller.amountToRecieve | number: '.0-7'}}
             </ion-col>
             <ion-col col-4 class="colgrid">
-                {{seller.rate | number: '.0-4'}}
+                {{seller.rate | number: '.0-5'}}
             </ion-col>
             <ion-col col-2 *ngIf="seller.status=='ORDER_PLACED'" (click)=deleteOrder(seller.trxId) class="colgrid">
                 <ion-icon name="trash" class="action-icon"></ion-icon>
