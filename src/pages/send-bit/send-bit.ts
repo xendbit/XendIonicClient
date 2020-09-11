@@ -75,8 +75,10 @@ export class SendBitPage {
 
       try {
         let decodedMessage = this.nfc.bytesToString(event.tag.ndefMessage[0].payload);
-        decodedMessage = Constants.unicodeToChar(decodedMessage);
+        //remove /u0000
+        decodedMessage = decodedMessage.slice(1);
         Console.log(decodedMessage);
+        Constants.showLongToastMessage("Beneficiary Code Read Successfully", this.toastCtrl);
         this.sendBitForm.controls.userCode.setValue(decodedMessage);
         if(this.showToast) {
           Constants.showLongToastMessage("User Code Read Successfully", this.toastCtrl);

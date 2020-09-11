@@ -91,10 +91,10 @@ export class SalePage {
 
       try {
         let decodedMessage = this.nfc.bytesToString(event.tag.ndefMessage[0].payload);
-        decodedMessage = Constants.unicodeToChar(decodedMessage);
-        Console.log(decodedMessage);
-        this.beneficiaryCode = decodedMessage;
-        Constants.showLongToastMessage("Beneficiary Code Read Successfully, Tap OK to continue", this.toastCtrl);
+        //remove /u0000
+        this.beneficiaryCode = decodedMessage.slice(1);
+        Console.log(this.beneficiaryCode);
+        Constants.showLongToastMessage("Beneficiary Code Read Successfully", this.toastCtrl);
       } catch (err) {
         Console.log(err);
       }

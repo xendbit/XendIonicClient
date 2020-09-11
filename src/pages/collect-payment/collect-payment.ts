@@ -62,7 +62,7 @@ export class CollectPaymentPage {
         //remove /u0000
         this.beneficiaryCode = decodedMessage.slice(1);
         Console.log(this.beneficiaryCode);
-        Constants.showLongToastMessage("Beneficiary Code Read Successfully, Tap OK to continue", this.toastCtrl);
+        Constants.showLongToastMessage("Beneficiary Code Read Successfully", this.toastCtrl);
       } catch (err) {
         Console.log(err);
       }
