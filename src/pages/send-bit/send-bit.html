@@ -20,11 +20,17 @@
 
   <ion-card>
     <ion-card-content>
+      <ion-item>
+        <ion-label>Block Fees (Transaction Speed)</ion-label>
+        <ion-range [(ngModel)]="sliderValue" min="1" max="10">
+          <ion-icon range-left small name="remove">&nbsp;Slow&nbsp;</ion-icon>
+          <ion-icon range-right name="add">&nbsp;Fast&nbsp;</ion-icon>
+        </ion-range>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>XendBit Fees: {{xendFees | number: '.6-7'}}</ion-label>
+      </ion-item>
       <form [formGroup]="sendBitForm">
-        <ion-item>
-          <ion-label stacked>Block Fees: {{blockFees | number:'.0-7'}}</ion-label>
-          <ion-label stacked>XendBit Fees: {{xendFees | number: '.0-7'}}</ion-label>
-        </ion-item>
         <ion-item>
           <ion-label floating>{{amountToSendText}} ({{btcText}})</ion-label>
           <ion-input formControlName="amount" type="number" (input)="calculateXendFees()"></ion-input>

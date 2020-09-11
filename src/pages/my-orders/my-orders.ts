@@ -169,7 +169,7 @@ export class MyOrdersPage {
         for (let w of wallets) {
           let wallet = Constants.getWalletFormatted(w);
             if (wallet['value'] !== Constants.WORKING_WALLET) {
-                let pair = Constants.WORKING_WALLET + " -> " + wallet['value  '];
+                let pair = Constants.WORKING_WALLET + " -> " + wallet['value'];
                 this.currencyPairs.push(pair);
             }
         }

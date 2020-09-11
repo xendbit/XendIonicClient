@@ -1,6 +1,4 @@
-import { CoinsSender } from './../utils/coinssender';
 import { Constants } from './../utils/constants';
-import { Console } from './../utils/console';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, Loading, LoadingController, AlertController, IonicPage } from 'ionic-angular';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -8,7 +6,6 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
-import { networks } from "bitcoinjs-lib";
 
 import { StorageService } from '../utils/storageservice';
 
@@ -44,7 +41,12 @@ export class SendBitPage {
   currencyText: string;
   disableButton = false;
   blockFees = 0;
+  sliderValue = 5;
+  minBlockFees = 0;
+  maxBlockFees = 0;
   xendFees = 0;
+
+  wallet = undefined;
 
   constructor(private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
     this.sendBitForm = formBuilder.group({
@@ -56,6 +58,7 @@ export class SendBitPage {
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
+    this.wallet = Constants.WALLET;
     setTimeout(function () {
       //Wait for sometimes for storage to be ready
       app.loading.dismiss();
@@ -63,9 +66,10 @@ export class SendBitPage {
   }
 
   ionViewDidEnter() {
-    let fees = Constants.getCurrentWalletProperties();
-    this.blockFees = +fees.blockFees;
-    this.xendFees = +fees.xendFees;
+    this.blockFees = +this.wallet['token']['blockFees'] * this.sliderValue;
+    this.minBlockFees = +this.wallet['token']['minBlockFees'];
+    this.maxBlockFees = +this.wallet['token']['maxBlockFees'];
+    this.xendFees = +this.wallet['token']['xendFees'];
 
     this.loadRate();
 
@@ -80,23 +84,14 @@ export class SendBitPage {
     this.howMuchCanISendText = "How much can I send?";
     this.hmcisWarning = "This is only an optimistic estimate depending on how much the block fee is, your charges may be less or more than we estimated.";
 
-    this.btcText = fees.btcText;
-    this.currencyText = fees.currencyText;
+    this.btcText = this.wallet['value'];
+    this.currencyText = this.wallet['value'];
     this.sendBitWarningText = this.sendBitWarningText.replace('bitcoin', this.currencyText)
     this.bitcoinAddressText = this.bitcoinAddressText.replace('Bitcoin', this.currencyText);
   }
 
 
   ionViewDidLoad() {
-    //Do all wallets.\
-    const app = this;
-    let wallets = Constants.properties['wallets'];
-    for (let w in wallets) {
-      let wallet = wallets[w];
-      let coin = wallet['value'];
-    }
-
-    Console.log('ionViewDidLoad SendBitPage');
     let faio: FingerprintAIO = new FingerprintAIO();
     faio.isAvailable().then(result => {
       this.useFingerprint = true;
@@ -107,20 +102,18 @@ export class SendBitPage {
   }
 
   calculateXendFees() {
-    let fees = Constants.getCurrentWalletProperties();
     let toSell = +this.sendBitForm.value.amount;
-    this.xendFees = toSell * +fees.xendFees;
+    this.xendFees = toSell * +this.wallet['token']['xendFees'];
+    this.blockFees = this.minBlockFees * this.sliderValue;
   }
 
   loadRate() {
-    let fees = Constants.getCurrentWalletProperties();
-    let tickerSymbol = fees.tickerSymbol;
+    let tickerSymbol = this.wallet['ticker_symbol'];
     let url = Constants.GET_USD_RATE_URL + tickerSymbol;
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       Constants.LAST_USD_RATE = +responseData.result.rate;
-      this.blockFees = +fees.blockFees / Constants.LAST_USD_RATE;
-    }, error => {
+    }, _error => {
       //doNothing
     });
   }
@@ -143,7 +136,6 @@ export class SendBitPage {
   }
 
   getTransactions(showLoading) {
-    let fees = Constants.getCurrentWalletProperties();
     if (showLoading) {
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     }
@@ -153,9 +145,7 @@ export class SendBitPage {
     let postData = {
       password: this.ls.getItem("password"),
       networkAddress: this.ls.getItem(key),
-      emailAddress: this.ls.getItem("emailAddress"),
-      currencyId: fees.currencyId,
-      equityId: fees.equityId
+      emailAddress: this.ls.getItem("emailAddress")
     };
 
 
@@ -169,7 +159,7 @@ export class SendBitPage {
         if (responseData.response_code === 0) {
           this.ls.setItem(Constants.WORKING_WALLET + "confirmedAccountBalance", responseData.result.balance);
           let balance = +responseData.result.balance;
-          this.xendFees = +fees.xendFees * balance;
+          this.xendFees = +this.wallet['token']['xendFees'] * balance;
           //0.001 is added because of rounding issues.
           let canSend = balance - this.blockFees - this.xendFees;
           if (canSend < 0) {
@@ -187,12 +177,11 @@ export class SendBitPage {
 
 
   howMuchCanISend() {
-    let fees = Constants.getCurrentWalletProperties();
     let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     if (balance === undefined || balance === NaN || balance === 0) {
       this.getTransactions(true);
     } else {
-      this.xendFees = +fees.xendFees * balance;
+      this.xendFees = +this.wallet['token']['xendFees'] * balance;
       let canSend = balance - this.blockFees - this.xendFees;
 
       //Correct for rounding error
@@ -215,11 +204,9 @@ export class SendBitPage {
     let password = bv.password;
     let toBitcoinAddress = bv.networkAddress;
 
-    let fees = Constants.getCurrentWalletProperties();
+    let invalidAddressMessage = "Invalid Coin Address detected".replace("Coin", this.currencyText);
 
-    let invalidAddressMessage = "Invalid Coin Address detected".replace("Coin", fees.currencyText);
-
-    this.xendFees = +fees.xendFees * amountToSend;
+    this.xendFees = +this.wallet['token']['xendFees'] * amountToSend;
 
     if (amountToSend === 0) {
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
@@ -235,103 +222,47 @@ export class SendBitPage {
 
     if (isValid) {
       let data = {};
-      data['amount'] = amountToSend
-      data['recipientAddress'] = toBitcoinAddress;
-      data['loading'] = this.loading;
-      data['loadingCtrl'] = this.loadingCtrl;
-      data['ls'] = this.ls;
-      data['toastCtrl'] = this.toastCtrl;
-      data['http'] = this.http;
-      data['sendBitPage'] = this;
-      data['alertCtrl'] = this.alertCtrl;
-
+      data['amountToRecieve'] = amountToSend
+      data['buyerToAddress'] = toBitcoinAddress;
+      data['blockFees'] = this.blockFees;
+      data['xendFees'] = this.xendFees;
+      data['emailAddress'] = this.ls.getItem("emailAddress");
+      data['password'] = this.ls.getItem("password");
       this.disableButton = true;
-      if (fees.btcText.indexOf('ETH') > 0) {
-        CoinsSender.sendCoinsEth(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET);
-      } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDOR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
-        CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);
-      } else if (fees.currencyId !== undefined) {
-        CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);
-      } else if (fees.equityId !== undefined) {
-        CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError, fees);
-      } else {
-        let key = Constants.WORKING_WALLET + "Address";
-        data['key'] = key;
-        if (fees.btcText === 'tBTC') {
-          CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, this.ls.getItem(key), networks.testnet);
-        } else {
-          CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, this.ls.getItem(key), networks.bitcoin);
-        }
-      }
-      this.disableButton = false;
+      this.sendCoins(data);
     }
   }
 
-  sendCoinsSuccess(data) {
-    let me: SendBitPage = data['sendBitPage'];
-    console.dir(data);
-    console.dir(me);
-    me.sendBitForm.controls.amount.setValue("");
-    me.sendBitForm.controls.networkAddress.setValue("");
-    me.sendBitForm.controls.password.setValue("");
+  sendCoins(data) {
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
+    let url = Constants.SEND_COINS_URL
 
-
-  }
-
-  addToExchangeTable(data) {
-    let fees = Constants.getCurrentWalletProperties();
-    let amount = +data['amount'];
-    let xendFees = (amount * +fees.xendFees);
-    let totalFees = xendFees + +fees.blockFees;
-    let fromAddress = this.ls.getItem(data['key']);
-    let password = this.ls.getItem('password');
-
-    let postData = {
-      amountToSell: amount,
-      fees: totalFees,
-      amountToRecieve: 0.00,
-      sellerFromAddress: fromAddress,
-      sellerToAddress: "",
-      fromCoin: Constants.WORKING_WALLET,
-      toCoin: "",
-      rate: 0.00,
-      emailAddress: this.ls.getItem("emailAddress"),
-      password: password,
-      networkAddress: fromAddress,
-      currencyId: fees.currencyId,
-      equityId: fees.equityId,
-      directSend: true
-    }
-
-    //this is wrong
-    let url = Constants.POST_TRADE_URL;
-
-    this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.clearForm();
+    this.http.post(url, data, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.loading.dismiss();
       if (responseData.response_text === "success") {
-        Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
-        Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
-        this.navCtrl.push('MyOrdersPage');
+        this.sendCoinsSuccess();
       } else {
-        Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+        Constants.showLongerToastMessage('Error Sending Coin: ' + responseData.result, this.toastCtrl);
+        this.sendCoinsError();
       }
     }, _error => {
       this.loading.dismiss();
       Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
     });
   }
-  sendCoinsError(data) {
-    let me: SendBitPage = data['sendBitPage'];
-    me.disableButton = false;
-    Constants.showLongerToastMessage('Error Sending Coin', me.toastCtrl);
+
+  sendCoinsSuccess() {
+    this.disableButton = false;
+    this.sendBitForm.reset();
+
+    Constants.showPersistentToastMessage("Your tokens have been sent successfully.", this.toastCtrl);
+    this.navCtrl.pop();
   }
 
-  clearForm() {
-    this.sendBitForm.controls.amount.setValue("");
-    this.sendBitForm.controls.networkAddress.setValue("");
-    this.sendBitForm.controls.password.setValue("");
+  sendCoinsError() {
+    this.disableButton = false;
   }
+
 
   scanCode() {
     this.barcodeScanner.scan().then((barcodeData) => {
