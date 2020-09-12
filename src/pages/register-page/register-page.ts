@@ -71,6 +71,12 @@ export class RegisterPaginated {
       androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA, androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE]);
     });
 
+    this.platform.registerBackButtonAction(() => {
+      //sometimes the best thing you can do is not think, not wonder, not imagine, not obsess.
+      //just breathe, and have faith that everything will work out for the best.
+      Console.log("Back Button Pressed");
+    },1);
+
     this.states = Constants.properties['states'];
     this.lgas = Constants.properties['lgas'];
 
