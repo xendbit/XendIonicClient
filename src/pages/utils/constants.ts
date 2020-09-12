@@ -129,6 +129,7 @@ export class Constants {
   static REPAY_LOAN_URL = Constants.SERVER_URL + "beneficiary/repay-loan";
   static BUY_PRODUCT_URL = Constants.SERVER_URL + "beneficiary/buy";
   static NEW_BANK_ACCOUNT_URL = Constants.SERVER_URL + "beneficiary/new-bank-account";
+  static FIND_BENEFICIARIES_URL = Constants.SERVER_URL + "beneficiary/all-user-beneficiaries";
 
   static SEND_2_BANK_URL = Constants.SERVER_URL + "send2bank/new";
   static GET_SEND_2_BANK_REQUEST_URL = Constants.SERVER_URL + "send2bank/tx/";

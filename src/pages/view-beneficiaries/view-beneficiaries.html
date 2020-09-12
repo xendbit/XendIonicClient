@@ -14,18 +14,23 @@
 
 
 <ion-content padding>
-    <ion-card>
-        <ion-card-header>
-          Beneficiaries
-        </ion-card-header>
-        <ion-card-content>
-            <ion-grid>
-                <ion-row *ngFor="let beneficiary of beneficiaries" (click)=showDetails(beneficiary)>
-                    <ion-col col-12>
-                        <button ion-button full medium round color="xend">{{beneficiary.firstName}} {{beneficiary.lastName}}</button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </ion-card-content>
-    </ion-card>
+  <ion-label>Account Number: {{sterlingAccountNumber}}</ion-label>
+  <ion-searchbar (ionInput)="findBeneficiary($event)"></ion-searchbar>
+  <ion-card>
+    <ion-card-header>
+      <ion-item>
+        Beneficiaries
+        <ion-badge item-end>{{beneficiaries.length}}</ion-badge>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row *ngFor="let beneficiary of beneficiaries" (click)=showDetails(beneficiary)>
+          <ion-col col-12>
+            <button ion-button full medium round color="xend">{{beneficiary.firstName}} {{beneficiary.lastName}}</button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

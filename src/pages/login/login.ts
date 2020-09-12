@@ -187,6 +187,7 @@ export class LoginPage {
           StorageService.IS_BENEFICIARY = user.beneficiary;
           ls.setItem("accountType", user.accountType);
           ls.setItem("exchangeType", exchangeType);
+          ls.setItem("sterlingAccountNumber", user.sterlingAccountNumber);
 
           try {
             ls.setItem("accountNumber", user.kyc.bankAccountNumber);
