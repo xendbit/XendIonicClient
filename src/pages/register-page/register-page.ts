@@ -41,6 +41,7 @@ export class RegisterPaginated {
   lgas = [];
   selectedLGAs = [];
   tradeTypes = [];
+  clusters = [];
   tradeSubtypes = [];
   selectedTradeSubtypes = [];
   disabilityTypes = [];
@@ -88,10 +89,12 @@ export class RegisterPaginated {
     this.disabilityTypes = Constants.properties['disability.types'];
     this.disabilitySubtypes = Constants.properties['disability.subtypes'];
 
+    this.clusters = Constants.properties['clusters'];
+
     this.registerPageOneForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      middleName: ['', Validators.required],
+      middleName: [''],
       phoneNumber: ['', Validators.compose([Validators.minLength(11), Validators.maxLength(11), Validators.required])],
       gender: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
@@ -111,8 +114,8 @@ export class RegisterPaginated {
     });
 
     this.registerPageThreeForm = this.formBuilder.group({
-      accountNumber: new FormControl({ value: ''}),
-      bvn: new FormControl({ value: ''}),
+      accountNumber: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.required])],
+      bvn: ['', Validators.compose([Validators.minLength(11), Validators.maxLength(11), Validators.required])],
     });
 
     this.registerPageFourForm = this.formBuilder.group({
@@ -376,6 +379,10 @@ export class RegisterPaginated {
         }
         break;
       case 3:
+        if (!this.registerPageThreeForm.valid) {
+          Constants.showLongToastMessage("Please fill all required fields. Required fields are marked with **", this.toastCtrl);
+          return false;
+        }
         break;
       case 4:
         if (!this.registerPageFourForm.valid) {

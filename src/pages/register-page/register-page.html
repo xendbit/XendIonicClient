@@ -82,7 +82,9 @@
     <ion-list no-lines>
       <ion-item>
         <ion-label floating><sup>**</sup>Market Cluster</ion-label>
-        <ion-input formControlName="cluster" type="text"></ion-input>
+        <ion-select interface='action-sheet' formControlName="cluster" placeholder="">
+          <ion-option *ngFor="let cluster of clusters" value="{{cluster.name}}">{{cluster.name}}</ion-option>
+        </ion-select>
       </ion-item>
       <ion-item>
         <ion-label floating><sup>**</sup>Association</ion-label>
