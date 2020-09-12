@@ -15,8 +15,8 @@ export class TabsPage {
   // should be each tab's root Page
   tab1Root: any = 'ViewBeneficiariesPage';
   tab2Root: any = 'NewBankAccountPage';
-  //tab2Root: any = 'RegisterPaginated';
-  tab3Root: any = 'CollectPaymentPage';
+  tab3Root: any = 'RegisterPaginated';
+  tab4Root: any = 'CollectPaymentPage';
   //tab4Root: any = 'SettingsPage';
 
   isAdvanced: boolean = false;

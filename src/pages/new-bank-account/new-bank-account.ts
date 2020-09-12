@@ -103,26 +103,22 @@ export class NewBankAccountPage {
         }
 
         if (responseData.response_text === 'success') {
-          Constants.showLongerToastMessage("Account Creation Successful.", this.toastCtrl);
           this.newBankAccountForm.reset();
+          Constants.showLongerToastMessage("Account Creation Successful.", this.toastCtrl);
           //show the account number
           let accountNumber = responseData.result;
           if (accountNumber !== "0000000000") {
-            Constants.registrationData['accountNumber'] = accountNumber;
             this.showAccountNumber(accountNumber);
           } else {
             this.showError();
           }
-          //Go to register page
-          this.newBankAccountForm.reset();
-          this.navCtrl.push('RegisterPaginated');
         }
       }, error => {
         this.loading.dismiss();
         Constants.showLongerToastMessage(error, this.toastCtrl);
       });
     } else {
-      this.navCtrl.push('RegisterPaginated');
+      this.showAccountNumber(this.storedAccountNumber);
     }
   }
 
