@@ -250,7 +250,7 @@ export class PersonalPage {
       Constants.registrationData['toastCtrl'] = this.toastCtrl;
       Constants.registrationData['obv'] = Observable;
       Constants.registrationData['navCtrl'] = this.navCtrl;
-      Constants.registrationData['tp'] = 'LoginPage';
+      Constants.registrationData['tp'] = 'PasswordPage';
       Constants.registrationData['idImage'] = this.idImage;
       Constants.registrationData['url'] = url;
       Constants.registrationData['registrationType'] = registrationType;

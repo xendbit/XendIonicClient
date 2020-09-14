@@ -63,7 +63,8 @@ export class SetupPage {
   }
 
   openLogin() {
-    this.navCtrl.push("LoginPage");
+    Constants.otherData['is_login'] = true;
+    this.navCtrl.push("PasswordPage");
   }
 
   pos() {

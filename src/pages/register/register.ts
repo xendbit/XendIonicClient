@@ -320,7 +320,7 @@ export class RegisterPage {
       Constants.registrationData['toastCtrl'] = this.toastCtrl;
       Constants.registrationData['obv'] = Observable;
       Constants.registrationData['navCtrl'] = this.navCtrl;
-      Constants.registrationData['tp'] = 'LoginPage';
+      Constants.registrationData['tp'] = 'PasswordPage';
       Constants.registrationData['idImage'] = this.idImage;
 
       Constants.registrationData['idImage'] = this.idImage;
@@ -328,8 +328,7 @@ export class RegisterPage {
       Constants.registrationData['registrationType'] = registrationType;
       Constants.passwordPadSuccessCallback = this.passwordPadSuccess;
 
-      Constants.otherData['is_beneficiary'] = false;
-
+      Constants.otherData['is_agent_register'] = true;
       this.navCtrl.push('PasswordPage');
     } else {
       Constants.showLongToastMessage("Please fill form properly", this.toastCtrl);

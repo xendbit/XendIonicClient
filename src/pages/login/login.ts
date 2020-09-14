@@ -159,7 +159,6 @@ export class LoginPage {
   }
 
   loginOnServer(password, emailAddress, exchangeType) {
-    this.ls.setItem('isGuest', false);
     this.ls.setItem('emailAddress', emailAddress);
     this.ls.setItem('password', password);
     let url = Constants.LOGIN_URL;
@@ -219,9 +218,6 @@ export class LoginPage {
   }
 
   loginWithPrint() {
-    //this.ethWallet();
-    //this.deployContract();
-    //0xd0e35b25607d4df00dfb35a8fe12da2cb2f4740499e83d15085b5f7bfae82489
     let ls = this.ls;
     let faio: FingerprintAIO = new FingerprintAIO();
     faio.show({

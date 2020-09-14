@@ -403,7 +403,8 @@ export class Constants {
             ls.setItem("isRegistered", "true");
             Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
             Constants.registrationData = {}
-            data['navCtrl'].push('LoginPage');
+            Constants.otherData['is_login'] = true;
+            data['navCtrl'].push('PasswordPage');
             return;
           }
         } else {
