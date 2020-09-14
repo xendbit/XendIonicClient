@@ -60,6 +60,7 @@ export class PasswordPage {
 
   ionViewDidLoad() {
     Console.log('ionViewDidLoad PasswordPage');
+    console.log(Constants.encryptData("1234"));
     this.isBeneficiary = Constants.otherData['is_beneficiary'];
     this.isLogin = Constants.otherData['is_login'];
     this.isAgentRegister = Constants.otherData['is_agent_register'];
@@ -94,7 +95,6 @@ export class PasswordPage {
       this.showOrHideText = "Hide";
       this.masked = this.password;
     }
-    console.log(this.masked, this.showOrHideText);
   }
 
   clicked(val) {
@@ -153,6 +153,7 @@ export class PasswordPage {
       passphrase: mnemonicCode
     };
 
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     this.http.post(url, requestData, Constants.getHeader())
       .map(res => res.json())
       .subscribe(responseData => {
@@ -162,6 +163,7 @@ export class PasswordPage {
           let walletType = user['walletType'];
           ls.setItem('walletType', walletType);
           ls.setItem("lastLoginTime", new Date().getTime() + "");
+          ls.setItem("password", this.password);
           StorageService.ACCOUNT_TYPE = user.accountType;
           StorageService.IS_BENEFICIARY = user.beneficiary;
           ls.setItem("sterlingAccountNumber", user.sterlingAccountNumber);

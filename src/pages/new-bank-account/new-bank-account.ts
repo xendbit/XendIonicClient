@@ -1,3 +1,4 @@
+import { StorageService } from './../utils/storageservice';
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
@@ -26,6 +27,7 @@ export class NewBankAccountPage {
   banks = [];
   bankData = {};
   storedAccountNumber = undefined;
+  ls: StorageService;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public http: Http, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
     this.newBankAccountForm = this.formBuilder.group({
@@ -37,6 +39,7 @@ export class NewBankAccountPage {
     });
 
     this.banks = Constants.properties['banks'];
+    this.ls = Constants.storageService;
   }
 
   ionViewDidLoad() {
@@ -63,11 +66,11 @@ export class NewBankAccountPage {
     alert.present();
   }
 
-  showError() {
+  showError(message) {
     const alert = this.alertCtrl.create({
-      title: 'New Account Creation',
-      subTitle: 'The account number will be created soon. You can continue the registration while this is been done',
-      buttons: ['Continue']
+      title: 'New Account Creation Error',
+      subTitle: message,
+      buttons: ['OK']
     });
     alert.present();
   }
@@ -95,10 +98,13 @@ export class NewBankAccountPage {
       let url = Constants.NEW_BANK_ACCOUNT_URL;
 
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please wait...");
-      this.http.post(url, postData, Constants.getWalletHeader("NGNC")).map(res => res.json()).subscribe(responseData => {
+      let headers = Constants.getWalletHeader("NGNC").headers;
+      headers.append("agent_account_number", this.ls.getItem("sterlingAccountNumber"));
+
+      this.http.post(url, postData, {headers: headers}).map(res => res.json()).subscribe(responseData => {
         this.loading.dismiss();
         if (responseData.response_text === 'error') {
-          Constants.showLongerToastMessage(responseData.result, this.toastCtrl);
+          this.showError(responseData.result);
           return;
         }
 
@@ -110,7 +116,7 @@ export class NewBankAccountPage {
           if (accountNumber !== "0000000000") {
             this.showAccountNumber(accountNumber);
           } else {
-            this.showError();
+            this.showError('Can not create account at this time. Please try again laters');
           }
         }
       }, error => {
