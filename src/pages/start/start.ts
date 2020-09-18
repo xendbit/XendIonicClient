@@ -86,6 +86,8 @@ export class StartPage {
 
   openLogin() {
     Constants.otherData['is_login'] = true;
+    Constants.otherData['is_beneficiary'] = false;
+    Constants.otherData['is_agent_register'] = false;
     this.navCtrl.push("PasswordPage");
   }
 

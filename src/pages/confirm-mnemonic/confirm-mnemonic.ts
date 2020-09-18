@@ -154,6 +154,8 @@ export class ConfirmMnemonicPage {
                 this.ls.setItem('emailAddress', this.email);
                 Constants.showLongToastMessage("Restore Successful. Now login", this.toastCtrl);
                 Constants.otherData['is_login'] = true;
+                Constants.otherData['is_beneficiary'] = false;
+                Constants.otherData['is_agent_register'] = false;
                 this.navCtrl.push('PasswordPage');
               } else {
                 this.loading.dismiss();

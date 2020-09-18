@@ -329,6 +329,8 @@ export class RegisterPage {
       Constants.passwordPadSuccessCallback = this.passwordPadSuccess;
 
       Constants.otherData['is_agent_register'] = true;
+      Constants.otherData['is_beneficiary'] = false;
+      Constants.otherData['is_login'] = false;
       this.navCtrl.push('PasswordPage');
     } else {
       Constants.showLongToastMessage("Please fill form properly", this.toastCtrl);

@@ -4,8 +4,12 @@ RC="`cat rc_test.txt`"
 MAJOR_VERSION="`cat major_version.txt`"
 MINOR_VERSION="`cat minor_version.txt`"
 BASE_DIR=$(pwd)
+INCREMENT_VERSION="$1"
 
-RC=$((RC + 1))
+if [[ $INCREMENT_VERSION == "yes" ]]
+then
+  RC=$((RC + 1))
+fi
 #MAJOR_VERSION=$((MAJOR_VERSION + 1))
 #MINOR_VERSION=$((MINOR_VERSION + 1))
 VERSION="v$MAJOR_VERSION.$MINOR_VERSION-rc$RC"

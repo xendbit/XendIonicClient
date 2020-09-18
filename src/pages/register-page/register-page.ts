@@ -256,6 +256,9 @@ export class RegisterPaginated {
     Constants.registrationData['agentEmail'] = this.ls.getItem("emailAddress");
 
     Constants.otherData['is_beneficiary'] = true;
+    Constants.otherData['is_login'] = false;
+    Constants.otherData['is_agent_register'] = false;
+
     this.navCtrl.push('PasswordPage');
   }
 
