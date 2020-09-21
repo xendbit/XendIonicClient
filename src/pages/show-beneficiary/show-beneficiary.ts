@@ -1,3 +1,4 @@
+import { NFCHelper } from './../utils/nfc';
 
 import { StorageService } from './../utils/storageservice';
 import { Console } from './../utils/console';
@@ -46,32 +47,6 @@ export class ShowBeneficiaryPage {
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
-  initializeNFC() {
-    // if(this.platform.is('core') || this.platform.is('mobileweb')) {
-    //   return;
-    // }
-
-    this.nfc.addNdefListener(() => {
-      Console.log('successfully attached ndef listener');
-    }, (err) => {
-      Console.log('error attaching ndef listener: ');
-      Console.log(err);
-    }).subscribe((event) => {
-      Console.log('received ndef message. the tag contains: ');
-      Console.log(event.tag);
-      Console.log('decoded tag id: ');
-      Console.log(this.nfc.bytesToHexString(event.tag.id));
-
-      try {
-        Console.log(this.nfc.bytesToString(event.tag.ndefMessage[0].payload));
-      } catch (err) {
-        Console.log(err);
-      }
-    });
-
-  }
-
-
   ionViewDidLoad() {
     Console.log('ionViewDidLoad ShowBeneficiaryPage');
   }
@@ -88,15 +63,9 @@ export class ShowBeneficiaryPage {
   }
 
   writeCard() {
-    this.initializeNFC();
     let value = this.beneficiary.passphrase;
-    Console.log('Writing info to card: ' + value);
-    let message = this.ndef.textRecord(value);
-    this.nfc.write([message]).then((_success) => {
-      Console.log("Write Successfully")
+    NFCHelper.writeNFC(value, this.platform, this.nfc, this.ndef).then(_res => {
       Constants.showLongToastMessage("Card Written Successfully", this.toastCtrl);
-    }).catch((_error) => {
-      Console.log(_error);
     });
   }
 

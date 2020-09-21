@@ -1,3 +1,4 @@
+import { NFCHelper } from './../utils/nfc';
 import { Console } from './../utils/console';
 import { Http } from '@angular/http';
 import { StorageService } from './../utils/storageservice';
@@ -33,39 +34,19 @@ export class CollectPaymentPage {
     this.ls = Constants.storageService;
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CollectPaymentPage');
+  ionViewDidEnter() {
     this.initializeNFC();
   }
 
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad CollectPaymentPage');
+  }
+
   initializeNFC() {
-    Console.log("is_core: " + this.platform.is('core'));
-    Console.log("is_mobileweb: " + this.platform.is('mobileweb'));
-
-    if (this.platform.is('core') || this.platform.is('mobileweb')) {
-      return;
-    }
-
-    this.nfc.addNdefListener(() => {
-      Console.log('successfully attached ndef listener');
-    }, (err) => {
-      Console.log('error attaching ndef listener: ');
-      Console.log(err);
-    }).subscribe((event) => {
-      Console.log('received ndef message. the tag contains: ');
-      Console.log(event.tag);
-      Console.log('decoded tag id: ');
-      Console.log(this.nfc.bytesToHexString(event.tag.id));
-
-      try {
-        let decodedMessage = this.nfc.bytesToString(event.tag.ndefMessage[0].payload);
-        //remove /u0000
-        this.beneficiaryCode = decodedMessage.slice(1);
-        Console.log(this.beneficiaryCode);
-        Constants.showLongToastMessage("Beneficiary Code Read Successfully", this.toastCtrl);
-      } catch (err) {
-        Console.log(err);
-      }
+    NFCHelper.readNFC(this.platform, this.nfc).then(res => {
+      this.beneficiaryCode = res;
+      Constants.showLongToastMessage("Beneficiary Code Read Successfully", this.toastCtrl);
+      this.initializeNFC();
     });
   }
 
