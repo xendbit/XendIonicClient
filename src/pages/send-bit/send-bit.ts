@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Rx';
 import { NFCHelper } from './../utils/nfc';
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { CoinsSender } from './../utils/coinssender';
@@ -31,6 +32,7 @@ export class SendBitPage {
   useFingerprint: boolean = false;
   showToast = false;
   products;
+  subscription: Subscription;
 
   constructor(public platform: Platform, public nfc: NFC, public ndef: Ndef, private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
     this.products = Constants.properties['products'];
@@ -56,11 +58,14 @@ export class SendBitPage {
     this.initializeNFC();
   }
 
+  ionViewWillLeave() {
+    this.subscription.unsubscribe();
+  }
+
   initializeNFC() {
-    NFCHelper.readNFC(this.platform, this.nfc).then(res => {
+    this.subscription = NFCHelper.readNFC(this.platform, this.nfc).subscribe((res) => {
       this.sendBitForm.controls.userCode.setValue(res);
       Constants.showLongToastMessage("Beneficiary Code Read Successfully", this.toastCtrl);
-      this.initializeNFC();
     });
   }
 

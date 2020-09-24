@@ -64,7 +64,7 @@ export class ShowBeneficiaryPage {
 
   writeCard() {
     let value = this.beneficiary.passphrase;
-    NFCHelper.writeNFC(value, this.platform, this.nfc, this.ndef).then(_res => {
+    NFCHelper.writeNFC(value, this.platform, this.nfc, this.ndef, this.toastCtrl).then(_res => {
       Constants.showLongToastMessage("Card Written Successfully", this.toastCtrl);
     });
   }

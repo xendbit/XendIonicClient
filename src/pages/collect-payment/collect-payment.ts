@@ -1,3 +1,4 @@
+import { Observable, Subscription } from 'rxjs/Rx';
 import { NFCHelper } from './../utils/nfc';
 import { Console } from './../utils/console';
 import { Http } from '@angular/http';
@@ -29,6 +30,7 @@ export class CollectPaymentPage {
   beneficiaryCode;
   beneficiaryPassword;
   amount;
+  subscription: Subscription;
 
   constructor(public platform: Platform, public formBuilder: FormBuilder, public barcodeScanner: BarcodeScanner, public nfc: NFC, public ndef: Ndef, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public http: Http, public alertCtrl: AlertController) {
     this.ls = Constants.storageService;
@@ -38,15 +40,18 @@ export class CollectPaymentPage {
     this.initializeNFC();
   }
 
+  ionViewWillLeave() {
+    this.subscription.unsubscribe();
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad CollectPaymentPage');
   }
 
   initializeNFC() {
-    NFCHelper.readNFC(this.platform, this.nfc).then(res => {
+    this.subscription = NFCHelper.readNFC(this.platform, this.nfc).subscribe((res) => {
       this.beneficiaryCode = res;
       Constants.showLongToastMessage("Beneficiary Code Read Successfully", this.toastCtrl);
-      this.initializeNFC();
     });
   }
 
