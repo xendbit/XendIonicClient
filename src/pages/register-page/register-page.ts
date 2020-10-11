@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, Loading, LoadingController, Platform } from 'ionic-angular';
-import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Console } from '../utils/console';
 import { Constants } from '../utils/constants';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -142,6 +142,15 @@ export class RegisterPaginated {
       //Wait for sometimes for storage to be ready
       app.loading.dismiss();
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
+  }
+
+
+  clearForm() {
+    this.registerPageOneForm.reset();
+    this.registerPageTwoForm.reset();
+    this.registerPageThreeForm.reset();
+    this.registerPageFourForm.reset();
+    this.registerPageFiveForm.reset();
   }
 
   capturePassport() {

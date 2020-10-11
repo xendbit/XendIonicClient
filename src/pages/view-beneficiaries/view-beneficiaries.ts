@@ -23,7 +23,7 @@ export class ViewBeneficiariesPage {
   ls: StorageService;
   loading: Loading;
   beneficiaries = [];
-  sterlingAccountNumber = "";
+  bankAccountNumber = "";
   searchTerm = "";
 
   constructor(public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, public modalCtrl: ModalController, public toastCtrl: ToastController) {
@@ -38,7 +38,7 @@ export class ViewBeneficiariesPage {
 
   ionViewDidEnter() {
     this.ls.setItem("searchBarBeneficiaries", undefined);
-    this.sterlingAccountNumber = this.ls.getItem("sterlingAccountNumber");
+    this.bankAccountNumber = this.ls.getItem("bankAccountNumber");
     this.loadBeneficiaries();
   }
 

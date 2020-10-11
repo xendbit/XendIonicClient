@@ -5,7 +5,6 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { IonicPage, NavController, NavParams, ToastController, Loading, LoadingController, AlertController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Rx';
 
 
 /**
@@ -99,7 +98,7 @@ export class NewBankAccountPage {
 
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please wait...");
       let headers = Constants.getWalletHeader("NGNC").headers;
-      headers.append("agent_account_number", this.ls.getItem("sterlingAccountNumber"));
+      headers.append("agent_account_number", this.ls.getItem("bankAccountNumber"));
 
       this.http.post(url, postData, {headers: headers}).map(res => res.json()).subscribe(responseData => {
         this.loading.dismiss();

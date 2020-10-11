@@ -166,7 +166,7 @@ export class PasswordPage {
           ls.setItem("password", this.password);
           StorageService.ACCOUNT_TYPE = user.accountType;
           StorageService.IS_BENEFICIARY = user.beneficiary;
-          ls.setItem("sterlingAccountNumber", user.sterlingAccountNumber);
+          ls.setItem("bankAccountNumber", user.bankAccountNumber);
 
           try {
             ls.setItem("accountNumber", user.kyc.bankAccountNumber);

@@ -17,6 +17,9 @@
 
 
 <ion-content padding>
+  <button ion-button full medium color="xend" (click)="clearForm()">Clear Form&nbsp;&nbsp;
+    <ion-icon name="close"></ion-icon>
+  </button>
   <form [formGroup]="registerPageOneForm" *ngIf="page === 1">
     <ion-list no-lines>
       <ion-item>

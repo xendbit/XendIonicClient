@@ -1,5 +1,4 @@
-import { Constants } from './constants';
-import { Observable, Observer, Subscription } from 'rxjs/Rx';
+import { Observable, Observer } from 'rxjs/Rx';
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { Platform } from 'ionic-angular';
 import { Console } from './console';
@@ -40,7 +39,7 @@ export class NFCHelper {
     Console.log("is_mobileweb: " + platform.is('mobileweb'));
 
     if (platform.is('core') || platform.is('mobileweb')) {
-      return;
+      return Observable.create((observer: Observer<any>) => { });
     }
 
     const obs = Observable.create((observer: Observer<any>) => {

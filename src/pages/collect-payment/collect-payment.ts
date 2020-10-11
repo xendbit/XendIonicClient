@@ -1,10 +1,10 @@
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Rx';
 import { NFCHelper } from './../utils/nfc';
 import { Console } from './../utils/console';
 import { Http } from '@angular/http';
 import { StorageService } from './../utils/storageservice';
 import { Constants } from './../utils/constants';
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams, Loading, ToastController, LoadingController, AlertController, Platform } from "ionic-angular";
 import 'rxjs/add/operator/map';
