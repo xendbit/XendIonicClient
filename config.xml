@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="34663" id="com.xendcredit" version="4.6.63" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="34629" id="com.xendcredit" version="4.6.63" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>XendCredit</name>
     <description>XendBit DEX Exchange</description>
     <author email="admin@xendcredit.com" href="https://xendbitcredit.com/">DTSL</author>
@@ -13,7 +13,8 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <preference name="android-minSdkVersion" value="19" />
+    <preference name="android-minSdkVersion" value="22" />
+    <preference name="android-targetSdkVersion" value="29" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="SplashScreenDelay" value="5000" />
     <preference name="FadeSplashScreenDuration" value="1000" />
@@ -143,5 +144,5 @@
     </plugin>
     <plugin name="cordova-plugin-dialogs" spec="^2.0.2" />
     <engine name="ios" spec="4.5.5" />
-    <engine name="android" spec="^8.0.0" />
+    <engine name="android" spec="^9.0.0" />
 </widget>
