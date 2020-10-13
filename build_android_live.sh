@@ -2,7 +2,7 @@
 RC="`cat rc.txt`"
 MAJOR_VERSION="`cat major_version.txt`"
 MINOR_VERSION="`cat minor_version.txt`"
-BASE_DIR=/Users/aardvocate/src/XendBitV3/mobile/XendBit
+BASE_DIR=$(pwd)
 
 RC=$((RC + 1))
 #MAJOR_VERSION=$((MAJOR_VERSION + 1))
@@ -48,6 +48,7 @@ cat /tmp/temp | cat - $WORKING_FILE > temp && mv temp $WORKING_FILE
 mv $WORKING_FILE $CONSTANTS_FILE
 cd $BASE_DIR
 
+export CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL=https://services.gradle.org/distributions/gradle-4.10.1-all.zip
 ionic cordova build android --release --verbose
 cd $BASE_DIR/platforms/android
 ./gradlew clean
