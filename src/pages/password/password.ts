@@ -131,8 +131,8 @@ export class PasswordPage {
       clientSecret: "password", //Only necessary for Android
       disableBackup: false  //Only for Android(optional)
     })
-      .then((result: any) => {
-        this.password = ls.getItem("password");
+      .then(async (result: any) => {
+        this.password = await ls.getItem("password");
         this.login();
       })
       .catch((error: any) => {
@@ -142,13 +142,13 @@ export class PasswordPage {
   }
 
 
-  login() {
+  async login() {
     let url = Constants.LOGIN_URL;
     let ls = this.ls;
-    let mnemonicCode = Constants.normalizeMnemonicCode(ls);
+    let mnemonicCode = await Constants.normalizeMnemonicCode(ls);
 
     let requestData = {
-      emailAddress: this.ls.getItem("emailAddress"),
+      emailAddress: await this.ls.getItem("emailAddress"),
       password: this.password,
       passphrase: mnemonicCode
     };
@@ -196,10 +196,10 @@ export class PasswordPage {
         });
   }
 
-  showResendConfirmationEmailDialog() {
+  async showResendConfirmationEmailDialog() {
     const confirm = this.alertCtrl.create({
       title: 'Resend Confirmation Email?',
-      message: 'Do you want us to resend the confirmation email to ' + this.ls.getItem('emailAddress') + '?',
+      message: 'Do you want us to resend the confirmation email to ' + await this.ls.getItem('emailAddress') + '?',
       buttons: [
         {
           text: 'No',
@@ -218,8 +218,8 @@ export class PasswordPage {
     confirm.present();
   }
 
-  resendConfirmationEmail() {
-    let emailAddress = this.ls.getItem('emailAddress');
+  async resendConfirmationEmail() {
+    let emailAddress = await this.ls.getItem('emailAddress');
     let requestData = {
       emailAddress: emailAddress,
     };

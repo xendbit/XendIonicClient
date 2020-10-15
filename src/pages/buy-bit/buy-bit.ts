@@ -99,7 +99,7 @@ export class BuyBitPage {
         }
     }
 
-    loadSellers() {
+    async loadSellers() {
         this.currencyPairs = [];
         this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         let wallets = Constants.properties['wallets'];
@@ -121,8 +121,8 @@ export class BuyBitPage {
         let url = Constants.GET_SELL_ORDERS_TX_URL;
 
         let postData = {
-            emailAddress: this.ls.getItem("emailAddress"),
-            password: this.ls.getItem("password")
+            emailAddress: await this.ls.getItem("emailAddress"),
+            password: await this.ls.getItem("password")
         };
 
         this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
@@ -199,19 +199,19 @@ export class BuyBitPage {
         }
     }
 
-    getBuyerOtherAddress(seller) {
+    async getBuyerOtherAddress(seller) {
         Console.log("getBuyerOtherAddress");
         let coin = seller.toCoin;
         if (coin === "Naira") {
             this.sendTradeStartMessage(seller);
         } else {
             let key = coin + "Address";
-            this.buyerOtherAddress = this.ls.getItem(key);
+            this.buyerOtherAddress = await this.ls.getItem(key);
             this.checkCoinBalance(coin, seller);
         }
     }
 
-    sendTradeStartMessage(seller) {
+    async sendTradeStartMessage(seller) {
         let ws = Constants.properties['ws_connection'];
         let coin = seller.toCoin;
 
@@ -220,17 +220,17 @@ export class BuyBitPage {
             this.buyerOtherAddress = "0000000000";
         } else {
             let key = coin + "Address";
-            this.buyerOtherAddress = this.ls.getItem(key);
+            this.buyerOtherAddress = await this.ls.getItem(key);
         }
 
         let key = Constants.WORKING_WALLET + "Address";
-        let buyerAddress = this.ls.getItem(key);
+        let buyerAddress = await this.ls.getItem(key);
         let trxId = seller.trxId;
 
         let data = {
             "buyerAddress": buyerAddress,
             "buyerOtherAddress": this.buyerOtherAddress,
-            "buyerEmailAddress": this.ls.getItem("emailAddress"),
+            "buyerEmailAddress": await this.ls.getItem("emailAddress"),
             "action": "startTrade",
             "trxId": trxId
         };
@@ -258,16 +258,16 @@ export class BuyBitPage {
         Constants.properties['startTradeObservable'] = running;
     }
 
-    checkCoinBalance(coin, seller) {
+    async checkCoinBalance(coin, seller) {
         this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Checking your current balance...");
         let amountToSend = +seller.amountToRecieve;
 
         let fees = Constants.getWalletProperties(coin);
 
         let postData = {
-            password: this.ls.getItem("password"),
+            password: await this.ls.getItem("password"),
             networkAddress: this.buyerOtherAddress,
-            emailAddress: this.ls.getItem("emailAddress"),
+            emailAddress: await this.ls.getItem("emailAddress"),
             currencyId: fees.currencyId,
             equityId: fees.equityId
         };

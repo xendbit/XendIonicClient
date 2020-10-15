@@ -168,11 +168,15 @@ export class Constants {
     Constants.showLongerToastMessage(subtitle, toastCtrl);
   }
 
-  static askBeneficiaryForAddress(data, home) {
+  static async askBeneficiaryForAddress(data, home) {
     let donor = data['donor'];
     let coin = data['coin'];
 
     let message = 'Hello, ' + donor + ' has indicated interest in sending you some ' + coin + '. Do you want to accept this donation?';
+
+    let key = coin + "Address";
+    let address = await home.ls.getItem(key);
+    let emailAddress = await home.ls.getItem("emailAddress");
 
     let alert = home.alertCtrl.create({
       title: 'Accept Donation?',
@@ -190,11 +194,9 @@ export class Constants {
           handler: () => {
             let ws = Constants.properties['ws_connection'];
 
-            let key = coin + "Address";
-            let address = home.ls.getItem(key);
             let wsData = {
               "donorEmailAddress": data['donorEmailAddress'],
-              "beneficiaryEmailAddress": home.ls.getItem("emailAddress"),
+              "beneficiaryEmailAddress": emailAddress,
               "coin": coin,
               "address": address,
               "action": "provideAddressToDonor"
@@ -274,10 +276,6 @@ export class Constants {
     let http = otherData['http'];
     let toastCtrl = otherData['toastCtrl'];
 
-    Console.log(url);
-    Console.log(postData);
-    Console.log(otherData);
-
     http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
         if (responseData.response_text === 'success') {
@@ -285,7 +283,9 @@ export class Constants {
           ls.removeItem(phone);
         } else if (responseData.response_text === 'error') {
           Constants.showPersistentToastMessage('Background registration of beneficiary failed: ' + responseData.result, toastCtrl);
-          Console.log(responseData);
+          // log error.
+          let key = "serverError-" + postData['phoneNumber'];
+          ls.setItem(key, responseData.result);
         }
       },
       error => {
@@ -329,11 +329,11 @@ export class Constants {
     );
   }
 
-  static completeRegistration() {
+  static async completeRegistration() {
     let data = Constants.registrationData;
     let ls = data['ls'];
 
-    let mnemonicCode = Constants.normalizeMnemonicCode(ls);
+    let mnemonicCode = await Constants.normalizeMnemonicCode(ls);
     let xendNetworkAddress = "N/A";
 
     if (Constants.IS_LOGGED_IN) {
@@ -365,7 +365,7 @@ export class Constants {
       referralCode: data['referralCode'],
       dob: data['dateOfBirth'],
       bvn: data['bvn'],
-      agentEmail: ls.getItem("emailAddress")
+      agentEmail: await ls.getItem("emailAddress")
     };
 
     Console.log(postData);
@@ -572,7 +572,7 @@ export class Constants {
     console.log(data);
   }
 
-  static startTrade(message, home, connection) {
+  static async startTrade(message, home, connection) {
     let data = {};
     data['loading'] = home.loading;
     data['loadingCtrl'] = home.loadingCtrl;
@@ -585,7 +585,7 @@ export class Constants {
 
     let coin: string = message['fromCoin'];
     let key = coin + "Address";
-    let fromAddress = home.ls.getItem(key);
+    let fromAddress = await home.ls.getItem(key);
     data['amount'] = message['amountToSell'];
     data['recipientAddress'] = message['buyerAddress'];
 
@@ -779,24 +779,25 @@ export class Constants {
   static tokenWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, coin) {
   }
 
-  static normalizeMnemonicCode(ls: StorageService) {
+  static async normalizeMnemonicCode(ls: StorageService) {
     // let mnemonicCode = ls.getItem('mnemonic');
 
     // let lastIndex = mnemonicCode.lastIndexOf(" ");
 
     // mnemonicCode = mnemonicCode.substr(0, lastIndex).trim();
-    let mnemonicCode = ls.getItem('mnemonic');
+    let mnemonicCode = await ls.getItem('mnemonic');
     return mnemonicCode;
   }
 
-  static ethWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, chainCode) {
-    if (ls.getItem("ETHAddress") !== undefined && ls.getItem("ETHAddress") !== "") {
-      let ethAddress = ls.getItem('ETHAddress');
+  static async ethWallet(ls: StorageService, loading, loadingCtrl, http, toastCtrl, chainCode) {
+    if (await ls.getItem("ETHAddress") !== undefined && await ls.getItem("ETHAddress") !== "") {
+    //if (await ls.getItem("ETHAddress") !== undefined) {
+      let ethAddress = await ls.getItem('ETHAddress');
       ls.setItem("ETHTESTAddress", ethAddress);
       return;
     }
 
-    let mnemonicCode = Constants.normalizeMnemonicCode(ls);
+    let mnemonicCode = await Constants.normalizeMnemonicCode(ls);
 
     let url = Constants.GET_ADDRESS_URL + "/" + chainCode;
 
@@ -833,6 +834,7 @@ export class Constants {
   }
 
   static decryptData(data) {
+    console.log("Data to decrypt: " + data);
     try {
       let coded = atob(data);
       let part1Key = coded.substr(0, 5);

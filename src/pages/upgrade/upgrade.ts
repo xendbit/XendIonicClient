@@ -19,7 +19,7 @@ import 'rxjs/add/operator/map';
  * Ionic pages and navigation.
  */
 
-@IonicPage() 
+@IonicPage()
 @Component({
   selector: 'page-upgrade',
   templateUrl: 'upgrade.html',
@@ -36,7 +36,7 @@ export class UpgradePage {
   emailAddress: string;
 
   constructor(public alertCtrl: AlertController, private http: Http, private loadingCtrl: LoadingController, private mediaCapture: MediaCapture, public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private imageResizer: ImageResizer, private toastCtrl: ToastController, private transfer: FileTransfer) {
-    this.registerForm = this.formBuilder.group({      
+    this.registerForm = this.formBuilder.group({
       phoneNumber: ['', Validators.required],
       idType: ['', Validators.required],
       idNumber: ['',Validators.required],
@@ -52,12 +52,12 @@ export class UpgradePage {
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
-    setTimeout(function () {
+    setTimeout(async function () {
       //Wait for sometimes for storage to be ready
-      app.emailAddress = app.ls.getItem("emailAddress");
-      app.registerForm.controls.fullName.setValue(app.ls.getItem("fullName"));  
+      app.emailAddress = await app.ls.getItem("emailAddress");
+      app.registerForm.controls.fullName.setValue(await app.ls.getItem("fullName"));
       app.loading.dismiss();
-    }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);    
+    }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
   ionViewDidLoad() {
@@ -107,7 +107,7 @@ export class UpgradePage {
       if (rf.country === '') {
         Constants.showLongToastMessage("Please enter your Country", this.toastCtrl);
         return;
-      }      
+      }
 
       if (rf.idNumber === '') {
         Constants.showLongToastMessage("Please enter  ID Number", this.toastCtrl);
@@ -131,7 +131,7 @@ export class UpgradePage {
       if (this.idImagePath === undefined) {
         Constants.showLongToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
         return;
-      }      
+      }
 
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please wait");
       this.uploadFile();
@@ -140,13 +140,13 @@ export class UpgradePage {
     }
   }
 
-  completeUpgrade(filePath) {
+  async completeUpgrade(filePath) {
     let rf = this.registerForm.value;
 
     let postData = {
-      password: this.ls.getItem('password'),
+      password: await this.ls.getItem('password'),
       phoneNumber: rf.phoneNumber,
-      emailAddress: this.ls.getItem('emailAddress'),
+      emailAddress: await this.ls.getItem('emailAddress'),
       fullname: rf.fullName,
       idType: rf.idType,
       idNumber: rf.idNumber,
@@ -162,7 +162,7 @@ export class UpgradePage {
 
     this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
-        if (responseData.response_text === "success") {     
+        if (responseData.response_text === "success") {
           this.loading.dismiss();
           let ls = this.ls;
           ls.setItem("phoneNumber", rf.phoneNumber);
@@ -187,7 +187,7 @@ export class UpgradePage {
       fileName: 'name.jpg'
       // headers: {
       //   'apiKey':'oalkuisnetgauyno',
-      //   'Content-Disposition': 'form-data; name="file"; filename="name.jpg"'        
+      //   'Content-Disposition': 'form-data; name="file"; filename="name.jpg"'
       // }
     }
 
@@ -197,7 +197,7 @@ export class UpgradePage {
     fileTransfer.upload(this.idImagePath, Constants.UPLOAD_URL, options)
       .then((data) => {
         let filePath = data['response'];
-        if (filePath.startsWith("file_")) {          
+        if (filePath.startsWith("file_")) {
           this.completeUpgrade(filePath);
         } else {
           this.loading.dismiss();

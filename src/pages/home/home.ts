@@ -85,14 +85,14 @@ export class HomePage {
     });
   }
 
-  getXndBalance() {
-    if (this.ls.getItem("XNDAddress") === undefined || this.ls.getItem("XNDAddress") === "") {
+  async getXndBalance() {
+    if (await this.ls.getItem("XNDAddress") === undefined || await this.ls.getItem("XNDAddress") === "") {
       return;
     }
     let postData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem("XNDAddress"),
-      emailAddress: this.ls.getItem("emailAddress")
+      password: await this.ls.getItem("password"),
+      networkAddress: await this.ls.getItem("XNDAddress"),
+      emailAddress: await this.ls.getItem("emailAddress")
     };
 
     this.http.post(Constants.GET_TX_URL, postData, Constants.getWalletHeader("XND"))
@@ -125,13 +125,13 @@ export class HomePage {
 
   refresh(showLoading) {
     let app = this;
-    setTimeout(function () {
+    setTimeout(async function () {
       let key = Constants.WORKING_WALLET + "Address";
       Console.log(key);
-      app.qrValue = app.ls.getItem(key);
-      app.emailAddress = app.ls.getItem('emailAddress');
+      app.qrValue = await app.ls.getItem(key);
+      app.emailAddress = await app.ls.getItem('emailAddress');
       WSConnection.startListeningForNotifications(app);
-      app.networkAddress = app.ls.getItem(key);
+      app.networkAddress = await app.ls.getItem(key);
       Constants.NETWORK = Constants.NETWORKS[Constants.WORKING_WALLET];
       let fees = Constants.getCurrentWalletProperties();
       app.currencyText = fees.currencyText;
@@ -152,10 +152,10 @@ export class HomePage {
   }
 
 
-  ionViewDidLoad() {
+  async ionViewDidLoad() {
     this.loadCharts();
     Console.log('ionViewDidLoad HomePage');
-    if (this.ls.getItem("exchangeType") === 'exchange') {
+    if (await this.ls.getItem("exchangeType") === 'exchange') {
       this.cryptoSellOrderText = 'Sell';
       this.cryptoBuyOrderText = 'Buy';
       this.fiatSellOrderText = 'Fiat Sell-Order'
@@ -223,17 +223,17 @@ export class HomePage {
     });
   }
 
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
     Console.log('ionViewDidEnter HomePage');
     this.isAdvanced = false;
-    this.isEquities = this.ls.getItem("exchangeType") !== 'exchange';
+    this.isEquities = await this.ls.getItem("exchangeType") !== 'exchange';
 
     this.refresh(false);
     if (StorageService.ACCOUNT_TYPE === "ADVANCED") {
       this.isAdvanced = true;
     }
 
-    if (this.ls.getItem("exchangeType") === 'exchange') {
+    if (await this.ls.getItem("exchangeType") === 'exchange') {
       this.cryptoSellOrderText = 'Sell';
       this.cryptoBuyOrderText = 'Buy';
       this.fiatSellOrderText = 'Fiat Sell Order'
@@ -248,7 +248,7 @@ export class HomePage {
     Console.log('ionViewWillLeave HomePage');
   }
 
-  getTransactions(showLoading) {
+  async getTransactions(showLoading) {
     let fees = Constants.getCurrentWalletProperties();
     Console.log(fees);
     if (showLoading) {
@@ -258,9 +258,9 @@ export class HomePage {
     let key = Constants.WORKING_WALLET + "Address";
 
     let postData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem(key),
-      emailAddress: this.ls.getItem("emailAddress"),
+      password: await this.ls.getItem("password"),
+      networkAddress: await this.ls.getItem(key),
+      emailAddress: await this.ls.getItem("emailAddress"),
       currencyId: fees.currencyId,
       equityId: fees.equityId
     };
@@ -269,7 +269,7 @@ export class HomePage {
 
     this.http.post(Constants.GET_TX_URL, postData, Constants.getHeader())
       .map(res => res.json())
-      .subscribe(responseData => {
+      .subscribe(async responseData => {
         if (showLoading) {
           this.loading.dismiss();
         }
@@ -286,7 +286,7 @@ export class HomePage {
           this.escrow = responseData.result.escrow === 0 ? 0 : (responseData.result.escrow)
 
           let key = Constants.WORKING_WALLET + "Address";
-          this.networkAddress = this.ls.getItem(key);
+          this.networkAddress = await this.ls.getItem(key);
           for (let txData of responseData.result.transactions) {
             let tx = {
               tx: txData.hash,
@@ -340,13 +340,13 @@ export class HomePage {
     }
   }
 
-  sellBit() {
+  async sellBit() {
     Console.log("sellBit");
     this.getTransactions(false);
-    if (this.ls.getItem("bankCode") === "000" || this.ls.getItem('bankCode') === undefined) {
+    if (await this.ls.getItem("bankCode") === "000" || await this.ls.getItem('bankCode') === undefined) {
       Constants.showAlert(this.toastCtrl, "Feature Unavailable", "This feature is not available because you didn't provide bank details during registration.");
       return;
-    } else if (this.ls.getItem("exchangeType") === 'exchange') {
+    } else if (await this.ls.getItem("exchangeType") === 'exchange') {
       this.navCtrl.push('SellBitPage', { 'isOwner': true });
     } else {
       this.navCtrl.push('SellEquityPage', { 'isOwner': true });

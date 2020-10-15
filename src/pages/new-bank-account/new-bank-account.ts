@@ -74,7 +74,7 @@ export class NewBankAccountPage {
     alert.present();
   }
 
-  createAccount() {
+  async createAccount() {
     if (!this.newBankAccountForm.valid) {
       Constants.showLongToastMessage("Please fill all required fields. Required fields are marked with **", this.toastCtrl);
       return false;
@@ -98,7 +98,7 @@ export class NewBankAccountPage {
 
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please wait...");
       let headers = Constants.getWalletHeader("NGNC").headers;
-      headers.append("agent_account_number", this.ls.getItem("bankAccountNumber"));
+      headers.append("agent_account_number", await this.ls.getItem("bankAccountNumber"));
 
       this.http.post(url, postData, {headers: headers}).map(res => res.json()).subscribe(responseData => {
         this.loading.dismiss();

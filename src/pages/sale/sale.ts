@@ -87,7 +87,7 @@ export class SalePage {
     });
   }
 
-  completeBuy() {
+  async completeBuy() {
     // TODO: Discuss with Bolaji how we manage the below with the new 10K loan.
     // let max = 47500;
     // let min = 47000;
@@ -113,7 +113,7 @@ export class SalePage {
     postData['totalPrice'] = this.totalPrice;
     postData['totalQuantity'] = this.totalQuantity;
     postData['grandTotal'] = this.total;
-    postData['distributorCode'] = this.ls.getItem("distributorCode");
+    postData['distributorCode'] = await this.ls.getItem("distributorCode");
     postData['beneficiaryCode'] = this.beneficiaryCode;
     postData['beneficiaryPassword'] = this.beneficiaryPassword;
     postData['password'] = this.beneficiaryPassword;

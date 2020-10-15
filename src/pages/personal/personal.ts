@@ -147,18 +147,18 @@ export class PersonalPage {
     });
   }
 
-  loginOnServer() {
-    let emailAddress = this.ls.getItem('emailAddress');
-    let password = this.ls.getItem('password');
+  async loginOnServer() {
+    let emailAddress = await this.ls.getItem('emailAddress');
+    let password = await this.ls.getItem('password');
     let url = Constants.LOGIN_URL;
     let ls = this.ls;
     let key = Constants.WORKING_WALLET + "Address";
-    let mnemonicCode = Constants.normalizeMnemonicCode(ls);
+    let mnemonicCode = await Constants.normalizeMnemonicCode(ls);
 
     let requestData = {
       emailAddress: emailAddress,
       password: password,
-      networkAddress: this.ls.getItem(key),
+      networkAddress: await this.ls.getItem(key),
       passphrase: mnemonicCode
     };
 

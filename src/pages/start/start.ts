@@ -47,13 +47,13 @@ export class StartPage {
 
     this.appVersion = Constants.APP_VERSION;
     let app = this;
-    setInterval(() => {
+    setInterval(async () => {
       console.dir(app.ss);
-      let keys = app.ss.postDataKeys();
+      let keys = await app.ss.postDataKeys();
       Console.log("Keys: " + keys);
       if (keys !== undefined) {
         for (let key of keys) {
-          let postData = app.ss.getItem(key);
+          let postData = await app.ss.getItem(key);
           if (postData === null || postData === undefined) {
             app.ss.setItem('keys', keys);
           } else {
@@ -93,16 +93,16 @@ export class StartPage {
 
   loadSettings() {
     Console.log(Constants.SETTINGS_URL);
-    this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(data => {
+    this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(async (data) => {
       Console.log("Settings loaded successfully");
       Constants.properties = data;
-      let type = this.ss.getItem('login-type');
+      let type = await this.ss.getItem('login-type');
       Console.log('Type in Start: ' + type);
       if (type === null || type === undefined || type.length === 0) {
         this.navCtrl.push('SetupPage');
       } else if (type === 'pos') {
-        let mc = this.ss.getItem('distributorCode');
-        let manId = this.ss.getItem('manufacturerId');
+        let mc = await this.ss.getItem('distributorCode');
+        let manId = await this.ss.getItem('manufacturerId');
         if (mc === null || mc === undefined || mc.length === 0) {
           this.navCtrl.push('SetupPage');
         } else if (manId === null || manId === undefined || manId.length === 0) {

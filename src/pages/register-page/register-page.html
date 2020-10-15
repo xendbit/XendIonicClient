@@ -172,22 +172,60 @@
         <ion-label>Share My Information</ion-label>
         <ion-checkbox formControlName="smi"></ion-checkbox>
       </ion-item>
-      <ion-item>
-        <button full item-center ion-button icon-only class="center" (click)="captureIdImage()">
-          <ion-icon name="camera"></ion-icon>Take Picture of ID Card
-        </button>
-        <p>{{idImagePath}}</p>
-      </ion-item>
-
-      <ion-item>
-        <button full item-center ion-button icon-only class="center" (click)="capturePassport()">
-          <ion-icon name="camera"></ion-icon>Take Picture of Beneficiary
-        </button>
-        <p>{{photoImagePath}}</p>
-      </ion-item>
-
     </ion-list>
   </form>
+
+  <div *ngIf="page === 5">
+    <ion-row>
+      <ion-col>
+        <p>Beneficiary ID Card Picture</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col col-6>
+        <button full item-center ion-button icon-only class="center" (click)="captureIdImage(1)">
+          <ion-icon name="camera"></ion-icon>&nbsp;&nbsp;Open Camera
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <button full item-center ion-button icon-only class="center" (click)="captureIdImage(0)">
+          <ion-icon name="images"></ion-icon>&nbsp;&nbsp;Open Gallery
+        </button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <p>{{idImagePath}}</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <p>Beneficiary Picture</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col col-6>
+        <button full item-center ion-button icon-only class="center" (click)="capturePassport(1)">
+          <ion-icon name="camera"></ion-icon>&nbsp;&nbsp;Open Camera
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <button full item-center ion-button icon-only class="center" (click)="capturePassport(0)">
+          <ion-icon name="images"></ion-icon>&nbsp;&nbsp;Open Gallery
+        </button>
+      </ion-col>
+
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <p>{{photoImagePath}}</p>
+      </ion-col>
+    </ion-row>
+  </div>
 
   <ion-row>
     <ion-col class="center" col-6>
@@ -199,7 +237,7 @@
       </ion-buttons>
     </ion-col>
     <ion-col class="center" col-6>
-      <ion-buttons class="bordered" *ngIf="page < 5" >
+      <ion-buttons class="bordered" *ngIf="page < 5">
         <button ion-button full medium color="xend" (click)="next()">Next&nbsp;&nbsp;
           <ion-icon name="return-right"></ion-icon>
         </button>

@@ -87,11 +87,11 @@ export class ReleaseCoinsPage {
     });
   }
 
-  confirmBankPayment() {
+  async confirmBankPayment() {
     let message = Constants.properties['buyWithBankMessage'];
     let connection = Constants.properties['ws_connection'];
     let data = {
-      "buyerEmailAddress": this.ls.getItem("emailAddress"),
+      "buyerEmailAddress": await this.ls.getItem("emailAddress"),
       "action": "buyerConfirmedBankPayment",
       "trxId": message['trxId']
     };

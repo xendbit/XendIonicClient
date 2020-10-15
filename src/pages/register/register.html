@@ -89,21 +89,31 @@
         <ion-label floating><sup>**</sup>BVN</ion-label>
         <ion-input formControlName="bvn" type="number"></ion-input>
       </ion-item>
-      <ion-item>
-        <button full item-center ion-button icon-only class="center" (click)="capturePassport()">
-          <ion-icon name="camera"></ion-icon>Take Picture of ID
-        </button>
-        <p>{{idImagePath}}</p>
-      </ion-item>
     </ion-list>
-    <!-- <ion-list>
-            <ion-item>
-                <ion-label floating>Enter Referral Code</ion-label>
-                <ion-input type="text" formControlName="referralCode"></ion-input>
-            </ion-item>
-        </ion-list> -->
   </form>
 
+  <ion-row>
+    <ion-col>
+      <p>Take picture of your ID Card</p>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col col-6>
+      <button full item-center ion-button icon-only class="center" (click)="capturePassport(1)">
+        <ion-icon name="camera"></ion-icon>&nbsp;&nbsp;Open Camera
+      </button>
+    </ion-col>
+    <ion-col col-6>
+      <button full item-center ion-button icon-only class="center" (click)="capturePassport(0)">
+        <ion-icon name="images"></ion-icon>&nbsp;&nbsp;Open Gallery
+      </button>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <p>{{idImagePath}}</p>
+    </ion-col>
+  </ion-row>
   <ion-row>
     <ion-col class="center">
       <ion-buttons class="bordered">

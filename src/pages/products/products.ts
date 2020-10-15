@@ -34,9 +34,9 @@ export class ProductsPage {
   ionViewDidEnter() {
   }
 
-  ionViewDidLoad() {
+  async ionViewDidLoad() {
     Console.log('ionViewDidLoad ProductsPage');
-    this.manufacturerId = this.ls.getItem("manufacturerId");
+    this.manufacturerId = await this.ls.getItem("manufacturerId");
     this.products = Constants.properties['products'];
     this.manufacturerSelected();
   }

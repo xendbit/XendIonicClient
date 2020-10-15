@@ -67,7 +67,7 @@ export class HistoryPage {
     Constants.showLongToastMessage("Transaction with hash " + hash + " copied.", this.toastCtrl);
   }
 
-  getTransactions(showLoading) {
+  async getTransactions(showLoading) {
     let fees = Constants.getCurrentWalletProperties();
     Console.log(fees);
     if (showLoading) {
@@ -77,9 +77,9 @@ export class HistoryPage {
     let key = Constants.WORKING_WALLET + "Address";
 
     let postData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem(key),
-      emailAddress: this.ls.getItem("emailAddress"),
+      password: await this.ls.getItem("password"),
+      networkAddress: await this.ls.getItem(key),
+      emailAddress: await this.ls.getItem("emailAddress"),
       currencyId: fees.currencyId,
       equityId: fees.equityId,
     };
@@ -88,7 +88,7 @@ export class HistoryPage {
     let url = Constants.GET_TX_URL + this.startDate.getTime() + "/" + this.endDate.getTime();
     this.http.post(url, postData, Constants.getHeader())
       .map(res => res.json())
-      .subscribe(responseData => {
+      .subscribe(async responseData => {
         if (showLoading) {
           this.loading.dismiss();
         }
@@ -105,7 +105,7 @@ export class HistoryPage {
           this.escrow = responseData.result.escrow === 0 ? 0 : (responseData.result.escrow)
 
           let key = Constants.WORKING_WALLET + "Address";
-          this.networkAddress = this.ls.getItem(key);
+          this.networkAddress = await this.ls.getItem(key);
           for (let txData of responseData.result.transactions) {
             let tx = {
               tx: txData.hash,
@@ -117,7 +117,7 @@ export class HistoryPage {
             }
             Console.log(tx);
             Console.log(new Date(txData.time));
-            
+
             this.checkTransaction(tx);
           }
         }

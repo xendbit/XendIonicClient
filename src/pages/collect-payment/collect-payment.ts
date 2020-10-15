@@ -67,7 +67,7 @@ export class CollectPaymentPage {
     });
   }
 
-  sendPayment() {
+  async sendPayment() {
     let isValid = true;
     let amountToSend = this.amount;
     let password = this.beneficiaryPassword;
@@ -82,7 +82,7 @@ export class CollectPaymentPage {
       postData['btcValue'] = amountToSend;
       postData['password'] = password;
       postData['userCode'] = userCode;
-      postData['emailAddress'] = this.ls.getItem("emailAddress");
+      postData['emailAddress'] = await this.ls.getItem("emailAddress");
 
       let url = Constants.REPAY_LOAN_URL;
       Console.log(url);

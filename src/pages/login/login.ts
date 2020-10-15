@@ -58,8 +58,8 @@ export class LoginPage {
 
     let app = this;
 
-    setTimeout(function () {
-      app.loginForm.controls.email.setValue(app.ls.getItem("emailAddress"));
+    setTimeout(async function () {
+      app.loginForm.controls.email.setValue(await app.ls.getItem("emailAddress"));
       app.loginForm.controls.exchangeType.setValue("exchange");
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
@@ -79,7 +79,7 @@ export class LoginPage {
   ionViewDidEnter() {
   }
 
-  login() {
+  async login() {
     let isValid = false;
     let rf = this.loginForm.value;
 
@@ -93,7 +93,7 @@ export class LoginPage {
 
     if (isValid) {
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-      let emailAddress = this.ls.getItem('emailAddress');
+      let emailAddress = await this.ls.getItem('emailAddress');
       let password = rf.password;
       let exchangeType = rf.exchangeType;
       this.ls.setItem('emailAddress', emailAddress);
@@ -102,10 +102,10 @@ export class LoginPage {
     }
   }
 
-  postKYCInfoToBlockchain(password, emailAddress) {
+  async postKYCInfoToBlockchain(password, emailAddress) {
     let url = Constants.ADD_KYC_URL;
-    let mnemonicCode = Constants.normalizeMnemonicCode(this.ls);
-    let xendNetworkAddress = this.ls.getItem('XNDAddress');
+    let mnemonicCode = await Constants.normalizeMnemonicCode(this.ls);
+    let xendNetworkAddress = await this.ls.getItem('XNDAddress');
     let requestData = {
       emailAddress: emailAddress,
       password: password,
@@ -118,10 +118,10 @@ export class LoginPage {
       .subscribe(_responseData => { }, error => { });
   }
 
-  showResendConfirmationEmailDialog() {
+  async showResendConfirmationEmailDialog() {
     const confirm = this.alertCtrl.create({
       title: 'Resend Confirmation Email?',
-      message: 'Do you want us to resend the confirmation email to ' + this.ls.getItem('emailAddress') + '?',
+      message: 'Do you want us to resend the confirmation email to ' + await this.ls.getItem('emailAddress') + '?',
       buttons: [
         {
           text: 'No',
@@ -140,8 +140,8 @@ export class LoginPage {
     confirm.present();
   }
 
-  resendConfirmationEmail() {
-    let emailAddress = this.ls.getItem('emailAddress');
+  async resendConfirmationEmail() {
+    let emailAddress = await this.ls.getItem('emailAddress');
     let requestData = {
       emailAddress: emailAddress,
     };
@@ -158,18 +158,18 @@ export class LoginPage {
         });
   }
 
-  loginOnServer(password, emailAddress, exchangeType) {
+  async loginOnServer(password, emailAddress, exchangeType) {
     this.ls.setItem('emailAddress', emailAddress);
     this.ls.setItem('password', password);
     let url = Constants.LOGIN_URL;
     let ls = this.ls;
     let key = Constants.WORKING_WALLET + "Address";
-    let mnemonicCode = Constants.normalizeMnemonicCode(ls);
+    let mnemonicCode = await Constants.normalizeMnemonicCode(ls);
 
     let requestData = {
       emailAddress: emailAddress,
       password: password,
-      networkAddress: this.ls.getItem(key),
+      networkAddress: await this.ls.getItem(key),
       passphrase: mnemonicCode
     };
 
@@ -225,8 +225,8 @@ export class LoginPage {
       clientSecret: "password", //Only necessary for Android
       disableBackup: false  //Only for Android(optional)
     })
-      .then((result: any) => {
-        this.loginForm.controls.password.setValue(ls.getItem("password"));
+      .then(async (result: any) => {
+        this.loginForm.controls.password.setValue(await ls.getItem("password"));
         this.login();
       })
       .catch((error: any) => {

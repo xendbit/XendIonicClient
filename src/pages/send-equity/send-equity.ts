@@ -97,8 +97,8 @@ export class SendEquityPage {
       clientSecret: "password", //Only necessary for Android
       disableBackup: true  //Only for Android(optional)
     })
-      .then((result: any) => {
-        this.sendBitForm.controls.password.setValue(this.ls.getItem("password"));
+      .then(async (result: any) => {
+        this.sendBitForm.controls.password.setValue(await this.ls.getItem("password"));
         this.sendBit();
       })
       .catch((error: any) => {
@@ -108,9 +108,9 @@ export class SendEquityPage {
       });
   }
 
-  howMuchCanISend() {
+  async howMuchCanISend() {
     let fees = Constants.getCurrentWalletProperties();
-    let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
+    let balance = await this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     let xendFees = +fees.xendFees * balance;
     //0.001 is added because of rounding issues.
     Console.log("confirmedAccountBalance: " + balance);
@@ -121,11 +121,11 @@ export class SendEquityPage {
     Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, canSend.toFixed(3));
   }
 
-  sendBit() {
+  async sendBit() {
     let isValid = false;
     let bv = this.sendBitForm.value;
     let amountToSend = +bv.amount;
-    let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
+    let balance = await +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     let password = bv.password;
     let toBitcoinAddress = bv.networkAddress;
     let brokerAccount = bv.brokerAccount;
@@ -145,7 +145,7 @@ export class SendEquityPage {
       Constants.showPersistentToastMessage(invalidAddressMessage, this.toastCtrl);
     } else if (brokerAccount === '') {
       Constants.showPersistentToastMessage("Please enter a broker address", this.toastCtrl);
-    } else if (password !== this.ls.getItem("password")) {
+    } else if (password !== await this.ls.getItem("password")) {
       Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
     } else if (this.sendBitForm.valid) {
       isValid = true;
@@ -177,7 +177,7 @@ export class SendEquityPage {
         CoinsSender.sendCoinsXnd(data, this.sendCoinsSuccess, this.sendCoinsError);
       } else {
         let key = Constants.WORKING_WALLET + "Address";
-        CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, this.ls.getItem(key), Constants.NETWORK);
+        CoinsSender.sendCoinsBtc(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET, await this.ls.getItem(key), Constants.NETWORK);
       }
       this.disableButton = false;
     }

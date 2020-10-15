@@ -79,12 +79,12 @@ export class SendBitPage {
     Constants.ethWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, coin);
   }
 
-  sendBit() {
+  async sendBit() {
     let isValid = false;
     let bv = this.sendBitForm.value;
     let amountToSend = +bv.amount;
     let password = bv.password;
-    let sellerCode = this.ls.getItem('distributorCode');
+    let sellerCode = await this.ls.getItem('distributorCode');
     let userCode = bv.userCode;
     let product = bv.product;
 
@@ -124,13 +124,13 @@ export class SendBitPage {
     me.sendBitForm.controls.sellerCode.setValue("");
   }
 
-  addToExchangeTable(data) {
+  async addToExchangeTable(data) {
     let fees = Constants.getCurrentWalletProperties();
     let amount = +data['amount'];
     let xendFees = (amount * +fees.xendFees);
     let totalFees = xendFees + +fees.blockFees;
-    let fromAddress = this.ls.getItem(data['key']);
-    let password = this.ls.getItem('password');
+    let fromAddress = await this.ls.getItem(data['key']);
+    let password = await this.ls.getItem('password');
 
     let postData = {
       amountToSell: amount,
@@ -141,7 +141,7 @@ export class SendBitPage {
       fromCoin: Constants.WORKING_WALLET,
       toCoin: "",
       rate: 0.00,
-      emailAddress: this.ls.getItem("emailAddress"),
+      emailAddress: await this.ls.getItem("emailAddress"),
       password: password,
       networkAddress: fromAddress,
       currencyId: fees.currencyId,

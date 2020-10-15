@@ -35,15 +35,15 @@ export class LandingPage {
   ionViewDidLoad() {
   }
 
-  ionViewDidEnter() {
-    let localWallets = this.ls.getItem('localWallets');
+  async ionViewDidEnter() {
+    let localWallets = await this.ls.getItem('localWallets');
     if (localWallets === undefined) {
       this.ls.setItem('localWallets', []);
     }
     this.reloadWallets();
   }
 
-  reloadWallets() {
+  async reloadWallets() {
     if (this.count === 0) {
       this.loadedWallets = [];
       this.unloadedWallets = [];
@@ -64,9 +64,9 @@ export class LandingPage {
       }
 
       this.totalAssets = 0;
-      if (this.ls.getItem("exchangeType") === 'exchange') {
+      if (await this.ls.getItem("exchangeType") === 'exchange') {
         this.wallets = Constants.properties['wallets'];
-      } else if (this.ls.getItem("exchangeType") === 'equities') {
+      } else if (await this.ls.getItem("exchangeType") === 'equities') {
         this.wallets = Constants.properties['equities'];
       }
       Constants.properties['wallets'] = this.wallets;
@@ -77,7 +77,7 @@ export class LandingPage {
     }
   }
 
-  loadWallets() {
+  async loadWallets() {
     let wallet = this.wallets[this.count];
     if (wallet === undefined) {
       this.count = 0;
@@ -85,7 +85,7 @@ export class LandingPage {
       return;
     }
     let working_wallet = wallet['value'];
-    if (this.ls.getItem("exchangeType") === 'exchange') {
+    if (await this.ls.getItem("exchangeType") === 'exchange') {
       if (working_wallet.indexOf("ETH") >= 0) {
         Constants.ethWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
@@ -125,7 +125,7 @@ export class LandingPage {
           app.refresh(wallet);
         }, this.loadWalletDelay);
       }
-    } else if (this.ls.getItem("exchangeType") === 'equities') {
+    } else if (await this.ls.getItem("exchangeType") === 'equities') {
       if (wallet['equityId'] !== undefined) {
         Constants.tokenWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, working_wallet);
         let app = this;
@@ -152,15 +152,15 @@ export class LandingPage {
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
-  getTransactions(wallet) {
+  async getTransactions(wallet) {
     let fees = Constants.getWalletProperties(wallet['value']);
 
     let key = wallet['value'] + "Address";
 
     let postData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem(key),
-      emailAddress: this.ls.getItem("emailAddress"),
+      password: await this.ls.getItem("password"),
+      networkAddress: await this.ls.getItem(key),
+      emailAddress: await this.ls.getItem("emailAddress"),
       currencyId: fees.currencyId,
       equityId: fees.equityId
     };
@@ -179,8 +179,8 @@ export class LandingPage {
       });
   }
 
-  shouldDisplayWallet(wallet) {
-    let localWallets = this.ls.getItem('localWallets');
+  async shouldDisplayWallet(wallet) {
+    let localWallets = await this.ls.getItem('localWallets');
 
     for (let w of localWallets) {
       if (w['value'] === wallet['value']) {
@@ -199,8 +199,8 @@ export class LandingPage {
     return false;
   }
 
-  removeItem(wallet) {
-    let localWallets = this.ls.getItem('localWallets');
+  async removeItem(wallet) {
+    let localWallets = await this.ls.getItem('localWallets');
 
     let index = localWallets.indexOf(wallet);
     localWallets.splice(index, 1);
@@ -215,8 +215,8 @@ export class LandingPage {
     Constants.showLongToastMessage(wallet['value'] + ' Removed. Reloading...', this.toastCtrl);
   }
 
-  showUnloadedWallets() {
-    let localWallets = this.ls.getItem('localWallets');
+  async showUnloadedWallets() {
+    let localWallets = await this.ls.getItem('localWallets');
     let buttons = [];
     for (let uw of this.unloadedWallets) {
       let button = {

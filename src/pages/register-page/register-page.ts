@@ -1,3 +1,4 @@
+import { StorageService } from './../utils/storageservice';
 import { PreImage } from './../utils/preimage';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
@@ -63,7 +64,7 @@ export class RegisterPaginated {
   long: number;
 
   loading: Loading;
-  ls;
+  ls: StorageService;
 
   constructor(public camera: Camera, public androidPermissions: AndroidPermissions, public base64: Base64, public imageResizer: ImageResizer, private toastCtrl: ToastController, private geolocation: Geolocation, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, private http: Http, private loadingCtrl: LoadingController, public platform: Platform) {
 
@@ -75,7 +76,7 @@ export class RegisterPaginated {
       //sometimes the best thing you can do is not think, not wonder, not imagine, not obsess.
       //just breathe, and have faith that everything will work out for the best.
       Console.log("Back Button Pressed");
-    },1);
+    }, 1);
 
     this.states = Constants.properties['states'];
     this.lgas = Constants.properties['lgas'];
@@ -153,7 +154,7 @@ export class RegisterPaginated {
     this.registerPageFiveForm.reset();
   }
 
-  capturePassport() {
+  capturePassport(sourceType) {
     Console.log("Capturing Passport");
     if (this.platform.is('core') || this.platform.is('mobileweb')) {
       this.photoImagePath = "path";
@@ -163,6 +164,7 @@ export class RegisterPaginated {
 
     const options: CameraOptions = {
       quality: 15,
+      sourceType: sourceType,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
@@ -180,7 +182,7 @@ export class RegisterPaginated {
     });
   }
 
-  captureIdImage() {
+  captureIdImage(sourceType) {
     Console.log("Capturing Id Image");
     if (this.platform.is('core') || this.platform.is('mobileweb')) {
       this.idImagePath = "path";
@@ -190,6 +192,7 @@ export class RegisterPaginated {
 
     const options: CameraOptions = {
       quality: 15,
+      sourceType: sourceType,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
@@ -207,7 +210,7 @@ export class RegisterPaginated {
     });
   }
 
-  submit() {
+  async submit() {
     let rf = this.registerPageOneForm.value;
     this.geolocation.getCurrentPosition().then((resp) => {
       this.lat = resp.coords.latitude;
@@ -232,7 +235,7 @@ export class RegisterPaginated {
     Constants.registrationData['lga'] = rf.lga;
 
     rf = this.registerPageTwoForm.value;
-    Constants.registrationData['cluster'] = rf.gender;
+    Constants.registrationData['cluster'] = rf.cluster;
     Constants.registrationData['association'] = rf.association;
     Constants.registrationData['gpsCoordinates'] = this.lat + "," + this.long;
     Constants.registrationData['tradeType'] = rf.tradeType;
@@ -262,13 +265,25 @@ export class RegisterPaginated {
     let result = genwallet();
     Constants.registrationData['passphrase'] = result.mnemonic;
     Constants.registrationData['dateRegistered'] = new Date().getTime();
-    Constants.registrationData['agentEmail'] = this.ls.getItem("emailAddress");
+    Constants.registrationData['agentEmail'] = await this.ls.getItem("emailAddress");
 
     Constants.otherData['is_beneficiary'] = true;
     Constants.otherData['is_login'] = false;
     Constants.otherData['is_agent_register'] = false;
 
-    this.navCtrl.push('PasswordPage');
+    if (Constants.otherData['editMode'] === true) {
+      let key = 'postData-' + Constants.registrationData['phoneNumber'];
+      let errorKey = 'serverError-' + Constants.registrationData['phoneNumber'];
+      await this.ls.setItem(key, Constants.registrationData);
+      await this.ls.removeItem(errorKey);
+      Constants.registrationData = {};
+      Constants.otherData['editMode'] = false;
+      Constants.otherData['editModeKey'] = "";
+      this.navCtrl.popToRoot();
+      Constants.showLongToastMessage("Beneficiary Data saved succeffully. It will be uploaded when you are connected to the internet", this.toastCtrl);
+    } else {
+      this.navCtrl.push('PasswordPage');
+    }
   }
 
   ionViewWillEnter() {
@@ -289,8 +304,64 @@ export class RegisterPaginated {
     Console.log("ionViewDidEnter entered");
   }
 
-  ionViewDidLoad() {
+  async ionViewDidLoad() {
     Console.log('ionViewDidLoad RegisterPageOnePage');
+    this.clearForm();
+    let editMode = Constants.otherData['editMode'];
+    //this.registerPageOneForm.controls.state.setValue('Delta');
+    if (editMode) {
+      let key = Constants.otherData['editModeKey'];
+      key = "postData-" + key.split('-')[1];
+      let postData = await this.ls.getItem(key);
+      let f1c = this.getFormControls(this.registerPageOneForm);
+      f1c.firstName.setValue(postData['firstName']);
+      f1c.lastName.setValue(postData['lastName']);
+      f1c.middleName.setValue(postData['middleName']);
+      f1c.phoneNumber.setValue(postData['phoneNumber']);
+      f1c.gender.setValue(postData['gender']);
+      f1c.dateOfBirth.setValue(new Date(postData['dateOfBirth']));
+      f1c.address.setValue(postData['address']);
+      try {
+        f1c.disabilityType.setValue(postData['disabilityType']);
+        this.disabilityTypeSelected(postData['disabilityType']);
+      } catch (e) {}
+      try {
+        f1c.disabilitySubtype.setValue(postData['disabilitySubtype']);
+      } catch (e) {}
+      f1c.state.setValue(postData['state']);
+      this.stateSelected(postData['state']);
+      f1c.lga.setValue(postData['lga']);
+
+      let f2c = this.getFormControls(this.registerPageTwoForm);
+      f2c.cluster.setValue(postData['cluster']);
+      f2c.association.setValue(postData['association']);
+      f2c.tradeType.setValue(postData['tradeType']);
+      this.tradeTypeSelected(postData['tradeType']);
+      f2c.tradeSubtype.setValue(postData['tradeSubtype']);
+
+      let f3c = this.getFormControls(this.registerPageThreeForm);
+      f3c.accountNumber.setValue(postData['accountNumber']);
+      f3c.bvn.setValue(postData['bvn']);
+
+      let f4c = this.getFormControls(this.registerPageFourForm);
+      f4c.nokFirstName.setValue(postData['nokFirstName']);
+      f4c.nokLastName.setValue(postData['nokLastName']);
+      f4c.nokPhoneNumber.setValue(postData['nokPhoneNumber']);
+      f4c.guarantorFirstName.setValue(postData['guarantorFirstName']);
+      f4c.guarantorLastName.setValue(postData['guarantorLastName']);
+      f4c.guarantorPhoneNumber.setValue(postData['guarantorPhoneNumber']);
+
+      let f5c = this.getFormControls(this.registerPageFiveForm);
+      f5c.idType.setValue(postData['idType']);
+      f5c.idNumber.setValue(postData['idNumber']);
+      f5c.idExpiry.setValue(new Date(postData['idExpiry']));
+      this.idImage = postData['idImage'];
+      this.photoImage = postData['photoImage'];
+    }
+  }
+
+  getFormControls(form) {
+    return form.controls;
   }
 
   tradeTypeSelected(value) {
@@ -299,11 +370,20 @@ export class RegisterPaginated {
     this.selectedTradeSubtypes = this.findTradeSubtypeByTypeId(tradeType.typeId);
   }
 
-
   findTradeTypeById(tradeTypeId) {
     for (let tradeType of this.tradeTypes) {
       if (tradeType.typeId === tradeTypeId) {
+        console.log("Found Trade Type --> ", tradeType);
         return tradeType;
+      }
+    }
+  }
+
+  getTradeSubType(tradeSubtypeId) {
+    for (let tradeSubtype of this.tradeSubtypes) {
+      if (tradeSubtype.subTypeId === tradeSubtypeId) {
+        console.log("Found Trade Sub Type --> ", tradeSubtype);
+        return tradeSubtype;
       }
     }
   }
@@ -324,6 +404,23 @@ export class RegisterPaginated {
     for (let disabilityType of this.disabilityTypes) {
       if (disabilityType.typeId === typeId) {
         this.selectedDisabilitySubTypes = this.findDisabilitySubTypes(disabilityType.typeId);
+      }
+    }
+    console.log(this.selectedDisabilitySubTypes);
+  }
+
+  getDisabilitySubType(type) {
+    for (let disabilitySubtype of this.disabilitySubtypes) {
+      if (disabilitySubtype.subTypeId === type) {
+        return disabilitySubtype;
+      }
+    }
+  }
+
+  getDisabilityType(type) {
+    for (let disabilityType of this.disabilityTypes) {
+      if (disabilityType.typeId === type) {
+        return disabilityType;
       }
     }
   }
@@ -356,6 +453,15 @@ export class RegisterPaginated {
 
     return found;
   }
+
+  findLgaByName(name) {
+    for (let lga of this.lgas) {
+      if (lga.name === name) {
+        return lga;
+      }
+    }
+  }
+
 
   findStateByName(name) {
     for (let state of this.states) {

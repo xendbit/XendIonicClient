@@ -82,7 +82,7 @@ export class ShowBankPaymentPage {
     Console.log('ionViewDidLoad ShowBankPaymentPage');
   }
 
-  successCall(data) {
+  async successCall(data) {
     let app: ShowBankPaymentPage = data['page'];
     app.disableButton = true;
     Console.log(app.sellOrder);
@@ -91,8 +91,8 @@ export class ShowBankPaymentPage {
     let requestData = {
       "sellOrderTransactionId": app.sellOrder['trxId'],
       "status": "SUCCESS",
-      emailAddress: app.ls.getItem("emailAddress"),
-      password: app.ls.getItem("password")
+      emailAddress: await app.ls.getItem("emailAddress"),
+      password: await app.ls.getItem("password")
     };
 
     app.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
@@ -102,7 +102,7 @@ export class ShowBankPaymentPage {
     })
   }
 
-  errorCall(data) {
+  async errorCall(data) {
     let app: ShowBankPaymentPage = data['page'];
     app.disableButton = true;
     Console.log(app.sellOrder);
@@ -111,8 +111,8 @@ export class ShowBankPaymentPage {
     let requestData = {
       "sellOrderTransactionId": app.sellOrder['trxId'],
       "status": "SELLER_SENDING_ERROR",
-      emailAddress: app.ls.getItem("emailAddress"),
-      password: app.ls.getItem("password")
+      emailAddress: await app.ls.getItem("emailAddress"),
+      password: await app.ls.getItem("password")
     };
 
     app.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
@@ -122,7 +122,9 @@ export class ShowBankPaymentPage {
     })
   }
 
-  presentAlert() {
+  async presentAlert() {
+    let key = this.fromCoin + "Address";
+    let keyItem = await this.ls.getItem(key);
     let alert = this.alertCtrl.create({
       title: 'Are you sure you want to confirm this order?',
       subTitle: 'Once confirmed, the coins held in escrow will be released to the buyer',
@@ -160,8 +162,8 @@ export class ShowBankPaymentPage {
             } else if (fees.equityId !== undefined) {
               CoinsSender.sendCoinsXnd(data, this.successCall, this.errorCall);
             } else {
-              let key = this.fromCoin + "Address";
-              CoinsSender.sendCoinsBtc(data, this.successCall, this.errorCall, this.fromCoin, this.ls.getItem(key), Constants.NETWORKS[this.fromCoin]);
+
+              CoinsSender.sendCoinsBtc(data, this.successCall, this.errorCall, this.fromCoin, keyItem, Constants.NETWORKS[this.fromCoin]);
             }
           }
         }
@@ -174,13 +176,13 @@ export class ShowBankPaymentPage {
     this.presentAlert();
   }
 
-  updateOrder(transactionId) {
+  async updateOrder(transactionId) {
     let url = Constants.UPDATE_USER_SELL_ORDERS_TX_URL;
     let postData = {
-      emailAddress: this.ls.getItem("emailAddress"),
+      emailAddress: await this.ls.getItem("emailAddress"),
       sellOrderTransactionId: transactionId,
       status: "sold",
-      password: this.ls.getItem("password")
+      password: await this.ls.getItem("password")
     };
 
     this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {

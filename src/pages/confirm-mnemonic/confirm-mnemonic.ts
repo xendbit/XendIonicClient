@@ -114,7 +114,7 @@ export class ConfirmMnemonicPage {
     Constants.ethWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'ETH');
   }
 
-  loginOnServer() {
+  async loginOnServer() {
     let postData = {
       passphrase: this.confirmMnemonic
     };
@@ -122,7 +122,7 @@ export class ConfirmMnemonicPage {
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
 
     this.http.post(Constants.GET_13TH_WORD, postData, Constants.getHeader()).map(res => res.json()).subscribe(
-      responseData => {
+      async responseData => {
         if (responseData.response_code == 0) {
           this.ls.clear();
           let lastWord = responseData.result;
@@ -137,7 +137,7 @@ export class ConfirmMnemonicPage {
           let requestData = {
             emailAddress: this.email,
             password: this.password,
-            networkAddress: this.ls.getItem(key),
+            networkAddress: await this.ls.getItem(key),
             passphrase: this.passphrase,
             refCode: action
           };

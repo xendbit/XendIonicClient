@@ -148,10 +148,12 @@ export class RegisterPage {
     Console.log('ionViewDidLoad RegisterPage');
   }
 
-  capturePassport() {
+  // TODO: create chose image method and chose image button
+  capturePassport(sourceType) {
     Console.log("Capturing Passport");
     const options: CameraOptions = {
       quality: 15,
+      sourceType: sourceType,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE

@@ -36,9 +36,9 @@ export class ViewBeneficiariesPage {
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
     this.ls.setItem("searchBarBeneficiaries", undefined);
-    this.bankAccountNumber = this.ls.getItem("bankAccountNumber");
+    this.bankAccountNumber = await this.ls.getItem("bankAccountNumber");
     this.loadBeneficiaries();
   }
 
@@ -46,9 +46,9 @@ export class ViewBeneficiariesPage {
     Console.log('ionViewDidLoad ViewBeneficiariesPage');
   }
 
-  findBeneficiary(ev: any) {
+  async findBeneficiary(ev: any) {
     this.searchTerm = ev.target.value;
-    let sbb = this.ls.getItem("searchBarBeneficiaries");
+    let sbb = await this.ls.getItem("searchBarBeneficiaries");
     if (sbb === undefined && this.searchTerm.length === 1) {
       this.findBeneficiaries();
     } else {
@@ -60,14 +60,14 @@ export class ViewBeneficiariesPage {
     }
   }
 
-  findBeneficiaries() {
+  async findBeneficiaries() {
     let url = Constants.FIND_BENEFICIARIES_URL;
     let key = Constants.WORKING_WALLET + "Address";
 
     let requestData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem(key),
-      emailAddress: this.ls.getItem("emailAddress")
+      password: await this.ls.getItem("password"),
+      networkAddress: await this.ls.getItem(key),
+      emailAddress: await this.ls.getItem("emailAddress")
     }
 
     this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(
@@ -107,14 +107,14 @@ export class ViewBeneficiariesPage {
     console.log(this.beneficiaries);
   }
 
-  loadBeneficiaries(): any {
+  async loadBeneficiaries() {
     let url = Constants.LOAD_BENEFICIARIES_URL;
     let key = Constants.WORKING_WALLET + "Address";
 
     let requestData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.ls.getItem(key),
-      emailAddress: this.ls.getItem("emailAddress")
+      password: await this.ls.getItem("password"),
+      networkAddress: await this.ls.getItem(key),
+      emailAddress: await this.ls.getItem("emailAddress")
     }
 
     this.http.post(url, requestData, Constants.getHeader()).map(res => res.json()).subscribe(

@@ -103,15 +103,15 @@ export class SellEquityPage {
         this.populateBeneficiaryInformation();
     }
 
-    populateBeneficiaryInformation() {
-        this.sellForm.controls.beneficiaryAccountNumber.setValue(this.ls.getItem('accountNumber'));
-        this.sellForm.controls.beneficiaryBank.setValue(this.ls.getItem("bank"));
+    async populateBeneficiaryInformation() {
+        this.sellForm.controls.beneficiaryAccountNumber.setValue(await this.ls.getItem('accountNumber'));
+        this.sellForm.controls.beneficiaryBank.setValue(await this.ls.getItem("bank"));
     }
 
-    sellBit() {
+    async sellBit() {
         let isValid = false;
         let sb = this.sellForm.value;
-        let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
+        let balance = await +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
         let price = +sb.pricePerBTC;
         let password = sb.password;
         let coinAmount = +sb.numberOfBTC;
@@ -129,7 +129,7 @@ export class SellEquityPage {
             Constants.showLongToastMessage("Price must be greater than 0", this.toastCtrl);
         } else if (!this.isOwner && sb.beneficiaryAccountNumber === '') {
             Constants.showLongToastMessage("Please enter a valid beneficiary account number", this.toastCtrl);
-        } else if (password !== this.ls.getItem("password")) {
+        } else if (password !== await this.ls.getItem("password")) {
             Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
         } else if (coinAmount + xendFees + blockFees > balance) {
             Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
@@ -142,8 +142,8 @@ export class SellEquityPage {
         }
 
         if (isValid) {
-            let beneficiaryAccountNumber = this.isOwner ? this.ls.getItem('accountNumber') : sb.beneficiaryAccountNumber;
-            let beneficiaryBank = this.isOwner ? this.ls.getItem('bankCode') : sb.beneficiaryBank;
+            let beneficiaryAccountNumber = this.isOwner ? await this.ls.getItem('accountNumber') : sb.beneficiaryAccountNumber;
+            let beneficiaryBank = this.isOwner ? await this.ls.getItem('bankCode') : sb.beneficiaryBank;
 
             this.beneficiaryData.beneficiaryBank = beneficiaryBank;
             this.beneficiaryData.beneficiaryAccountNumber = beneficiaryAccountNumber;
@@ -201,7 +201,7 @@ export class SellEquityPage {
         });
     }
 
-    continue() {
+    async continue() {
         this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
         let sb = this.sellForm.value;
         let coinAmount = +sb.numberOfBTC;
@@ -218,7 +218,7 @@ export class SellEquityPage {
         let btcValue = coinAmount;
 
         let key = Constants.WORKING_WALLET + "Address";
-        let sellerFromAddress = this.ls.getItem(key);
+        let sellerFromAddress = await this.ls.getItem(key);
         let sellerToAddress = beneficiaryBank + ":" + beneficiaryAccountNumber;
 
         let postData = {
@@ -229,7 +229,7 @@ export class SellEquityPage {
             fromCoin: Constants.WORKING_WALLET,
             toCoin: sb.acceptedPaymentMethods.toString(),
             rate: rate,
-            emailAddress: this.ls.getItem("emailAddress"),
+            emailAddress: await this.ls.getItem("emailAddress"),
             password: password,
             networkAddress: sellerFromAddress,
             currencyId: fees.currencyId,
@@ -261,8 +261,8 @@ export class SellEquityPage {
             clientSecret: "password", //Only necessary for Android
             disableBackup: true  //Only for Android(optional)
         })
-            .then((result: any) => {
-                this.sellForm.controls.password.setValue(this.ls.getItem("password"));
+            .then(async (_result: any) => {
+                this.sellForm.controls.password.setValue(await this.ls.getItem("password"));
                 this.sellBit();
             })
             .catch((error: any) => {
@@ -286,11 +286,11 @@ export class SellEquityPage {
         });
     }
 
-    loadBalanceFromStorage() {
+    async loadBalanceFromStorage() {
         let key = Constants.WORKING_WALLET + "Address";
-        this.networkAddress = this.ls.getItem(key);
+        this.networkAddress = await this.ls.getItem(key);
         if (this.networkAddress !== null) {
-            this.confirmedAccountBalance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
+            this.confirmedAccountBalance = await this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
         }
     }
 

@@ -51,7 +51,7 @@ export class CoinsSender {
     }
 
     //static sendCoinsEth(data, amount, recipientAddress, password) {
-    static sendCoinsEth(data, successCall, errorCall, coin) {
+    static async sendCoinsEth(data, successCall, errorCall, coin) {
         let amount = data['amount'];
         let recipientAddress = data['recipientAddress'];
         let loading = data['loading'];
@@ -63,9 +63,9 @@ export class CoinsSender {
 
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
 
-        let mnemonicCode = Constants.normalizeMnemonicCode(ls);
+        let mnemonicCode = await Constants.normalizeMnemonicCode(ls);
 
-        let privateKey = ls.getItem('ETHPrivateKey');
+        let privateKey = await ls.getItem('ETHPrivateKey');
 
         let fees = Constants.getWalletProperties(coin);
 
@@ -76,7 +76,7 @@ export class CoinsSender {
         var instance = xendContract.at(contractAddress);
 
         let key = coin + "Address";
-        let sender = ls.getItem(key);
+        let sender = await ls.getItem(key);
 
 
         try {
@@ -155,15 +155,15 @@ export class CoinsSender {
         prompt.present();
     }
 
-    static sendCoinsBtc(data, successCall, errorCall, coin, fromAddress, network) {
+    static async sendCoinsBtc(data, successCall, errorCall, coin, fromAddress, network) {
         Console.log("sendCoinsBtc");
         let ls = data['ls'];
         let http = data['http'];
 
-        if (ls.getItem('enable2FA')) {
+        if (await ls.getItem('enable2FA')) {
             let url = Constants.SEND_2FA_CODE_URL;
             let postData = {
-                emailAddress: ls.getItem("emailAddress")
+                emailAddress: await ls.getItem("emailAddress")
             };
 
             http.post(url, postData, Constants.getWalletHeader(coin)).map(res => res.json()).subscribe(responseData => {
@@ -178,7 +178,7 @@ export class CoinsSender {
     }
 
 
-    static continueSendingBTC(data, successCall, errorCall, coin, fromAddress, network) {
+    static async continueSendingBTC(data, successCall, errorCall, coin, fromAddress, network) {
         let ls = data['ls'];
         let http = data['http'];
         let fees = Constants.getWalletProperties(coin);
@@ -187,7 +187,7 @@ export class CoinsSender {
         let loading = data['loading'];
         let loadingCtrl = data['loadingCtrl'];
         let toastCtrl = data['toastCtrl'];
-        let password = ls.getItem('password');
+        let password = await ls.getItem('password');
 
         let xendFees = (amount * +fees.xendFees);
         let blockFees = +fees.blockFees / Constants.LAST_USD_RATE;
@@ -296,13 +296,13 @@ export class CoinsSender {
         });
     }
 
-    static submitTx(data, coin, hex, password, loading, successCall, errorCall) {
+    static async submitTx(data, coin, hex, password, loading, successCall, errorCall) {
         let ls = data['ls'];
         let http = data['http'];
         let toastCtrl = data['toastCtrl'];
         let url = Constants.PUSH_TX_URL;
         let requestData = {
-            emailAddress: ls.getItem("emailAddress"),
+            emailAddress: await ls.getItem("emailAddress"),
             password: password,
             "transactionHex": hex
         };
