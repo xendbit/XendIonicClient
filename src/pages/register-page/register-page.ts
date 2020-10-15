@@ -65,6 +65,7 @@ export class RegisterPaginated {
 
   loading: Loading;
   ls: StorageService;
+  editingPhone: string;
 
   constructor(public camera: Camera, public androidPermissions: AndroidPermissions, public base64: Base64, public imageResizer: ImageResizer, private toastCtrl: ToastController, private geolocation: Geolocation, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, private http: Http, private loadingCtrl: LoadingController, public platform: Platform) {
 
@@ -273,9 +274,11 @@ export class RegisterPaginated {
 
     if (Constants.otherData['editMode'] === true) {
       let key = 'postData-' + Constants.registrationData['phoneNumber'];
-      let errorKey = 'serverError-' + Constants.registrationData['phoneNumber'];
-      await this.ls.setItem(key, Constants.registrationData);
+      let errorKey = 'serverError-' + this.editingPhone;
+      let dataKey = 'postData-' + this.editingPhone;
+      await this.ls.removeItem(dataKey);
       await this.ls.removeItem(errorKey);
+      await this.ls.setItem(key, Constants.registrationData);
       Constants.registrationData = {};
       Constants.otherData['editMode'] = false;
       Constants.otherData['editModeKey'] = "";
@@ -311,6 +314,7 @@ export class RegisterPaginated {
     //this.registerPageOneForm.controls.state.setValue('Delta');
     if (editMode) {
       let key = Constants.otherData['editModeKey'];
+      this.editingPhone = key.split('-')[1];
       key = "postData-" + key.split('-')[1];
       let postData = await this.ls.getItem(key);
       let f1c = this.getFormControls(this.registerPageOneForm);

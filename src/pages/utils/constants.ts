@@ -285,7 +285,9 @@ export class Constants {
           Constants.showPersistentToastMessage('Background registration of beneficiary failed: ' + responseData.result, toastCtrl);
           // log error.
           let key = "serverError-" + postData['phoneNumber'];
-          ls.setItem(key, responseData.result);
+          let errorMsg = "[" + postData['firstName'] + ", " + postData['lastName'] + ", " + postData['phoneNumber'] + "] : ";
+          errorMsg = errorMsg + responseData.result;
+          ls.setItem(key, errorMsg);
         }
       },
       error => {

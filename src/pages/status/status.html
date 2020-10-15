@@ -24,14 +24,11 @@
           <ion-col col-12>
             <p>{{pd.data}}</p>
           </ion-col>
-          <ion-col col-4>
+          <ion-col col-6>
             <button ion-button full medium round color="xend" (click)=edit(pd)>Edit</button>
           </ion-col>
-          <ion-col col-4>
-            <button ion-button full medium round color="danger">Delete</button>
-          </ion-col>
-          <ion-col col-4>
-            <button ion-button full medium round color="dark">Retry</button>
+          <ion-col col-6>
+            <button ion-button full medium round color="danger" (click)=delete(pd)>Delete</button>
           </ion-col>
         </ion-row>
       </ion-grid>
