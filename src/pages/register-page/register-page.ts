@@ -153,6 +153,10 @@ export class RegisterPaginated {
     this.registerPageThreeForm.reset();
     this.registerPageFourForm.reset();
     this.registerPageFiveForm.reset();
+    this.idImage = undefined;
+    this.idImagePath = undefined;
+    this.photoImage = undefined;
+    this.photoImagePath = undefined;
   }
 
   capturePassport(sourceType) {
