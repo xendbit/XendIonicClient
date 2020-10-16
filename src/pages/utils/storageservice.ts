@@ -26,7 +26,7 @@ export class StorageService {
                 app.setItem(key, storeData[key]);
               }
             }
-            app.ns.remove("store");
+            //app.ns.remove("store");
           } catch (e) { }
         }
       )
