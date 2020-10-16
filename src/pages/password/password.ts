@@ -251,7 +251,7 @@ export class PasswordPage {
 
     this.navCtrl.popToRoot();
 
-    Constants.showLongToastMessage("Beneficiary Data saved succeffully. It will be uploaded when you are connected to the internet", this.toastCtrl);
+    Constants.showLongToastMessage("Beneficiary Data saved successffully. It will be uploaded when you are connected to the internet", this.toastCtrl);
   }
 
   gotoNextPage() {
