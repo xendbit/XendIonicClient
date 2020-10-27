@@ -1,3 +1,4 @@
+import { Console } from './console';
 import { Constants } from './constants';
 import { Storage } from '@ionic/storage';
 
@@ -15,6 +16,7 @@ export class StorageService {
       //this.ns.set("store", this.data);
       app.ns.get("store").then(
         async (storeData) => {
+          Console.log(storeData);
           app.setReady(true);
           // here iterate through the keys and set them using await/async methods.
           try {
@@ -27,7 +29,7 @@ export class StorageService {
               }
             }
             await app.ns.set('__store', storeData);
-            await app.ns.remove("store");
+            //await app.ns.remove("store");
           } catch (e) { }
         }
       )
@@ -52,7 +54,7 @@ export class StorageService {
   async getItem(key) {
     let itemData = await this.ns.get(key);
     if (key === "mnemonic" || key === "password") {
-      return Constants.decryptData(itemData);
+      itemData = Constants.decryptData(itemData);
     }
 
     return itemData;

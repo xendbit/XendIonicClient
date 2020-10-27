@@ -43,10 +43,10 @@ import { LocalProps } from "./localprops";
 import { CoinsSender } from "./coinssender";
 
 export class Constants {
-static TOMCAT_URL = "http://192.250.236.180:8080";' > /tmp/temp
+static TOMCAT_URL = "https://xendcredit.ddns.net";' > /tmp/temp
 echo "static APP_VERSION = \"$VERSION\";" >> /tmp/temp
 echo "static ENABLE_GUEST = false;" >> /tmp/temp
-echo "static NOTIFICATION_SOCKET_URL = \"ws://192.250.236.180:8080/notify/websocket\";" >> /tmp/temp
+echo "static NOTIFICATION_SOCKET_URL = \"ws://xendcredit.ddns.net:8080/notify/websocket\";" >> /tmp/temp
 
 cat /tmp/temp | cat - $WORKING_FILE > temp && mv temp $WORKING_FILE
 mv $WORKING_FILE $CONSTANTS_FILE

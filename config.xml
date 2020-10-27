@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="34629" id="com.xendcredit" version="4.6.63" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="34664" id="com.xendbit" version="4.6.64" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>XendCredit</name>
     <description>XendBit DEX Exchange</description>
     <author email="admin@xendcredit.com" href="https://xendbitcredit.com/">DTSL</author>
