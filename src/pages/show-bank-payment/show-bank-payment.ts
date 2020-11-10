@@ -48,7 +48,7 @@ export class ShowBankPaymentPage {
 
     let data = Constants.properties['finalize_sale_order'];
     this.sellOrder = data;
-    Console.log(data);
+
     let sellerToAddress = data['sellerToAddress'];
     let splitted = sellerToAddress.split(":");
 
@@ -79,13 +79,13 @@ export class ShowBankPaymentPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad ShowBankPaymentPage');
+
   }
 
   async successCall(data) {
     let app: ShowBankPaymentPage = data['page'];
     app.disableButton = true;
-    Console.log(app.sellOrder);
+
     //ok, we need to call server "update-exchange-status";
     let url = Constants.UPDATE_TRADE_URL;
     let requestData = {
@@ -105,7 +105,7 @@ export class ShowBankPaymentPage {
   async errorCall(data) {
     let app: ShowBankPaymentPage = data['page'];
     app.disableButton = true;
-    Console.log(app.sellOrder);
+
     //ok, we need to call server "update-exchange-status";
     let url = Constants.UPDATE_TRADE_URL;
     let requestData = {

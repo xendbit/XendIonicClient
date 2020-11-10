@@ -59,12 +59,10 @@ export class PasswordPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad PasswordPage');
     console.log(Constants.encryptData("1234"));
     this.isBeneficiary = Constants.otherData['is_beneficiary'];
     this.isLogin = Constants.otherData['is_login'];
     this.isAgentRegister = Constants.otherData['is_agent_register'];
-    Console.log(this.isLogin);
     if (this.isLogin) {
       this.pageTitle = "Enter Your Pin to Login";
       this.title = "Login Here";
@@ -119,7 +117,6 @@ export class PasswordPage {
   }
 
   registerBeneficiary() {
-    Console.log("Register Clicked");
     Constants.registerBeneficiary();
   }
 
@@ -136,7 +133,6 @@ export class PasswordPage {
         this.login();
       })
       .catch((error: any) => {
-        Console.log(error);
         Constants.showLongToastMessage("Biometric Login can not be used at this time.", this.toastCtrl);
       });
   }
@@ -167,12 +163,13 @@ export class PasswordPage {
           StorageService.ACCOUNT_TYPE = user.accountType;
           StorageService.IS_BENEFICIARY = user.beneficiary;
           ls.setItem("bankAccountNumber", user.bankAccountNumber);
+          ls.setItem("accountBalance", user.balance);
 
           try {
             ls.setItem("accountNumber", user.kyc.bankAccountNumber);
             ls.setItem("bankCode", user.kyc.bankCode);
           } catch (e) {
-            Console.log(e);
+
           }
 
           Constants.IS_LOGGED_IN = true;
@@ -181,7 +178,6 @@ export class PasswordPage {
           this.loading.dismiss();
           Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
 
-          Console.log(responseData.response_code === 601);
           if (responseData.response_code === 601) {
             //account is not activated
             this.showResendConfirmationEmailDialog();
@@ -190,7 +186,6 @@ export class PasswordPage {
         }
       },
         error => {
-          Console.log(error);
           this.loading.dismiss();
           Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
         });

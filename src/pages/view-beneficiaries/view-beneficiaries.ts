@@ -24,6 +24,7 @@ export class ViewBeneficiariesPage {
   loading: Loading;
   beneficiaries = [];
   bankAccountNumber = "";
+  accountBalance = 0;
   searchTerm = "";
 
   constructor(public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public alertCtrl: AlertController, public modalCtrl: ModalController, public toastCtrl: ToastController) {
@@ -39,11 +40,12 @@ export class ViewBeneficiariesPage {
   async ionViewDidEnter() {
     this.ls.setItem("searchBarBeneficiaries", undefined);
     this.bankAccountNumber = await this.ls.getItem("bankAccountNumber");
+    this.accountBalance = await this.ls.getItem("accountBalance");
     this.loadBeneficiaries();
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad ViewBeneficiariesPage');
+
   }
 
   async findBeneficiary(ev: any) {

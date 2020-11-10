@@ -111,7 +111,6 @@ export class PersonalPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad RegisterPage');
   }
 
   capturePassport() {
@@ -140,10 +139,8 @@ export class PersonalPage {
       this.base64.encodeFile(filePath).then((base64File: string) => {
         this.idImage = base64File;
       }, (err) => {
-        Console.log(err);
       });
     }).catch(e => {
-      Console.log(e)
     });
   }
 
@@ -262,7 +259,6 @@ export class PersonalPage {
   }
 
   checkValue() {
-    Console.log(this.registerForm.value.isBeneficiary);
   }
 
   passwordPadSuccess() {
@@ -274,8 +270,6 @@ export class PersonalPage {
         break;
       }
     }
-
-    Console.log(rf.phoneNumber);
 
     if (rf.phoneNumber !== undefined) {
       if (rf.phoneNumber.startsWith("+")) {

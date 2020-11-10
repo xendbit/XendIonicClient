@@ -56,7 +56,6 @@ export class BuyBitPage {
     }
 
     ionViewDidLoad() {
-        Console.log('ionViewDidLoad BuyBitNgntPage');
         this.loadSellers();
     }
 
@@ -81,7 +80,6 @@ export class BuyBitPage {
 
     pairSelected(value) {
         this.showHeaders = false;
-        Console.log("Selected Pair");
         let selectedPair = value;
         this.currencyPair = value;
         if (selectedPair !== undefined && selectedPair.indexOf("->") >= 0) {
@@ -116,8 +114,6 @@ export class BuyBitPage {
             this.currencyPairs.push(pair);
         }
 
-        Console.log(this.currencyPairs);
-
         let url = Constants.GET_SELL_ORDERS_TX_URL;
 
         let postData = {
@@ -141,7 +137,6 @@ export class BuyBitPage {
     }
 
     buyBit(seller) {
-        Console.log("buyBit");
         this.presentAlert(seller);
     }
 
@@ -200,7 +195,6 @@ export class BuyBitPage {
     }
 
     async getBuyerOtherAddress(seller) {
-        Console.log("getBuyerOtherAddress");
         let coin = seller.toCoin;
         if (coin === "Naira") {
             this.sendTradeStartMessage(seller);
@@ -234,9 +228,6 @@ export class BuyBitPage {
             "action": "startTrade",
             "trxId": trxId
         };
-
-        Console.log(data);
-        Console.log(Constants.WORKING_WALLET);
 
         ws.send(Constants.encryptData(JSON.stringify(data))).subscribe((_data) => {
         }, (_error) => {
@@ -285,7 +276,6 @@ export class BuyBitPage {
                 } else {
                     //if buyerOtherAddress starts with XND, then it's a colored coin
                     //so we must check if they have XND balance of 1
-                    Console.log(this.buyerOtherAddress);
                     if (this.buyerOtherAddress.indexOf("XND") === 0) {
                         this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Checking your Xendcoin balance...");
                         this.http.post(Constants.GET_TX_URL, postData, Constants.getWalletHeader("XND"))

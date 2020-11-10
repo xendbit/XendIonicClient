@@ -66,7 +66,6 @@ export class HomePage {
     this.ls = Constants.storageService;
     this.initProps();
     Constants.properties['home'] = this;
-    Console.log("Working Wallet: " + Constants.WORKING_WALLET);
     this.wtv = Constants.WORKING_TICKER_VALUE;;
   }
 
@@ -127,7 +126,6 @@ export class HomePage {
     let app = this;
     setTimeout(async function () {
       let key = Constants.WORKING_WALLET + "Address";
-      Console.log(key);
       app.qrValue = await app.ls.getItem(key);
       app.emailAddress = await app.ls.getItem('emailAddress');
       WSConnection.startListeningForNotifications(app);
@@ -139,10 +137,8 @@ export class HomePage {
 
       app.yourBTCWalletText = "My Coin Wallet".replace('Coin', app.btcText);
 
-      Console.log(app.yourBTCWalletText);
-
       app.yourBTCWalletText = app.yourBTCWalletText.replace('/t*BTC/gi', app.btcText);
-      Console.log(app.yourBTCWalletText);
+
       if (app.showXendBalance == true) {
         app.getXndBalance();
       }
@@ -154,7 +150,6 @@ export class HomePage {
 
   async ionViewDidLoad() {
     this.loadCharts();
-    Console.log('ionViewDidLoad HomePage');
     if (await this.ls.getItem("exchangeType") === 'exchange') {
       this.cryptoSellOrderText = 'Sell';
       this.cryptoBuyOrderText = 'Buy';
@@ -174,7 +169,6 @@ export class HomePage {
   loadCharts() {
     let tickerSymbol = 'BTC';
     let url = Constants.CHART_URL.replace("{{symbol}}", tickerSymbol.toUpperCase());
-    Console.log(url);
     this.http.get(url).map(res => res.json()).subscribe(data => {
       let dates = Object.keys(data['Time Series (Digital Currency Daily)']);
       dates.sort();
@@ -184,7 +178,6 @@ export class HomePage {
         let dateLong = new Date(date).getTime();
         let value = +jsonData[date]["4a. close (USD)"];
         let singleValue = [dateLong, value];
-        Console.log(singleValue);
         data.push(singleValue);
       }
 
@@ -218,13 +211,11 @@ export class HomePage {
       });
     }, _error => {
       Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-      Console.log("Can not pull data from server");
       //this.platform.exitApp();
     });
   }
 
   async ionViewDidEnter() {
-    Console.log('ionViewDidEnter HomePage');
     this.isAdvanced = false;
     this.isEquities = await this.ls.getItem("exchangeType") !== 'exchange';
 
@@ -245,12 +236,10 @@ export class HomePage {
   }
 
   ionViewWillLeave() {
-    Console.log('ionViewWillLeave HomePage');
   }
 
   async getTransactions(showLoading) {
     let fees = Constants.getCurrentWalletProperties();
-    Console.log(fees);
     if (showLoading) {
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     }
@@ -265,8 +254,6 @@ export class HomePage {
       equityId: fees.equityId
     };
 
-    Console.log(postData);
-
     this.http.post(Constants.GET_TX_URL, postData, Constants.getHeader())
       .map(res => res.json())
       .subscribe(async responseData => {
@@ -278,7 +265,6 @@ export class HomePage {
           this.utx = [];
           this.ctx = [];
           this.confirmedAccountBalance = responseData.result.balance
-          Console.log("confirmedAccountBalance: " + this.confirmedAccountBalance);
           this.ls.setItem(Constants.WORKING_WALLET + "confirmedAccountBalance", responseData.result.balance);
           this.totalReceived = responseData.result.received
           this.totalSent = responseData.result.spent
@@ -341,7 +327,6 @@ export class HomePage {
   }
 
   async sellBit() {
-    Console.log("sellBit");
     this.getTransactions(false);
     if (await this.ls.getItem("bankCode") === "000" || await this.ls.getItem('bankCode') === undefined) {
       Constants.showAlert(this.toastCtrl, "Feature Unavailable", "This feature is not available because you didn't provide bank details during registration.");

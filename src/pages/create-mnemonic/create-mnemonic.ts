@@ -39,7 +39,6 @@ export class CreateMnemonicPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad CreateMnemonicPage');
     this.generateMnemonic();
   }
 
@@ -75,8 +74,6 @@ export class CreateMnemonicPage {
             let lastWord = responseData.result;
             this.fullMnemonic = result.mnemonic + " " + lastWord;
             this.mnemonic = splitted.join(' ');
-            Console.log(this.fullMnemonic);
-            Console.log(this.mnemonic);
           } else {
             throw(responseData.response_text);
           }

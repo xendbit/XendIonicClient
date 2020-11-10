@@ -65,11 +65,11 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad SettingsPage');
+
   }
 
   async ionViewDidEnter() {
-    Console.log('ionViewDidEnter SettingsPage');
+
     //this.craftMultisig();
     this.enable2fa = await this.ls.getItem("enable2FA");
 
@@ -125,7 +125,7 @@ export class SettingsPage {
   }
 
   showMyInfo() {
-    Console.log('Showing My Info Page');
+
     this.navCtrl.push('PersonalPage');
   }
 

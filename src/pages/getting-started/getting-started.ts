@@ -67,8 +67,6 @@ export class GettingStartedPage {
 
   ionViewWillEnter() {
     this.isReset = (Constants.REG_TYPE === 'reset');
-    Console.log(this.isReset);
-    Console.log(Constants.REG_TYPE);
     if (this.isReset) {
       this.passwordPlaceHolder = "New Password";
     }
@@ -85,7 +83,6 @@ export class GettingStartedPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad GettingStartedPage');
   }
 
   openAdvancedWallet() {

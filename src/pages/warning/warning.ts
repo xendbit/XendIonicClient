@@ -36,11 +36,11 @@ export class WarningPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad WarningPage');
+
   }
 
   ready() {
-   this.navCtrl.push('CreateMnemonicPage', { 'mnemonic': '', 'shouldRegister': false, 'fromTabs': false }); 
+   this.navCtrl.push('CreateMnemonicPage', { 'mnemonic': '', 'shouldRegister': false, 'fromTabs': false });
   }
 
 }

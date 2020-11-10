@@ -100,7 +100,7 @@ export class SellBitPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad SellBitPage');
+
     this.loadRate();
     this.loadBalanceFromStorage();
     this.populateBeneficiaryInformation();
@@ -256,7 +256,7 @@ export class SellBitPage {
     let balance = await this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     this.xendFees = +fees.xendFees * balance;
 
-    Console.log("confirmedAccountBalance: " + balance);
+
     let canSend = balance - this.blockFees - this.xendFees;
 
     //Correct for rounding error

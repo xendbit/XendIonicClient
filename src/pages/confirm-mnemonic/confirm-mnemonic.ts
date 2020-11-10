@@ -52,7 +52,6 @@ export class ConfirmMnemonicPage {
     console.log(this.navParams);
     this.email = this.navParams.get('email');
     this.password = this.navParams.get('password');
-    Console.log("Password: " + this.password);
     this.passphrase = this.navParams.get('mnemonic');
 
     let splitted = this.passphrase.split(" ");
@@ -104,13 +103,11 @@ export class ConfirmMnemonicPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad ConfirmMnemonicPage');
   }
 
   createWallets() {
     let allWallets = [];
     allWallets.push(Constants.CURRENT_WALLET);
-    Console.log(allWallets);
     Constants.ethWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, 'ETH');
   }
 

@@ -34,8 +34,6 @@ export class StartPage {
   }
 
   ionViewDidLoad() {
-    Console.log("is_core: " + this.platform.is('core'));
-    Console.log("is_mobileweb: " + this.platform.is('mobileweb'));
     let otherData = {};
     otherData['loading'] = this.loading;
     otherData['loadingCtrl'] = this.loadingCtrl;
@@ -50,14 +48,13 @@ export class StartPage {
     setInterval(async () => {
       console.dir(app.ss);
       let keys = await app.ss.postDataKeys();
-      Console.log("Keys: " + keys);
+
       if (keys !== undefined) {
         for (let key of keys) {
           let postData = await app.ss.getItem(key);
           if (postData === null || postData === undefined) {
             app.ss.setItem('keys', keys);
           } else {
-            Console.log("Calling Register on " + key);
             Constants.registerSaved(app.ss, postData, otherData, key);
           }
         }
@@ -92,12 +89,12 @@ export class StartPage {
   }
 
   loadSettings() {
-    Console.log(Constants.SETTINGS_URL);
+
     this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(async (data) => {
-      Console.log("Settings loaded successfully");
+
       Constants.properties = data;
       let type = await this.ss.getItem('login-type');
-      Console.log('Type in Start: ' + type);
+
       if (type === null || type === undefined || type.length === 0) {
         this.navCtrl.push('SetupPage');
       } else if (type === 'pos') {
@@ -117,7 +114,7 @@ export class StartPage {
       }
     }, _error => {
       Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-      Console.log("Can not pull data from server");
+
       //this.platform.exitApp();
     });
   }

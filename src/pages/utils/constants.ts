@@ -1,3 +1,4 @@
+import { keystore } from "eth-lightwallet";
 import { StorageService } from "./storageservice";
 import { Console } from "./console";
 import { Headers } from "@angular/http";
@@ -291,7 +292,7 @@ export class Constants {
         }
       },
       error => {
-        Console.log(error);
+
       }
     );
 
@@ -308,9 +309,9 @@ export class Constants {
     let loadingCtrl = otherData['loadingCtrl'];
     loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
 
-    Console.log(url);
-    Console.log(postData);
-    Console.log(otherData);
+
+
+
 
     http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
@@ -370,7 +371,7 @@ export class Constants {
       agentEmail: await ls.getItem("emailAddress")
     };
 
-    Console.log(postData);
+
 
     let url = data['url'];
     let http = data['http'];
@@ -384,8 +385,8 @@ export class Constants {
         if (responseData.response_text === "success") {
           loading.dismiss();
 
-          Console.log("ILI: " + Constants.IS_LOGGED_IN);
-          Console.log("Nav Ctrl: " + data['navCtrl']);
+
+
 
           if (Constants.IS_LOGGED_IN) {
             Constants.showPersistentToastMessage("Beneficiary Registration Successful.", toastCtrl);
@@ -523,7 +524,7 @@ export class Constants {
   }
 
   static sendCoinsToSeller(message, home, connection, buyerOtherAddress) {
-    Console.log("sendCoinsToSeller");
+
 
     let data = {};
     data['amount'] = message['amountToRecieve'];
@@ -595,7 +596,7 @@ export class Constants {
 
     let toCoin = message['toCoin'];
     let fees = Constants.getWalletProperties(coin);
-    Console.log(fees);
+
 
     let bankPaymentMethodsValues = Constants.properties['payment.methods'].map(x => x.value);
     if (bankPaymentMethodsValues.indexOf(toCoin) >= 0) {
@@ -655,7 +656,7 @@ export class Constants {
   }
 
   static askBuyerToPay(data) {
-    Console.log("Asking Buyer to Pay");
+
     let wsConnection = data['connection'];
     let message = data['message'];
     let buyerEmailAddress = message['buyerEmailAddress'];
@@ -674,7 +675,7 @@ export class Constants {
       "action": "askBuyerToPay"
     };
 
-    Console.log(wsData);
+
 
     wsConnection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((_responseData) => {
       //doNothing
@@ -836,7 +837,6 @@ export class Constants {
   }
 
   static decryptData(data) {
-    console.log("Data to decrypt: " + data);
     try {
       let coded = atob(data);
       let part1Key = coded.substr(0, 5);

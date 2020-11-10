@@ -74,7 +74,7 @@ export class SendBitPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad SendBitPage');
+
     let coin = 'ETH';
     Constants.ethWallet(this.ls, this.loading, this.loadingCtrl, this.http, this.toastCtrl, coin);
   }
@@ -114,7 +114,7 @@ export class SendBitPage {
   }
 
   sendCoinsSuccess(data) {
-    Console.log("Success Code Called");
+
     let me: SendBitPage = data['sendBitPage'];
     console.dir(data);
     console.dir(me);
@@ -170,7 +170,7 @@ export class SendBitPage {
 
 
   sendCoinsError(data) {
-    Console.log("Errored Out");
+
   }
 
   clearForm() {

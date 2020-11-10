@@ -15,6 +15,7 @@
 
 <ion-content padding>
   <ion-label>Account Number: {{bankAccountNumber}}</ion-label>
+  <ion-label>Account Balance: {{accountBalance | number: '.0-2'}} Naira</ion-label>
   <ion-searchbar (ionInput)="findBeneficiary($event)"></ion-searchbar>
   <ion-card>
     <ion-card-header>

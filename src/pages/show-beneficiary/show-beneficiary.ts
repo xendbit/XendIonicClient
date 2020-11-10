@@ -33,9 +33,9 @@ export class ShowBeneficiaryPage {
 
   constructor(public platform: Platform, public nfc: NFC, public ndef: Ndef, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public storage: Storage, public toastCtrl: ToastController) {
     this.beneficiary = Constants.registrationData['beneficiary'];
-    Console.log(this.beneficiary);
+
     this.dateRegistered = new Date(this.beneficiary.dateRegistered).toLocaleString();
-    Console.log(this.dateRegistered);
+
 
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
@@ -48,17 +48,17 @@ export class ShowBeneficiaryPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad ShowBeneficiaryPage');
+
   }
 
   makeDonation() {
-    Console.log('makeDonation');
+
     this.viewCtrl.dismiss();
     Constants.registrationData['viewBeneficiaries'].navCtrl.push('SendBitPage');
   }
 
   collectPayment() {
-    Console.log("Collect Payment");
+
     this.navCtrl.push('CollectPaymentPage');
   }
 
@@ -74,10 +74,10 @@ export class ShowBeneficiaryPage {
   }
 
   loadIdImage(code) {
-    Console.log("load ID Image called");
+
     let url = Constants.GET_IMAGE_URL + "/" + code;
 
-    Console.log(url);
+
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
@@ -89,9 +89,9 @@ export class ShowBeneficiaryPage {
   }
 
   loadBeneficiaryImage(code) {
-    Console.log("load Photo Image called");
+
     let url = Constants.GET_IMAGE_URL + "/" + code;
-    Console.log(url);
+
     this.http.get(url, Constants.getHeader()).map(res2 => res2.json()).subscribe(
       responseData2 => {
         this.pdi = 'data:image/jpeg;base64,' + responseData2.result;
@@ -103,7 +103,7 @@ export class ShowBeneficiaryPage {
   }
 
   loadImages(beneficiary) {
-    Console.log("Loading Images");
+
     setTimeout(() => {
       this.loadBeneficiaryImage(beneficiary.photoImage);
     }, 1000);

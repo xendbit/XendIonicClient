@@ -27,7 +27,7 @@ export class SwitchWalletPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad SwitchWalletPage');
+
   }
 
   ionViewDidEnter() {
@@ -49,7 +49,7 @@ export class SwitchWalletPage {
       this.wallets.push(by3);
     }
 
-    Console.log(this.wallets);
+
   }
 
   switchWallet(wallet) {
@@ -57,14 +57,14 @@ export class SwitchWalletPage {
     Constants.WORKING_WALLET = wallet['value'];
     if (Constants.WORKING_WALLET.indexOf("ETH") >= 0) {
       this.home.showXendBalance = false;
-      Console.log("Switching Wallet to " + Constants.WORKING_WALLET);
+
       Constants.ethWallet(this.ls, this.home.loading, this.home.loadingCtrl, this.home.http, this.home.toastCtrl, Constants.WORKING_WALLET);
       let app = this;
       setTimeout(function () {
         app.home.refresh(true);
       }, 2500);
     } else if (Constants.WORKING_WALLET === 'XND' || Constants.WORKING_WALLET === 'NXT' || Constants.WORKING_WALLET === 'ARDOR' || Constants.WORKING_WALLET === 'IGNIS') {
-      Console.log("Switching Wallet to " + Constants.WORKING_WALLET);
+
       this.home.showXendBalance = false;
       Constants.xndWallet(this.ls, this.home.loading, this.home.loadingCtrl, this.home.http, this.home.toastCtrl, Constants.WORKING_WALLET);
       let app = this;

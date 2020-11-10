@@ -12,27 +12,6 @@ export class StorageService {
     let app = this;
     app.ns = storage;
     app.ns.ready().then(() => {
-      //this.ns.clear();
-      //this.ns.set("store", this.data);
-      app.ns.get("store").then(
-        async (storeData) => {
-          Console.log(storeData);
-          app.setReady(true);
-          // here iterate through the keys and set them using await/async methods.
-          try {
-            let keys = Object.keys(storeData);
-            for (let key of keys) {
-              if (key === "mnemonic" || key === "password") {
-                await this.ns.set(key, storeData[key]);
-              } else {
-                await app.setItem(key, storeData[key]);
-              }
-            }
-            await app.ns.set('__store', storeData);
-            //await app.ns.remove("store");
-          } catch (e) { }
-        }
-      )
     });
   }
 
@@ -67,14 +46,12 @@ export class StorageService {
   async postDataKeys() {
     let retData = [];
     let keys = await this.ns.keys();
-    console.log(keys);
     for (let key of keys) {
       if (key.indexOf('postData') >= 0) {
         retData.push(key);
       }
     }
 
-    console.log(retData);
     return await retData;
   }
 

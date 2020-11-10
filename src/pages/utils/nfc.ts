@@ -10,7 +10,7 @@ export class NFCHelper {
     let sub = NFCHelper.readNFC(platform, nfc).subscribe((res) => {
       //Constants.showLongToastMessage("Card Attached. Now Click on Write Card.", toastCtrl);
     });
-    Console.log('Writing info to card: ' + msg);
+
     let message = ndef.textRecord(msg);
     let retVal = nfc.write([message]);
     sub.unsubscribe();
@@ -30,13 +30,13 @@ export class NFCHelper {
 
       observer.next(decodedMessage);
     } catch (err) {
-      Console.log(err);
+
     }
   }
 
   static readNFC(platform: Platform, nfc: NFC): Observable<any> {
-    Console.log("is_core: " + platform.is('core'));
-    Console.log("is_mobileweb: " + platform.is('mobileweb'));
+
+
 
     if (platform.is('core') || platform.is('mobileweb')) {
       return Observable.create((observer: Observer<any>) => { });
@@ -44,31 +44,31 @@ export class NFCHelper {
 
     const obs = Observable.create((observer: Observer<any>) => {
       nfc.addTagDiscoveredListener(() => {
-        Console.log('successfully attached TagDiscoveredListener listener');
+
       }, (err) => {
-        Console.log('error attaching TagDiscoveredListener listener: ');
-        Console.log(err);
+
+
         observer.error(err);
       }).subscribe((event) => {
-        Console.log('received TagDiscoveredListener message. the tag contains: ');
-        Console.log(event.tag);
-        Console.log('decoded tag id: ');
-        Console.log(nfc.bytesToHexString(event.tag.id));
+
+
+
+
         NFCHelper._readMessage(event, nfc, observer);
       });
 
       nfc.addNdefListener(() => {
-        Console.log('successfully attached NdefListener listener');
+
       }, (err) => {
-        Console.log('error attaching NdefListener listener: ');
-        Console.log(err);
+
+
         observer.error(err);
       }).subscribe((event) => {
-        Console.log(event);
-        Console.log('received NdefListener message. the tag contains: ');
-        Console.log(event.tag);
-        Console.log('decoded tag id: ');
-        Console.log(nfc.bytesToHexString(event.tag.id));
+
+
+
+
+
 
         NFCHelper._readMessage(event, nfc, observer);
       });

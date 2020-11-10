@@ -31,7 +31,7 @@ export class CoinsSender {
 
         http.post(url, requestData, Constants.getWalletHeader("NGNC")).map(res => res.json()).subscribe(responseData => {
             loading.dismiss();
-            Console.log(responseData);
+
             if(responseData.response_text === 'error') {
               Constants.showLongerToastMessage(responseData.result, toastCtrl);
               errorCall(data);
@@ -82,7 +82,7 @@ export class CoinsSender {
         try {
             web3.personal.importRawKey(privateKey, mnemonicCode);
         } catch (e) {
-            //Console.log(e);
+            //
         }
 
         try {
@@ -134,14 +134,14 @@ export class CoinsSender {
                 {
                     text: 'Cancel',
                     handler: data => {
-                        Console.log('Cancel clicked');
+
                     }
                 },
                 {
                     text: 'Confirm',
                     handler: alertData => {
-                        Console.log(alertData['2fa']);
-                        Console.log(code);
+
+
                         if(+alertData['2fa'] === code) {
                             this.continueSendingBTC(data, successCall, errorCall, coin, fromAddress, network);
                         } else {
@@ -156,7 +156,7 @@ export class CoinsSender {
     }
 
     static async sendCoinsBtc(data, successCall, errorCall, coin, fromAddress, network) {
-        Console.log("sendCoinsBtc");
+
         let ls = data['ls'];
         let http = data['http'];
 
@@ -206,7 +206,7 @@ export class CoinsSender {
                 errorCall(data);
             } else {
                 let hex = CoinsSender.getTransactionHex(responseData, network, ls, amount, fees, xendFees, blockFees, recipientAddress, fromAddress);
-                Console.log(hex);
+
                 CoinsSender.submitTx(data, coin, hex, password, loading, successCall, errorCall);
             }
         }, _error => {

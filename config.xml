@@ -144,6 +144,5 @@
     </plugin>
     <plugin name="cordova-plugin-dialogs" spec="^2.0.2" />
     <plugin name="cordova-sqlite-storage" spec="^5.1.0" />
-    <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="^9.0.0" />
 </widget>

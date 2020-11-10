@@ -29,7 +29,6 @@ export class BarcodePrinterPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad BarcodePrinterPage');
   }
 
   printUserCode() {
@@ -37,7 +36,6 @@ export class BarcodePrinterPage {
 
   writeCard() {
     NFCHelper.writeNFC(this.qrValue, this.platform, this.nfc, this.ndef, this.toastCtrl).then(_res => {
-      Console.log("Write Successfully")
       Constants.showLongToastMessage("Card Written Successfully", this.toastCtrl);
     });
   }

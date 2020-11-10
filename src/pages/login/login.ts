@@ -73,7 +73,6 @@ export class LoginPage {
     }, error => {
       //this.useFingerprint = false;
     });
-    Console.log('ionViewDidLoad LoginPage');
   }
 
   ionViewDidEnter() {
@@ -187,12 +186,12 @@ export class LoginPage {
           ls.setItem("accountType", user.accountType);
           ls.setItem("exchangeType", exchangeType);
           ls.setItem("bankAccountNumber", user.bankAccountNumber);
+          ls.setItem("accountBalance", user.accountBalance);
 
           try {
             ls.setItem("accountNumber", user.kyc.accountNumber);
             ls.setItem("bankCode", user.kyc.bankCode);
           } catch (e) {
-            Console.log(e);
           }
 
           Constants.IS_LOGGED_IN = true;
@@ -201,7 +200,6 @@ export class LoginPage {
           this.loading.dismiss();
           Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
 
-          Console.log(responseData.response_code === 601);
           if (responseData.response_code === 601) {
             //account is not activated
             this.showResendConfirmationEmailDialog();
@@ -210,7 +208,6 @@ export class LoginPage {
         }
       },
         error => {
-          Console.log(error);
           this.loading.dismiss();
           Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
         });
@@ -230,7 +227,6 @@ export class LoginPage {
         this.login();
       })
       .catch((error: any) => {
-        Console.log(error);
         Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
       });
   }
@@ -259,32 +255,5 @@ export class LoginPage {
     this.pageTitle = Constants.properties['login.page.title'];
     this.forgotPasswordText = "Forgot your login details? ";
     this.getHelpText = "Get help signing in";
-  }
-
-  deployContract() {
-    let web3 = new Web3(new Web3.providers.HttpProvider(Constants.GETH_PROXY));
-    let abi = Constants.ABI;
-
-    Console.log(abi);
-
-    let code = Constants.CODE;
-
-    Console.log(code);
-
-    let SampleContract = web3.eth.contract(abi);
-
-    var password = "Wq017kmg@tm";
-    try {
-      Console.log("Unlocking Account");
-      web3.personal.unlockAccount('0xb812082dd702a53ec36c874a49480f3991043aed', password);
-      Console.log("Account Unlocked Successfully");
-    } catch (e) {
-      Console.log(e);
-      return;
-    }
-
-    Console.log("Deploying the contract");
-    let contract = SampleContract.new({ from: '0xb812082dd702a53ec36c874a49480f3991043aed', gas: 1000000, data: code });
-    Console.log("Your contract is being deployed in transaction at http://rinkeby.etherscan.io/tx/" + contract.transactionHash);
   }
 }

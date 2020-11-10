@@ -53,7 +53,7 @@ export class SalePage {
 
     for (let index in productNames) {
       let pn = productNames[index];
-      Console.log(pn);
+
       let pp = +productPrices[index];
       let pq = +productQuantities[index];
       let pt = pp * pq;

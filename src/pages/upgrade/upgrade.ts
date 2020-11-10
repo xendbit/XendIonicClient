@@ -61,7 +61,7 @@ export class UpgradePage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad UpgradePage');
+
   }
 
   capturePassport() {

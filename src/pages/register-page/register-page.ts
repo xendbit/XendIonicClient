@@ -76,7 +76,7 @@ export class RegisterPaginated {
     this.platform.registerBackButtonAction(() => {
       //sometimes the best thing you can do is not think, not wonder, not imagine, not obsess.
       //just breathe, and have faith that everything will work out for the best.
-      Console.log("Back Button Pressed");
+
     }, 1);
 
     this.states = Constants.properties['states'];
@@ -160,7 +160,7 @@ export class RegisterPaginated {
   }
 
   capturePassport(sourceType) {
-    Console.log("Capturing Passport");
+
     if (this.platform.is('core') || this.platform.is('mobileweb')) {
       this.photoImagePath = "path";
       this.photoImage = PreImage.photoImage;
@@ -181,14 +181,14 @@ export class RegisterPaginated {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       this.photoImage = base64Image;
       this.photoImagePath = "data:image";
-      Console.log(base64Image);
+
     }, (err) => {
       // Handle error
     });
   }
 
   captureIdImage(sourceType) {
-    Console.log("Capturing Id Image");
+
     if (this.platform.is('core') || this.platform.is('mobileweb')) {
       this.idImagePath = "path";
       this.idImage = PreImage.idImage;
@@ -209,7 +209,7 @@ export class RegisterPaginated {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       this.idImage = base64Image;
       this.idImagePath = "data:image";
-      Console.log(base64Image);
+
     }, (err) => {
       // Handle error
     });
@@ -220,7 +220,7 @@ export class RegisterPaginated {
     this.geolocation.getCurrentPosition().then((resp) => {
       this.lat = resp.coords.latitude;
       this.long = resp.coords.longitude
-      Console.log(resp);
+
     }).catch((error) => {
       console.log('Error getting location', error);
     });
@@ -308,11 +308,11 @@ export class RegisterPaginated {
   }
 
   ionViewDidEnter() {
-    Console.log("ionViewDidEnter entered");
+
   }
 
   async ionViewDidLoad() {
-    Console.log('ionViewDidLoad RegisterPageOnePage');
+
     this.clearForm();
     let editMode = Constants.otherData['editMode'];
     //this.registerPageOneForm.controls.state.setValue('Delta');
@@ -408,7 +408,7 @@ export class RegisterPaginated {
   }
 
   disabilityTypeSelected(typeId) {
-    Console.log("Type ID: " + typeId);
+
     for (let disabilityType of this.disabilityTypes) {
       if (disabilityType.typeId === typeId) {
         this.selectedDisabilitySubTypes = this.findDisabilitySubTypes(disabilityType.typeId);
@@ -436,9 +436,9 @@ export class RegisterPaginated {
   findDisabilitySubTypes(typeId) {
     let found = [];
     for (let disabilitySubtype of this.disabilitySubtypes) {
-      Console.log(disabilitySubtype);
+
       if (disabilitySubtype.typeId === typeId) {
-        Console.log(found);
+
         found.push(disabilitySubtype);
       }
     }

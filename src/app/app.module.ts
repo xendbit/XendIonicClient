@@ -24,7 +24,7 @@ import { HttpModule } from '@angular/http';
     HttpModule,
     IonicStorageModule.forRoot({
       name: '__mydb',
-      driverOrder: ['sqlite', 'localstorage', 'indexeddb', 'websql']
+      driverOrder: ['localstorage', 'sqlite', 'indexeddb', 'websql']
     }
     )
   ],

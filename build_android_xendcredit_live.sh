@@ -5,7 +5,13 @@ MAJOR_VERSION="`cat major_version.txt`"
 MINOR_VERSION="`cat minor_version.txt`"
 BASE_DIR=$(pwd)
 
-RC=$((RC + 1))
+INCREMENT_VERSION="$1"
+
+if [[ $INCREMENT_VERSION == "yes" ]]
+then
+  RC=$((RC + 1))
+fi
+
 #MAJOR_VERSION=$((MAJOR_VERSION + 1))
 #MINOR_VERSION=$((MINOR_VERSION + 1))
 VERSION="v$MAJOR_VERSION.$MINOR_VERSION-rc$RC"
@@ -42,7 +48,7 @@ export class Constants {
 static TOMCAT_URL = "https://lb.xendbit.com";' > /tmp/temp
 echo "static APP_VERSION = \"$VERSION\";" >> /tmp/temp
 echo "static ENABLE_GUEST = false;" >> /tmp/temp
-echo "static NOTIFICATION_SOCKET_URL = \"ws://192.250.236.180:8080/notify/websocket\";" >> /tmp/temp
+#echo "static NOTIFICATION_SOCKET_URL = \"ws://192.250.236.180:8080/notify/websocket\";" >> /tmp/temp
 
 cat /tmp/temp | cat - $WORKING_FILE > temp && mv temp $WORKING_FILE
 mv $WORKING_FILE $CONSTANTS_FILE

@@ -85,13 +85,11 @@ export class CollectPaymentPage {
       postData['emailAddress'] = await this.ls.getItem("emailAddress");
 
       let url = Constants.REPAY_LOAN_URL;
-      Console.log(url);
 
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
 
       this.http.post(url, postData, Constants.getWalletHeader("NGNC")).map(res => res.json()).subscribe(responseData => {
         this.loading.dismiss();
-        Console.log(responseData);
         if (responseData.response_text === 'error') {
           Constants.showLongerToastMessage(responseData.result, this.toastCtrl);
           return;

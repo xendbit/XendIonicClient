@@ -80,7 +80,7 @@ export class SendEquityPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad SendBitPage');
+
     let faio: FingerprintAIO = new FingerprintAIO();
     faio.isAvailable().then(result => {
       this.useFingerprint = true;
@@ -103,7 +103,7 @@ export class SendEquityPage {
       })
       .catch((error: any) => {
         //doNothing
-        Console.log(error);
+
         Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
       });
   }
@@ -113,7 +113,7 @@ export class SendEquityPage {
     let balance = await this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     let xendFees = +fees.xendFees * balance;
     //0.001 is added because of rounding issues.
-    Console.log("confirmedAccountBalance: " + balance);
+
     let canSend = balance - fees.blockFees - xendFees;
     if (canSend < 0) {
       canSend = 0;
@@ -136,8 +136,8 @@ export class SendEquityPage {
 
     let xendFees = +fees.xendFees * amountToSend;
     if (amountToSend === 0) {
-      Console.log(balance);
-      Console.log(amountToSend + fees.blockFees + xendFees);
+
+
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
     } else if (amountToSend + fees.blockFees + xendFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
@@ -165,8 +165,8 @@ export class SendEquityPage {
       data['alertCtrl'] = this.alertCtrl;
 
       this.disableButton = true;
-      Console.log(fees);
-      Console.log(fees.btcText);
+
+
       if (fees.btcText.indexOf('ETH') > 0) {
         CoinsSender.sendCoinsEth(data, this.sendCoinsSuccess, this.sendCoinsError, Constants.WORKING_WALLET);
       } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDOR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
@@ -184,7 +184,7 @@ export class SendEquityPage {
   }
 
   sendCoinsSuccess(data) {
-    Console.log("Success Code Called");
+
     let me: SendEquityPage = data['sendBitPage'];
     console.dir(data);
     console.dir(me);
@@ -197,7 +197,7 @@ export class SendEquityPage {
     let me: SendEquityPage = data['sendBitPage'];
     me.disableButton = false;
     Constants.showLongerToastMessage('Error Sending Coin', me.toastCtrl);
-    Console.log("Errored Out");
+
   }
 
   clearForm() {

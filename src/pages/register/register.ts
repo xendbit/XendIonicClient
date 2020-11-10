@@ -131,7 +131,7 @@ export class RegisterPage {
   ionViewWillEnter() {
     if (Constants.IS_LOGGED_IN) {
       let result = genwallet();
-      Console.log(result);
+
       Constants.registrationData['mnemonic'] = result.mnemonic;
       this.mnemonic = result.mnemonic;
     } else {
@@ -145,12 +145,12 @@ export class RegisterPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad RegisterPage');
+
   }
 
   // TODO: create chose image method and chose image button
   capturePassport(sourceType) {
-    Console.log("Capturing Passport");
+
     const options: CameraOptions = {
       quality: 15,
       sourceType: sourceType,
@@ -165,32 +165,32 @@ export class RegisterPage {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       this.idImage = base64Image;
       this.idImagePath = "data:image";
-      Console.log(base64Image);
+
     }, (err) => {
       // Handle error
     });
   }
 
   __capturePassport() {
-    Console.log("Capturing Passport");
+
     let options: CaptureImageOptions = { limit: 1 };
     this.mediaCapture.captureImage(options)
       .then(
         (data: MediaFile[]) => {
-          Console.log("Passport Captured with data: " + data);
-          Console.log("Path: " + data[0]['fullPath']);
+
+
           //this.resizeImage(data[0]['fullPath']);
         },
         (err: CaptureError) => {
-          Console.log(err);
+
         }
       );
   }
 
   resizeImage(uri) {
-    Console.log("Resizing Image");
+
     this.idImagePath = uri;
-    Console.log("Platform is iOS: " + this.platform.is('ios'));
+
     if (this.platform.is('ios')) {
       uri = normalizeURL(uri);
       this.toDataUrl(uri, function (myBase64) {
@@ -207,20 +207,20 @@ export class RegisterPage {
         fileName: fileName
       };
 
-      Console.log("Resizing Options: " + options);
+
 
       this.imageResizer.resize(options).then((filePath: string) => {
-        Console.log("Resizing Succesful. New Path is: " + filePath);
+
         this.idImagePath = filePath;
-        Console.log("Encoding Into Base64");
+
         this.base64.encodeFile(filePath).then((base64File: string) => {
-          Console.log("Base64 Encoding Succesful: " + base64File.substr(0, 10));
+
           this.idImage = base64File;
         }, (err) => {
-          Console.log(err);
+
         });
       }).catch(e => {
-        Console.log(e)
+
       });
     }
   }
@@ -240,7 +240,7 @@ export class RegisterPage {
   }
 
   register() {
-    Console.log('DOB: ' + this.registerForm.value.dateOfBirth);
+
     let isValid = false;
     let rf = this.registerForm.value;
 
@@ -340,7 +340,7 @@ export class RegisterPage {
   }
 
   checkValue() {
-    Console.log(this.registerForm.value.isBeneficiary);
+
   }
 
   passwordPadSuccess() {

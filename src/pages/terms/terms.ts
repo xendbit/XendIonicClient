@@ -30,7 +30,7 @@ export class TermsPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad TermsPage');
+
     this.ls = new StorageService(this.storage);
   }
 

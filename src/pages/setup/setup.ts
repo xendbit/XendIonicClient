@@ -44,15 +44,13 @@ export class SetupPage {
   }
 
   loadSettings() {
-    Console.log(Constants.SETTINGS_URL);
+
     this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(data => {
-      Console.log("Settings loaded successfully");
+
       Constants.properties = data;
       this.manufacturers = Constants.properties['manufacturers'];
     }, _error => {
       Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-      Console.log("Can not pull data from server");
-      //this.platform.exitApp();
     });
   }
 
@@ -86,7 +84,7 @@ export class SetupPage {
   }
 
   selectLoginType(type) {
-    Console.log(type);
+
     console.dir(this.ls);
     this.type = type;
     if (type === 'agent') {

@@ -69,7 +69,7 @@ export class ReleaseCoinsPage {
   }
 
   ionViewDidLoad() {
-    Console.log('ionViewDidLoad BuyWithBankAccountPage');
+
   }
 
   loadRate() {

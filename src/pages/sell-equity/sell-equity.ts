@@ -97,7 +97,7 @@ export class SellEquityPage {
     }
 
     ionViewDidLoad() {
-        Console.log('ionViewDidLoad SellBitPage');
+
         this.loadRate();
         this.loadBalanceFromStorage();
         this.populateBeneficiaryInformation();
