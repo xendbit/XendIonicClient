@@ -1,12 +1,9 @@
-import { keystore } from "eth-lightwallet";
 import { StorageService } from "./storageservice";
 import { Console } from "./console";
 import { Headers } from "@angular/http";
 import { networks, Network } from "bitcoinjs-lib";
 import { LocalProps } from "./localprops";
 import { CoinsSender } from "./coinssender";
-import { HDNode } from "bitcoinjs-lib";
-import { mnemonicToSeed } from "bip39";
 
 export class Constants {
     //static TOMCAT_URL = "https://lb.xendbit.net";
@@ -124,6 +121,11 @@ export class Constants {
 
     static SEND_2_BANK_URL = Constants.SERVER_URL + "send2bank/new";
     static GET_SEND_2_BANK_REQUEST_URL = Constants.SERVER_URL + "send2bank/tx/";
+
+    static GET_NGNC_BALANCE_URL = Constants.SERVER_URL + "user/#{userId}/get-ngnc-balance";
+
+    static BUY_WITH_NGNC_URL = Constants.SERVER_URL + "exchange/trade";
+
     static APP_NAME = "XendbitV1.0Client";
 
     static REG_STATUS_URL = Constants.SERVER_URL + "register/status";

@@ -197,11 +197,42 @@ export class BuyBitPage {
   getBuyerOtherAddress(seller) {
     let coin = seller.toCoin;
     if (coin === "Naira") {
-      this.sendTradeStartMessage(seller);
+      //this.sendTradeStartMessage(seller);
+      // TODO: Just do the swap on the server.
+      this.trade(seller);
     } else {
       this.buyerOtherAddress = this.wallet['chain_address'];
       this.checkCoinBalance(coin, seller);
     }
+  }
+
+  trade(seller) {
+    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait....");
+    let buyerAddress = this.wallet['chain_address'];
+    let trxId = seller.trxId;
+    let data = {
+      "buyerAddress": buyerAddress,
+      "buyerEmailAddress": this.ls.getItem("emailAddress"),
+      "password": this.ls.getItem("password"),
+      "trxId": trxId
+    };
+
+    console.log(data);
+    let url = Constants.BUY_WITH_NGNC_URL;
+
+    this.http.post(url, data, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+      this.loading.dismiss();
+      if(responseData.response_text === 'success') {
+        this.loadSellers();
+        Constants.showLongerToastMessage('Order Successfully Completed. Reload to see your new balance', this.toastCtrl);
+      } else {
+        Constants.showLongerToastMessage(responseData.result, this.toastCtrl);
+      }
+    }, error => {
+      this.loading.dismiss();
+      Console.log(error);
+      Constants.showLongToastMessage('Can not buy coin at this time. Please try again', this.toastCtrl);
+    })
   }
 
   sendTradeStartMessage(seller) {

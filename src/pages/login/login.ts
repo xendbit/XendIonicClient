@@ -173,6 +173,8 @@ export class LoginPage {
           StorageService.IS_BENEFICIARY = user.beneficiary;
           ls.setItem("accountType", user.accountType);
           ls.setItem("exchangeType", exchangeType);
+          ls.setItem("userId", user.id);
+          ls.setItem("ngncBalance", user.ngncBalance);
 
           try {
             ls.setItem("accountNumber", user.kyc.bankAccountNumber);
@@ -243,23 +245,5 @@ export class LoginPage {
     this.pageTitle = Constants.properties['login.page.title'];
     this.forgotPasswordText = "Forgot your login details? ";
     this.getHelpText = "Get help signing in";
-  }
-
-  deployContract() {
-    let web3 = new Web3(new Web3.providers.HttpProvider(Constants.GETH_PROXY));
-    let abi = Constants.ABI;
-
-    let code = Constants.CODE;
-
-    let SampleContract = web3.eth.contract(abi);
-
-    var password = "Wq017kmg@tm";
-    try {
-      web3.personal.unlockAccount('0xb812082dd702a53ec36c874a49480f3991043aed', password);
-    } catch (e) {
-      Console.log(e);
-      return;
-    }
-    let contract = SampleContract.new({ from: '0xb812082dd702a53ec36c874a49480f3991043aed', gas: 1000000, data: code });
   }
 }

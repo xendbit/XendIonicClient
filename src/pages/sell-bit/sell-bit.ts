@@ -7,7 +7,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, ActionSheetController, AlertController, IonicPage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
-import { min } from 'rxjs/operator/min';
 
 /**
  * Generated class for the SellBitPage page.
@@ -40,18 +39,11 @@ export class SellBitPage {
   numberOfBTCText: string;
   sendBitText: string;
   beneficiaryNameText: string;
-  beneficiaryAccountNumberText: string;
-  beneficiaryBankText: string;
   banks = [];
   beneficiaryName: string;
   passwordText: string;
   placeOrderText: string;
   isOwner = false;
-  beneficiaryData = {
-    beneficiaryBank: "",
-    beneficiaryAccountNumber: ""
-  };
-
   blockFees = 0;
   sliderValue = 5;
   minBlockFees = 0;
@@ -67,8 +59,6 @@ export class SellBitPage {
     this.sendBitText = "Place Sell Order";
     this.placeOrderText = "Place Order";
     this.beneficiaryNameText = "Beneficiary Name";
-    this.beneficiaryAccountNumberText = "Beneficiary Account Number";
-    this.beneficiaryBankText = "Beneficiary Bank";
     this.passwordText = "Wallet Password";
 
     this.wallet = Constants.WALLET;
@@ -82,8 +72,6 @@ export class SellBitPage {
       pricePerBTC: ['', Validators.required],
       usdRate: ['', Validators.required],
       amountToRecieve: ['', Validators.required],
-      beneficiaryAccountNumber: ['', Validators.required],
-      beneficiaryBank: ['', Validators.required],
       password: ['', Validators.required]
     });
 
@@ -109,105 +97,56 @@ export class SellBitPage {
     Console.log('ionViewDidLoad SellBitPage');
     this.loadRate();
     this.loadBalanceFromStorage();
-    this.populateBeneficiaryInformation();
-  }
-
-  populateBeneficiaryInformation() {
-    this.sellForm.controls.beneficiaryAccountNumber.setValue(this.ls.getItem('accountNumber'));
-    this.sellForm.controls.beneficiaryBank.setValue(this.ls.getItem("bank"));
   }
 
   sellBit() {
-    let isValid = false;
     let sb = this.sellForm.value;
     let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
-    let price = +sb.pricePerBTC;
     let password = sb.password;
     let coinAmount = +sb.numberOfBTC;
     this.blockFees = this.minBlockFees * this.sliderValue;
 
     if (coinAmount === 0) {
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
-    } else if (!this.isOwner && sb.beneficiaryBank === "") {
-      Constants.showLongToastMessage("Please select the beneficiary bank", this.toastCtrl);
-    } else if (price === 0) {
-      Constants.showLongToastMessage("Price must be greater than 0", this.toastCtrl);
-    } else if (!this.isOwner && sb.beneficiaryAccountNumber === '') {
-      Constants.showLongToastMessage("Please enter a valid beneficiary account number", this.toastCtrl);
+      return;
     } else if (password !== this.ls.getItem("password")) {
       Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
+      return;
     } else if (coinAmount + this.xendFees + this.blockFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
-    } else {
-      isValid = true;
+      return;
     }
 
-    if (isValid) {
-      let beneficiaryAccountNumber = this.isOwner ? this.ls.getItem('accountNumber') : sb.beneficiaryAccountNumber;
-      let beneficiaryBank = this.isOwner ? this.ls.getItem('bankCode') : sb.beneficiaryBank;
-
-      this.beneficiaryData.beneficiaryBank = beneficiaryBank;
-      this.beneficiaryData.beneficiaryAccountNumber = beneficiaryAccountNumber;
-
-      let data = {
-        beneficiaryBank: beneficiaryBank,
-        beneficiaryAccountNumber: beneficiaryAccountNumber
-      }
-
-      this.confirmBeneficiary(data);
-    }
+    this.continue();
   }
+  // confirmBeneficiary(data) {
+  //   this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
 
-  presentActionSheet(beneficiaryName) {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: "Continue" + '?',
-      buttons: [
-        {
-          text: beneficiaryName,
-          handler: () => {
-            this.continue();
-          }
-        }, {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-          }
-        }
-      ]
-    });
-    actionSheet.present();
-  }
+  //   let url = Constants.RESOLVE_ACCOUNT_URL;
+  //   let postData = {
+  //     bankCode: data.beneficiaryBank,
+  //     accountNumber: data.beneficiaryAccountNumber
+  //   };
 
-  confirmBeneficiary(data) {
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-
-    let url = Constants.RESOLVE_ACCOUNT_URL;
-    let postData = {
-      bankCode: data.beneficiaryBank,
-      accountNumber: data.beneficiaryAccountNumber
-    };
-
-    this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      if (responseData.response_text === "success") {
-        this.beneficiaryName = responseData.account_name;
-        this.loading.dismiss();
-        this.presentActionSheet(this.beneficiaryName);
-      } else {
-        Constants.showPersistentToastMessage("Can not confirm beneficiary account number.", this.toastCtrl);
-        this.loading.dismiss();
-      }
-    }, _error => {
-      this.loading.dismiss();
-      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-    });
-  }
+  //   this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+  //     if (responseData.response_text === "success") {
+  //       this.beneficiaryName = responseData.account_name;
+  //       this.loading.dismiss();
+  //       this.presentActionSheet(this.beneficiaryName);
+  //     } else {
+  //       Constants.showPersistentToastMessage("Can not confirm beneficiary account number.", this.toastCtrl);
+  //       this.loading.dismiss();
+  //     }
+  //   }, _error => {
+  //     this.loading.dismiss();
+  //     Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+  //   });
+  // }
 
   continue() {
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let sb = this.sellForm.value;
     let coinAmount = +sb.numberOfBTC;
-    let beneficiaryAccountNumber = this.beneficiaryData.beneficiaryAccountNumber;
-    let beneficiaryBank = this.beneficiaryData.beneficiaryBank;
     let password = sb.password;
     let amountToRecieve = +sb.amountToRecieve;
 
@@ -219,7 +158,17 @@ export class SellBitPage {
 
     let key = Constants.WORKING_WALLET + "Address";
     let sellerFromAddress = this.ls.getItem(key);
-    let sellerToAddress = beneficiaryBank + ":" + beneficiaryAccountNumber;
+
+    // Get seller ETH Address to recieve NGNC
+    let sellerToAddress = "";
+    let wallets = Constants.LOGGED_IN_USER['addressMappings'];
+    for (let w of wallets) {
+      let wallet = Constants.getWalletFormatted(w);
+      if (wallet['value'] === 'ETH') {
+        sellerToAddress = wallet['chain_address'];
+        break;
+      }
+    }
 
     let postData = {
       amountToSell: btcValue,
@@ -236,6 +185,8 @@ export class SellBitPage {
       password: password,
       networkAddress: sellerFromAddress
     }
+
+    console.log(postData);
 
     //this is wrong
     let url = Constants.POST_TRADE_URL;
@@ -260,8 +211,10 @@ export class SellBitPage {
     let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     this.xendFees = +this.wallet['token']['xendFees'] * balance;
     this.blockFees = this.minBlockFees * this.sliderValue;
-
     let canSend = balance - this.blockFees - this.xendFees;
+    console.log(this.xendFees);
+    console.log(this.blockFees);
+    console.log(canSend);
 
     if (canSend < 0) {
       canSend = 0;

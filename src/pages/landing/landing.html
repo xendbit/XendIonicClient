@@ -14,18 +14,27 @@
 
 
 <ion-content>
-  <ion-fab bottom end>
+  <!-- <ion-fab bottom end>
     <button ion-fab mini (click)="showUnloadedWallets()">
       <ion-icon name="add"></ion-icon>
     </button>
-  </ion-fab>
-  <ion-item>
+  </ion-fab> -->
+  <ion-row>
+    <ion-col>
     <p class="total-assets">Portfolio Value</p>
     <p class="total-assets" (click)="reloadWallets()">
       {{totalAssets | currency: 'USD' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ion-icon name="refresh"
         color="xend"></ion-icon>
     </p>
-  </ion-item>
+  </ion-col>
+  <ion-col>
+    <p class="total-assets">NGNC Value</p>
+    <p class="total-assets" (click)="getNgncBalance()">
+      {{ngncBalance | currency: '&#8358;' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ion-icon name="refresh"
+        color="xend"></ion-icon>
+    </p>
+  </ion-col>
+  </ion-row>
 
   <ion-item>
     Select an Asset below to View or Trade
@@ -40,11 +49,11 @@
           class="big-color" item-end>[{{wallet.usdBalance | currency:'USD' : 'symbol' : '.2-2'}}]</span><br />
         <span class="small">{{wallet.usdRate | currency:'USD' : 'symbol' : '.2-4'}} per {{wallet.text}}</span>
       </ion-item>
-      <ion-item-options side="right">
+      <!-- <ion-item-options side="right">
         <button ion-button color="danger" (click)="removeItem(wallet)">
           <ion-icon name="trash"></ion-icon> Delete
         </button>
-      </ion-item-options>
+      </ion-item-options> -->
     </ion-item-sliding>
   </ion-list>
   <ion-item *ngIf="isEmpty();">

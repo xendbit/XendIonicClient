@@ -1,4 +1,3 @@
-import { Console } from './../utils/console';
 import { Constants } from './../utils/constants';
 import { Clipboard } from '@ionic-native/clipboard';
 import { Component } from '@angular/core';

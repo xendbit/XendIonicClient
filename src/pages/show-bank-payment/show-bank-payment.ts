@@ -1,5 +1,3 @@
-import { CoinsSender } from './../utils/coinssender';
-
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, AlertController, IonicPage } from 'ionic-angular';

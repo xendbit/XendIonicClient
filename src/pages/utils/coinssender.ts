@@ -265,11 +265,9 @@ export class CoinsSender {
     }
 
     static confirmSellerHaveCoins(data, successCall, errorCall, coin, fromAddress, wallet) {
-        let ls = data['ls'];
         let http = data['http'];
 
         let amount: number = +data['amount'];
-        let recipientAddress = data['recipientAddress'];
         let loading = data['loading'];
         let loadingCtrl = data['loadingCtrl'];
         let toastCtrl = data['toastCtrl'];

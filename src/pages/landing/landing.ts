@@ -27,6 +27,7 @@ export class LandingPage {
   totalAssets = 0;
   loadingTotalAssets = 0;
   numberOfWallets = 0;
+  ngncBalance = 0;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController) {
     this.ls = Constants.storageService;
@@ -44,6 +45,7 @@ export class LandingPage {
     Constants.WORKING_TICKER_VALUE = wallet['ticker_symbol'];
     this.totalAssets = 0;
     this.reloadWallets();
+    this.ngncBalance = this.ls.getItem("ngncBalance");
     //this.ls.setItem("loadedWallets", []);
   }
 
@@ -58,6 +60,14 @@ export class LandingPage {
       let wallet = Constants.getWalletFormatted(w);
       this.getTransactions(wallet);
     }
+  }
+
+  getNgncBalance() {
+    let userId = this.ls.getItem("userId");
+    let url = Constants.GET_NGNC_BALANCE_URL.replace("#{userId}", userId);
+    this.http.get(url, Constants.getWalletHeader('BTC')).map(res => res.json()).subscribe(responseData => {
+      this.ngncBalance = responseData.result;
+    });
   }
 
   getTransactions(wallet) {
