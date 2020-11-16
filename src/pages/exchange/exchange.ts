@@ -240,11 +240,11 @@ export class ExchangePage {
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.loading.dismiss();
       this.rate = responseData.result['t1_t2'];
-      this.sellForm.controls.pricePerBTC.setValue(this.rate.toFixed(10));
+      this.sellForm.controls.pricePerBTC.setValue(this.rate.toFixed(7));
       let toSell = this.sellForm.value.numberOfBTC;
       if (toSell > 0) {
         let amount = toSell * this.rate;
-        this.sellForm.controls.amountToRecieve.setValue(amount.toFixed(3));
+        this.sellForm.controls.amountToRecieve.setValue(amount.toFixed(7));
       }
     }, _error => {
       this.loading.dismiss();
@@ -257,7 +257,7 @@ export class ExchangePage {
     let toSell = +this.sellForm.value.numberOfBTC;
     if (this.rate !== 0 && toSell !== 0) {
       let toRecieve = toSell * this.rate;
-      this.sellForm.controls.amountToRecieve.setValue(toRecieve.toFixed(3));
+      this.sellForm.controls.amountToRecieve.setValue(toRecieve.toFixed(7));
     }
   }
 

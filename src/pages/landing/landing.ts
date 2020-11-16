@@ -44,8 +44,10 @@ export class LandingPage {
     Constants.WALLET = wallet;
     Constants.WORKING_TICKER_VALUE = wallet['ticker_symbol'];
     this.totalAssets = 0;
-    this.reloadWallets();
     this.ngncBalance = this.ls.getItem("ngncBalance");
+
+    this.reloadWallets();
+    this.getNgncBalance();
     //this.ls.setItem("loadedWallets", []);
   }
 

@@ -25,9 +25,6 @@ export class HomePage {
 
   cashBalance: number = 0;
   ls: StorageService;
-  allTransactions: any = [];
-  utx: any = [];
-  ctx: any = [];
   static wallet: any;
   loading: Loading;
 
@@ -214,25 +211,12 @@ export class HomePage {
         }
         //if (responseData.response_text === "success") {
         if (responseData.response_code === 0) {
-          this.utx = [];
-          this.ctx = [];
           this.confirmedAccountBalance = responseData.result.balance
           this.ls.setItem(Constants.WORKING_WALLET + "confirmedAccountBalance", responseData.result.balance);
           this.totalReceived = responseData.result.received
           this.totalSent = responseData.result.spent
 
           this.escrow = responseData.result.escrow === 0 ? 0 : (responseData.result.escrow)
-
-          for (let txData of responseData.result.transactions) {
-            let tx = {
-              tx: txData.hash,
-              url: txData.url,
-              value: txData.value,
-              confirmations: txData.confirmations,
-              incoming: txData.incoming
-            }
-            this.checkTransaction(tx);
-          }
         }
       }, _error => {
         if (showLoading) {
@@ -240,14 +224,6 @@ export class HomePage {
         }
         Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
       });
-  }
-
-  checkTransaction(tx) {
-    if (tx.confirmations < 6) {
-      this.utx.push(tx);
-    } else {
-      this.ctx.push(tx);
-    }
   }
 
   initProps() {

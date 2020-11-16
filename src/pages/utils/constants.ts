@@ -206,7 +206,7 @@ export class Constants {
     static showLongToastMessage(message, toastCtrl) {
         let toast = toastCtrl.create({
             message: message,
-            duration: 5000
+            duration: 10000
         });
 
         toast.onDidDismiss(() => {
@@ -230,7 +230,7 @@ export class Constants {
     static showLongerToastMessage(message, toastCtrl) {
         let toast = toastCtrl.create({
             message: message,
-            duration: 5000
+            duration: 10000
         });
 
         toast.onDidDismiss(() => {
