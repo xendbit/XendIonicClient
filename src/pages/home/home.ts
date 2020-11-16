@@ -66,9 +66,6 @@ export class HomePage {
     this.ls = Constants.storageService;
     this.initProps();
     Constants.properties['home'] = this;
-    Console.log("Working Wallet: " + Constants.WORKING_WALLET);
-    this.wtv = Constants.WORKING_TICKER_VALUE;
-    this.wallet = Constants.WALLET;
   }
 
   loadRate() {
@@ -116,11 +113,15 @@ export class HomePage {
 
 
   ionViewDidLoad() {
-    this.loadCharts();
     Console.log('ionViewDidLoad HomePage');
     this.cryptoSellOrderText = 'Sell';
     this.cryptoBuyOrderText = 'Buy';
     this.fiatSellOrderText = 'Fiat Sell-Order'
+
+    Console.log("Working Wallet: " + Constants.WORKING_WALLET);
+    this.wtv = Constants.WORKING_TICKER_VALUE;
+    this.wallet = Constants.WALLET;
+    this.loadCharts();
   }
 
   loadCharts() {
@@ -205,7 +206,7 @@ export class HomePage {
       emailAddress: this.ls.getItem("emailAddress"),
     };
 
-    this.http.post(Constants.GET_TX_URL, postData, Constants.getHeader())
+    this.http.post(Constants.GET_TX_URL, postData, Constants.getWalletHeader(Constants.WORKING_WALLET))
       .map(res => res.json())
       .subscribe(responseData => {
         if (showLoading) {

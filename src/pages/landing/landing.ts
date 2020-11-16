@@ -117,7 +117,8 @@ export class LandingPage {
   }
 
   openHomePage(wallet) {
-    Constants.WORKING_WALLET = wallet['chain'];
+    console.log(wallet);
+    Constants.WORKING_WALLET = wallet['value'];
     Constants.WALLET = wallet;
     Constants.WORKING_TICKER_VALUE = wallet['ticker_symbol'];
     this.navCtrl.push('HomePage');
