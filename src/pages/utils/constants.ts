@@ -3,15 +3,14 @@ import { Console } from "./console";
 import { Headers } from "@angular/http";
 import { networks, Network } from "bitcoinjs-lib";
 import { LocalProps } from "./localprops";
-import { CoinsSender } from "./coinssender";
 
 export class Constants {
-    //static TOMCAT_URL = "https://lb.xendbit.net";
+    static TOMCAT_URL = "https://lb.xendbit.net";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
     //static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
     static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
-    static TOMCAT_URL = "http://localhost:8080";
+    //static TOMCAT_URL = "http://localhost:8080";
     //static TOMCAT_URL = "https://lb.xendbit.com";
     static NOTIFICATION_SOCKET_URL = "ws://localhost:8080/notify/websocket";
     static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
@@ -441,11 +440,11 @@ export class Constants {
 
         if (coin.indexOf("BTC") >= 0) {
             let network = Constants.NETWORKS[coin];
-            CoinsSender.sendCoinsBtc(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, coin, buyerOtherAddress, network)
+            //CoinsSender.sendCoinsBtc(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, coin, buyerOtherAddress, network)
         } else if (coin.indexOf("ETH") >= 0) {
-            CoinsSender.sendCoinsEth(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, coin);
+            //CoinsSender.sendCoinsEth(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, coin);
         } else {
-            CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, fees);
+            //CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, fees);
         }
     }
 
@@ -475,7 +474,7 @@ export class Constants {
         let coin: string = message['fromCoin'];
         let ls = data['ls'];
         let fromAddress = Constants.WALLET['chain_address'];
-        CoinsSender.confirmSellerHaveCoins(data, Constants.askBuyerToPay, Constants.sendCoinsToBuyerError, coin, fromAddress, Constants.WALLET);
+        //CoinsSender.confirmSellerHaveCoins(data, Constants.askBuyerToPay, Constants.sendCoinsToBuyerError, coin, fromAddress, Constants.WALLET);
     }
 
     static startTrade(message, home, connection) {

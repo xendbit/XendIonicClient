@@ -2,7 +2,7 @@
 RC="`cat rc.txt`"
 MAJOR_VERSION="`cat major_version.txt`"
 MINOR_VERSION="`cat minor_version.txt`"
-BASE_DIR=/Users/aardvocate/src/XendBitV3/mobile/XendBit
+BASE_DIR=/Users/aardvocate/src/XendBitIonic
 
 RC=$((RC + 1))
 #MAJOR_VERSION=$((MAJOR_VERSION + 1))
@@ -35,7 +35,6 @@ import { Console } from "./console";
 import { Headers } from "@angular/http";
 import { networks, Network } from "bitcoinjs-lib";
 import { LocalProps } from "./localprops";
-import { CoinsSender } from "./coinssender";
 import { HDNode } from "bitcoinjs-lib";
 import { mnemonicToSeed } from "bip39";
 
