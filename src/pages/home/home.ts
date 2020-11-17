@@ -1,5 +1,4 @@
 import { StorageService } from './../utils/storageservice';
-import { WSConnection } from './../utils/websocketconnection';
 import { Constants } from './../utils/constants';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Component } from '@angular/core';
@@ -96,7 +95,6 @@ export class HomePage {
     setTimeout(function () {
       app.qrValue = app.wallet['chain_address']
       app.emailAddress = app.ls.getItem('emailAddress');
-      WSConnection.startListeningForNotifications(app);
       app.networkAddress = app.wallet['chain_address']
       app.currencyText = app.wallet['value'];
       app.btcText = app.wallet['value'];

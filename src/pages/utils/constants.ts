@@ -1,23 +1,16 @@
 import { StorageService } from "./storageservice";
-import { Console } from "./console";
 import { Headers } from "@angular/http";
-import { networks, Network } from "bitcoinjs-lib";
 import { LocalProps } from "./localprops";
 
 export class Constants {
-    static TOMCAT_URL = "https://lb.xendbit.net";
+    //static TOMCAT_URL = "https://lb.xendbit.net";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
-    //static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
-    static GETH_PROXY = "http://rinkeby.xendbit.com:8546";
-    //static TOMCAT_URL = "http://localhost:8080";
+    static TOMCAT_URL = "http://localhost:8080";
     //static TOMCAT_URL = "https://lb.xendbit.com";
-    static NOTIFICATION_SOCKET_URL = "ws://localhost:8080/notify/websocket";
-    static RPC_PROXY = Constants.TOMCAT_URL + "/chain/x/rpc";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
 
-    static NETWORK = networks.bitcoin;
     static WORKING_WALLET = "BTC";
     static WALLET = undefined;
     static WORKING_TICKER_VALUE = 'btc';
@@ -43,35 +36,6 @@ export class Constants {
     static TRADE_CANCELLED = false;
 
     static LAST_USD_RATE = 5000;
-
-    static litecoinnet: Network = {
-        messagePrefix: '\x19Litecoin Signed Message:\n',
-        bip32: {
-            public: 0x0488b21e,
-            private: 0x0488ade4
-        },
-        pubKeyHash: 0x30,
-        scriptHash: 0x32,
-        wif: 0xb0
-    }
-
-    static litecointestnet: Network = {
-        messagePrefix: '\x19Litecoin Signed Message:\n',
-        bip32: {
-            public: 0x043587cf,
-            private: 0x04358394
-        },
-        pubKeyHash: 0x6f,
-        scriptHash: 0x3a,
-        wif: 0xef
-    };
-
-    static NETWORKS = {
-        "BTC": networks.bitcoin,
-        "BTCTEST": networks.testnet,
-        "LTC": Constants.litecoinnet,
-        "LTCTEST": Constants.litecointestnet
-    };
 
     static LOGGED_IN_USER = undefined;
 
@@ -157,49 +121,6 @@ export class Constants {
 
     static showAlert(toastCtrl, title, subtitle) {
         Constants.showLongerToastMessage(subtitle, toastCtrl);
-    }
-
-    static askBeneficiaryForAddress(data, home) {
-        let donor = data['donor'];
-        let coin = data['coin'];
-
-        let message = 'Hello, ' + donor + ' has indicated interest in sending you some ' + coin + '. Do you want to accept this donation?';
-
-        let alert = home.alertCtrl.create({
-            title: 'Accept Donation?',
-            message: message,
-            buttons: [
-                {
-                    text: "Don't Accept",
-                    role: 'cancel',
-                    handler: () => {
-                        //doNothing
-                    }
-                },
-                {
-                    text: 'Accept',
-                    handler: () => {
-                        let ws = Constants.properties['ws_connection'];
-
-                        let key = coin + "Address";
-                        let address = home.ls.getItem(key);
-                        let wsData = {
-                            "donorEmailAddress": data['donorEmailAddress'],
-                            "beneficiaryEmailAddress": home.ls.getItem("emailAddress"),
-                            "coin": coin,
-                            "address": address,
-                            "action": "provideAddressToDonor"
-                        };
-
-                        ws.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((responseData) => {
-                        }, (error) => {
-                        }, () => {
-                        });
-                    }
-                }
-            ]
-        });
-        alert.present();
     }
 
     static showLongToastMessage(message, toastCtrl) {
@@ -356,224 +277,6 @@ export class Constants {
         };
         connection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((responseData) => {
         }, (error) => {
-            //doNothing
-        }, () => {
-            //doNothing
-        });
-    }
-
-    static sendCoinsToBuyerSuccess(data) {
-        let message = data['message'];
-        let connection = data['connection'];
-        let buyerOtherAddress = message['buyerOtherAddress'];
-
-        let wsData = {
-            "trxId": message['trxId'],
-            "buyerAddress": message['buyerAddress'],
-            "action": "sellerSentCoins",
-            "buyerEmailAddress": message['buyerEmailAddress'],
-            "buyerOtherAddress": buyerOtherAddress
-        };
-
-        connection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((responseData) => {
-            //doNothing
-        }, (error) => {
-            //doNothing
-        }, () => {
-            //doNothing
-        });
-    }
-
-    static sendCoinsToSellerError(data) {
-        let message = data['message'];
-        let connection = data['connection'];
-        let wsData = {
-            "trxId": message['trxId'],
-            "buyerEmailAddress": message['buyerEmailAddress'],
-            "action": "errorSendingToSeller",
-        };
-
-        connection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((responseData) => {
-        }, (error) => {
-            //doNothing
-        }, () => {
-            //doNothing
-        });
-    }
-
-    static sendCoinsToSellerSuccess(data) {
-        let message = data['message'];
-        let connection = data['connection'];
-
-        let wsData = {
-            "trxId": message['trxId'],
-            "action": "buyerSentCoins",
-            "buyerEmailAddress": message['buyerEmailAddress']
-        };
-
-        connection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((responseData) => {
-            //doNothing
-        }, (error) => {
-            //doNothing
-        }, () => {
-            //doNothing
-        });
-    }
-
-    static sendCoinsToSeller(message, home, connection, buyerOtherAddress) {
-        Console.log("sendCoinsToSeller");
-
-        let data = {};
-        data['amount'] = message['amountToRecieve'];
-        data['recipientAddress'] = message['sellerOtherAddress'];
-        data['loading'] = home.loading;
-        data['loadingCtrl'] = home.loadingCtrl;
-        data['ls'] = home.ls;
-        data['toastCtrl'] = home.toastCtrl;
-        data['http'] = home.http;
-        data['connection'] = connection;
-        data['message'] = message;
-        data['alertCtrl'] = home.alertCtrl;
-
-        let coin: string = message['toCoin'];
-        let fees = Constants.getWalletProperties(coin);
-
-        if (coin.indexOf("BTC") >= 0) {
-            let network = Constants.NETWORKS[coin];
-            //CoinsSender.sendCoinsBtc(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, coin, buyerOtherAddress, network)
-        } else if (coin.indexOf("ETH") >= 0) {
-            //CoinsSender.sendCoinsEth(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, coin);
-        } else {
-            //CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToSellerSuccess, Constants.sendCoinsToSellerError, fees);
-        }
-    }
-
-    static sellerConfirmTrade(data, home) {
-        let message = data['message']['message'] + " " + data['amount'];
-        let actionSheet = home.actionSheetCtrl.create({
-            title: message,
-            buttons: [
-                {
-                    text: 'Continue?',
-                    handler: () => {
-                        Constants.continue(data);
-                    }
-                }, {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    handler: () => {
-                    }
-                }
-            ]
-        });
-        actionSheet.present();
-    }
-
-    static continue(data) {
-        let message = data['message'];
-        let coin: string = message['fromCoin'];
-        let ls = data['ls'];
-        let fromAddress = Constants.WALLET['chain_address'];
-        //CoinsSender.confirmSellerHaveCoins(data, Constants.askBuyerToPay, Constants.sendCoinsToBuyerError, coin, fromAddress, Constants.WALLET);
-    }
-
-    static startTrade(message, home, connection) {
-        let data = {};
-        data['loading'] = home.loading;
-        data['loadingCtrl'] = home.loadingCtrl;
-        data['ls'] = home.ls;
-        data['toastCtrl'] = home.toastCtrl;
-        data['http'] = home.http;
-        data['connection'] = connection;
-        data['message'] = message;
-        data['alertCtrl'] = home.alertCtrl;
-
-        let coin: string = message['fromCoin'];
-        let key = coin + "Address";
-        let fromAddress = home.ls.getItem(key);
-        data['amount'] = message['amountToSell'];
-        data['recipientAddress'] = message['buyerAddress'];
-
-
-        let toCoin = message['toCoin'];
-
-        let bankPaymentMethodsValues = Constants.properties['payment.methods'].map(x => x.value);
-        if (bankPaymentMethodsValues.indexOf(toCoin) >= 0) {
-            Constants.sellerConfirmTrade(data, home);
-        } else {
-          //sending coins should happen on the server now.
-            // if (fees.btcText.indexOf('ETH') > 0) {
-            //     CoinsSender.sendCoinsEth(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin);
-            // } else if (fees.btcText.indexOf('XND') >= 0 || fees.btcText.indexOf('NXT') >= 0 || fees.btcText.indexOf('ARDOR') >= 0 || fees.btcText.indexOf('IGNIS') >= 0) {
-            //     CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
-            // } else if (fees.currencyId !== undefined) {
-            //     CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
-            // } else if (fees.equityId !== undefined) {
-            //     CoinsSender.sendCoinsXnd(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, fees);
-            // } else {
-            //     let network = Constants.NETWORKS[coin];
-            //     CoinsSender.sendCoinsBtc(data, Constants.sendCoinsToBuyerSuccess, Constants.sendCoinsToBuyerError, coin, fromAddress, network);
-            // }
-        }
-    }
-
-    static releaseCoins(message, home) {
-        let trxId = message['trxId'];
-        let http = home.http;
-
-        let url = Constants.GET_EXCHANGE_URL + trxId;
-        http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(
-            responseData => {
-                let sellOrder = responseData.result;
-                Constants.properties['finalize_sale_order'] = sellOrder;
-                home.navCtrl.push('ShowBankPaymentPage');
-            },
-            _error => {
-                Constants.showLongToastMessage("Unable to get sell-order properties. Please try again later", home.toastCtrl);
-            });
-    }
-
-    static paySeller(message, navCtrl) {
-        let sellerOtherAddress = message['sellerOtherAddress'];
-        let splitted = sellerOtherAddress.split(":");
-        let sellerBank = splitted[0];
-        let sellerAccountNumber = splitted[1];
-        let amountToSell = message['amountToSell'];
-        let amountToRecieve = message['amountToRecieve'];
-        let trxId = message['trxId'];
-        let seller = JSON.parse(message['seller']);
-
-        Constants.properties['buyWithBankMessage'] = {
-            "sellerBank": sellerBank,
-            "sellerAccountNumber": sellerAccountNumber,
-            "amount": amountToSell,
-            "amountToRecieve": amountToRecieve,
-            "trxId": trxId,
-            "seller": seller
-        };
-
-        navCtrl.push('BuyWithBankAccountPage');
-    }
-
-    static askBuyerToPay(data) {
-        Console.log("Asking Buyer to Pay");
-        let wsConnection = data['connection'];
-        let message = data['message'];
-        let buyerEmailAddress = message['buyerEmailAddress'];
-        let buyerOtherAddress = message['buyerOtherAddress'];
-        let buyerAddress = message['buyerAddress'];
-
-        let wsData = {
-            "trxId": message['trxId'],
-            "buyerEmailAddress": buyerEmailAddress,
-            "buyerOtherAddress": buyerOtherAddress,
-            "buyerAddress": buyerAddress,
-            "action": "askBuyerToPay"
-        };
-
-        wsConnection.send(Constants.encryptData(JSON.stringify(wsData))).subscribe((_responseData) => {
-            //doNothing
-        }, (_error) => {
             //doNothing
         }, () => {
             //doNothing

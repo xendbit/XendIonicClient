@@ -1,4 +1,3 @@
-import { EquitiesExchangePage } from './../equities-exchange/equities-exchange';
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
 import { Console } from '../utils/console';

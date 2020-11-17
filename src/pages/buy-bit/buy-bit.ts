@@ -202,7 +202,7 @@ export class BuyBitPage {
       this.trade(seller);
     } else {
       this.buyerOtherAddress = this.wallet['chain_address'];
-      this.checkCoinBalance(coin, seller);
+      //this.checkCoinBalance(coin, seller);
     }
   }
 
@@ -233,76 +233,5 @@ export class BuyBitPage {
       Console.log(error);
       Constants.showLongToastMessage('Can not buy coin at this time. Please try again', this.toastCtrl);
     })
-  }
-
-  sendTradeStartMessage(seller) {
-    let ws = Constants.properties['ws_connection'];
-    let coin = seller.toCoin;
-
-    if (coin === "Naira") {
-      //this is a hack. we don't need the buyerAddress for NGNT Transactions
-      this.buyerOtherAddress = "0000000000";
-    } else {
-      this.buyerOtherAddress = this.wallet['chain_address'];
-    }
-
-    let buyerAddress = this.wallet['chain_address'];
-    let trxId = seller.trxId;
-
-    let data = {
-      "buyerAddress": buyerAddress,
-      "buyerOtherAddress": this.buyerOtherAddress,
-      "buyerEmailAddress": this.ls.getItem("emailAddress"),
-      "action": "startTrade",
-      "trxId": trxId
-    };
-
-    ws.send(Constants.encryptData(JSON.stringify(data))).subscribe((_data) => {
-    }, (_error) => {
-    }, () => {
-    });
-
-    Constants.properties['spmNavCtrl'] = this.navCtrl;
-    this.showPleaseWait();
-  }
-
-  showPleaseWait() {
-    let timer = 120;
-    let running = Observable.interval(1000).subscribe(x => {
-      timer = timer - 1;
-      if (timer <= 0) {
-        running.unsubscribe();
-      }
-    });
-    Constants.properties['startTradeObservable'] = running;
-  }
-
-  checkCoinBalance(coin, seller) {
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Checking your current balance...");
-    let amountToSend = +seller.amountToRecieve;
-
-    let postData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.buyerOtherAddress,
-      emailAddress: this.ls.getItem("emailAddress"),
-    };
-
-    this.http.post(Constants.GET_TX_URL, postData, Constants.getWalletHeader(coin))
-      .map(res => res.json())
-      .subscribe(responseData => {
-        this.loading.dismiss();
-        let confirmedAccountBalance = +responseData.result.balance;
-
-        let xendFees = amountToSend * +this.wallet['token']['xendFees']
-        let totalAmount: number = amountToSend + +this.wallet['token']['xendFees'] + xendFees;
-        if (confirmedAccountBalance < totalAmount) {
-          Constants.showLongerToastMessage("Insufficient " + coin + " balance", this.toastCtrl);
-        } else {
-            this.sendTradeStartMessage(seller);
-        }
-      }, error => {
-        this.loading.dismiss();
-        Constants.showLongerToastMessage("Can not retreive your " + coin + " balance. Please try again later", this.toastCtrl);
-      });
   }
 }
