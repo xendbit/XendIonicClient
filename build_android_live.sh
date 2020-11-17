@@ -47,7 +47,8 @@ cat /tmp/temp | cat - $WORKING_FILE > temp && mv temp $WORKING_FILE
 mv $WORKING_FILE $CONSTANTS_FILE
 cd $BASE_DIR
 
-ionic cordova build android --release
+export CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL=https://services.gradle.org/distributions/gradle-6.1.1-all.zip
+ionic cordova build android --release --verbose
 cd $BASE_DIR/platforms/android
 ./gradlew clean
 ./gradlew assemble

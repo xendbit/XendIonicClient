@@ -35,7 +35,6 @@ import { Console } from "./console";
 import { Headers } from "@angular/http";
 import { networks, Network } from "bitcoinjs-lib";
 import { LocalProps } from "./localprops";
-import { CoinsSender } from "./coinssender";
 import { HDNode } from "bitcoinjs-lib";
 import { mnemonicToSeed } from "bip39";
 
