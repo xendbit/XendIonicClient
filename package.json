@@ -50,7 +50,6 @@
     "bip39": "^2.5.0",
     "bitcoinjs-lib": "^3.3.2",
     "com-badrit-base64": "^0.2.0",
-    "cordova-android": "^9.0.0",
     "cordova-clipboard": "^1.2.1",
     "cordova-ios": "4.5.5",
     "cordova-plugin-add-swift-support": "^1.7.2",
@@ -93,6 +92,7 @@
     "@types/crypto-js": "^3.1.43",
     "@types/jasmine": "^2.8.8",
     "appium": "^1.9.1",
+    "cordova-android": "^9.0.0",
     "istanbul-instrumenter-loader": "^3.0.1",
     "jasmine": "^3.3.0",
     "jasmine-core": "^3.3.0",
@@ -132,8 +132,8 @@
       "cordova-plugin-android-permissions": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }
