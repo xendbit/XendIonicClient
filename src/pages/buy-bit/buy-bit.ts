@@ -1,5 +1,4 @@
 import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { Observable } from 'rxjs/Rx';
 
 import { StorageService } from './../utils/storageservice';
 import { Console } from './../utils/console';
@@ -176,34 +175,17 @@ export class BuyBitPage {
     alert.present();
   }
 
-  sendExternalMessage(seller) {
-    let phoneNumber = seller.seller.kyc.phoneNumber;
-    //let phoneNumber = '2348025943549';
-    if (phoneNumber === undefined || phoneNumber === null) {
-      Constants.showLongerToastMessage("You can't chat with this seller.", this.toastCtrl);
-    } else {
-      let coin = seller.fromCoin;
-      let toCoin = seller.toCoin;
-      let priceFrom = seller.amountToSell;
-      let priceTo = seller.amountToRecieve;
-      let rate = seller.rate;
-      let message = "I'm interested in your " + priceFrom + coin + " -> " + priceTo + toCoin + " (@ " + rate + ") trade posted on XendBit. Please log in to your XendBit app to continue trade";
-      let url = "https://wa.me/" + phoneNumber + "?text=" + message;
-      const browser = this.iab.create(url, "_system", "hardwareback=yes,");
-      browser.close();
-    }
-  }
-
   getBuyerOtherAddress(seller) {
     let coin = seller.toCoin;
-    if (coin === "Naira") {
-      //this.sendTradeStartMessage(seller);
-      // TODO: Just do the swap on the server.
-      this.trade(seller);
-    } else {
-      this.buyerOtherAddress = this.wallet['chain_address'];
-      //this.checkCoinBalance(coin, seller);
+    let wallets = Constants.LOGGED_IN_USER['addressMappings'];
+    for (let w of wallets) {
+      let wallet = Constants.getWalletFormatted(w);
+      if (wallet['value'] === coin) {
+        this.buyerOtherAddress = wallet['chain_address'];
+        break;
+      }
     }
+    this.trade(seller);
   }
 
   trade(seller) {
@@ -212,13 +194,14 @@ export class BuyBitPage {
     let trxId = seller.trxId;
     let data = {
       "buyerAddress": buyerAddress,
+      "buyerOtherAddress": this.buyerOtherAddress,
       "buyerEmailAddress": this.ls.getItem("emailAddress"),
       "password": this.ls.getItem("password"),
       "trxId": trxId
     };
 
     console.log(data);
-    let url = Constants.BUY_WITH_NGNC_URL;
+    let url = Constants.TRADE_URL;
 
     this.http.post(url, data, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.loading.dismiss();
@@ -226,6 +209,7 @@ export class BuyBitPage {
         this.loadSellers();
         Constants.showLongerToastMessage('Order Successfully Completed. Reload to see your new balance', this.toastCtrl);
       } else {
+        this.loadSellers();
         Constants.showLongerToastMessage(responseData.result, this.toastCtrl);
       }
     }, error => {

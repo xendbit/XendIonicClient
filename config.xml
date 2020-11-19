@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="34663" id="com.xendbit" version="4.6.63" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>XendBit</name>
-    <description>XendBit DEX Exchange</description>
+<widget android-versionCode="34663" id="com.xendfi" version="4.6.63" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>XendFi</name>
+    <description>XendFi DEX Exchange</description>
     <author email="seguna@xendbit.com" href="https://xendbit.com/">DTSL</author>
     <allow-navigation href="*" />
     <content src="index.html" />

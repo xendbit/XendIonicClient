@@ -27,7 +27,7 @@ const androidPixel2XLCapability = {
   deviceName: 'pixel',
   // app: path.resolve(__dirname, '../platforms/android/build/outputs/apk/armv7/debug/android-armv7-debug.apk'),
   app: path.resolve(__dirname, '../platforms/android/build/outputs/apk/x86/debug/android-x86-debug.apk'),
-  'app-package': 'com.xendbit',
+  'app-package': 'com.xendfi',
   'app-activity': 'MainActivity',
   autoAcceptAlerts: 'true',
   autoGrantPermissions: 'true',

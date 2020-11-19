@@ -68,7 +68,7 @@ export class RegisterPage {
     this.isTrader = Constants.properties['walletType'] === 'trader';
     this.banks = Constants.properties['banks'];
     this.pageTitle = "Complete Registration";
-    this.cbnWarning = "Due to CBN regulations, Your XendBit wallet must be integrated with your BVN. Make sure the information below is the same as the one on your BVN registration. If we can not validate your information with your BVN information, you will not be able to Send Bits.";
+    this.cbnWarning = "Due to CBN regulations, Your XendFi wallet must be integrated with your BVN. Make sure the information below is the same as the one on your BVN registration. If we can not validate your information with your BVN information, you will not be able to Send Bits.";
     this.emailAddressText = "Email Address";
     this.phoneNumberText = "Phone Number";
     this.bvnText = "BVN";
@@ -156,7 +156,7 @@ export class RegisterPage {
       let fileName = Constants.makeid();
       let options: ImageResizerOptions = {
         uri: uri,
-        folderName: 'XendBit',
+        folderName: 'XendFi',
         quality: 100,
         width: 400,
         height: 400,

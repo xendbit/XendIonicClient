@@ -121,7 +121,7 @@ export class SendBitPage {
   sendBitFingerprint() {
     let faio: FingerprintAIO = new FingerprintAIO();
     faio.show({
-      clientId: "XendBit",
+      clientId: "XendFi",
       clientSecret: "password", //Only necessary for Android
       disableBackup: true  //Only for Android(optional)
     })

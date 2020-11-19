@@ -43,6 +43,11 @@ export class ExchangePage {
   sentOrDeducted = "sent to";
   isSellEnabled = false;
   isBuyEnabled = true;
+  blockFees = 0;
+  sliderValue = 5;
+  minBlockFees = 0;
+  maxBlockFees = 0;
+  xendFees = 0;
 
   wallet = undefined;
 
@@ -73,10 +78,18 @@ export class ExchangePage {
 
     this.ls = Constants.storageService;
     let app = this;
+    this.wallet = Constants.WALLET;
     setTimeout(function () {
       //Wait for sometimes for storage to be ready
       app.loadRate();
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
+  }
+
+  ionViewWillEnter() {
+    this.minBlockFees = +this.wallet['token']['minBlockFees'];
+    this.blockFees =  +this.minBlockFees * this.sliderValue;
+    this.maxBlockFees = +this.wallet['token']['maxBlockFees'];
+    this.xendFees = +this.wallet['token']['xendFees'];
   }
 
   ionViewDidLoad() {
@@ -124,10 +137,11 @@ export class ExchangePage {
   sellBit() {
     let sb = this.sellForm.value;
 
+    this.blockFees = +this.minBlockFees * this.sliderValue;
+
     let fromCoin = Constants.WORKING_WALLET;
     let toCoin = this.selectedPaymentMethod;
     let sellerFromAddress = this.wallet['chain_address'];
-    let networdAddress = sellerFromAddress;
     let sellerToAddress = sb.recipientOtherAddress;
 
     if (this.type === 'Buy') {
@@ -147,17 +161,16 @@ export class ExchangePage {
     let coinAmount = +sb.numberOfBTC;
     let amountToRecieve = +sb.amountToRecieve;
 
-
-    let xendFees = coinAmount * +this.wallet['token']['xendFees']
-    let blockFees = +this.wallet['token']['minBlockFees'];
-
+    console.log("SV: " + this.sliderValue);
+    console.log("MBF: " + this.minBlockFees);
+    console.log("BFF: " + this.blockFees);
     if (coinAmount === 0) {
       Constants.showLongToastMessage("Please enter amount to sell", this.toastCtrl);
     } else if (rate === 0) {
       Constants.showLongToastMessage("Please enter rate", this.toastCtrl);
     } else if (password !== this.ls.getItem("password")) {
       Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
-    } else if (coinAmount + xendFees + blockFees > balance) {
+    } else if (coinAmount + this.xendFees + this.blockFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
     } else if (sb.acceptedPaymentMethods === "") {
       Constants.showPersistentToastMessage("Please specify accepted payment method", this.toastCtrl);
@@ -167,6 +180,7 @@ export class ExchangePage {
 
     if (isValid) {
       let amountToSell = coinAmount;
+      let totalFees = +this.xendFees + +this.blockFees;
 
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
       let postData = {
@@ -179,7 +193,10 @@ export class ExchangePage {
         rate: rate,
         emailAddress: this.ls.getItem("emailAddress"),
         password: password,
-        networkAddress: networdAddress,
+        networkAddress: sellerFromAddress,
+        xendFees: this.xendFees,
+        blockFees: this.blockFees,
+        fees: totalFees,
       }
 
       let url = Constants.POST_TRADE_URL;
@@ -207,7 +224,7 @@ export class ExchangePage {
   sellBitFingerprint() {
     let faio: FingerprintAIO = new FingerprintAIO();
     faio.show({
-      clientId: "XendBit",
+      clientId: "XendFi",
       clientSecret: "password", //Only necessary for Android
       disableBackup: true  //Only for Android(optional)
     }).then((result: any) => {
@@ -229,6 +246,7 @@ export class ExchangePage {
       if (wallet['value'] === value) {
         recipientOtherAddress = wallet['chain_address'];
         f2 = wallet;
+        break;
       }
     }
     this.sellForm.controls.recipientOtherAddress.setValue(recipientOtherAddress);
@@ -255,8 +273,11 @@ export class ExchangePage {
   calculateHowMuchToRecieve() {
     this.rate = this.sellForm.value.pricePerBTC;
     let toSell = +this.sellForm.value.numberOfBTC;
+    this.blockFees = this.minBlockFees * this.sliderValue;
+    console.log("BFF: " + this.blockFees);
     if (this.rate !== 0 && toSell !== 0) {
       let toRecieve = toSell * this.rate;
+      this.xendFees = toSell * +this.wallet['token']['xendFees'];
       this.sellForm.controls.amountToRecieve.setValue(toRecieve.toFixed(7));
     }
   }

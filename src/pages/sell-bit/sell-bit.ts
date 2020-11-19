@@ -119,29 +119,6 @@ export class SellBitPage {
 
     this.continue();
   }
-  // confirmBeneficiary(data) {
-  //   this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-
-  //   let url = Constants.RESOLVE_ACCOUNT_URL;
-  //   let postData = {
-  //     bankCode: data.beneficiaryBank,
-  //     accountNumber: data.beneficiaryAccountNumber
-  //   };
-
-  //   this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-  //     if (responseData.response_text === "success") {
-  //       this.beneficiaryName = responseData.account_name;
-  //       this.loading.dismiss();
-  //       this.presentActionSheet(this.beneficiaryName);
-  //     } else {
-  //       Constants.showPersistentToastMessage("Can not confirm beneficiary account number.", this.toastCtrl);
-  //       this.loading.dismiss();
-  //     }
-  //   }, _error => {
-  //     this.loading.dismiss();
-  //     Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-  //   });
-  // }
 
   continue() {
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
@@ -154,7 +131,7 @@ export class SellBitPage {
 
     let btcValue = coinAmount;
 
-    let totalFees = (+this.xendFees * btcValue) + +this.blockFees;
+    let totalFees = +this.xendFees + +this.blockFees;
 
     let key = Constants.WORKING_WALLET + "Address";
     let sellerFromAddress = this.ls.getItem(key);
@@ -227,7 +204,7 @@ export class SellBitPage {
   sellBitFingerprint() {
     let faio: FingerprintAIO = new FingerprintAIO();
     faio.show({
-      clientId: "XendBit",
+      clientId: "XendFi",
       clientSecret: "password", //Only necessary for Android
       disableBackup: true  //Only for Android(optional)
     })

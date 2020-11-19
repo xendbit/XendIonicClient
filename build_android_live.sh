@@ -51,7 +51,7 @@ cd $BASE_DIR
 jarsigner -storepass @bsolute -tsa http://timestamp.digicert.com -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore XendBit.keystore $BASE_DIR/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk XendBit
 /Users/aardvocate/Library/Android/sdk/build-tools/24.0.2/zipalign -v 4  $BASE_DIR/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk XendBit.apk
 
-mv XendBit.apk XendBit.$VERSION.apk
+mv XendBit.apk XendFi.$VERSION.apk
 #reverse the process above
 
 cd $BASE_DIR/src/pages/utils/

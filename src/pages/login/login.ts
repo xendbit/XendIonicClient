@@ -207,7 +207,7 @@ export class LoginPage {
     let ls = this.ls;
     let faio: FingerprintAIO = new FingerprintAIO();
     faio.show({
-      clientId: "XendBit",
+      clientId: "XendFi",
       clientSecret: "password", //Only necessary for Android
       disableBackup: false  //Only for Android(optional)
     })

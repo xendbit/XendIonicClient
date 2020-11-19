@@ -87,7 +87,7 @@ export class Constants {
 
     static GET_NGNC_BALANCE_URL = Constants.SERVER_URL + "user/#{userId}/get-ngnc-balance";
 
-    static BUY_WITH_NGNC_URL = Constants.SERVER_URL + "exchange/trade";
+    static TRADE_URL = Constants.SERVER_URL + "exchange/trade";
 
     static APP_NAME = "XendbitV1.0Client";
 
