@@ -127,9 +127,6 @@
     <plugin name="cordova-plugin-local-notification" spec="^0.9.0-beta.1" />
     <plugin name="cordova-plugin-websocket" spec="^0.12.2" />
     <plugin name="info.protonet.imageresizer" spec="^0.1.1" />
-    <plugin name="cordova-android-support-gradle-release" spec="^1.2.0">
-        <variable name="ANDROID_SUPPORT_VERSION" value="26.+" />
-    </plugin>
     <plugin name="com-badrit-base64" spec="~0.2.0" />
     <plugin name="cordova-plugin-media-capture" spec="^2.0.0" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />

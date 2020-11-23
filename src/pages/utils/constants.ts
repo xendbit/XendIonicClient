@@ -5,14 +5,14 @@ import { Headers } from "@angular/http";
 import { networks, Network } from "bitcoinjs-lib";
 import { LocalProps } from "./localprops";
 import { CoinsSender } from "./coinssender";
+import { HDNode } from "bitcoinjs-lib";
+import { mnemonicToSeed } from "bip39";
 
 export class Constants {
-  static TOMCAT_URL = "https://xendcredit.ddns.net";
-  static APP_VERSION = "v4.6-rc31"
-  static ENABLE_GUEST = false;
-  static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
-
-  //static TOMCAT_URL = "https://lb.xendbit.com";
+static TOMCAT_URL = "http://xendcreditlive.ddns.net:8080";
+static APP_VERSION = "v1.0-rc2"
+static ENABLE_GUEST = false;
+static NOTIFICATION_SOCKET_URL = "ws://ethereum.xendbit.net:8080/notify/websocket";
   //static TOMCAT_URL = "http://192.168.0.119:8080";
   //static NOTIFICATION_SOCKET_URL = "ws://192.250.236.180:8080/notify/websocket";
   static GETH_PROXY = "http://ethqoufb6-dns-reg1.eastus.cloudapp.azure.com:8540";// "http://rinkeby.xendbit.com:8546";
