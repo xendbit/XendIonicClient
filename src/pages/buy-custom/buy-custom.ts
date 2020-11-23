@@ -118,7 +118,6 @@ export class BuyCustomPage {
         let password = sb.password;
         let coinAmount = +sb.numberOfBTC;
 
-        let fees = Constants.getCurrentWalletProperties();
         if (coinAmount === 0) {
             Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
         } else if (price === 0) {

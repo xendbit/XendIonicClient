@@ -21,7 +21,7 @@ export class TabsPage {
   tab1Root: any = 'LandingPage';
   tab2Root: any = 'MyOrdersPage';
   tab3Root: any = 'ExchangePage';
-  tab4Root: any = 'HistoryPage';
+  tab4Root: any = 'NgncPage';
   tab5Root: any = 'SettingsPage';
 
  isAdvanced: boolean = false;

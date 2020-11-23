@@ -1,0 +1,52 @@
+<!--
+  Generated template for the SellBitPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>NGNC</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <div padding>
+    <ion-segment [(ngModel)]="accountAction">
+      <ion-segment-button value="fund">
+        Fund Account
+      </ion-segment-button>
+      <ion-segment-button value="withdraw">
+        Withdraw
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div [ngSwitch]="accountAction">
+    <ion-card *ngSwitchCase="'fund'">
+      <ion-card-content>
+        <ion-item>
+          <p>Pay Naira into</p>
+        </ion-item>
+        <ion-item>
+          <span item-start>Account Name</span>
+          Akintayo Abiona Olusegun
+        </ion-item>
+        <ion-item>
+          <span item-start>Account Number</span>
+          0109998058
+        </ion-item>
+        <ion-item>
+          <span item-start>Bank</span>
+          Guarantee Trust Bank
+        </ion-item>
+        <ion-item>
+          <button ion-button large full color="xend" icon-right>Click here to confirm<ion-icon name="trending-up"></ion-icon></button>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+
+</ion-content>

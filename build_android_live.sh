@@ -1,10 +1,15 @@
 #!/bin/bash
+rm -rf *.apk
 RC="`cat rc.txt`"
 MAJOR_VERSION="`cat major_version.txt`"
 MINOR_VERSION="`cat minor_version.txt`"
 BASE_DIR=/Users/aardvocate/src/XendBitIonic
-
-RC=$((RC + 1))
+echo $RC
+if [ $1 == "yes" ]
+then
+    RC=$((RC + 1))
+fi
+echo $RC
 #MAJOR_VERSION=$((MAJOR_VERSION + 1))
 #MINOR_VERSION=$((MINOR_VERSION + 1))
 VERSION="v$MAJOR_VERSION.$MINOR_VERSION-rc$RC"
@@ -29,8 +34,7 @@ cp $CONSTANTS_FILE $BAK_FILE
 
 tail -n +9 $CONSTANTS_FILE > $WORKING_FILE
 #add the server base url and the first line of file
-echo '
-import { StorageService } from "./storageservice";
+echo 'import { StorageService } from "./storageservice";
 import { Headers } from "@angular/http";
 import { LocalProps } from "./localprops";
 

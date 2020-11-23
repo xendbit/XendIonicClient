@@ -1,5 +1,3 @@
-import { InAppBrowser } from '@ionic-native/in-app-browser';
-
 import { StorageService } from './../utils/storageservice';
 import { Console } from './../utils/console';
 import { Constants } from './../utils/constants';
@@ -43,7 +41,7 @@ export class BuyBitPage {
 
   wallet = undefined;
 
-  constructor(private iab: InAppBrowser, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+  constructor( public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
     this.wallet = Constants.WALLET;
     this.currentWallet = this.wallet;
     this.loadRate();
