@@ -3,10 +3,10 @@ import { Headers } from "@angular/http";
 import { LocalProps } from "./localprops";
 
 export class Constants {
-    static TOMCAT_URL = "https://lb.xendbit.net";
+    //static TOMCAT_URL = "https://lb.xendbit.net";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
-    //static TOMCAT_URL = "http://localhost:8080";
+    static TOMCAT_URL = "http://localhost:8080";
     //static TOMCAT_URL = "https://lb.xendbit.com";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
@@ -86,6 +86,7 @@ export class Constants {
     static GET_SEND_2_BANK_REQUEST_URL = Constants.SERVER_URL + "send2bank/tx/";
 
     static GET_NGNC_BALANCE_URL = Constants.SERVER_URL + "user/#{userId}/get-ngnc-balance";
+    static WITHDRAW_NGNC_URL = Constants.SERVER_URL + "user/withdraw-ngnc";
 
     static TRADE_URL = Constants.SERVER_URL + "exchange/trade";
 

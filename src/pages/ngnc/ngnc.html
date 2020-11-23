@@ -31,18 +31,51 @@
         </ion-item>
         <ion-item>
           <span item-start>Account Name</span>
-          Akintayo Abiona Olusegun
+          {{user.fullName}}
         </ion-item>
         <ion-item>
           <span item-start>Account Number</span>
-          0109998058
+          {{user.ngncAcccountNumber}}
         </ion-item>
         <ion-item>
           <span item-start>Bank</span>
-          Guarantee Trust Bank
+          {{user.ngncBank}}
         </ion-item>
         <ion-item>
-          <button ion-button large full color="xend" icon-right>Click here to confirm<ion-icon name="trending-up"></ion-icon></button>
+          Once you make deposit, your NGNC Balance will be credited within 24 hours.
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+
+  <div [ngSwitch]="accountAction">
+    <ion-card *ngSwitchCase="'withdraw'">
+      <ion-card-content>
+        <ion-item>
+          <span item-start>Account Name</span>
+          {{user.accountName}}
+        </ion-item>
+        <ion-item>
+          <span item-start>Account Number</span>
+          {{user.accountNumber}}
+        </ion-item>
+        <ion-item>
+          <span item-start>Bank Name</span>
+          {{user.accountName}}
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Amount to Withdraw</ion-label>
+          <ion-input type="number" [(ngModel)]="amountToWithdraw"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Enter your password</ion-label>
+          <ion-input type="password" [(ngModel)]="password"></ion-input>
+        </ion-item>
+        <ion-item>
+          <button ion-button full large color="xend" (click)="withdraw();" icon-right>Send Withdrawal Request
+            <ion-icon name="cash"></ion-icon>
+          </button>
         </ion-item>
       </ion-card-content>
     </ion-card>
