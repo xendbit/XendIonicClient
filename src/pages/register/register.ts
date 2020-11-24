@@ -195,6 +195,15 @@ export class RegisterPage {
     let isValid = false;
     let rf = this.registerForm.value;
 
+    for(let bank of this.banks) {
+      if(bank.bankCode === rf.bank) {
+        Constants.registrationData['bankName'] = bank.bankName;
+        break;
+      }
+    }
+
+    console.log(Constants.registrationData);
+
     if (this.registerForm.valid) {
       isValid = true;
     } else {
@@ -226,13 +235,6 @@ export class RegisterPage {
       if (rf.accountNumber === '') {
         Constants.showLongToastMessage("Please enter  Account Number", this.toastCtrl);
         return;
-      }
-
-      for (let bank in this.banks) {
-        if (this.banks[bank]['bankCode'] === rf.bank) {
-          Constants.registrationData['bankName'] = this.banks[bank]['bankName'];
-          break;
-        }
       }
     }
 
@@ -292,11 +294,7 @@ export class RegisterPage {
     Constants.registrationData['country'] = "";
     Constants.registrationData['enableWhatsapp'] = rf.enableWhatsapp;
     Constants.registrationData['referralCode'] = referralCode;
-    if (rf.bank !== undefined && rf.bank !== "") {
-      Constants.registrationData['bankCode'] = rf.bank;
-    } else {
-      Constants.registrationData['bankCode'] = "000";
-    }
+    Constants.registrationData['bankCode'] = rf.bank;
     Constants.registrationData['accountNumber'] = rf.accountNumber;
     Constants.registrationData['isBeneficiary'] = rf.isBeneficiary;
     StorageService.IS_BENEFICIARY = rf.isBeneficiary;

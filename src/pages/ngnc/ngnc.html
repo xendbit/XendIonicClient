@@ -30,19 +30,17 @@
           <p>Pay Naira into</p>
         </ion-item>
         <ion-item>
-          <span item-start>Account Name</span>
-          {{user.fullName}}
+          Account Name <p class="blue">{{user.fullname}}</p>
         </ion-item>
         <ion-item>
-          <span item-start>Account Number</span>
-          {{user.ngncAcccountNumber}}
+          Account Number <p class="blue">{{user.ngncAccountNumber}}</p>
         </ion-item>
         <ion-item>
-          <span item-start>Bank</span>
-          {{user.ngncBank}}
+          Bank <p class="blue">{{user.ngncBank}}</p>
         </ion-item>
         <ion-item>
-          Once you make deposit, your NGNC Balance will be credited within 24 hours.
+          <p>Once you make deposit,</p>
+          <p>your NGNC will be credited within 24 hours.</p>
         </ion-item>
       </ion-card-content>
     </ion-card>
@@ -53,19 +51,19 @@
     <ion-card *ngSwitchCase="'withdraw'">
       <ion-card-content>
         <ion-item>
-          <span item-start>Account Name</span>
-          {{user.accountName}}
+          Account Name
+          <p class="blue">{{user.accountName}}</p>
         </ion-item>
         <ion-item>
-          <span item-start>Account Number</span>
-          {{user.accountNumber}}
+          Account Number
+          <p class="blue">{{user.accountNumber}}</p>
         </ion-item>
         <ion-item>
-          <span item-start>Bank Name</span>
-          {{user.accountName}}
+          Bank Name
+          <p class="blue">{{user.bankName}}</p>
         </ion-item>
         <ion-item>
-          <ion-label floating>Amount to Withdraw</ion-label>
+          <ion-label floating>Enter Amount to Withdraw</ion-label>
           <ion-input type="number" [(ngModel)]="amountToWithdraw"></ion-input>
         </ion-item>
         <ion-item>

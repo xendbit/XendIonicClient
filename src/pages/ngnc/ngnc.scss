@@ -8,4 +8,13 @@ page-ngnc {
       color: black !important;
       //background-color: rgb(50, 6, 121) !important;
     }
+
+    p {
+      color: brown !important;
+    }
+
+    p.blue {
+      color: #488aff !important;
+      font-size: larger;
+    }
 }
