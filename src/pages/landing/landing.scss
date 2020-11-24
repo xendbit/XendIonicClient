@@ -1,10 +1,12 @@
 page-landing {
-    .thumbnail {
-        width: 40px !important;
-        height: 40px !important;
-        border-width: 5px;
-        border-style: outset;
-        border-radius: 50px
+    ion-card.card {
+        border-radius: 10px;
+        background-color: white !important;
+    }
+
+    .bg {
+        border-bottom: solid thin black !important;
+        line-height: 2.0;
     }
 
     .header-card {
@@ -24,12 +26,37 @@ page-landing {
 
     .total-assets {
         font-family: sans-serif;
-        font-weight: bold;
-        font-size: 1.2em;
+        font-size: 1.1em;
         text-align: center;
         line-height: 1.2;
         color: black;
     }
+
+    .assets-value {
+        text-align: center;
+        line-height: 1.2;
+        color: black;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 1.0em;
+    }
+
+    .assets-icon {
+        text-align: center;
+        line-height: 1.2;
+        color: black;
+        font-weight: bold;
+        font-size: 36px;
+    }    
+
+    .coins {
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 1.3em;
+        text-align: left;
+        line-height: 1.2;
+        color: black;
+    }    
 
     .small {
         font-size: 0.9em;
@@ -37,12 +64,12 @@ page-landing {
     }
 
     .big {
-        font-size: 1.2em;
+        font-size: 1.1em;
         font-family: sans-serif;
     }
 
     .big-color {
-        font-size: 1.2em;
+        font-size: 1.1em;
         font-family: sans-serif;
         color: black;
     }

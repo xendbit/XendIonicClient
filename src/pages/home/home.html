@@ -29,7 +29,7 @@
       <h3>{{yourBTCWalletText}}</h3>
     </ion-card-header>
     <ion-card-content>
-      <button ion-button icon-left clear big (click)="copyBitcoinAddress();">
+      <button ion-button icon-left clear big (click)="copyBitcoinAddress();" class="big">
         {{networkAddress}}
       </button>
       <ngx-qrcode (click)="copyBitcoinAddress();" [qrc-element-type]="qrType" [qrc-value]="qrValue"

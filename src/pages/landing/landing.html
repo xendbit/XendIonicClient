@@ -14,49 +14,61 @@
 
 
 <ion-content>
-  <!-- <ion-fab bottom end>
-    <button ion-fab mini (click)="showUnloadedWallets()">
-      <ion-icon name="add"></ion-icon>
-    </button>
-  </ion-fab> -->
-  <ion-row>
-    <ion-col>
-    <p class="total-assets">Portfolio Value</p>
-    <p class="total-assets" (click)="reloadWallets()">
-      {{totalAssets | currency: 'USD' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ion-icon name="refresh"
-        color="xend"></ion-icon>
-    </p>
-  </ion-col>
-  <ion-col>
-    <p class="total-assets">NGNC Balance</p>
-    <p class="total-assets" (click)="getNgncBalance()">
-      {{ngncBalance | currency: '&#8358;' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ion-icon name="refresh"
-        color="xend"></ion-icon>
-    </p>
-  </ion-col>
-  </ion-row>
+  <ion-card>
+    <ion-card-content>
+      <ion-row>
+        <ion-col class="total-assets">Portfolio Value</ion-col>
+        <ion-col class="total-assets">Naira (NGNC)</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="assets-value" (click)="reloadWallets()">
+          {{totalAssets | currency: 'USD' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
+        </ion-col>
+        <ion-col class="assets-value" (click)="getNgncBalance()">
+          {{ngncBalance | currency: '&#8358;' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="assets-value" (click)="reloadWallets()">
+          <ion-icon name="refresh" color="xend" class="assets-icon"></ion-icon>
+        </ion-col>
+        <ion-col class="assets-value" (click)="getNgncBalance()">
+          <ion-icon name="refresh" color="xend" class="assets-icon"></ion-icon>
+        </ion-col>        
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
 
-  <ion-item>
-    Select an Asset below to View or Trade
+  <ion-item style="text-align: left !important;">
+    <p class="coins">Coins</p>
   </ion-item>
-  <ion-list>
-    <ion-item-sliding *ngFor="let wallet of loadedWallets">
-      <ion-item class="bg" (click)="openHomePage(wallet)">
-        <ion-avatar item-start>
-          <img src="https://xendbit.com/coins/{{wallet.ticker_symbol}}.png">
-        </ion-avatar>
-        <span class="big">{{wallet.symbol}} {{wallet.confirmedAccountBalance | number: '.2-5'}}</span><span
-          class="big-color" item-end>[{{wallet.usdBalance | currency:'USD' : 'symbol' : '.2-2'}}]</span><br />
-        <span class="small">{{wallet.usdRate | currency:'USD' : 'symbol' : '.2-4'}} per {{wallet.text}}</span>
+  <ion-card>
+    <ion-card-content>
+
+      <ion-list>
+        <ion-item-group *ngFor="let wallet of loadedWallets">          
+          <ion-item class="bg" (click)="openHomePage(wallet)">
+            <ion-avatar item-start>
+              <img src="https://xendbit.com/coins/{{wallet.ticker_symbol}}.png" />
+            </ion-avatar>
+            <span class="big">{{wallet.symbol}} {{wallet.confirmedAccountBalance | number: '.2-5'}}</span>
+            <br />
+            <span class="small">{{wallet.usdRate | currency:'USD' : 'symbol' : '.2-4'}} per {{wallet.text}}</span>            
+            <span class="big-color" item-end>{{wallet.usdBalance | currency:'USD' : 'symbol' : '.2-2'}}</span>
+          </ion-item>          
+        </ion-item-group>
+      </ion-list>
+      <ion-item *ngIf="isEmpty();">
+        No Assets. Click Buy Above to buy some assets
       </ion-item>
-      <!-- <ion-item-options side="right">
-        <button ion-button color="danger" (click)="removeItem(wallet)">
-          <ion-icon name="trash"></ion-icon> Delete
-        </button>
-      </ion-item-options> -->
-    </ion-item-sliding>
-  </ion-list>
-  <ion-item *ngIf="isEmpty();">
-    No Assets. Click Buy Above to buy some assets
-  </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-footer>
+    <ion-toolbar>
+      <button color="primary" ion-button full medium icon-right (click)="gotongnc()">Deposit Naira => NGNC
+        <ion-icon name="money"></ion-icon>
+      </button>
+    </ion-toolbar>
+  </ion-footer>
 </ion-content>

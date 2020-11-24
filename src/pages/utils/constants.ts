@@ -3,10 +3,10 @@ import { Headers } from "@angular/http";
 import { LocalProps } from "./localprops";
 
 export class Constants {
-    //static TOMCAT_URL = "https://lb.xendbit.net";
+    static TOMCAT_URL = "https://lb.xendbit.net";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
-    static TOMCAT_URL = "http://localhost:8080";
+    //static TOMCAT_URL = "http://localhost:8080";
     //static TOMCAT_URL = "https://lb.xendbit.com";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
@@ -28,6 +28,7 @@ export class Constants {
 
     static REG_TYPE = 'register';
 
+    static NGNC_ACTION = 'fund';
     static DUST = 546;
     static vector = crypto.getRandomValues(new Uint8Array(16));
 
@@ -64,7 +65,6 @@ export class Constants {
     static GET_USER_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-sell-orders"
     static GET_USER_BUY_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-buy-orders"
     static UPDATE_USER_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/my-sell-orders/update"
-    static GET_MARKET_DATA_URL = Constants.SERVER_URL + "exchange/market-data"
     static RESOLVE_ACCOUNT_URL = Constants.SERVER_URL + "exchange/account/verify";
     static UPDATE_TRADE_URL = Constants.SERVER_URL + "exchange/update-exchange-status";
     static SEND_COINS_URL = Constants.SERVER_URL + "exchange/send-coins";

@@ -28,12 +28,18 @@ export class LandingPage {
   loadingTotalAssets = 0;
   numberOfWallets = 0;
   ngncBalance = 0;
+  tab: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController) {
     this.ls = Constants.storageService;
+    this.tab = this.navCtrl.parent;
   }
 
   ionViewDidLoad() {
+  }
+
+  gotongnc() {
+    this.tab.select(3).then(() => {console.log("NGNC Tabbed")});
   }
 
   ionViewDidEnter() {

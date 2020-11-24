@@ -9,13 +9,16 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { LoginPage } from '../pages/login/login';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 
 
 @NgModule({
   declarations: [
     MyApp,
     TabsPage,
-    StartPage
+    StartPage,
+    LoginPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -31,12 +34,14 @@ import { HttpModule } from '@angular/http';
   entryComponents: [
     MyApp,
     TabsPage,
-    StartPage
+    StartPage,
+    LoginPage
   ],
   providers: [
     { provide: ErrorHandler, useClass: MyExceptionHandler },
     SplashScreen,
     StatusBar,
+    FingerprintAIO
   ]
 })
 export class AppModule { }

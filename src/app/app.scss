@@ -70,7 +70,7 @@ ion-content {
 }
 
 .col {
-  color: black !important;
+    color: black !important;
 }
 
 ion-item {
@@ -83,8 +83,8 @@ ion-item {
 }
 
 .tab-button-icon {
-  color: white !important;
-  font-weight: bold;
+    color: white !important;
+    font-weight: bold;
 }
 
 ion-icon {
@@ -119,22 +119,22 @@ ion-icon {
 }
 
 p {
-  color: black !important;
-  font-weight: bold;
-  font-size: 15px;
-  line-height: 2;
+    color: black !important;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 2;
 }
 
 .no-border {
-  border: none !important;
-  box-shadow: none !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .button {
     text-transform: none;
-    border: solid thin #f59338;
+    border: solid thin white;
     border-radius: 10px !important;
-    box-shadow: 1px 1px #f59338;
+    box-shadow: 1px 1px white;
 }
 
 .center {
@@ -147,11 +147,11 @@ p {
 
 .very_small {
     font-size: 12px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .history {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .danger {
@@ -170,7 +170,7 @@ p {
     font-size: 0.7em;
     color: black;
     font-weight: bold; //font-style: italic;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Times New Roman", Times, serif;
 }
 
 .card {
@@ -195,10 +195,11 @@ textarea.text-input {
 }
 
 .text-input {
-  background: none !important;
+    background: none !important;
     color: black; //border: inset;
     font-size: 1em;
     text-align: left;
+    border-bottom: solid thin blue !important;
 }
 
 .toolbar-background {
@@ -219,21 +220,21 @@ textarea.text-input {
 }
 
 .select-text {
-  text-align: left;
+    text-align: left;
 }
 
 .fab-image {
-  right: calc(env(safe-area-inset-right) + 10px);
-  bottom: 10px;
-  width: 100px;
-  position: absolute;
+    right: calc(env(safe-area-inset-right) + 10px);
+    bottom: 10px;
+    width: 100px;
+    position: absolute;
 }
 
 img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 75%;
-  margin-top: 25px;
-  margin-bottom: 25px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    margin-top: 25px;
+    margin-bottom: 25px;
 }

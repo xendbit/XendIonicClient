@@ -180,13 +180,19 @@
 page-login {
     ion-card.card {
         box-shadow: none;
-        background: rgba(0,0,0,0.7);
-        border-radius: 5px;
+        //background: rgba(0,0,0,0.7);
+        border-radius: 10px;
+        background-color: white !important;
     }
 
-    a, p,
-    ion-card-header.card-header {
+    a, p {
         text-align: center !important;
+    }
+
+    .card-header {
+      text-align: left !important;
+      font-size: 1.4em;
+      //border-bottom: solid thin gray;
     }
 
     .list > .item-block:first-child {

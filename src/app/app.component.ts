@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
-import { StartPage } from '../pages/start/start';
+//import { StartPage } from '../pages/start/start';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { LoginPage } from '../pages/login/login';
 
 @Component({
   templateUrl: 'app.html'
@@ -20,7 +21,7 @@ export class MyApp {
       stBar.styleDefault();
       setTimeout(() => {
         this.splashScreen.hide();            
-        app.rootPage = StartPage;
+        app.rootPage = LoginPage;
       }, 5000);      
     });
   }

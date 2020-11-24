@@ -7,9 +7,8 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { TabsPage } from '../tabs/tabs';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
-
+import { Storage } from '@ionic/storage';
 import { StorageService } from '../utils/storageservice';
-import Web3 from 'web3';
 
 /*
   Generated class for the Login page.
@@ -17,7 +16,6 @@ import Web3 from 'web3';
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 */
-@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
@@ -43,13 +41,16 @@ export class LoginPage {
 
   emailRegex = '^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$';
 
-  constructor(public alertCtrl: AlertController, public platform: Platform, public http: Http, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public formBuilder: FormBuilder, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public storage: Storage, public alertCtrl: AlertController, public platform: Platform, public http: Http, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public formBuilder: FormBuilder, public navCtrl: NavController, public navParams: NavParams) {
     this.loginForm = formBuilder.group({
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       email: new FormControl({ value: '', disabled: true }),
       exchangeType: ['', Validators.compose([Validators.required])]
       //email: ['', Validators.compose([Validators.maxLength(30), Validators.pattern(this.emailRegex), Validators.required])]
     });
+
+    this.ls = new StorageService(storage);
+    Constants.storageService = this.ls;
 
     this.initProps();
 
@@ -77,6 +78,7 @@ export class LoginPage {
   }
 
   ionViewDidEnter() {
+    this.loadSettings();
   }
 
   login() {
@@ -244,5 +246,16 @@ export class LoginPage {
     this.pageTitle = Constants.properties['login.page.title'];
     this.forgotPasswordText = "Forgot your login details? ";
     this.getHelpText = "Get help signing in";
+  }
+
+  loadSettings() {
+    Console.log(Constants.SETTINGS_URL);
+    this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(data => {
+      Constants.properties = data;
+    }, _error => {
+      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+      Console.log("Can not pull data from server");
+      //this.platform.exitApp();
+    });
   }
 }

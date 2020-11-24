@@ -30,6 +30,10 @@ export class NgncPage {
     this.ls = Constants.storageService;
   }
 
+  ionViewDidEnter() {
+    this.accountAction = Constants.NGNC_ACTION;
+  }
+
   withdraw() {
     let postData = {
       btcValue: this.amountToWithdraw,
