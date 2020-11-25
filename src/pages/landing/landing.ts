@@ -101,12 +101,12 @@ export class LandingPage {
 
   loadRate(wallet) {
     let working_wallet = wallet['value'];
-    let url = Constants.GET_USD_RATE_URL + working_wallet;
+    let url = Constants.GET_USD_RATE_URL + working_wallet + '/BUY';
     Console.log(url);
 
     this.http.get(url, Constants.getWalletHeader(working_wallet)).map(res => res.json()).subscribe(responseData => {
-      wallet['usdRate'] = responseData.result.rate;
-      wallet['usdBalance'] = responseData.result.rate * wallet['confirmedAccountBalance'];
+      wallet['usdRate'] = responseData.result.usdRate;
+      wallet['usdBalance'] = responseData.result.usdRate * wallet['confirmedAccountBalance'];
 
       if (!this.alreadyAdded(wallet)) {
         this.loadingWallets.push(wallet);

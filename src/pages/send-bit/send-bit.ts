@@ -71,8 +71,6 @@ export class SendBitPage {
     this.maxBlockFees = +this.wallet['token']['maxBlockFees'];
     this.xendFees = +this.wallet['token']['xendFees'];
 
-    this.loadRate();
-
     this.pageTitle = "Xend Bit";
     this.sendBitWarningText = "Please make sure the bitcoin address you will enter below is correct. Once you send your bits, the transaction can not be reversed.";
     this.amountToSendText = "Amount to Send";
@@ -105,17 +103,6 @@ export class SendBitPage {
     let toSell = +this.sendBitForm.value.amount;
     this.xendFees = toSell * +this.wallet['token']['xendFees'];
     this.blockFees = this.minBlockFees * this.sliderValue;
-  }
-
-  loadRate() {
-    let tickerSymbol = this.wallet['ticker_symbol'];
-    let url = Constants.GET_USD_RATE_URL + tickerSymbol;
-
-    this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      Constants.LAST_USD_RATE = +responseData.result.rate;
-    }, _error => {
-      //doNothing
-    });
   }
 
   sendBitFingerprint() {

@@ -38,8 +38,6 @@ export class HomePage {
   sellBitText: string;
   loadWalletText: string;
   private clipboard: Clipboard;
-  usdRate: number = 0;
-  btcRate: number = 0;
   btcToNgn = 0;
   qrType = 'img';
   qrValue: string;
@@ -66,12 +64,9 @@ export class HomePage {
 
   loadRate() {
     let tickerSymbol = this.wallet['ticker_symbol'];
-    let url = Constants.GET_USD_RATE_URL + tickerSymbol;
+    let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/BUY';
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.usdRate = responseData.result.buy;
-      this.btcRate = responseData.result.rate;
-      Constants.LAST_USD_RATE = this.btcRate;
-      this.btcToNgn = this.btcRate / this.usdRate;
+      this.btcToNgn = responseData.result.ngnRate;
     }, error => {
       //doNothing
     });

@@ -15,10 +15,9 @@
 <ion-content padding>
     <ion-card>
         <ion-card-content>
-            <div>{{currentWallet['value']}} Rate:</div>
             <button ion-button icon-left clear small (click)="loadRate()" item-left>
                 <ion-icon name="refresh-circle"></ion-icon>
-                <span class="item">1 {{currentWallet['btcText']}} = {{btcToNgn | number: '.0-3'}} NGN</span>
+                <span class="item">1 {{currentWallet['value']}} = {{btcToNgn | number: '.0-3'}} NGN</span>
             </button>
         </ion-card-content>
     </ion-card>

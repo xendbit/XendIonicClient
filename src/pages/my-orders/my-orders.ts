@@ -22,8 +22,6 @@ import { Http } from '@angular/http';
 export class MyOrdersPage {
 
   currentWallet = {};
-  usdRate: number = 0;
-  btcRate: number = 0;
   btcToNgn = 0;
 
   ls: StorageService;
@@ -76,13 +74,10 @@ export class MyOrdersPage {
 
   loadRate() {
     let tickerSymbol = this.wallet['ticker_symbol'];
-    let url = Constants.GET_USD_RATE_URL + tickerSymbol;
+    let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/BUY';
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.usdRate = responseData.result.buy;
-      this.btcRate = responseData.result.rate;
-      Constants.LAST_USD_RATE = this.btcRate;
-      this.btcToNgn = this.btcRate * this.usdRate;
+      this.btcToNgn = responseData.result.ngnRate;
     }, error => {
       //doNothing
     });

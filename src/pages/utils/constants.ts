@@ -3,10 +3,10 @@ import { Headers } from "@angular/http";
 import { LocalProps } from "./localprops";
 
 export class Constants {
-    static TOMCAT_URL = "https://lb.xendbit.net";
+    //static TOMCAT_URL = "https://lb.xendbit.net";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
-    //static TOMCAT_URL = "http://localhost:8080";
+    static TOMCAT_URL = "http://localhost:8080";
     //static TOMCAT_URL = "https://lb.xendbit.com";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
@@ -58,7 +58,6 @@ export class Constants {
     static GET_EXCHANGE_RATE_URL = Constants.SERVER_URL + "exchange/xrate/";
     static POST_TRADE_URL = Constants.SERVER_URL + "exchange/post-trade";
     static BUY_CUSTOM_URL = Constants.SERVER_URL + "exchange/buy-direct";
-    static HOW_MUCH_CAN_WE_SELL_URL = Constants.SERVER_URL + "exchange/how-much-can-we-sell";
 
     static GET_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/sell-orders";
     static GET_UNSPENT_OUTPUTS_URL = Constants.SERVER_URL + "exchange/utxos/";

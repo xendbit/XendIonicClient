@@ -28,7 +28,7 @@ export class SellBitPage {
   sellForm: any;
   loading: Loading;
   usdRate: number = 0;
-  btcRate: number = 0;
+  usdToNgnRate: number = 0;
   btcToNgn = 0;
   pageTitle: string;
   btcText: string;
@@ -219,15 +219,14 @@ export class SellBitPage {
 
   loadRate() {
     let tickerSymbol = this.wallet['ticker_symbol'];
-    let url = Constants.GET_USD_RATE_URL + tickerSymbol;
+    let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/SELL';
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.usdRate = responseData.result.buy;
-      this.btcRate = responseData.result.rate;
-      Constants.LAST_USD_RATE = this.btcRate;
-      this.btcToNgn = this.btcRate * this.usdRate;
-      this.sellForm.controls.pricePerBTC.setValue(this.btcRate.toFixed(4));
-      this.sellForm.controls.usdRate.setValue(this.usdRate.toFixed(4));
+      this.usdRate = responseData.result.usdRate;
+      this.btcToNgn = responseData.result.ngnRate;
+      this.usdToNgnRate = this.btcToNgn/this.usdRate;
+      this.sellForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
+      this.sellForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
     }, error => {
       //doNothing
     });

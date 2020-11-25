@@ -23,8 +23,6 @@ import { Console } from '../utils/console';
 export class ExchangePage {
 
   ls: StorageService;
-  usdRate = 0;
-  btcRate = 0;
   btcToNgn = 0;
   sellForm;
   btcText: string;
@@ -51,18 +49,6 @@ export class ExchangePage {
 
   wallet = undefined;
 
-  switchTo(type) {
-    this.type = type;
-    this.getOrPay = this.type === 'Sell' ? 'get' : 'pay';
-    this.sentOrDeducted = this.type === 'Sell' ? 'sent to' : 'deducted from';
-    if (type === 'Sell') {
-      this.isSellEnabled = false;
-      this.isBuyEnabled = true;
-    } else {
-      this.isSellEnabled = true;
-      this.isBuyEnabled = false;
-    }
-  }
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public loadingCtrl: LoadingController) {
     this.sellForm = this.formBuilder.group({
       numberOfBTC: ['', Validators.required],
@@ -81,13 +67,13 @@ export class ExchangePage {
     this.wallet = Constants.WALLET;
     setTimeout(function () {
       //Wait for sometimes for storage to be ready
-      app.loadRate();
+      app.loadRate('BUY', false);
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
   ionViewWillEnter() {
     this.minBlockFees = +this.wallet['token']['minBlockFees'];
-    this.blockFees =  +this.minBlockFees * this.sliderValue;
+    this.blockFees = +this.minBlockFees * this.sliderValue;
     this.maxBlockFees = +this.wallet['token']['maxBlockFees'];
     this.xendFees = +this.wallet['token']['xendFees'];
   }
@@ -120,19 +106,44 @@ export class ExchangePage {
     }
   }
 
-  loadRate() {
+  loadRate(side, showLoading) {
     let tickerSymbol = this.wallet['ticker_symbol'];
-    let url = Constants.GET_USD_RATE_URL + tickerSymbol;
+    let url = Constants.GET_USD_RATE_URL + tickerSymbol + "/" + side;
 
+    if (showLoading) {
+      this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Calculating Exchange Rates. Please Wait....");
+    }
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.usdRate = responseData.result.buy;
-      this.btcRate = responseData.result.rate;
-      Constants.LAST_USD_RATE = this.btcRate;
-      this.btcToNgn = this.btcRate * this.usdRate;
+      if (showLoading) {
+        this.loading.dismiss();
+      }
+      this.btcToNgn = responseData.result.ngnRate;
+
+      if(showLoading) {
+        this.calculateHowMuchToRecieve();
+      }
     }, _error => {
-      //doNothing
+      if (showLoading) {
+        this.loading.dismiss();
+      }
     });
   }
+
+  switchTo(type) {
+    this.type = type;
+    this.getOrPay = this.type === 'Sell' ? 'get' : 'pay';
+    this.sentOrDeducted = this.type === 'Sell' ? 'sent to' : 'deducted from';
+    if (type === 'Sell') {
+      this.isSellEnabled = false;
+      this.isBuyEnabled = true;
+    } else {
+      this.isSellEnabled = true;
+      this.isBuyEnabled = false;
+    }
+
+    this.loadRate(type === 'Sell' ? 'SELL' : 'BUY', true);
+  }
+
 
   sellBit() {
     let sb = this.sellForm.value;
