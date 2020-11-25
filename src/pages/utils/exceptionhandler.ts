@@ -17,20 +17,16 @@ export class MyExceptionHandler extends IonicErrorHandler {
             error.message = "phem";
             return;
         } else {
-            // let options = {
-            //     title: "Error Occured.",
-            //     message: error.message,
-            // };
+            let options = {
+                title: "Error Occured.",
+                message: error.message,
+            };
+
+            console.log(options);
 
             // let alert = this.alertCtrl.create(options);
             // alert.present();
             //we should send this error to a slack channel
-            let url = "https://hooks.slack.com/services/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";
-
-            let postData = {
-                text: error.message
-            }
-            this.http.post(url, postData).map(res => res.json()).subscribe(_responseData => {}, _error => {});
         }
         super.handleError(error);
     }

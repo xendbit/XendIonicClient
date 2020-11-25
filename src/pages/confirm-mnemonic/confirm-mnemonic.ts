@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Rx';
 
 import { StorageService } from '../utils/storageservice';
+import { LoginPage } from '../login/login';
 /*
   Generated class for the CreateMnemonic page.
 
@@ -149,7 +150,7 @@ export class ConfirmMnemonicPage {
 
                 this.ls.setItem('emailAddress', this.email);
                 Constants.showLongToastMessage("Restore Successful. Now login", this.toastCtrl);
-                this.navCtrl.push('LoginPage');
+                this.navCtrl.push(LoginPage);
               } else {
                 this.loading.dismiss();
                 Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);

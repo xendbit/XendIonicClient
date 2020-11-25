@@ -1,6 +1,7 @@
 import { StorageService } from "./storageservice";
 import { Headers } from "@angular/http";
 import { LocalProps } from "./localprops";
+import { LoginPage } from "../login/login";
 
 export class Constants {
     //static TOMCAT_URL = "https://lb.xendbit.net";
@@ -233,7 +234,7 @@ export class Constants {
                         return;
                     } else {
                         Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
-                        data['navCtrl'].push('LoginPage');
+                        data['navCtrl'].push(LoginPage);
                     }
                 } else {
                     Constants.showPersistentToastMessage(responseData.result, toastCtrl);
