@@ -234,7 +234,8 @@ export class Constants {
                         return;
                     } else {
                         Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
-                        data['navCtrl'].push(LoginPage);
+                        //data['navCtrl'].push(LoginPage);
+                        data['navCtrl'].popToRoot();
                     }
                 } else {
                     Constants.showPersistentToastMessage(responseData.result, toastCtrl);
