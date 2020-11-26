@@ -30,7 +30,7 @@
             </ion-item>
 
             <ion-item>
-                <ion-label floating>Middlename</ion-label>
+                <ion-label floating><sup>**</sup>Middlename</ion-label>
                 <ion-input formControlName="middleName" type="text"></ion-input>
             </ion-item>
 
@@ -43,16 +43,9 @@
                 <ion-label floating><sup>**</sup>{{phoneNumberText}}</ion-label>
                 <ion-input type="number" formControlName="phoneNumber"></ion-input>
             </ion-item>
-            <ion-item>
-                    <ion-label floating>Enable Whatsapp Messaging?</ion-label>
-                    <ion-select interface='action-sheet' formControlName="enableWhatsapp" placeholder="Enable Whatsapp Messaging?">
-                        <ion-option value="No">No</ion-option>
-                        <ion-option value="Yes">Yes</ion-option>
-                    </ion-select>
-            </ion-item>
 
             <ion-item>
-                <ion-label floating>Bank Account Number</ion-label>
+                <ion-label floating><sup>**</sup>Bank Account Number</ion-label>
                 <ion-input type="number" formControlName="accountNumber"></ion-input>
             </ion-item>
 
@@ -73,7 +66,7 @@
                 </ion-select>
             </ion-item>
             <ion-item>
-                <ion-label floating>{{idNumberText}}</ion-label>
+                <ion-label floating><sup>**</sup>{{idNumberText}}</ion-label>
                 <ion-input formControlName="idNumber" type="text"></ion-input>
             </ion-item>
             <ion-item>
@@ -83,22 +76,6 @@
                 <p>{{idImagePath}}</p>
             </ion-item>
         </ion-list>
-        <ion-list>
-            <ion-item>
-                <ion-label floating>Enter Referral Code</ion-label>
-                <ion-input type="text" formControlName="referralCode"></ion-input>
-            </ion-item>
-        </ion-list>
-        <!-- <ion-list no-lines>
-            <ion-item>Become a Beneficiary</ion-item>
-            <p>
-                If you accept to be a beneficiary, Donors will be able to view all your information.
-            </p>
-            <ion-item>
-                <ion-label floating>Make my information public</ion-label>
-                <ion-checkbox (click)="checkValue()" formControlName="isBeneficiary"></ion-checkbox>
-            </ion-item>
-        </ion-list> -->
     </form>
 
     <ion-row>

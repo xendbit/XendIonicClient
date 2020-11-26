@@ -242,6 +242,7 @@ export class ConfirmMnemonicPage {
   }
 
   presentActionSheet() {
+    console.log("CM 245");
     this.disableButton = true;
     this.navCtrl.push('RegisterPage', { "mnemonic": this.confirmMnemonic, "type": "new" });
   }

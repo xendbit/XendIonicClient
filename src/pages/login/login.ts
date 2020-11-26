@@ -1,7 +1,7 @@
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
 import { Console } from '../utils/console';
-import { Platform, AlertController, NavController, NavParams, Loading, LoadingController, ToastController, IonicPage } from 'ionic-angular';
+import { Platform, AlertController, NavController, NavParams, Loading, LoadingController, ToastController } from 'ionic-angular';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -79,6 +79,9 @@ export class LoginPage {
 
   ionViewDidEnter() {
     this.loadSettings();
+    this.loginForm.controls.email.setValue(this.ls.getItem("emailAddress"));
+    this.loginForm.controls.exchangeType.setValue("exchange");
+    console.log(this.ls.getItem("mnemonic"));
   }
 
   login() {

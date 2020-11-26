@@ -93,13 +93,9 @@ export class RegisterPage {
       idNumber: ['', Validators.required],
       surName: ['', Validators.required],
       firstName: ['', Validators.required],
-      middleName: [''],
-      country: [''],
+      middleName: ['', Validators.required],
       bank: ['', Validators.required],
-      accountNumber: ['', Validators.required],
-      isBeneficiary: ['false'],
-      referralCode: [''],
-      enableWhatsapp: ['No'],
+      accountNumber: ['', Validators.required]
     });
 
     this.isBasic = false;
@@ -192,11 +188,10 @@ export class RegisterPage {
   }
 
   register() {
-    let isValid = false;
     let rf = this.registerForm.value;
 
-    for(let bank of this.banks) {
-      if(bank.bankCode === rf.bank) {
+    for (let bank of this.banks) {
+      if (bank.bankCode === rf.bank) {
         Constants.registrationData['bankName'] = bank.bankName;
         break;
       }
@@ -204,70 +199,77 @@ export class RegisterPage {
 
     console.log(Constants.registrationData);
 
-    if (this.registerForm.valid) {
-      isValid = true;
-    } else {
-      if (rf.email.match(this.emailRegex) === null) {
-        Constants.showLongToastMessage("Enter valid email address", this.toastCtrl);
-        return;
-      }
-
-      if (rf.phoneNumber === '') {
-        Constants.showLongToastMessage("Enter valid phone number", this.toastCtrl);
-        return;
-      }
-
-      if (rf.surName === '') {
-        Constants.showLongToastMessage("Please enter your surname", this.toastCtrl);
-        return;
-      }
-
-      if (rf.firstName === '') {
-        Constants.showLongToastMessage("Please enter your first name", this.toastCtrl);
-        return;
-      }
-
-      if (rf.idNumber === '') {
-        Constants.showLongToastMessage("Please enter  ID Number", this.toastCtrl);
-        return;
-      }
-
-      if (rf.accountNumber === '') {
-        Constants.showLongToastMessage("Please enter  Account Number", this.toastCtrl);
-        return;
-      }
+    if (rf.email.match(this.emailRegex) === null) {
+      Constants.showLongToastMessage("Enter valid email address", this.toastCtrl);
+      return;
     }
 
-    if (isValid) {
-      if (this.idImagePath === undefined) {
-        Constants.showLongToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
-        return;
-      }
-
-      let url = Constants.RESTORE_USER_URL;
-      url = Constants.NEW_USER_URL;
-      let registrationType = "NEW";
-
-      Constants.registrationData['loading'] = this.loading;
-      Constants.registrationData['loadingCtrl'] = this.loadingCtrl;
-      Constants.registrationData['navCtrl'] = this.navCtrl;
-      Constants.registrationData['rf'] = rf;
-      Constants.registrationData['http'] = this.http;
-      Constants.registrationData['ls'] = this.ls;
-      Constants.registrationData['toastCtrl'] = this.toastCtrl;
-      Constants.registrationData['obv'] = Observable;
-      Constants.registrationData['navCtrl'] = this.navCtrl;
-      Constants.registrationData['tp'] = 'LoginPage';
-      Constants.registrationData['idImage'] = this.idImage;
-      Constants.registrationData['url'] = url;
-      Constants.registrationData['registrationType'] = registrationType;
-
-      this.navCtrl.push('PasswordPage');
-
-      Constants.passwordPadSuccessCallback = this.passwordPadSuccess;
-    } else {
-      Constants.showLongToastMessage("Please fill form properly", this.toastCtrl);
+    if (rf.phoneNumber === '') {
+      Constants.showLongToastMessage("Enter valid phone number", this.toastCtrl);
+      return;
     }
+
+    if (rf.surName === '') {
+      Constants.showLongToastMessage("Please enter your surname", this.toastCtrl);
+      return;
+    }
+
+    if (rf.firstName === '') {
+      Constants.showLongToastMessage("Please enter your first name", this.toastCtrl);
+      return;
+    }
+
+    if (rf.middleName === '') {
+      Constants.showLongToastMessage("Please enter your middle name", this.toastCtrl);
+      return;
+    }
+
+    if (rf.idType === '') {
+      Constants.showLongToastMessage("Please select  ID Type", this.toastCtrl);
+      return;
+    }
+
+    if (rf.idNumber === '') {
+      Constants.showLongToastMessage("Please enter  ID Number", this.toastCtrl);
+      return;
+    }
+
+    if (rf.accountNumber === '') {
+      Constants.showLongToastMessage("Please enter  Account Number", this.toastCtrl);
+      return;
+    }
+
+    if (rf.bank === '') {
+      Constants.showLongToastMessage("Please select Bank", this.toastCtrl);
+      return;
+    }
+
+
+    if (this.idImagePath === undefined) {
+      Constants.showLongToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
+      return;
+    }
+
+    let url = Constants.NEW_USER_URL;
+    let registrationType = "NEW";
+
+    Constants.registrationData['loading'] = this.loading;
+    Constants.registrationData['loadingCtrl'] = this.loadingCtrl;
+    Constants.registrationData['navCtrl'] = this.navCtrl;
+    Constants.registrationData['rf'] = rf;
+    Constants.registrationData['http'] = this.http;
+    Constants.registrationData['ls'] = this.ls;
+    Constants.registrationData['toastCtrl'] = this.toastCtrl;
+    Constants.registrationData['obv'] = Observable;
+    Constants.registrationData['navCtrl'] = this.navCtrl;
+    Constants.registrationData['tp'] = 'LoginPage';
+    Constants.registrationData['idImage'] = this.idImage;
+    Constants.registrationData['url'] = url;
+    Constants.registrationData['registrationType'] = registrationType;
+
+    this.navCtrl.push('PasswordPage');
+
+    Constants.passwordPadSuccessCallback = this.passwordPadSuccess;
   }
 
   checkValue() {
