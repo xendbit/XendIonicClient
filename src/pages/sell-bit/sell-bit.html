@@ -22,46 +22,90 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card>
-    <ion-card-content>
-      <ion-item>
-        <ion-label>Block Fees (Transaction Speed)</ion-label>
-        <ion-range [(ngModel)]="sliderValue" min="1" max="10">
-          <ion-icon range-left small name="remove">&nbsp;Slow&nbsp;</ion-icon>
-          <ion-icon range-right name="add">&nbsp;Fast&nbsp;</ion-icon>
-        </ion-range>
-      </ion-item>
-      <form [formGroup]="sellForm">
-        <ion-item>
-          <ion-label floating>{{numberOfBTCText}}</ion-label>
-          <ion-input type="number" formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();">
-          </ion-input>
-        </ion-item>
-        <ion-item>
-          <button ion-button medium color="xend" (click)="sellAll();" icon-right>Tap to Sell All {{btcText}}
-            <ion-icon name="trending-up"></ion-icon></button>
-        </ion-item>
-        <ion-item>
-          <ion-label floating>{{priceText}}</ion-label>
-          <ion-input type="number" formControlName="pricePerBTC" (input)="calculateHowMuchToRecieve();">
-          </ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label floating>USD to NGN Rate</ion-label>
-          <ion-input type="number" formControlName="usdRate" (input)="calculateHowMuchToRecieve();">
-          </ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label floating>You will get (NGN)</ion-label>
-          <ion-input readonly type="number" formControlName="amountToRecieve"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label floating>{{passwordText}}</ion-label>
-          <ion-input type="password" formControlName="password"></ion-input>
-        </ion-item>
-      </form>
-    </ion-card-content>
-  </ion-card>
+  <div padding>
+    <ion-segment [(ngModel)]="orderType">
+      <ion-segment-button value="MO">
+        Market Order
+      </ion-segment-button>
+      <ion-segment-button value="P2P">
+        P2P Exchange
+      </ion-segment-button>
+    </ion-segment>
+    <ion-item>
+      <button ion-button full medium color="xend" (click)="showOrderTypeInfo();" icon-right>More Info...
+        <ion-icon name="information-circle"></ion-icon></button>
+    </ion-item>
+  </div>
+
+  <div [ngSwitch]="orderType">
+    <ion-card *ngSwitchCase="'MO'">
+      <ion-card-content>
+        <form [formGroup]="sellForm">
+          <ion-item>
+            <ion-label floating>{{numberOfBTCText}}</ion-label>
+            <ion-input type="number" formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <button ion-button medium color="xend" (click)="sellAll();" icon-right>Tap to Sell All {{btcText}}
+              <ion-icon name="trending-up"></ion-icon></button>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>{{priceText}}</ion-label>
+            <ion-input readonly type="number" formControlName="pricePerBTC" (input)="calculateHowMuchToRecieve();">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>USD to NGN Rate</ion-label>
+            <ion-input readonly type="number" formControlName="usdRate" (input)="calculateHowMuchToRecieve();">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>You will get (NGN)</ion-label>
+            <ion-input readonly type="number" formControlName="amountToRecieve"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>{{passwordText}}</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+          </ion-item>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngSwitchCase="'P2P'">
+      <ion-card-content>
+        <form [formGroup]="sellForm">
+          <ion-item>
+            <ion-label floating>{{numberOfBTCText}}</ion-label>
+            <ion-input type="number" formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <button ion-button medium color="xend" (click)="sellAll();" icon-right>Tap to Sell All {{btcText}}
+              <ion-icon name="trending-up"></ion-icon></button>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>{{priceText}}</ion-label>
+            <ion-input type="number" formControlName="pricePerBTC" (input)="calculateHowMuchToRecieve();">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>USD to NGN Rate</ion-label>
+            <ion-input type="number" formControlName="usdRate" (input)="calculateHowMuchToRecieve();">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>You will get (NGN)</ion-label>
+            <ion-input readonly type="number" formControlName="amountToRecieve"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>{{passwordText}}</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+          </ion-item>
+        </form>
+      </ion-card-content>
+    </ion-card>    
+  </div>
 
   <ion-card>
     <ion-card-content>

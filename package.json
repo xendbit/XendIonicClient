@@ -33,6 +33,7 @@
     "@ionic-native/camera": "4.11.0",
     "@ionic-native/clipboard": "4.11.0",
     "@ionic-native/core": "4.11.0",
+    "@ionic-native/dialogs": "^4.11.0",
     "@ionic-native/file-transfer": "4.11.0",
     "@ionic-native/fingerprint-aio": "4.11.0",
     "@ionic-native/image-resizer": "4.11.0",
@@ -129,7 +130,8 @@
       "com-badrit-base64": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "cordova-plugin-dialogs": {}
     },
     "platforms": [
       "ios",

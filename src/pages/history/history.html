@@ -16,11 +16,11 @@
 <ion-content padding>
             <ion-item>
                 <ion-label>Start Date</ion-label>
-                <ion-datetime placeholder="Click to Select Start Date" displayFormat="DD MMMM YYYY" [(ngModel)]="startDate"></ion-datetime>
+                <ion-datetime placeholder="Select Start Date" displayFormat="DD MMMM YYYY" [(ngModel)]="startDate"></ion-datetime>
             </ion-item>
             <ion-item>
                 <ion-label>End Date</ion-label>
-                <ion-datetime placeholder="Click to Select End Date" displayFormat="DD MMMM YYYY" [(ngModel)]="endDate"></ion-datetime>
+                <ion-datetime placeholder="Select End Date" displayFormat="DD MMMM YYYY" [(ngModel)]="endDate"></ion-datetime>
             </ion-item>
             <ion-item>
                 <button ion-button full medium color="xend" (click)="loadTransactions()">Load Transaction</button>

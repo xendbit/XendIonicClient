@@ -61,7 +61,7 @@
                 </ion-item>
                 <ion-item>
                     <ion-label stacked>Accepted Payment Method</ion-label>
-                    <ion-select interface='actionsheet' formControlName="acceptedPaymentMethod" placeholder="Click to select payment methods"
+                    <ion-select interface='actionsheet' formControlName="acceptedPaymentMethod" placeholder="select payment methods"
                         (ionChange)="paymentMethodSelected($event)">
                         <ion-option *ngFor="let paymentMethod of paymentMethods" value="{{paymentMethod.value}}">
                             {{paymentMethod.text}}

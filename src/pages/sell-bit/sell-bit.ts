@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, ActionSheetController, AlertController, IonicPage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
+import { Dialogs } from '@ionic-native/dialogs';
 
 /**
  * Generated class for the SellBitPage page.
@@ -50,8 +51,9 @@ export class SellBitPage {
   maxBlockFees = 0;
   xendFees = 0;
   wallet = undefined;
+  orderType = "MO";
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
+  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController, private dialogs: Dialogs) {
     this.banks = Constants.properties['banks']
     this.pageTitle = "Place Sell Order"
     this.priceText = "Price Per Coin (USD)";
@@ -132,6 +134,8 @@ export class SellBitPage {
     let btcValue = coinAmount;
 
     let totalFees = +this.xendFees + +this.blockFees;
+    
+    let orderType = this.orderType;
 
     let key = Constants.WORKING_WALLET + "Address";
     let sellerFromAddress = this.ls.getItem(key);
@@ -160,7 +164,9 @@ export class SellBitPage {
       rate: rate,
       emailAddress: this.ls.getItem("emailAddress"),
       password: password,
-      networkAddress: sellerFromAddress
+      networkAddress: sellerFromAddress,
+      orderType: orderType,
+      side: 'SELL',
     }
 
     console.log(postData);
@@ -174,7 +180,11 @@ export class SellBitPage {
         this.clearForm();
         Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
         Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
-        this.navCtrl.push('MyOrdersPage');
+        if(this.orderType === 'MO') {
+          this.clearForm();
+        } else {
+          this.navCtrl.push('MyOrdersPage');
+        }
       } else {
         Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
       }
@@ -224,9 +234,10 @@ export class SellBitPage {
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.usdRate = responseData.result.usdRate;
       this.btcToNgn = responseData.result.ngnRate;
-      this.usdToNgnRate = this.btcToNgn/this.usdRate;
+      this.usdToNgnRate = this.btcToNgn / this.usdRate;
       this.sellForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
       this.sellForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
+      this.calculateHowMuchToRecieve();
     }, error => {
       //doNothing
     });
@@ -241,6 +252,7 @@ export class SellBitPage {
 
   clearForm() {
     this.sellForm.reset();
+    this.loadRate();
   }
 
   calculateHowMuchToRecieve() {
@@ -253,5 +265,17 @@ export class SellBitPage {
       this.xendFees = toSell * +this.wallet['token']['xendFees'];
       this.sellForm.controls.amountToRecieve.setValue(toRecieve.toFixed(3));
     }
+  }
+
+  showOrderTypeInfo() {
+    let sb = this.sellForm.value;
+    let title = sb.orderType === 'MO' ? 'Market Order' : 'P2P Exchange'
+    let moText = 'Market Order: Selling your coins immediately on the exchange using the current market price.';
+    let p2pText = 'P2P Exchnage: Allows you to set the price you want your coins to be sold at.\n'
+      + 'This is usually reserved for advanced traders';
+    let text = sb.orderType === 'MO' ? moText : p2pText;
+    this.dialogs.alert(text, title, 'OK')
+      .then(() => console.log('Dialog dismissed'))
+      .catch(e => console.log('Error displaying dialog', e));
   }
 }
