@@ -123,75 +123,92 @@ export class SellBitPage {
   }
 
   continue() {
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-    let sb = this.sellForm.value;
-    let coinAmount = +sb.numberOfBTC;
-    let password = sb.password;
-    let amountToRecieve = +sb.amountToRecieve;
+    if (this.orderType === 'MO') {
+      this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
+      let tickerSymbol = this.wallet['ticker_symbol'];
+      let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/SELL';
 
-    let rate = +sb.pricePerBTC;
+      this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+        this.usdRate = responseData.result.usdRate;
+        this.btcToNgn = responseData.result.ngnRate;
+        this.usdToNgnRate = this.btcToNgn / this.usdRate;
+        this.sellForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
+        this.sellForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
+        this.calculateHowMuchToRecieve();
+        
+        let sb = this.sellForm.value;
+        let coinAmount = +sb.numberOfBTC;
+        let password = sb.password;
+        let amountToRecieve = +sb.amountToRecieve;
 
-    let btcValue = coinAmount;
+        let rate = +sb.pricePerBTC;
 
-    let totalFees = +this.xendFees + +this.blockFees;
-    
-    let orderType = this.orderType;
+        let btcValue = coinAmount;
 
-    let key = Constants.WORKING_WALLET + "Address";
-    let sellerFromAddress = this.ls.getItem(key);
+        let totalFees = +this.xendFees + +this.blockFees;
 
-    // Get seller ETH Address to recieve NGNC
-    let sellerToAddress = "";
-    let wallets = Constants.LOGGED_IN_USER['addressMappings'];
-    for (let w of wallets) {
-      let wallet = Constants.getWalletFormatted(w);
-      if (wallet['value'] === 'ETH') {
-        sellerToAddress = wallet['chain_address'];
-        break;
-      }
-    }
+        let orderType = this.orderType;
 
-    let postData = {
-      amountToSell: btcValue,
-      xendFees: this.xendFees,
-      blockFees: this.blockFees,
-      fees: totalFees,
-      amountToRecieve: amountToRecieve,
-      sellerFromAddress: sellerFromAddress,
-      sellerToAddress: sellerToAddress,
-      fromCoin: Constants.WORKING_WALLET,
-      toCoin: "Naira",
-      rate: rate,
-      emailAddress: this.ls.getItem("emailAddress"),
-      password: password,
-      networkAddress: sellerFromAddress,
-      orderType: orderType,
-      side: 'SELL',
-    }
+        let key = Constants.WORKING_WALLET + "Address";
+        let sellerFromAddress = this.ls.getItem(key);
 
-    console.log(postData);
-
-    //this is wrong
-    let url = Constants.POST_TRADE_URL;
-
-    this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.loading.dismiss();
-      if (responseData.response_text === "success") {
-        this.clearForm();
-        Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
-        Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
-        if(this.orderType === 'MO') {
-          this.clearForm();
-        } else {
-          this.navCtrl.push('MyOrdersPage');
+        // Get seller ETH Address to recieve NGNC
+        let sellerToAddress = "";
+        let wallets = Constants.LOGGED_IN_USER['addressMappings'];
+        for (let w of wallets) {
+          let wallet = Constants.getWalletFormatted(w);
+          if (wallet['value'] === 'ETH') {
+            sellerToAddress = wallet['chain_address'];
+            break;
+          }
         }
-      } else {
-        Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
-      }
-    }, _error => {
-      this.loading.dismiss();
-      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-    });
+
+        let postData = {
+          amountToSell: btcValue,
+          xendFees: this.xendFees,
+          blockFees: this.blockFees,
+          fees: totalFees,
+          amountToRecieve: amountToRecieve,
+          sellerFromAddress: sellerFromAddress,
+          sellerToAddress: sellerToAddress,
+          fromCoin: Constants.WORKING_WALLET,
+          toCoin: "Naira",
+          rate: rate,
+          emailAddress: this.ls.getItem("emailAddress"),
+          password: password,
+          networkAddress: sellerFromAddress,
+          orderType: orderType,
+          side: 'SELL',
+        }
+
+        console.log(postData);
+
+        //this is wrong
+        let url = Constants.SELL_TRADE_URL;
+
+        this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+          this.loading.dismiss();
+          if (responseData.response_text === "success") {
+            this.clearForm();
+            Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
+            Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
+            if (this.orderType === 'MO') {
+              // do nothing
+            } else {
+              this.navCtrl.push('MyOrdersPage');
+            }
+          } else {
+            Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+          }
+        }, _error => {
+          this.loading.dismiss();
+          Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+        });
+
+      }, error => {
+        //doNothing
+      });
+    }
   }
 
   sellAll() {

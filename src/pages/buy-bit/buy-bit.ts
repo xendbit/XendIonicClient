@@ -5,6 +5,8 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, AlertController, IonicPage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Dialogs } from '@ionic-native/dialogs';
 
 /**
  * Generated class for the BuyBitPage page.
@@ -36,13 +38,37 @@ export class BuyBitPage {
   fromCoin: string;
   toCoin: string;
   showHeaders = false;
+  orderType = 'MO';
+  buyForm: any;
+
+
+  blockFees = 0;
+  sliderValue = 5;
+  minBlockFees = 0;
+  maxBlockFees = 0;
+  xendFees = 0;
+  rate = 0;
+  usdToNgnRate = 0;
+  usdRate = 0;
+  btcText = 'NGNC';
 
   wallet = undefined;
 
-  constructor( public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+
+  constructor(public formBuilder: FormBuilder, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController, private dialogs: Dialogs) {
     this.wallet = Constants.WALLET;
     this.currentWallet = this.wallet;
     this.loadRate();
+
+    this.btcText = this.wallet['value'];
+
+    this.buyForm = this.formBuilder.group({
+      numberOfBTC: ['', Validators.required],
+      pricePerBTC: ['', Validators.required],
+      usdRate: ['', Validators.required],
+      amountToRecieve: ['', Validators.required],
+      password: ['', Validators.required]
+    });
 
     this.ls = Constants.storageService;
   }
@@ -53,6 +79,7 @@ export class BuyBitPage {
 
   ionViewDidEnter() {
     this.loadSellers();
+    this.loadRate();
   }
 
   loadRate() {
@@ -62,10 +89,28 @@ export class BuyBitPage {
     Console.log(url);
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+      this.usdRate = responseData.result.usdRate;
       this.btcToNgn = responseData.result.ngnRate;
+      this.usdToNgnRate = this.btcToNgn / this.usdRate;
+      this.buyForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
+      this.buyForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
+
+      this.calculateHowMuchToRecieve();
     }, _error => {
       //doNothing
     });
+  }
+
+  calculateHowMuchToRecieve() {
+    this.blockFees = this.minBlockFees * this.sliderValue;
+    this.rate = this.buyForm.value.pricePerBTC;
+    let usdRate = this.buyForm.value.usdRate;
+    let toSell = +this.buyForm.value.numberOfBTC;
+    if (this.rate !== 0 && toSell !== 0) {
+      let toRecieve = toSell * this.rate * usdRate;
+      this.xendFees = toSell * +this.wallet['token']['xendFees'];
+      this.buyForm.controls.amountToRecieve.setValue(toRecieve.toFixed(3));
+    }
   }
 
   pairSelected(value) {
@@ -124,13 +169,105 @@ export class BuyBitPage {
     });
   }
 
-  buyCustom() {
-    this.navCtrl.push('BuyCustomPage');
-  }
-
   buyBit(seller) {
     Console.log("buyBit");
-    this.presentAlert(seller);
+    if (this.orderType === 'MO') {
+      let sb = this.buyForm.value;
+      let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
+      let password = sb.password;
+      let coinAmount = +sb.numberOfBTC;
+      this.blockFees = this.minBlockFees * this.sliderValue;
+
+      if (coinAmount === 0) {
+        Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
+        return;
+      } else if (password !== this.ls.getItem("password")) {
+        Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
+        return;
+      }
+
+      this.continue();
+    } else {
+      this.presentAlert(seller);
+    }
+  }
+
+  continue() {
+    if (this.orderType === 'MO') {
+      this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
+      let tickerSymbol = this.wallet['ticker_symbol'];
+      let url = Constants.GET_USD_RATE_URL + tickerSymbol + "/BUY";
+
+      Console.log(url);
+
+      this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+        this.usdRate = responseData.result.usdRate;
+        this.btcToNgn = responseData.result.ngnRate;
+        this.usdToNgnRate = this.btcToNgn / this.usdRate;
+        this.buyForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
+        this.buyForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
+
+        this.calculateHowMuchToRecieve();
+        
+        let sb = this.buyForm.value;
+        let coinAmount = +sb.numberOfBTC;
+        let password = sb.password;
+        let amountToRecieve = +sb.amountToRecieve;
+
+        let rate = +sb.pricePerBTC;
+
+        let btcValue = coinAmount;
+
+        let totalFees = +this.xendFees + +this.blockFees;
+
+        let orderType = this.orderType;
+
+        let key = Constants.WORKING_WALLET + "Address";
+        let sellerFromAddress = this.ls.getItem(key);
+
+        // Get seller ETH Address to recieve NGNC
+        let sellerToAddress = "";
+
+        let postData = {
+          amountToSell: btcValue,
+          xendFees: this.xendFees,
+          blockFees: this.blockFees,
+          fees: totalFees,
+          amountToRecieve: amountToRecieve,
+          sellerFromAddress: sellerFromAddress,
+          sellerToAddress: sellerFromAddress,
+          fromCoin: Constants.WORKING_WALLET,
+          toCoin: "Naira",
+          rate: rate,
+          emailAddress: this.ls.getItem("emailAddress"),
+          password: password,
+          networkAddress: sellerFromAddress,
+          orderType: orderType,
+          side: 'BUY',
+        }
+
+        console.log(postData);
+
+        //this is wrong
+        let url = Constants.BUY_TRADE_URL;
+
+        this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+          this.loading.dismiss();
+          if (responseData.response_text === "success") {
+            this.buyForm.reset();
+            this.loadRate();
+            Constants.showPersistentToastMessage("Your buy order has been placed.", this.toastCtrl);
+          } else {
+            Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+          }
+        }, _error => {
+          this.loading.dismiss();
+          Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+        });
+      }, _error => {
+        //doNothing
+      });
+    }
   }
 
   presentAlert(seller) {
@@ -199,7 +336,7 @@ export class BuyBitPage {
 
     this.http.post(url, data, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.loading.dismiss();
-      if(responseData.response_text === 'success') {
+      if (responseData.response_text === 'success') {
         this.loadSellers();
         Constants.showLongerToastMessage('Order Successfully Completed. Reload to see your new balance', this.toastCtrl);
       } else {
@@ -211,5 +348,17 @@ export class BuyBitPage {
       Console.log(error);
       Constants.showLongToastMessage('Can not buy coin at this time. Please try again', this.toastCtrl);
     })
+  }
+
+  showOrderTypeInfo() {
+    let sb = this.buyForm.value;
+    let title = sb.orderType === 'MO' ? 'Market Order' : 'P2P Exchange'
+    let moText = 'Market Order: Selling your coins immediately on the exchange using the current market price.';
+    let p2pText = 'P2P Exchnage: Allows you to set the price you want your coins to be sold at.\n'
+      + 'This is usually reserved for advanced traders';
+    let text = sb.orderType === 'MO' ? moText : p2pText;
+    this.dialogs.alert(text, title, 'OK')
+      .then(() => console.log('Dialog dismissed'))
+      .catch(e => console.log('Error displaying dialog', e));
   }
 }

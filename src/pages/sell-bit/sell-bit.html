@@ -19,6 +19,13 @@
         <ion-icon name="refresh-circle" color="dark"></ion-icon>
         <span>1 {{btcText}} = {{btcToNgn | number: '.3-3'}} NGN</span>
       </button>
+      <ion-item>
+        <ion-label>Block Fees (Transaction Speed)</ion-label>
+        <ion-range [(ngModel)]="sliderValue" min="1" max="10">
+          <ion-icon range-left small name="remove">&nbsp;Slow&nbsp;</ion-icon>
+          <ion-icon range-right name="add">&nbsp;Fast&nbsp;</ion-icon>
+        </ion-range>
+      </ion-item>      
     </ion-card-content>
   </ion-card>
 

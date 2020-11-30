@@ -56,7 +56,8 @@ export class Constants {
     static GET_EXCHANGE_URL = Constants.SERVER_URL + "exchange/";
     static GET_USD_RATE_URL = Constants.SERVER_URL + "exchange/usdrate/";
     static GET_EXCHANGE_RATE_URL = Constants.SERVER_URL + "exchange/xrate/";
-    static POST_TRADE_URL = Constants.SERVER_URL + "exchange/post-trade";
+    static SELL_TRADE_URL = Constants.SERVER_URL + "exchange/sell-trade";
+    static BUY_TRADE_URL = Constants.SERVER_URL + "exchange/buy-trade";
     static BUY_CUSTOM_URL = Constants.SERVER_URL + "exchange/buy-direct";
 
     static GET_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/sell-orders";
