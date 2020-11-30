@@ -4,19 +4,20 @@
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
-    <ion-navbar>
+<ion-header style="opacity: 100%;">
+    <ion-navbar style="opacity: 100%;">
         <ion-title>{{pageTitle}}</ion-title>
     </ion-navbar>
 </ion-header>
 
+
 <ion-content padding>
 
 
-    <ion-grid>
+    <ion-card style="background: whitesmoke; border-radius: 2px; margin-top: 5rem;">
         <ion-row>
             <ion-col>
-                <div style="text-align:justify;">
+                <div style="text-align:justify; margin-top: 2rem;">
                         {{warning1Text}}.
                 </div>
                 <div style="text-align:justify;">
@@ -27,19 +28,18 @@
 
         <ion-row>
             <ion-col>
-                <ion-card class="passphrase">
+                <ion-card-content class="passphrase" >
                         {{mnemonic}}
-                </ion-card>
+                </ion-card-content>
 
             </ion-col>
         </ion-row>
-        <ion-row></ion-row>
         <ion-row>
             <ion-col class="center">
-                <ion-buttons class="bordered">
-                    <button ion-button medium full color="xend" (click)="confirmMnemonic();" icon-right><span class="written">{{iveWrittenItText}}</span><ion-icon name="paper"></ion-icon></button>
+                <ion-buttons class="bordered" style="margin-top: 5rem; margin-bottom: 3rem;">
+                    <button ion-button medium full color="orange" (click)="confirmMnemonic();" icon-right><span class="written">{{iveWrittenItText}}</span><ion-icon name="paper"></ion-icon></button>
                 </ion-buttons>
             </ion-col>
         </ion-row>
-    </ion-grid>
+    </ion-card>
 </ion-content>

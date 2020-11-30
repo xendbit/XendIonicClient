@@ -6,32 +6,22 @@
     </div>
 </div>
 
-<ion-header>
-    <ion-navbar hideBackButton="true">
-        <ion-title>{{pageTitle}}</ion-title>
-    </ion-navbar>
-</ion-header>
-<ion-content padding>
-    <ion-card>
-        <ion-card-content>
-            <img src="assets/img/xendbit.png" alt="" class="header">
-        </ion-card-content>
-    </ion-card>
-    <ion-card>
+<ion-content padding style="background: #9874E5;">
+            <img src="assets/img/hdwhite.png" alt="" class="header">
+    <ion-card style="margin-top: 2rem;">
         <ion-card-header>
             XendBit Login
         </ion-card-header>
         <ion-card-content>
             <form [formGroup]="loginForm">
                 <ion-list no-line>
-                    <ion-item>
-                        <ion-label floating>{{emailAddressText}}</ion-label>
-                        <ion-input type="text" formControlName="email"></ion-input>
+                    <ion-item style="font-size: 10px;">
+                        <ion-label stacked>{{emailAddressText}}</ion-label>
+                        <ion-input type="text" formControlName="email" class="lined-input"></ion-input>
                     </ion-item>
                     <ion-item>
                         <ion-label stacked>{{passwordText}}</ion-label>
                         <ion-input type="password" formControlName="password" class="lined-input"></ion-input>
-                        <hr />
                         <button small ion-button clear full color="xend"
                             (click)="register();">{{forgotPasswordText}}</button>
                     </ion-item>
@@ -57,18 +47,9 @@
             </form>
         </ion-card-content>
     </ion-card>
-</ion-content>
+    <div style="margin-top: 6rem;">
+        <button style="margin-left: 5rem;" ion-button medium color="orange" (click)="register();" slot="start" icon-right>Register</button> 
+    <button style="margin-left: 8rem;" slot="end" ion-button medium color="orange" (click)="login();" icon-left>Recover</button>
 
-<ion-footer>
-    <ion-toolbar>
-        <ion-row>
-            <ion-col col-6>
-                <button class="no-border" ion-button large clear full round color="xend"
-                    (click)="register();">Register</button>
-            </ion-col>
-            <ion-col col-6>
-                <button class="no-border" ion-button large clear full round color="xend" (click)="recover();">Recover</button>
-            </ion-col>
-        </ion-row>
-    </ion-toolbar>
-</ion-footer>
+    </div>
+</ion-content>

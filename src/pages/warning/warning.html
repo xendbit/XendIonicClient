@@ -4,30 +4,25 @@
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
-    <ion-navbar>
-        <ion-title>{{pageTitle}}</ion-title>
-    </ion-navbar>
-</ion-header>
 
 <ion-content padding>
-    <img src="assets/img/xendbit.png" alt="">
+    <img src="assets/img/hdwhite.png" alt="">
 
-    <ion-card>
+    <ion-card  style="background: white;">
         <ion-card-header>
             {{takeNoteText}}
         </ion-card-header>
-        <ion-card-content>
-            {{warning1Text}}
+        <ion-card-content style="background: white;">
+            <p style="background: white; margin-left: 3rem;"> {{warning1Text}}  </p>
             <hr/>
             <br>
-            {{warning2Text}}
+            <p style="background: white; margin-left: 3rem;">  {{warning2Text}}  </p>
             <hr/>
             <br>
-            {{warning3Text}}
+            <p style="background: white; margin-left: 3rem;">  {{warning3Text}} </p>   
             <hr />
             <br />
-            <button ion-button block medium color="xend" (click)="ready();" icon-right>{{imReadyText}}<ion-icon name="checkmark-circle"></ion-icon></button>
+            <button style="margin-top: 8rem; margin-bottom: 4rem;" ion-button block medium color="orange" (click)="ready();" icon-right> {{imReadyText}}<ion-icon name="checkmark-circle"></ion-icon> </button> 
         </ion-card-content>
     </ion-card>
 

@@ -11,6 +11,18 @@ page-confirm-mnemonic {
         height: 100%;
     }
 
+    .selectButton {
+        position: absolute;
+        width: 96px;
+        height: 22px;
+        left: 133px;
+        top: 318px;
+
+        background: rgba(160, 115, 234, 0.8);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 5px;
+    }
+
     ion-card.big {
         font-size: 2em !important;
         line-height: 1.5 !important;

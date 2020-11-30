@@ -17,6 +17,13 @@
 
 
 <ion-content padding>
+    <img src="assets/img/hdwhite.png" alt="" class="header">
+    <ion-card style="margin-top: 2rem;">
+        <ion-card-header>
+            XendBit Registration
+        </ion-card-header>
+
+    <ion-card-content style="background: whitesmoke;">
     <form [formGroup]="registerForm">
         <ion-list no-lines>
             <ion-item>
@@ -81,10 +88,12 @@
     <ion-row>
         <ion-col class="center">
             <ion-buttons class="bordered">
-                <button ion-button full medium color="xend" (click)="register();" icon-right>{{nextText}}
+                <button style="margin-left: 1rem;" ion-button full medium color="orange" (click)="register();" icon-right>{{nextText}}
                     <ion-icon name="contact"></ion-icon>
                 </button>
             </ion-buttons>
         </ion-col>
     </ion-row>
+    </ion-card-content>
+</ion-card>
 </ion-content>

@@ -41,7 +41,7 @@ ion-col {
 }
 
 .card {
-    background-color: rgba(0, 0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0);
     padding: 0 !important;
 }
 
@@ -52,7 +52,7 @@ ion-col {
 }
 
 ion-content {
-    background-image: url("../assets/img/bg_lb.png") !important;
+    background: radial-gradient(103.44% 103.44% at 50% 90.63%, rgba(141, 55, 239, 0.7) 0%, rgba(41, 64, 179, 0.7) 100%);
     //background-position: center;
     //background-repeat: no-repeat;
     //background-size: auto;
@@ -132,9 +132,7 @@ p {
 
 .button {
     text-transform: none;
-    border: solid thin white;
     border-radius: 10px !important;
-    box-shadow: 1px 1px white;
 }
 
 .center {
@@ -203,7 +201,8 @@ textarea.text-input {
 }
 
 .toolbar-background {
-    background-color: rgb(50, 6, 121) !important;
+    background: radial-gradient(103.44% 103.44% at 50% 90.63%, rgba(141, 55, 239, 0.7) 0%, rgba(41, 64, 179, 0.7) 100%);
+    opacity: 100%;
 }
 
 .overlay {

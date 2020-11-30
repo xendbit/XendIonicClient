@@ -11,36 +11,39 @@
 </ion-header>
 
 <ion-content padding class="white">
-    <img src="assets/img/xendbit.png" alt="">
+    <img src="assets/img/hdwhite.png" alt="">
+    <ion-card style="background: whitesmoke;">
 
-    <ion-row>
-        <ion-col>
-            {{description}}
-        </ion-col>
-    </ion-row>
+        <ion-row>
+            <ion-col>
+                {{description}}
+            </ion-col>
+        </ion-row>
+    
+        <ion-row *ngIf="shouldRegister === 'false'">
+            <ion-col>
+                <ion-textarea class="mnemonic" [(ngModel)]="confirmMnemonic">{{confirmMnemonic}}</ion-textarea>
+            </ion-col>
+        </ion-row>
 
-    <ion-row *ngIf="shouldRegister === 'false'">
-        <ion-col>
-            <ion-textarea class="mnemonic" [(ngModel)]="confirmMnemonic">{{confirmMnemonic}}</ion-textarea>
-        </ion-col>
-    </ion-row>
+        <ion-item *ngIf="shouldRegister === 'true'">
+            <ion-card-content>
+                <ion-row>
+                    <ion-col *ngFor="let ma of mnemonicArray" col-4>
+                        <button style="background: rgba(160, 115, 234, 0.8); box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: border-radius: 5px;" ion-button full medium color="xend" [disabled]="!isEnabled(ma)" (click)="disableAndSave(ma)">{{ma}}</button>
+                    </ion-col>
+                </ion-row>
+            </ion-card-content>
+        </ion-item>
 
-    <ion-card *ngIf="shouldRegister === 'true'">
-        <ion-card-content>
-            <ion-row>
-                <ion-col *ngFor="let ma of mnemonicArray" col-4>
-                    <button ion-button full medium color="xend" [disabled]="!isEnabled(ma)" (click)="disableAndSave(ma)">{{ma}}</button>
-                </ion-col>
-            </ion-row>
-        </ion-card-content>
+        <ion-row>
+            <ion-col>
+                <ion-buttons class="bordered" style="margin-top: 3rem;">
+                    <button style="margin-bottom: 3rem;" [disabled]="disableButton" ion-button full medium color="orange" (click)="createWallet();"
+                        icon-right>{{buttonText}}<ion-icon name="cash"></ion-icon></button>
+                </ion-buttons>
+            </ion-col>
+        </ion-row>
+        
     </ion-card>
-
-    <ion-row>
-        <ion-col>
-            <ion-buttons class="bordered">
-                <button [disabled]="disableButton" ion-button full medium color="xend" (click)="createWallet();"
-                    icon-right>{{buttonText}}<ion-icon name="cash"></ion-icon></button>
-            </ion-buttons>
-        </ion-col>
-    </ion-row>
 </ion-content>
