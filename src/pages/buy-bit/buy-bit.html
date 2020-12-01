@@ -50,10 +50,9 @@
             <ion-card-content>
                 <form [formGroup]="buyForm">
                     <ion-item>
-                        <ion-label floating>How man {{btcText}} to buy</ion-label>
-                        <ion-input type="number" formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();">
-                        </ion-input>
-                    </ion-item>
+                        <ion-label floating>Enter Amount (NGNC)</ion-label>
+                        <ion-input type="number" formControlName="amountToRecieve" (input)="calculateHowMuchToRecieve();"></ion-input>
+                    </ion-item>                    
                     <ion-item>
                         <ion-label floating>Price per {{btcText}}</ion-label>
                         <ion-input readonly type="number" formControlName="pricePerBTC"
@@ -67,10 +66,10 @@
                         </ion-input>
                     </ion-item>
                     <ion-item>
-                        <ion-label floating>You will Pay (NGN)</ion-label>
-                        <ion-input type="number" formControlName="amountToRecieve"
-                            (input)="calculateHowMuchToRecieve();"></ion-input>
-                    </ion-item>
+                        <ion-label floating>You will get {{btcText}} (approximate)</ion-label>
+                        <ion-input type="number" readonlhy formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();">
+                        </ion-input>
+                    </ion-item>                    
                     <ion-item>
                         <ion-label floating>{{passwordText}}</ion-label>
                         <ion-input type="password" formControlName="password"></ion-input>

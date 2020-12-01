@@ -103,13 +103,12 @@ export class BuyBitPage {
 
   calculateHowMuchToRecieve() {
     this.blockFees = this.minBlockFees * this.sliderValue;
-    this.rate = this.buyForm.value.pricePerBTC;
-    let usdRate = this.buyForm.value.usdRate;
-    let toSell = +this.buyForm.value.numberOfBTC;
-    if (this.rate !== 0 && toSell !== 0) {
-      let toRecieve = toSell * this.rate * usdRate;
-      this.xendFees = toSell * +this.wallet['token']['xendFees'];
-      this.buyForm.controls.amountToRecieve.setValue(toRecieve.toFixed(3));
+    this.rate = this.buyForm.value.pricePerBTC;  
+    let amount = +this.buyForm.value.amountToRecieve;
+    if (this.rate !== 0 && amount !== 0 && this.btcToNgn !== 0) {
+      let numBTC = amount * (1/this.btcToNgn);
+      this.xendFees = +this.wallet['token']['xendFees'];
+      this.buyForm.controls.numberOfBTC.setValue(numBTC.toFixed(7));
     }
   }
 
@@ -257,6 +256,7 @@ export class BuyBitPage {
             this.buyForm.reset();
             this.loadRate();
             Constants.showPersistentToastMessage("Your buy order has been placed.", this.toastCtrl);
+            this.navCtrl.pop();
           } else {
             Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
           }

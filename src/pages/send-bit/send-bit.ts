@@ -66,7 +66,7 @@ export class SendBitPage {
   }
 
   ionViewDidEnter() {
-    this.blockFees = +this.wallet['token']['blockFees'] * this.sliderValue;
+    this.blockFees = +this.wallet['token']['minBlockFees'] * this.sliderValue;
     this.minBlockFees = +this.wallet['token']['minBlockFees'];
     this.maxBlockFees = +this.wallet['token']['maxBlockFees'];
     this.xendFees = +this.wallet['token']['xendFees'];
@@ -101,7 +101,7 @@ export class SendBitPage {
 
   calculateXendFees() {
     let toSell = +this.sendBitForm.value.amount;
-    this.xendFees = toSell * +this.wallet['token']['xendFees'];
+    this.xendFees = +this.wallet['token']['xendFees'];
     this.blockFees = this.minBlockFees * this.sliderValue;
   }
 
@@ -146,7 +146,7 @@ export class SendBitPage {
         if (responseData.response_code === 0) {
           this.ls.setItem(Constants.WORKING_WALLET + "confirmedAccountBalance", responseData.result.balance);
           let balance = +responseData.result.balance;
-          this.xendFees = +this.wallet['token']['xendFees'] * balance;
+          this.xendFees = +this.wallet['token']['xendFees'];
           //0.001 is added because of rounding issues.
           let canSend = balance - this.blockFees - this.xendFees;
           if (canSend < 0) {
@@ -168,7 +168,7 @@ export class SendBitPage {
     if (balance === undefined || balance === NaN || balance === 0) {
       this.getTransactions(true);
     } else {
-      this.xendFees = +this.wallet['token']['xendFees'] * balance;
+      this.xendFees = +this.wallet['token']['xendFees'];
       let canSend = balance - this.blockFees - this.xendFees;
 
       //Correct for rounding error
@@ -193,7 +193,7 @@ export class SendBitPage {
 
     let invalidAddressMessage = "Invalid Coin Address detected".replace("Coin", this.currencyText);
 
-    this.xendFees = +this.wallet['token']['xendFees'] * amountToSend;
+    this.xendFees = +this.wallet['token']['xendFees'];
 
     if (amountToSend === 0) {
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
