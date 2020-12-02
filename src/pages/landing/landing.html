@@ -7,46 +7,66 @@
 
 
 <ion-content>
-  <ion-title style="margin-top: 3rem; margin-bottom: 3rem;">My Portfolio</ion-title>
-  <ion-card>
-    <ion-card-content>
+  <ion-title style="margin-top: 3rem; margin-bottom: 3rem; font-size: 0.9rem;"><ion-icon style="margin-right: 1.0rem;" name="menu"></ion-icon> My portfolio</ion-title>
+  <ion-card style="opacity: 90%; box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22);">
+    <ion-grid>
       <ion-row>
-        <ion-col class="total-assets" style="margin-right: 2rem;">Portfolio Value</ion-col>
-        <ion-col class="total-assets">Naira (NGNC)</ion-col>
+          <ion-col width-50>
+            <ion-card style="opacity: 70%; box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22); display: inline-block;">
+              <ion-card-content>
+                <ion-row>
+                  <ion-col class="total-assets" style="margin-right: 2rem;">Portfolio Value</ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col class="assets-value" (click)="reloadWallets()">
+                    {{totalAssets | currency: 'USD' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col class="assets-value" (click)="reloadWallets()">
+                    <ion-icon name="refresh" color="xend" class="assets-icon"></ion-icon>
+                  </ion-col>      
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col width-50>
+            <ion-card style="opacity: 70%; box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22); display: inline-block;">
+              <ion-card-content>
+                <ion-row>
+                  <ion-col class="total-assets">Naira (NGNC)</ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col class="assets-value" (click)="getNgncBalance()">
+                    {{ngncBalance | currency: '&#8358;' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col class="assets-value" (click)="getNgncBalance()">
+                    <ion-icon name="refresh" color="xend" class="assets-icon"></ion-icon>
+                  </ion-col>        
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col class="assets-value" (click)="reloadWallets()">
-          {{totalAssets | currency: 'USD' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
-        </ion-col>
-        <ion-col class="assets-value" (click)="getNgncBalance()">
-          {{ngncBalance | currency: '&#8358;' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col class="assets-value" (click)="reloadWallets()">
-          <ion-icon name="refresh" color="xend" class="assets-icon"></ion-icon>
-        </ion-col>
-        <ion-col class="assets-value" (click)="getNgncBalance()">
-          <ion-icon name="refresh" color="xend" class="assets-icon"></ion-icon>
-        </ion-col>        
-      </ion-row>
-    </ion-card-content>
+    </ion-grid>
   </ion-card>
 
   <ion-item style="text-align: left !important;">
     <p class="coins">Coins</p>
   </ion-item>
-  <ion-card>
+  <ion-card style="box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22);">
     <ion-card-content>
 
       <ion-list>
         <ion-item-group *ngFor="let wallet of loadedWallets">          
           <ion-item class="bg" (click)="openHomePage(wallet)">
             <ion-avatar item-start>
-              <img src="https://xendbit.com/coins/{{wallet.ticker_symbol}}.png" />
+              <img style="width: 60px; height: 60px;" src="https://xendbit.com/coins/{{wallet.ticker_symbol}}.png" />
             </ion-avatar>
             <span class="big">{{wallet.symbol}} {{wallet.confirmedAccountBalance | number: '.2-5'}}</span>
-            <br />
+            <br style="color: orange;" />
             <span class="small">{{wallet.usdRate | currency:'USD' : 'symbol' : '.2-4'}} per {{wallet.text}}</span>            
             <span class="big-color" item-end>{{wallet.usdBalance | currency:'USD' : 'symbol' : '.2-2'}}</span>
           </ion-item>          
@@ -58,11 +78,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-footer>
-    <ion-toolbar>
-      <button color="orange" ion-button full medium icon-right (click)="gotongnc()">Deposit Naira => NGNC
-        <ion-icon name="money"></ion-icon>
-      </button>
-    </ion-toolbar>
-  </ion-footer>
+  <button class="depositButton" color="orange" ion-button full medium icon-right (click)="gotongnc()"><p style="color: darkslategray;"> Deposit Naira (NGNC) </p>
+    <ion-icon name="money"></ion-icon>
+  </button>
 </ion-content>

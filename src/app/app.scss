@@ -70,7 +70,7 @@ ion-content {
 }
 
 .col {
-    color: black !important;
+    color: black ;
 }
 
 ion-item {
@@ -115,11 +115,10 @@ ion-icon {
 .label {
     font-size: 15px;
     text-align: left;
-    color: black !important;
+    color:  darkslategray;
 }
 
 p {
-    color: black !important;
     font-weight: bold;
     font-size: 15px;
     line-height: 2;
@@ -176,7 +175,8 @@ p {
 }
 
 .tabbar {
-    background-color: rgb(50, 6, 121) !important;
+    background: transparent !important;
+    opacity: 100%;
 }
 
 .scroll-content {

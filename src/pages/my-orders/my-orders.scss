@@ -11,17 +11,18 @@ page-my-orders {
     .rowgrid {
         border: thin solid black;
         border-width: 0.005em;
-        background-color: mediumpurple;
+        background-color: white;
         color: white;
         font-weight: bolder;
         font-size: 14px;        
     }
 
     .colgrid {
-        border: thin solid black;        
+        border: 4px solid rgba(126, 117, 213, 0.7);        
         border-width: 0.005em;
         font-weight: normal;
         font-size: smaller;
+        box-sizing: border-box;
     }
 
     .scroll-content {
