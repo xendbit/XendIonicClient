@@ -46,7 +46,7 @@
 
             <ion-item *ngIf="!isBasic">
                     <ion-label floating></ion-label>
-                <ion-select interface='action-sheet' formControlName="country" placeholder="Click to Select Country" (ionChange)="countrySelected($event)">
+                <ion-select interface='action-sheet' formControlName="country" placeholder="Select Country" (ionChange)="countrySelected($event)">
                     <ion-option value="Nigeria">Nigeria</ion-option>
                     <ion-option value="Kenya">Kenya</ion-option>
                     <ion-option value="Ghana">Ghana</ion-option>
@@ -61,7 +61,7 @@
 
             <ion-item *ngIf="!isBasic">
                     <ion-label floating></ion-label>
-                <ion-select interface='action-sheet' formControlName="bank" placeholder="Click to Select Bank Name (optional)">
+                <ion-select interface='action-sheet' formControlName="bank" placeholder="Select Bank Name (optional)">
                     <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
                 </ion-select>
             </ion-item>

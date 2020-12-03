@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, ActionSheetController, AlertController, IonicPage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
+import { Dialogs } from '@ionic-native/dialogs';
+import { Wallet } from '../utils/wallet';
 
 /**
  * Generated class for the SellBitPage page.
@@ -44,14 +46,13 @@ export class SellBitPage {
   passwordText: string;
   placeOrderText: string;
   isOwner = false;
-  blockFees = 0;
   sliderValue = 5;
-  minBlockFees = 0;
-  maxBlockFees = 0;
-  xendFees = 0;
-  wallet = undefined;
+  wallet: Wallet;
+  orderType = "MO";
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
+  xendFees = 0;
+
+  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController, private dialogs: Dialogs) {
     this.banks = Constants.properties['banks']
     this.pageTitle = "Place Sell Order"
     this.priceText = "Price Per Coin (USD)";
@@ -62,8 +63,8 @@ export class SellBitPage {
     this.passwordText = "Wallet Password";
 
     this.wallet = Constants.WALLET;
-    this.currencyText = this.wallet['value'];
-    this.btcText = this.wallet['value'];
+    this.currencyText = this.wallet.chain;
+    this.btcText = this.wallet.chain;
     this.priceText = this.priceText.replace('Coin', this.btcText);
     this.numberOfBTCText = this.numberOfBTCText.replace('Coin', this.btcText);
 
@@ -87,15 +88,11 @@ export class SellBitPage {
 
   ionViewWillEnter() {
     this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;
-    this.blockFees = +this.wallet['token']['blockFees'] * this.sliderValue;
-    this.minBlockFees = +this.wallet['token']['minBlockFees'];
-    this.maxBlockFees = +this.wallet['token']['maxBlockFees'];
-    this.xendFees = +this.wallet['token']['xendFees'];
+    this.loadRate();
   }
 
   ionViewDidLoad() {
     Console.log('ionViewDidLoad SellBitPage');
-    this.loadRate();
     this.loadBalanceFromStorage();
   }
 
@@ -104,7 +101,11 @@ export class SellBitPage {
     let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     let password = sb.password;
     let coinAmount = +sb.numberOfBTC;
-    this.blockFees = this.minBlockFees * this.sliderValue;
+    const blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
+    const externalTradingFees = this.wallet.fees.percExternalTradingFees * balance;
+
+    console.log(coinAmount + this.xendFees + blockFees);
+    console.log(balance);
 
     if (coinAmount === 0) {
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
@@ -112,7 +113,7 @@ export class SellBitPage {
     } else if (password !== this.ls.getItem("password")) {
       Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
       return;
-    } else if (coinAmount + this.xendFees + this.blockFees > balance) {
+    } else if (coinAmount + this.xendFees + blockFees + externalTradingFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
       return;
     }
@@ -122,83 +123,118 @@ export class SellBitPage {
 
   continue() {
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-    let sb = this.sellForm.value;
-    let coinAmount = +sb.numberOfBTC;
-    let password = sb.password;
-    let amountToRecieve = +sb.amountToRecieve;
+    let tickerSymbol = this.wallet.tickerSymbol;
+    let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/SELL';
+    const blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
 
-    let rate = +sb.pricePerBTC;
+    this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+      this.usdRate = responseData.result.usdRate;
+      this.btcToNgn = responseData.result.ngnRate;
+      this.usdToNgnRate = this.btcToNgn / this.usdRate;
+      this.sellForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
+      this.sellForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
+      this.calculateHowMuchToRecieve();
 
-    let btcValue = coinAmount;
+      let sb = this.sellForm.value;
+      let coinAmount = +sb.numberOfBTC;
+      let password = sb.password;
+      let amountToRecieve = +sb.amountToRecieve;
 
-    let totalFees = +this.xendFees + +this.blockFees;
+      let rate = +sb.pricePerBTC;
 
-    let key = Constants.WORKING_WALLET + "Address";
-    let sellerFromAddress = this.ls.getItem(key);
+      let btcValue = coinAmount;
 
-    // Get seller ETH Address to recieve NGNC
-    let sellerToAddress = "";
-    let wallets = Constants.LOGGED_IN_USER['addressMappings'];
-    for (let w of wallets) {
-      let wallet = Constants.getWalletFormatted(w);
-      if (wallet['value'] === 'ETH') {
-        sellerToAddress = wallet['chain_address'];
-        break;
+      let totalFees = this.xendFees + blockFees;
+
+      let orderType = this.orderType;
+
+      let key = Constants.WORKING_WALLET + "Address";
+      let sellerFromAddress = this.ls.getItem(key);
+
+      // Get seller ETH Address to recieve xNGN
+      let sellerToAddress = "";
+      let wallets = Constants.LOGGED_IN_USER['addressMappings'];
+      for (let w of wallets) {
+        let wallet = Constants.getWalletFormatted(w);
+        if (wallet.chain === 'ETH') {
+          sellerToAddress = wallet.chainAddress;
+          break;
+        }
       }
-    }
 
-    let postData = {
-      amountToSell: btcValue,
-      xendFees: this.xendFees,
-      blockFees: this.blockFees,
-      fees: totalFees,
-      amountToRecieve: amountToRecieve,
-      sellerFromAddress: sellerFromAddress,
-      sellerToAddress: sellerToAddress,
-      fromCoin: Constants.WORKING_WALLET,
-      toCoin: "Naira",
-      rate: rate,
-      emailAddress: this.ls.getItem("emailAddress"),
-      password: password,
-      networkAddress: sellerFromAddress
-    }
-
-    console.log(postData);
-
-    //this is wrong
-    let url = Constants.POST_TRADE_URL;
-
-    this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.loading.dismiss();
-      if (responseData.response_text === "success") {
-        this.clearForm();
-        Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
-        Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
-        this.navCtrl.push('MyOrdersPage');
-      } else {
-        Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+      let postData = {
+        amountToSell: btcValue,
+        xendFees: this.xendFees,
+        blockFees: blockFees,
+        fees: totalFees,
+        amountToRecieve: amountToRecieve,
+        sellerFromAddress: sellerFromAddress,
+        sellerToAddress: sellerToAddress,
+        fromCoin: Constants.WORKING_WALLET,
+        toCoin: "Naira",
+        rate: rate,
+        emailAddress: this.ls.getItem("emailAddress"),
+        password: password,
+        networkAddress: sellerFromAddress,
+        orderType: orderType,
+        side: 'SELL',
       }
-    }, _error => {
-      this.loading.dismiss();
-      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+
+      console.log(postData);
+
+      //this is wrong
+      let url = Constants.SELL_TRADE_URL;
+
+      this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
+        this.loading.dismiss();
+        if (responseData.response_text === "success") {
+          this.clearForm();
+          Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
+          Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
+          if (this.orderType === 'MO') {
+            // do nothing
+            this.navCtrl.pop();
+          } else {
+            this.navCtrl.push('MyOrdersPage');
+          }
+        } else {
+          Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+        }
+      }, _error => {
+        this.loading.dismiss();
+        Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+      });
+
+    }, error => {
+      //doNothing
     });
   }
 
   sellAll() {
-    let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
-    this.xendFees = +this.wallet['token']['xendFees'] * balance;
-    this.blockFees = this.minBlockFees * this.sliderValue;
-    let canSend = balance - this.blockFees - this.xendFees;
-    console.log(this.xendFees);
-    console.log(this.blockFees);
-    console.log(canSend);
+    let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
+    let xendFees = balance * this.wallet.fees.percXendFees;
+    let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+    if (xendFees < xfInTokens) {
+      xendFees = xfInTokens
+    }
+
+    if(xendFees > xfInTokens) {
+      xendFees = xfInTokens;
+    }
+
+    this.xendFees = xendFees;
+
+    const externalTradingFees = this.wallet.fees.percExternalTradingFees * balance;
+    const blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
+    let canSend = balance - blockFees - xendFees - externalTradingFees - 0.00001;
 
     if (canSend < 0) {
       canSend = 0;
     }
 
-    this.sellForm.controls.numberOfBTC.setValue(canSend);
-    this.sellForm.controls.amountToRecieve.setValue(this.sellForm.value.pricePerBTC * this.sellForm.value.usdRate * canSend);
+    this.sellForm.controls.numberOfBTC.setValue(canSend.toFixed(4));
+    let atr = this.sellForm.value.pricePerBTC * this.sellForm.value.usdRate * canSend;
+    this.sellForm.controls.amountToRecieve.setValue(atr.toFixed(4));
   }
 
   sellBitFingerprint() {
@@ -218,22 +254,24 @@ export class SellBitPage {
   }
 
   loadRate() {
-    let tickerSymbol = this.wallet['ticker_symbol'];
+    let tickerSymbol = this.wallet.tickerSymbol;
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/SELL';
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.usdRate = responseData.result.usdRate;
       this.btcToNgn = responseData.result.ngnRate;
-      this.usdToNgnRate = this.btcToNgn/this.usdRate;
+      this.usdToNgnRate = this.btcToNgn / this.usdRate;
       this.sellForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
       this.sellForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
+      this.sellAll();
+      this.calculateHowMuchToRecieve();
     }, error => {
       //doNothing
     });
   }
 
   loadBalanceFromStorage() {
-    this.networkAddress = this.wallet['chain_address'];
+    this.networkAddress = this.wallet.chainAddress;
     if (this.networkAddress !== null) {
       this.confirmedAccountBalance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     }
@@ -241,17 +279,28 @@ export class SellBitPage {
 
   clearForm() {
     this.sellForm.reset();
+    this.loadRate();
   }
 
   calculateHowMuchToRecieve() {
-    this.blockFees = this.minBlockFees * this.sliderValue;
     this.rate = this.sellForm.value.pricePerBTC;
     let usdRate = this.sellForm.value.usdRate;
     let toSell = +this.sellForm.value.numberOfBTC;
     if (this.rate !== 0 && toSell !== 0) {
       let toRecieve = toSell * this.rate * usdRate;
-      this.xendFees = toSell * +this.wallet['token']['xendFees'];
       this.sellForm.controls.amountToRecieve.setValue(toRecieve.toFixed(3));
     }
+  }
+
+  showOrderTypeInfo() {
+    let sb = this.sellForm.value;
+    let title = sb.orderType === 'MO' ? 'Market Order' : 'P2P Exchange'
+    let moText = 'Market Order: Selling your coins immediately on the exchange using the current market price.';
+    let p2pText = 'P2P Exchnage: Allows you to set the price you want your coins to be sold at.\n'
+      + 'This is usually reserved for advanced traders';
+    let text = sb.orderType === 'MO' ? moText : p2pText;
+    this.dialogs.alert(text, title, 'OK')
+      .then(() => console.log('Dialog dismissed'))
+      .catch(e => console.log('Error displaying dialog', e));
   }
 }

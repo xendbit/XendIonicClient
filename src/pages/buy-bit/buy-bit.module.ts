@@ -1,7 +1,7 @@
 import { BuyBitPage } from './buy-bit';
 import { IonicPageModule } from 'ionic-angular';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { NgModule } from '@angular/core';
+import { Dialogs } from '@ionic-native/dialogs';
 
 @NgModule({
     declarations: [
@@ -14,7 +14,7 @@ import { NgModule } from '@angular/core';
       BuyBitPage
     ],
     providers: [
-      InAppBrowser
+      Dialogs
     ]
   })
 

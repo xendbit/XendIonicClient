@@ -59,7 +59,7 @@
             <ion-item>
                 <ion-label floating></ion-label>
                 <ion-select interface='action-sheet' formControlName="bank"
-                    placeholder="Click to Select Bank Name">
+                    placeholder="Select Bank Name">
                     <ion-option *ngFor="let bank of banks" value="{{bank.bankCode}}">{{bank.bankName}}</ion-option>
                 </ion-select>
             </ion-item>
@@ -68,7 +68,7 @@
         <ion-list no-lines>
             <ion-item>
                 <ion-label floating></ion-label>
-                <ion-select interface='action-sheet' formControlName="idType" placeholder="Click to Select ID Type">
+                <ion-select interface='action-sheet' formControlName="idType" placeholder="Select ID Type">
                     <ion-option *ngFor="let idType of idTypes" value="{{idType.text}}">{{idType.text}}</ion-option>
                 </ion-select>
             </ion-item>

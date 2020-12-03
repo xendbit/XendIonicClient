@@ -1,6 +1,7 @@
 import { StorageService } from "./storageservice";
 import { Headers } from "@angular/http";
 import { LocalProps } from "./localprops";
+import { Wallet, Fees } from "./wallet";
 
 export class Constants {
     static TOMCAT_URL = "https://xendfilb.xendbit.net";
@@ -14,17 +15,6 @@ export class Constants {
     static WORKING_WALLET = "BTC";
     static WALLET = undefined;
     static WORKING_TICKER_VALUE = 'btc';
-
-    static CURRENT_WALLET = {
-        "text": "Bitcoin",
-        "value": "BTC",
-        "symbol": "BTC",
-        "ticker_symbol": "btc",
-        "xend.fees": 0.000625,
-        "block.fees": 0.003571,
-        "xend.address": "1HHeKfxgDe4Vqv7nJcvT1QYahksekUwkMN",
-        "multiplier": 100000000
-    };
 
     static REG_TYPE = 'register';
 
@@ -56,7 +46,8 @@ export class Constants {
     static GET_EXCHANGE_URL = Constants.SERVER_URL + "exchange/";
     static GET_USD_RATE_URL = Constants.SERVER_URL + "exchange/usdrate/";
     static GET_EXCHANGE_RATE_URL = Constants.SERVER_URL + "exchange/xrate/";
-    static POST_TRADE_URL = Constants.SERVER_URL + "exchange/post-trade";
+    static SELL_TRADE_URL = Constants.SERVER_URL + "exchange/sell-trade";
+    static BUY_TRADE_URL = Constants.SERVER_URL + "exchange/buy-trade";
     static BUY_CUSTOM_URL = Constants.SERVER_URL + "exchange/buy-direct";
 
     static GET_SELL_ORDERS_TX_URL = Constants.SERVER_URL + "exchange/sell-orders";
@@ -284,67 +275,6 @@ export class Constants {
         });
     }
 
-    static getWalletProperties(currentWallet: string) {
-        let xendFees = 0;
-        let blockFees = 0;
-        let currencyText = "";
-        let btcText = "";
-        let value = "";
-        let xendAddress = "";
-        let tickerSymbol = "";
-        let multiplier = 1;
-        let url = "";
-        let contract = "";
-        let currencyId = "";
-        let equityId = "";
-        let publicKey = "";
-
-        let wallets = Constants.properties['wallets'];
-        for (let w in wallets) {
-            let wallet = wallets[w];
-            if (wallet['value'] === currentWallet) {
-                xendFees = wallet['xend.fees'];
-                blockFees = wallet['block.fees'];
-                currencyText = wallet['text'];
-                btcText = wallet['symbol'];
-                value = wallet['value'];
-                xendAddress = wallet['xend.address'];
-                tickerSymbol = wallet['ticker_symbol'];
-                multiplier = wallet['multiplier']
-                url = wallet['url'];
-                contract = wallet['contract'];
-                currencyId = wallet['currencyId'];
-                equityId = wallet['equityId'];
-                publicKey = wallet['xend.public_key'];
-            }
-        }
-
-        let fees = {
-            "xendFees": xendFees,
-            "blockFees": blockFees,
-            "currencyText": currencyText,
-            "btcText": btcText,
-            "value": value,
-            "xendAddress": xendAddress,
-            "tickerSymbol": tickerSymbol,
-            "multiplier": multiplier,
-            "contract": contract,
-            "url": url,
-            "currencyId": currencyId,
-            "equityId": equityId,
-            "publicKey": publicKey
-        };
-        return fees;
-    }
-
-    static getCurrentWalletProperties() {
-        if (Constants.WORKING_WALLET === undefined || Constants.WORKING_WALLET === "") {
-            Constants.WORKING_WALLET = "BTC";
-        }
-        return Constants.getWalletProperties(Constants.WORKING_WALLET);
-    }
-
-
     static normalizeMnemonicCode(ls: StorageService) {
         let mnemonicCode = ls.getItem('mnemonic');
         return mnemonicCode;
@@ -411,17 +341,27 @@ export class Constants {
         return day + '/' + monthNames[monthIndex] + '/' + year;
     }
 
-    static getWalletFormatted(w) {
+    static getWalletFormatted(w): Wallet {
       let chain = w['chain'];
       let chainAddress = w['chainAddress'];
 
-      let wallet = {};
-      wallet['ticker_symbol'] = chain.toLowerCase();
-      wallet['symbol'] = chain;
-      wallet['text'] = chain;
-      wallet['value'] = chain;
-      wallet['chain_address'] = chainAddress;
-      wallet['token'] = w['token'];
+      let wallet: Wallet = new Wallet();
+      wallet.tickerSymbol = chain.toLowerCase();
+      wallet.chainAddress = chainAddress;
+      wallet.chain = chain;
+      
+      const fees: Fees = new Fees();                  
+      fees.externalDepositFees = w['fees']['externalDepositFees'];
+      fees.maxXendFees = w['fees']['maxXendFees'];
+      fees.minBlockFees = w['fees']['minBlockFees'];
+      fees.minXendFees = w['fees']['minXendFees'];
+      fees.percExternalTradingFees = w['fees']['percExternalTradingFees'];
+      fees.externalWithdrawalFees = w['fees']['externalWithdrawalFees'];
+      fees.percXendFees = w['fees']['percXendFees'];
+      fees.tickerSymbol = wallet.tickerSymbol;
+      fees.chain = wallet.chain;
+      fees.chainAddress = wallet.chainAddress;
+      wallet.fees = fees;
 
       return wallet;
     }

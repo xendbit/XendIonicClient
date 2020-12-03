@@ -12,7 +12,7 @@
     <ion-card-content>
       <ion-row>
         <ion-col class="total-assets" style="margin-right: 2rem;">Portfolio Value</ion-col>
-        <ion-col class="total-assets">Naira (NGNC)</ion-col>
+        <ion-col class="total-assets">Naira (xNGN)</ion-col>        
       </ion-row>
       <ion-row>
         <ion-col class="assets-value" (click)="reloadWallets()">
@@ -43,7 +43,7 @@
         <ion-item-group *ngFor="let wallet of loadedWallets">          
           <ion-item class="bg" (click)="openHomePage(wallet)">
             <ion-avatar item-start>
-              <img src="https://xendbit.com/coins/{{wallet.ticker_symbol}}.png" />
+              <img src="https://xendbit.com/coins/{{wallet.tickerSymbol}}.png" />
             </ion-avatar>
             <span class="big">{{wallet.symbol}} {{wallet.confirmedAccountBalance | number: '.2-5'}}</span>
             <br />
@@ -60,7 +60,7 @@
 
   <ion-footer>
     <ion-toolbar>
-      <button color="orange" ion-button full medium icon-right (click)="gotongnc()">Deposit Naira => NGNC
+      <button color="orange" ion-button full medium icon-right (click)="gotongnc()">Deposit Naira => xNGN
         <ion-icon name="money"></ion-icon>
       </button>
     </ion-toolbar>

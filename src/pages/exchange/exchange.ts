@@ -208,9 +208,11 @@ export class ExchangePage {
         xendFees: this.xendFees,
         blockFees: this.blockFees,
         fees: totalFees,
+        orderType: 'P2P',
+        side: 'SELL',
       }
 
-      let url = Constants.POST_TRADE_URL;
+      let url = Constants.SELL_TRADE_URL;
       this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(
         responseData => {
           Constants.showLongerToastMessage(responseData.result, this.toastCtrl);

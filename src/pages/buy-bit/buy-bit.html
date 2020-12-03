@@ -7,61 +7,141 @@
 <ion-header>
 
     <ion-navbar>
-        <ion-title>Buy {{currentWallet['value']}}</ion-title>
+        <ion-title>Buy {{wallet.chain}}</ion-title>
     </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
+
     <ion-card>
         <ion-card-content>
             <button ion-button icon-left clear small (click)="loadRate()" item-left>
                 <ion-icon name="refresh-circle"></ion-icon>
-                <span class="item">1 {{currentWallet['value']}} = {{btcToNgn | number: '.0-3'}} NGN</span>
+                <span class="item">1 {{wallet.chain}} = {{btcToNgn | number: '.0-3'}} NGN</span>
             </button>
+            <ion-item>
+                <ion-label>Block Fees (Transaction Speed)</ion-label>
+                <ion-range [(ngModel)]="sliderValue" min="1" max="10">
+                    <ion-icon range-left small name="remove">&nbsp;Slow&nbsp;</ion-icon>
+                    <ion-icon range-right name="add">&nbsp;Fast&nbsp;</ion-icon>
+                </ion-range>
+            </ion-item>
         </ion-card-content>
     </ion-card>
-    <ion-item style="background-color: none">
-        <ion-label stacked>Click to Select Currency Pair</ion-label>
-        <ion-select interface='action-sheet' [(ngModel)]="currencyPair" placeholder="Click to Select Currency Pair"
-            (ionChange)="pairSelected($event)">
-            <ion-option *ngFor="let currencyPair of currencyPairs" value="{{currencyPair}}">
-                {{currencyPair}}
-            </ion-option>
-        </ion-select>
-    </ion-item>
-    <ion-item>
-        <ion-label stacked>Available Sell Orders</ion-label>
-    </ion-item>
-    <ion-grid style="background-color: none">
-        <ion-row>
-            <ion-col col-4 class="colgrid"></ion-col>
-            <ion-col col-4 class="colgrid">
-                <button ion-button icon-left clear small (click)="loadSellers()" item-left>
-                    Refresh &nbsp;&nbsp;&nbsp;<ion-icon name="refresh-circle"></ion-icon>
-                </button>
-            </ion-col>
-            <ion-col col-4 class="colgrid"></ion-col>
-        </ion-row>
-        <ion-row class="rowgrid" *ngIf="showHeaders">
-            <ion-col col-4 class="colgrid">{{fromCoin}}</ion-col>
-            <ion-col col-4 class="colgrid">{{toCoin}}</ion-col>
-            <ion-col col-4 class="colgrid">Rate</ion-col>
-        </ion-row>
-        <ion-row *ngFor="let seller of sellersPairs; let i = index" (click)=buyBit(seller) [ngClass]="(i % 2 == 0) ? 'odd' : 'even'">
-            <ion-col col-4 class="colgrid">
-                {{seller.amountToSell | number: '.0-3'}}
-            </ion-col>
-            <ion-col col-4 class="colgrid">
-                {{seller.amountToRecieve | number: '.0-3'}}
-            </ion-col>
-            <ion-col col-4 class="colgrid">
-                {{seller.rate | number: '.0-4'}}
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-    <ion-card>
-        <ion-card-content class="nbnmnp">
-        </ion-card-content>
-    </ion-card>
+
+    <div padding>
+        <ion-segment [(ngModel)]="orderType">
+            <ion-segment-button value="MO">
+                Market Order
+            </ion-segment-button>
+            <ion-segment-button value="P2P">
+                P2P Exchange
+            </ion-segment-button>
+        </ion-segment>
+        <ion-item>
+            <button ion-button full medium color="xend" (click)="showOrderTypeInfo();" icon-right>More Info...
+                <ion-icon name="information-circle"></ion-icon></button>
+        </ion-item>
+    </div>
+
+    <div [ngSwitch]="orderType">
+        <ion-card *ngSwitchCase="'MO'">
+            <ion-card-content>
+                <form [formGroup]="buyForm">
+                    <ion-item>
+                        <ion-label floating>Enter Amount (xNGN)</ion-label>
+                        <ion-input type="number" formControlName="amountToRecieve" (input)="calculateHowMuchToRecieve();"></ion-input>
+                    </ion-item>                    
+                    <ion-item>
+                        <ion-label floating>Price per {{btcText}}</ion-label>
+                        <ion-input readonly type="number" formControlName="pricePerBTC"
+                            (input)="calculateHowMuchToRecieve();">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label floating>USD to NGN Rate</ion-label>
+                        <ion-input readonly type="number" formControlName="usdRate"
+                            (input)="calculateHowMuchToRecieve();">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label floating>You will get {{btcText}} (approximate)</ion-label>
+                        <ion-input type="number" readonlhy formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();">
+                        </ion-input>
+                    </ion-item>                    
+                    <ion-item>
+                        <ion-label floating>Your Password</ion-label>
+                        <ion-input type="password" formControlName="password"></ion-input>
+                    </ion-item>
+                </form>
+                <ion-item class="center">
+                    <ion-buttons class="bordered">
+                        <ion-row>
+                            <ion-col col-9>
+                                <button ion-button medium full color="xend" (click)="buyBit();" icon-right>Place Buy
+                                    Order
+                                    <ion-icon name="trending-up"></ion-icon></button>
+                            </ion-col>
+                            <ion-col col-3>
+                                <button ion-button medium round color="fingerprint" (click)="buyBitFingerprint();"
+                                    icon-only>
+                                    <ion-icon name="finger-print"></ion-icon>
+                                </button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-buttons>
+                </ion-item>
+            </ion-card-content>
+        </ion-card>
+
+        <ion-card *ngSwitchCase="'P2P'">
+            <ion-card-content>
+                <ion-item style="background-color: none">
+                    <ion-label stacked>Select Currency Pair</ion-label>
+                    <ion-select interface='action-sheet' [(ngModel)]="currencyPair" placeholder="Select Currency Pair"
+                        (ionChange)="pairSelected($event)">
+                        <ion-option *ngFor="let currencyPair of currencyPairs" value="{{currencyPair}}">
+                            {{currencyPair}}
+                        </ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label stacked>Available Sell Orders</ion-label>
+                </ion-item>
+                <ion-grid style="background-color: none">
+                    <ion-row>
+                        <ion-col col-4 class="colgrid"></ion-col>
+                        <ion-col col-4 class="colgrid">
+                            <button ion-button icon-left clear small (click)="loadSellers()" item-left>
+                                Refresh &nbsp;&nbsp;&nbsp;<ion-icon name="refresh-circle"></ion-icon>
+                            </button>
+                        </ion-col>
+                        <ion-col col-4 class="colgrid"></ion-col>
+                    </ion-row>
+                    <ion-row class="rowgrid" *ngIf="showHeaders">
+                        <ion-col col-4 class="colgrid">{{fromCoin}}</ion-col>
+                        <ion-col col-4 class="colgrid">{{toCoin}}</ion-col>
+                        <ion-col col-4 class="colgrid">Rate</ion-col>
+                    </ion-row>
+                    <ion-row *ngFor="let seller of sellersPairs; let i = index" (click)=buyBit(seller)
+                        [ngClass]="(i % 2 == 0) ? 'odd' : 'even'">
+                        <ion-col col-4 class="colgrid">
+                            {{seller.amountToSell | number: '.0-3'}}
+                        </ion-col>
+                        <ion-col col-4 class="colgrid">
+                            {{seller.amountToRecieve | number: '.0-3'}}
+                        </ion-col>
+                        <ion-col col-4 class="colgrid">
+                            {{seller.rate | number: '.0-4'}}
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <ion-card>
+                    <ion-card-content class="nbnmnp">
+                    </ion-card-content>
+                </ion-card>
+            </ion-card-content>
+        </ion-card>
+    </div>
 </ion-content>
