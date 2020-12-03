@@ -4,10 +4,10 @@ import { LocalProps } from "./localprops";
 import { Wallet, Token } from "./wallet";
 
 export class Constants {
-static TOMCAT_URL = "https://xendfilb.xendbit.net";
+//static TOMCAT_URL = "https://xendfilb.xendbit.net";
 static APP_VERSION = "v1.1-rc4"
 static ENABLE_GUEST = false;
-    //static TOMCAT_URL = "https://lb.xendbit.com";
+    static TOMCAT_URL = "http://localhost:8080";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
 
@@ -361,13 +361,13 @@ static ENABLE_GUEST = false;
       wallet.chain = chain;
       
       const token = new Token();                  
-      token.externalDepositFees = w['token']['externalDepositFees'];
-      token.maxXendFees = w['token']['maxXendFees'];
-      token.minBlockFees = w['token']['minBlockFees'];
-      token.minXendFees = w['token']['minXendFees'];
-      token.percExternalTradingFees = w['token']['percExternalTradingFees'];
-      token.externalWithdrawalFees = w['token']['externalWithdrawalFees'];
-      token.percXendFees = w['token']['percXendFees'];
+      token.externalDepositFees = w['fees']['externalDepositFees'];
+      token.maxXendFees = w['fees']['maxXendFees'];
+      token.minBlockFees = w['fees']['minBlockFees'];
+      token.minXendFees = w['fees']['minXendFees'];
+      token.percExternalTradingFees = w['fees']['percExternalTradingFees'];
+      token.externalWithdrawalFees = w['fees']['externalWithdrawalFees'];
+      token.percXendFees = w['fees']['percXendFees'];
       wallet.token = token;
 
       return wallet;

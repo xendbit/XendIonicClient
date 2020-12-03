@@ -40,11 +40,12 @@ export class LandingPage {
   }
 
   gotongnc() {
-    this.tab.select(3).then(() => {console.log("NGNC Tabbed")});
+    this.tab.select(3).then(() => {console.log("xNGN Tabbed")});
   }
 
   ionViewDidEnter() {
     this.wallets = Constants.LOGGED_IN_USER['addressMappings'];
+    console.log(this.wallets);
     this.numberOfWallets = this.wallets.length;
     let wallet: Wallet = Constants.getWalletFormatted(this.wallets[0]);
     Constants.WORKING_WALLET = wallet.chain;
@@ -66,6 +67,7 @@ export class LandingPage {
     this.loadingWallets = [];
     this.loadingTotalAssets = 0;
     for (let w of this.wallets) {
+      console.log(w);
       let wallet: Wallet = Constants.getWalletFormatted(w);
       this.getTransactions(wallet);
     }

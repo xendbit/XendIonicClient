@@ -60,6 +60,8 @@ export class HomePage {
     this.clipboard = new Clipboard();
     this.ls = Constants.storageService;    
     Constants.properties['home'] = this;
+    this.wtv = Constants.WORKING_TICKER_VALUE;
+    this.wallet = Constants.WALLET;    
   }
 
   loadRate() {
@@ -109,8 +111,6 @@ export class HomePage {
     this.fiatSellOrderText = 'Fiat Sell-Order'
 
     Console.log("Working Wallet: " + Constants.WORKING_WALLET);
-    this.wtv = Constants.WORKING_TICKER_VALUE;
-    this.wallet = Constants.WALLET;
     this.initProps();
     this.loadCharts();
   }

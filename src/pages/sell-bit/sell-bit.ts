@@ -151,7 +151,7 @@ export class SellBitPage {
       let key = Constants.WORKING_WALLET + "Address";
       let sellerFromAddress = this.ls.getItem(key);
 
-      // Get seller ETH Address to recieve NGNC
+      // Get seller ETH Address to recieve xNGN
       let sellerToAddress = "";
       let wallets = Constants.LOGGED_IN_USER['addressMappings'];
       for (let w of wallets) {

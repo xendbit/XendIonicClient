@@ -45,7 +45,7 @@ export class BuyBitPage {
   rate = 0;
   usdToNgnRate = 0;
   usdRate = 0;
-  btcText = 'NGNC';
+  btcText = 'xNGN';
 
   wallet: Wallet;
 
