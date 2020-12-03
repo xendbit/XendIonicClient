@@ -12,31 +12,31 @@
 </ion-header>
 
 <ion-content padding>
-  <div padding>
+  <div padding style="border-radius: 2rem;">
     <ion-segment [(ngModel)]="accountAction">
-      <ion-segment-button value="fund">
+      <ion-segment-button value="fund" style="background: white; color:  rgba(141, 55, 239, 0.7) ;">
         Fund Account
       </ion-segment-button>
-      <ion-segment-button value="withdraw">
+      <ion-segment-button value="withdraw" style="background: white;">
         Withdraw
       </ion-segment-button>
     </ion-segment>
   </div>
 
   <div [ngSwitch]="accountAction">
-    <ion-card *ngSwitchCase="'fund'">
+    <ion-card *ngSwitchCase="'fund'" style="background: white; border-radius: 2rem;">
       <ion-card-content>
         <ion-item>
-          <p>Pay Naira into</p>
+          <p style="color:  rgba(141, 55, 239, 0.7) ;">Pay Naira into</p>
         </ion-item>
         <ion-item>
-          Account Name <p class="blue">XendBit-{{user.fullname}}</p>
+          Account Name <p style="color:  rgba(141, 55, 239, 0.7) ;">XendBit-{{user.fullname}}</p>
         </ion-item>
         <ion-item>
-          Account Number <p class="blue">{{user.ngncAccountNumber}}</p>
+          Account Number <p style="color: rgba(141, 55, 239, 0.7) ">{{user.ngncAccountNumber}}</p>
         </ion-item>
         <ion-item>
-          Bank <p class="blue">{{user.ngncBank}}</p>
+          Bank <p style="color: rgba(141, 55, 239, 0.7) ">{{user.ngncBank}}</p>
         </ion-item>
         <ion-item>
           <p>Once you make deposit,</p>
@@ -48,19 +48,19 @@
 
 
   <div [ngSwitch]="accountAction">
-    <ion-card *ngSwitchCase="'withdraw'">
+    <ion-card *ngSwitchCase="'withdraw'" style="background: white; border-radius: 2rem;">
       <ion-card-content>
         <ion-item>
           Account Name
-          <p class="blue">{{user.accountName}}</p>
+          <p style="color:  rgba(141, 55, 239, 0.7) ;">{{user.accountName}}</p>
         </ion-item>
         <ion-item>
           Account Number
-          <p class="blue">{{user.accountNumber}}</p>
+          <p style="color:  rgba(141, 55, 239, 0.7) ;">{{user.accountNumber}}</p>
         </ion-item>
         <ion-item>
           Bank Name
-          <p class="blue">{{user.bankName}}</p>
+          <p style="color:  rgba(141, 55, 239, 0.7) ;">{{user.bankName}}</p>
         </ion-item>
         <ion-item>
           <ion-label floating>Enter Amount to Withdraw</ion-label>
@@ -71,7 +71,7 @@
           <ion-input type="password" [(ngModel)]="password"></ion-input>
         </ion-item>
         <ion-item>
-          <button ion-button full large color="xend" (click)="withdraw();" icon-right>Send Withdrawal Request
+          <button ion-button full medium color="orange" (click)="withdraw();" icon-right>Send Withdrawal Request
             <ion-icon name="cash"></ion-icon>
           </button>
         </ion-item>
