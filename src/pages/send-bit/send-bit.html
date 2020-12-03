@@ -20,6 +20,10 @@
 
   <ion-card>
     <ion-card-content>
+      <button ion-button icon-left clear small (click)="loadRate()" item-left>
+        <ion-icon name="refresh-circle" color="dark"></ion-icon>
+        <span>1 {{btcText}} = {{btcToNgn | number: '.3-3'}} NGN</span>
+      </button>      
       <ion-item>
         <ion-label>Block Fees (Transaction Speed)</ion-label>
         <ion-range [(ngModel)]="sliderValue" min="1" max="10">

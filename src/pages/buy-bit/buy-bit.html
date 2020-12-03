@@ -7,7 +7,7 @@
 <ion-header>
 
     <ion-navbar>
-        <ion-title>Buy {{currentWallet['value']}}</ion-title>
+        <ion-title>Buy {{wallet.chain}}</ion-title>
     </ion-navbar>
 
 </ion-header>
@@ -18,7 +18,7 @@
         <ion-card-content>
             <button ion-button icon-left clear small (click)="loadRate()" item-left>
                 <ion-icon name="refresh-circle"></ion-icon>
-                <span class="item">1 {{currentWallet['value']}} = {{btcToNgn | number: '.0-3'}} NGN</span>
+                <span class="item">1 {{wallet.chain}} = {{btcToNgn | number: '.0-3'}} NGN</span>
             </button>
             <ion-item>
                 <ion-label>Block Fees (Transaction Speed)</ion-label>

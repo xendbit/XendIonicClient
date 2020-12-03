@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, Loading, LoadingController, ToastController, AlertController, IonicPage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
+import { Wallet } from '../utils/wallet';
 
 /**
  * Generated class for the BuyBitPage page.
@@ -20,8 +21,6 @@ import { Http } from '@angular/http';
   templateUrl: 'my-orders.html',
 })
 export class MyOrdersPage {
-
-  currentWallet = {};
   btcToNgn = 0;
 
   ls: StorageService;
@@ -43,7 +42,7 @@ export class MyOrdersPage {
   isBuyEnabled = true;
   lastValue: string;
 
-  wallet = undefined;
+  wallet: Wallet;
 
   constructor(public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
     this.ls = Constants.storageService;
@@ -54,7 +53,6 @@ export class MyOrdersPage {
 
   ionViewDidLoad() {
     this.wallet = Constants.WALLET;
-    this.currentWallet = this.wallet;
     this.loadRate();
     Console.log('ionViewDidLoad BuyBitNgntPage');
   }
@@ -67,13 +65,12 @@ export class MyOrdersPage {
 
   ionViewDidEnter() {
     this.wallet = Constants.WALLET;
-    this.currentWallet = this.wallet;
     this.currencyPair = (Constants.properties['selectedPair'] !== undefined && Constants.properties['selectedPair'] !== "") ? Constants.properties['selectedPair'] : "";
     this.loadSellers();
   }
 
   loadRate() {
-    let tickerSymbol = this.wallet['ticker_symbol'];
+    let tickerSymbol = this.wallet.tickerSymbol;
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/BUY';
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
@@ -163,8 +160,8 @@ export class MyOrdersPage {
     let wallets = Constants.LOGGED_IN_USER['addressMappings'];
     for (let w of wallets) {
       let wallet = Constants.getWalletFormatted(w);
-      if (wallet['value'] !== Constants.WORKING_WALLET) {
-        let pair = Constants.WORKING_WALLET + " -> " + wallet['value'];
+      if (wallet.chain !== Constants.WORKING_WALLET) {
+        let pair = Constants.WORKING_WALLET + " -> " + wallet.chain;
         this.currencyPairs.push(pair);
       }
     }

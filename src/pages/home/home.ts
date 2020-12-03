@@ -7,6 +7,7 @@ import { Platform, ActionSheetController, ModalController, AlertController, NavC
 import { Clipboard } from '@ionic-native/clipboard';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Wallet } from '../utils/wallet';
 declare var Highcharts: any;
 
 @IonicPage()
@@ -53,17 +54,16 @@ export class HomePage {
   cryptoBuyOrderText = 'Buy';
   fiatSellOrderText = 'Fiat Sell-Order';
   wtv = 'btc';
-  wallet = undefined;
+  wallet: Wallet;
 
   constructor(public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public toastCtrl: ToastController, public localNotifications: LocalNotifications, public actionSheetCtrl: ActionSheetController) {
     this.clipboard = new Clipboard();
-    this.ls = Constants.storageService;
-    this.initProps();
+    this.ls = Constants.storageService;    
     Constants.properties['home'] = this;
   }
 
   loadRate() {
-    let tickerSymbol = this.wallet['ticker_symbol'];
+    let tickerSymbol = this.wallet.tickerSymbol;
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/BUY';
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.btcToNgn = responseData.result.ngnRate;
@@ -81,18 +81,18 @@ export class HomePage {
       this.isShowingQr = true;
     }
     this.clipboard.copy(this.networkAddress);
-    let message = "Coin Address Copied".replace("Coin", this.wallet['symbol']);
+    let message = "Coin Address Copied".replace("Coin", this.wallet.chain);
     Constants.showLongToastMessage(message, this.toastCtrl);
   }
 
   refresh(showLoading) {
     let app = this;
     setTimeout(function () {
-      app.qrValue = app.wallet['chain_address']
+      app.qrValue = app.wallet.chainAddress
       app.emailAddress = app.ls.getItem('emailAddress');
-      app.networkAddress = app.wallet['chain_address']
-      app.currencyText = app.wallet['value'];
-      app.btcText = app.wallet['value'];
+      app.networkAddress = app.wallet.chainAddress
+      app.currencyText = app.wallet.chain;
+      app.btcText = app.wallet.chain;
 
       app.yourBTCWalletText = "My Coin Wallet".replace('Coin', app.btcText);
 
@@ -111,12 +111,13 @@ export class HomePage {
     Console.log("Working Wallet: " + Constants.WORKING_WALLET);
     this.wtv = Constants.WORKING_TICKER_VALUE;
     this.wallet = Constants.WALLET;
+    this.initProps();
     this.loadCharts();
   }
 
   loadCharts() {
-    let tickerSymbol = this.wallet['ticker_symbol'];
-    let symbol = this.wallet['text'];
+    let tickerSymbol = this.wallet.tickerSymbol;
+    let symbol = this.wallet.chain;
     let url = Constants.CHART_URL.replace("{{symbol}}", tickerSymbol.toUpperCase());
     this.http.get(url).map(res => res.json()).subscribe(data => {
       let dates = Object.keys(data['Time Series (Digital Currency Daily)']);
@@ -192,7 +193,7 @@ export class HomePage {
 
     let postData = {
       password: this.ls.getItem("password"),
-      networkAddress: this.wallet['chain_address'],
+      networkAddress: this.wallet.chainAddress,
       emailAddress: this.ls.getItem("emailAddress"),
     };
 
@@ -228,9 +229,8 @@ export class HomePage {
     this.loadWalletText = "Fund Wallet";
     this.sellBitText = "Place Sell Order";
 
-    let fees = Constants.getCurrentWalletProperties();
-    this.currencyText = fees.currencyText;
-    this.btcText = fees.btcText;
+    this.currencyText = this.wallet.chain;
+    this.btcText = this.wallet.chain;
     this.yourBTCWalletText = "My Coin Wallet".replace('Coin', this.btcText);
     this.yourBTCWalletText = this.yourBTCWalletText.replace('/t*BTC/gi', this.btcText);
   }

@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Dialogs } from '@ionic-native/dialogs';
+import { Wallet } from '../utils/wallet';
 
 /**
  * Generated class for the BuyBitPage page.
@@ -21,8 +22,6 @@ import { Dialogs } from '@ionic-native/dialogs';
   templateUrl: 'buy-bit.html',
 })
 export class BuyBitPage {
-
-  currentWallet = {};
   btcToNgn = 0;
 
   ls: StorageService;
@@ -42,25 +41,21 @@ export class BuyBitPage {
   buyForm: any;
 
 
-  blockFees = 0;
   sliderValue = 5;
-  minBlockFees = 0;
-  maxBlockFees = 0;
-  xendFees = 0;
   rate = 0;
   usdToNgnRate = 0;
   usdRate = 0;
   btcText = 'NGNC';
 
-  wallet = undefined;
+  wallet: Wallet;
 
 
   constructor(public formBuilder: FormBuilder, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController, private dialogs: Dialogs) {
-    this.wallet = Constants.WALLET;
-    this.currentWallet = this.wallet;
+    this.wallet = Constants.WALLET;    
+
     this.loadRate();
 
-    this.btcText = this.wallet['value'];
+    this.btcText = this.wallet.chain;
 
     this.buyForm = this.formBuilder.group({
       numberOfBTC: ['', Validators.required],
@@ -83,7 +78,7 @@ export class BuyBitPage {
   }
 
   loadRate() {
-    let tickerSymbol = this.wallet['ticker_symbol'];
+    let tickerSymbol = this.wallet.tickerSymbol
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + "/BUY";
 
     Console.log(url);
@@ -102,12 +97,11 @@ export class BuyBitPage {
   }
 
   calculateHowMuchToRecieve() {
-    this.blockFees = this.minBlockFees * this.sliderValue;
     this.rate = this.buyForm.value.pricePerBTC;  
-    let amount = +this.buyForm.value.amountToRecieve;
+    const amount = +this.buyForm.value.amountToRecieve - this.wallet.token.externalDepositFees;
     if (this.rate !== 0 && amount !== 0 && this.btcToNgn !== 0) {
       let numBTC = amount * (1/this.btcToNgn);
-      this.xendFees = +this.wallet['token']['xendFees'];
+      numBTC = numBTC - (numBTC * this.wallet.token.percExternalTradingFees);
       this.buyForm.controls.numberOfBTC.setValue(numBTC.toFixed(7));
     }
   }
@@ -137,9 +131,9 @@ export class BuyBitPage {
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let wallets = Constants.LOGGED_IN_USER['addressMappings'];
     for (let w of wallets) {
-      let wallet = Constants.getWalletFormatted(w);
-      if (wallet['value'] !== Constants.WORKING_WALLET) {
-        let pair = Constants.WORKING_WALLET + " -> " + wallet['value'];
+      let wallet: Wallet = Constants.getWalletFormatted(w);
+      if (wallet.chain !== Constants.WORKING_WALLET) {
+        let pair = Constants.WORKING_WALLET + " -> " + wallet.chain;
         this.currencyPairs.push(pair);
       }
     }
@@ -172,10 +166,8 @@ export class BuyBitPage {
     Console.log("buyBit");
     if (this.orderType === 'MO') {
       let sb = this.buyForm.value;
-      let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
       let password = sb.password;
       let coinAmount = +sb.numberOfBTC;
-      this.blockFees = this.minBlockFees * this.sliderValue;
 
       if (coinAmount === 0) {
         Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
@@ -194,7 +186,7 @@ export class BuyBitPage {
   continue() {
     if (this.orderType === 'MO') {
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-      let tickerSymbol = this.wallet['ticker_symbol'];
+      let tickerSymbol = this.wallet.tickerSymbol
       let url = Constants.GET_USD_RATE_URL + tickerSymbol + "/BUY";
 
       Console.log(url);
@@ -217,21 +209,16 @@ export class BuyBitPage {
 
         let btcValue = coinAmount;
 
-        let totalFees = +this.xendFees + +this.blockFees;
-
         let orderType = this.orderType;
 
         let key = Constants.WORKING_WALLET + "Address";
         let sellerFromAddress = this.ls.getItem(key);
 
-        // Get seller ETH Address to recieve NGNC
-        let sellerToAddress = "";
-
         let postData = {
           amountToSell: btcValue,
-          xendFees: this.xendFees,
-          blockFees: this.blockFees,
-          fees: totalFees,
+          xendFees: 0,
+          blockFees: this.sliderValue * this.wallet.token.minBlockFees,
+          fees: 0,
           amountToRecieve: amountToRecieve,
           sellerFromAddress: sellerFromAddress,
           sellerToAddress: sellerFromAddress,
@@ -311,8 +298,8 @@ export class BuyBitPage {
     let wallets = Constants.LOGGED_IN_USER['addressMappings'];
     for (let w of wallets) {
       let wallet = Constants.getWalletFormatted(w);
-      if (wallet['value'] === coin) {
-        this.buyerOtherAddress = wallet['chain_address'];
+      if (wallet.chain === coin) {
+        this.buyerOtherAddress = wallet.chainAddress
         break;
       }
     }
@@ -321,7 +308,7 @@ export class BuyBitPage {
 
   trade(seller) {
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait....");
-    let buyerAddress = this.wallet['chain_address'];
+    let buyerAddress = this.wallet.chainAddress;
     let trxId = seller.trxId;
     let data = {
       "buyerAddress": buyerAddress,

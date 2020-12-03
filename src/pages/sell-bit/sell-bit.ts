@@ -8,6 +8,7 @@ import { NavController, NavParams, Loading, LoadingController, ToastController, 
 import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
 import { Dialogs } from '@ionic-native/dialogs';
+import { Wallet } from '../utils/wallet';
 
 /**
  * Generated class for the SellBitPage page.
@@ -45,13 +46,11 @@ export class SellBitPage {
   passwordText: string;
   placeOrderText: string;
   isOwner = false;
-  blockFees = 0;
   sliderValue = 5;
-  minBlockFees = 0;
-  maxBlockFees = 0;
-  xendFees = 0;
-  wallet = undefined;
+  wallet: Wallet;
   orderType = "MO";
+
+  xendFees = 0;
 
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController, private dialogs: Dialogs) {
     this.banks = Constants.properties['banks']
@@ -64,8 +63,8 @@ export class SellBitPage {
     this.passwordText = "Wallet Password";
 
     this.wallet = Constants.WALLET;
-    this.currencyText = this.wallet['value'];
-    this.btcText = this.wallet['value'];
+    this.currencyText = this.wallet.chain;
+    this.btcText = this.wallet.chain;
     this.priceText = this.priceText.replace('Coin', this.btcText);
     this.numberOfBTCText = this.numberOfBTCText.replace('Coin', this.btcText);
 
@@ -89,10 +88,6 @@ export class SellBitPage {
 
   ionViewWillEnter() {
     this.isOwner = this.navParams.get('isOwner') === undefined ? false : true;
-    this.blockFees = +this.wallet['token']['minBlockFees'] * this.sliderValue;
-    this.minBlockFees = +this.wallet['token']['minBlockFees'];
-    this.maxBlockFees = +this.wallet['token']['maxBlockFees'];
-    this.xendFees = +this.wallet['token']['xendFees'];
     this.loadRate();
   }
 
@@ -106,9 +101,10 @@ export class SellBitPage {
     let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     let password = sb.password;
     let coinAmount = +sb.numberOfBTC;
-    this.blockFees = this.minBlockFees * this.sliderValue;
+    const blockFees = this.wallet.token.minBlockFees * this.sliderValue;
+    const externalTradingFees = this.wallet.token.percExternalTradingFees * balance;
 
-    console.log(coinAmount + this.xendFees + this.blockFees);
+    console.log(coinAmount + this.xendFees + blockFees);
     console.log(balance);
 
     if (coinAmount === 0) {
@@ -117,7 +113,7 @@ export class SellBitPage {
     } else if (password !== this.ls.getItem("password")) {
       Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
       return;
-    } else if (coinAmount + this.xendFees + this.blockFees > balance) {
+    } else if (coinAmount + this.xendFees + blockFees + externalTradingFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
       return;
     }
@@ -127,8 +123,9 @@ export class SellBitPage {
 
   continue() {
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-    let tickerSymbol = this.wallet['ticker_symbol'];
+    let tickerSymbol = this.wallet.tickerSymbol;
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/SELL';
+    const blockFees = this.wallet.token.minBlockFees * this.sliderValue;
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.usdRate = responseData.result.usdRate;
@@ -147,7 +144,7 @@ export class SellBitPage {
 
       let btcValue = coinAmount;
 
-      let totalFees = +this.xendFees + +this.blockFees;
+      let totalFees = this.xendFees + blockFees;
 
       let orderType = this.orderType;
 
@@ -159,8 +156,8 @@ export class SellBitPage {
       let wallets = Constants.LOGGED_IN_USER['addressMappings'];
       for (let w of wallets) {
         let wallet = Constants.getWalletFormatted(w);
-        if (wallet['value'] === 'ETH') {
-          sellerToAddress = wallet['chain_address'];
+        if (wallet.chain === 'ETH') {
+          sellerToAddress = wallet.chainAddress;
           break;
         }
       }
@@ -168,7 +165,7 @@ export class SellBitPage {
       let postData = {
         amountToSell: btcValue,
         xendFees: this.xendFees,
-        blockFees: this.blockFees,
+        blockFees: blockFees,
         fees: totalFees,
         amountToRecieve: amountToRecieve,
         sellerFromAddress: sellerFromAddress,
@@ -214,14 +211,22 @@ export class SellBitPage {
   }
 
   sellAll() {
-    let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
-    this.xendFees = +this.wallet['token']['xendFees'];
-    this.blockFees = this.minBlockFees * this.sliderValue;
-    let canSend = balance - this.blockFees - this.xendFees - 0.00001;
-    console.log(balance);
-    console.log(this.xendFees);
-    console.log(this.blockFees);
-    console.log(canSend);
+    let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
+    let xendFees = balance * this.wallet.token.percXendFees;
+    let xfInTokens = this.wallet.token.minXendFees / this.usdRate;
+    if (xendFees < xfInTokens) {
+      xendFees = xfInTokens
+    }
+
+    if(xendFees > xfInTokens) {
+      xendFees = xfInTokens;
+    }
+
+    this.xendFees = xendFees;
+
+    const externalTradingFees = this.wallet.token.percExternalTradingFees * balance;
+    const blockFees = this.wallet.token.minBlockFees * this.sliderValue;
+    let canSend = balance - blockFees - xendFees - externalTradingFees - 0.00001;
 
     if (canSend < 0) {
       canSend = 0;
@@ -249,7 +254,7 @@ export class SellBitPage {
   }
 
   loadRate() {
-    let tickerSymbol = this.wallet['ticker_symbol'];
+    let tickerSymbol = this.wallet.tickerSymbol;
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/SELL';
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
@@ -266,7 +271,7 @@ export class SellBitPage {
   }
 
   loadBalanceFromStorage() {
-    this.networkAddress = this.wallet['chain_address'];
+    this.networkAddress = this.wallet.chainAddress;
     if (this.networkAddress !== null) {
       this.confirmedAccountBalance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     }
@@ -278,13 +283,11 @@ export class SellBitPage {
   }
 
   calculateHowMuchToRecieve() {
-    this.blockFees = this.minBlockFees * this.sliderValue;
     this.rate = this.sellForm.value.pricePerBTC;
     let usdRate = this.sellForm.value.usdRate;
     let toSell = +this.sellForm.value.numberOfBTC;
     if (this.rate !== 0 && toSell !== 0) {
       let toRecieve = toSell * this.rate * usdRate;
-      this.xendFees = +this.wallet['token']['xendFees'];
       this.sellForm.controls.amountToRecieve.setValue(toRecieve.toFixed(3));
     }
   }
