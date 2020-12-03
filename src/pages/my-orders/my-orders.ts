@@ -46,13 +46,12 @@ export class MyOrdersPage {
 
   constructor(public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController) {
     this.ls = Constants.storageService;
-    //let pageTitle = "Select Payment Method";
+    this.wallet = Constants.WALLET;
     setTimeout(function () {
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
 
-  ionViewDidLoad() {
-    this.wallet = Constants.WALLET;
+  ionViewDidLoad() {    
     this.loadRate();
     Console.log('ionViewDidLoad BuyBitNgntPage');
   }
