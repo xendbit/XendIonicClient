@@ -58,10 +58,10 @@ export class BuyBitPage {
     this.btcText = this.wallet.chain;
 
     this.buyForm = this.formBuilder.group({
-      numberOfBTC: ['', Validators.required],
+      amountToGet: ['', Validators.required],
       pricePerBTC: ['', Validators.required],
       usdRate: ['', Validators.required],
-      amountToRecieve: ['', Validators.required],
+      amountToSpend: ['', Validators.required],
       password: ['', Validators.required]
     });
 
@@ -98,11 +98,21 @@ export class BuyBitPage {
 
   calculateHowMuchToRecieve() {
     this.rate = this.buyForm.value.pricePerBTC;  
-    const amount = +this.buyForm.value.amountToRecieve - this.wallet.fees.externalDepositFees;
+    const amount = +this.buyForm.value.amountToSpend - this.wallet.fees.externalDepositFees;
     if (this.rate !== 0 && amount !== 0 && this.btcToNgn !== 0) {
       let numBTC = amount * (1/this.btcToNgn);
-      numBTC = numBTC - (numBTC * this.wallet.fees.percExternalTradingFees);
-      this.buyForm.controls.numberOfBTC.setValue(numBTC.toFixed(7));
+      let xendFees = numBTC * this.wallet.fees.percXendFees;
+      let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+      if (xendFees < xfInTokens) {
+        xendFees = xfInTokens
+      }
+  
+      if (xendFees > xfInTokens) {
+        xendFees = xfInTokens;
+      }
+  
+      numBTC = numBTC - (numBTC * this.wallet.fees.percExternalTradingFees) - this.wallet.fees.externalWithdrawalFees - xendFees;
+      this.buyForm.controls.amountToGet.setValue(numBTC.toFixed(7));
     }
   }
 
@@ -167,7 +177,7 @@ export class BuyBitPage {
     if (this.orderType === 'MO') {
       let sb = this.buyForm.value;
       let password = sb.password;
-      let coinAmount = +sb.numberOfBTC;
+      let coinAmount = +sb.amountToGet;
 
       if (coinAmount === 0) {
         Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
@@ -201,13 +211,11 @@ export class BuyBitPage {
         this.calculateHowMuchToRecieve();
         
         let sb = this.buyForm.value;
-        let coinAmount = +sb.numberOfBTC;
+        let amountToGet = +sb.amountToGet;
         let password = sb.password;
-        let amountToRecieve = +sb.amountToRecieve;
+        let amountToSpend = +sb.amountToSpend;
 
         let rate = +sb.pricePerBTC;
-
-        let btcValue = coinAmount;
 
         let orderType = this.orderType;
 
@@ -215,11 +223,11 @@ export class BuyBitPage {
         let sellerFromAddress = this.ls.getItem(key);
 
         let postData = {
-          amountToSell: btcValue,
+          amountToGet: amountToGet,
           xendFees: 0,
           blockFees: this.sliderValue * this.wallet.fees.minBlockFees,
           fees: 0,
-          amountToRecieve: amountToRecieve,
+          amountToSpend: amountToSpend,
           sellerFromAddress: sellerFromAddress,
           sellerToAddress: sellerFromAddress,
           fromCoin: Constants.WORKING_WALLET,
@@ -262,7 +270,7 @@ export class BuyBitPage {
       + seller.amountToSell + ' '
       + seller.fromCoin + ' @ '
       + seller.rate + ' per coin? You will be paying '
-      + seller.amountToRecieve + ' in '
+      + seller.amountToReceive + ' in '
       + seller.toCoin;
 
     let alert = this.alertCtrl.create({
