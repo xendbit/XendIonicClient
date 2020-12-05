@@ -1,3 +1,1 @@
-The way the transactions is pulled is not efficient
-    On the home page, pull only balance
-    On the history page, pull only the transactions.
+show confirm dialogs before sending, selling and buying.

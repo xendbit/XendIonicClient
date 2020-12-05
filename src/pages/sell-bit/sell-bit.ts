@@ -282,7 +282,6 @@ export class SellBitPage {
 
   calculateHowMuchToRecieve() {
     this.rate = this.sellForm.value.pricePerBTC;
-    let usdRate = this.sellForm.value.usdRate;
     let toSell = +this.sellForm.value.amountToSpend;
     let xendFees = toSell * this.wallet.fees.percXendFees;
     let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;

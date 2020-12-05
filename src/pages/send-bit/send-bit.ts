@@ -49,6 +49,8 @@ export class SendBitPage {
 
   wallet: Wallet;
 
+  xendFees = 0;
+
   constructor(private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
     this.sendBitForm = formBuilder.group({
       amount: ['', Validators.compose([Validators.required])],
@@ -67,6 +69,7 @@ export class SendBitPage {
   }
 
   ionViewDidEnter() {
+    this.loadRate();
     this.pageTitle = "Xend Bit";
     this.sendBitWarningText = "Please make sure the bitcoin address you will enter below is correct. Once you send your bits, the transaction can not be reversed.";
     this.amountToSendText = "Amount to Send";
@@ -92,7 +95,7 @@ export class SendBitPage {
     }, error => {
       this.useFingerprint = false;
       //doNothing
-    });
+    });    
   }
 
   sendBitFingerprint() {
@@ -112,6 +115,21 @@ export class SendBitPage {
       });
   }
 
+  calculateXendFees() {
+    let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
+
+    let xendFees = balance * this.wallet.fees.percXendFees;
+    let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+    if (xendFees < xfInTokens) {
+      xendFees = xfInTokens
+    }
+
+    if(xendFees > xfInTokens) {
+      xendFees = xfInTokens;
+    }
+
+    this.xendFees = xendFees;
+  }
 
   howMuchCanISend() {
     let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
@@ -130,12 +148,11 @@ export class SendBitPage {
     let canSend = balance - blockFees - xendFees;
 
     //Correct for rounding error
-    canSend = canSend - 0.0001;
+    //canSend = canSend - 0.0001;
 
     if (canSend < 0) {
       canSend = 0;
-    }
-    this.sendBitForm.controls.amount.setValue(canSend.toFixed(3));
+    }    
 
     Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, "You can send " + canSend.toFixed(3) + " " + Constants.WORKING_WALLET);
   }
@@ -148,6 +165,7 @@ export class SendBitPage {
       this.usdRate = responseData.result.usdRate;
       this.btcToNgn = responseData.result.ngnRate;
       this.usdToNgnRate = this.btcToNgn / this.usdRate;
+      this.howMuchCanISend();
     }, _error => {
       //doNothing
     });
