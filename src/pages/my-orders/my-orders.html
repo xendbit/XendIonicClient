@@ -44,6 +44,7 @@
                 </ion-option>
             </ion-select>
         </ion-item>
+
         <ion-grid style="background: white; margin-bottom: 6rem;" *ngIf="isSellEnabled">
             <ion-row class="rowgrid" style="border: 2px solid whitesmoke;">
                 <ion-col col-3 class="colgrid" style="color:  rgba(126, 117, 213, 0.7);">Naira</ion-col>
@@ -69,7 +70,7 @@
         </ion-grid>
     
         <ion-grid style="background-color: none" *ngIf="isBuyEnabled">
-            <ion-row class="rowgrid" *ngIf="showHeaders" style="box-sizing:border-box; border: 2px solid rgba(126, 117, 213, 0.7);">
+            <ion-row class="rowgrid" style="box-sizing:border-box; border: 2px solid rgba(126, 117, 213, 0.7);">
                 <ion-col col-3 class="colgrid">{{fromCoin}}</ion-col>
                 <ion-col col-3 class="colgrid">{{toCoin}}</ion-col>
                 <ion-col col-4 class="colgrid">Rate</ion-col>

@@ -283,12 +283,6 @@ export class BuyBitPage {
             this.getBuyerOtherAddress(seller);
           }
         },
-        // {
-        //   text: 'Chat With Seller',
-        //   handler: () => {
-        //     this.sendExternalMessage(seller);
-        //   }
-        // },
         {
           text: "Don't Buy",
           role: 'cancel',

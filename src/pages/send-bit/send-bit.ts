@@ -189,7 +189,7 @@ export class SendBitPage {
 
     if (isValid) {
       let data = {};
-      data['amountToRecieve'] = amountToSend
+      data['amountToSend'] = amountToSend
       data['buyerToAddress'] = toBitcoinAddress;
       data['blockFees'] = blockFees;
       data['xendFees'] = xendFees;

@@ -36,7 +36,6 @@ export class MyOrdersPage {
   sellersPairs = [];
   fromCoin: string;
   toCoin: string;
-  showHeaders = false;
   type = 'Sell';
   isSellEnabled = false;
   isBuyEnabled = true;
@@ -103,7 +102,6 @@ export class MyOrdersPage {
   }
 
   pairSelected(value) {
-    this.showHeaders = false;
     this.lastValue = value;
     let selectedPair = value;
     if (selectedPair !== undefined && selectedPair.indexOf("->") >= 0) {
@@ -125,8 +123,6 @@ export class MyOrdersPage {
           }
         }
       }
-
-      this.showHeaders = this.sellersPairs.length > 0;
     }
   }
 

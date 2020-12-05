@@ -159,21 +159,21 @@ export class ExchangePage {
     let balance = +this.ls.getItem(fromCoin + "confirmedAccountBalance");
     let rate = +sb.pricePerBTC;
     let password = sb.password;
-    let coinAmount = +sb.numberOfBTC;
-    let amountToRecieve = +sb.amountToRecieve;
+    let toSell = +sb.numberOfBTC;
+    let toRecieve = +sb.amountToRecieve;
 
     if (this.type === 'Buy') {
-      coinAmount = +sb.amountToRecieve;
-      amountToRecieve = +sb.numberOfBTC;
+      toSell = +sb.amountToRecieve;
+      toRecieve = +sb.numberOfBTC;
     }
 
-    if (coinAmount === 0) {
+    if (toSell === 0) {
       Constants.showLongToastMessage("Please enter amount to sell", this.toastCtrl);
     } else if (rate === 0) {
       Constants.showLongToastMessage("Please enter rate", this.toastCtrl);
     } else if (password !== this.ls.getItem("password")) {
       Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
-    } else if (coinAmount + this.xendFees + this.blockFees > balance) {
+    } else if (toSell + this.xendFees + this.blockFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
     } else if (sb.acceptedPaymentMethods === "") {
       Constants.showPersistentToastMessage("Please specify accepted payment method", this.toastCtrl);
@@ -181,14 +181,13 @@ export class ExchangePage {
       isValid = true;
     }
 
-    if (isValid) {
-      let amountToSell = coinAmount;
+    if (isValid) {    
       let totalFees = +this.xendFees + this.blockFees;
 
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
       let postData = {
-        amountToSell: amountToSell,
-        amountToRecieve: amountToRecieve,
+        toSell: toSell,
+        toRecieve: toRecieve,
         sellerFromAddress: sellerFromAddress,
         sellerToAddress: sellerToAddress,
         fromCoin: fromCoin,
@@ -219,11 +218,7 @@ export class ExchangePage {
   }
 
   clearForm() {
-    this.sellForm.controls.numberOfBTC.setValue('');
-    this.sellForm.controls.amountToRecieve.setValue('');
-    //this.sellForm.controls.pricePerBTC.setValue('');
-    //this.sellForm.controls.recipientOtherAddress.setValue('');
-    this.sellForm.controls.password.setValue('');
+    this.sellForm.reset();
   }
 
   sellBitFingerprint() {
@@ -295,13 +290,13 @@ export class ExchangePage {
 
       this.xendFees = xendFees;
 
-      if (this.rate !== 0 && toSell !== 0) {
+      if (this.rate !== 0) {
         let toBuy = toSell * this.rate;
         this.sellForm.controls.amountToRecieve.setValue(toBuy.toFixed(7));
       }
     } else {
       let toBuy = +this.sellForm.value.numberOfBTC;
-      if (this.rate !== 0 && toBuy !== 0) {
+      if (this.rate !== 0) {
         let toSell = toBuy * this.rate;
         let xendFees = toSell * this.wallet.fees.percXendFees;
 
