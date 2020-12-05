@@ -96,6 +96,36 @@ export class SellBitPage {
     this.loadBalanceFromStorage();
   }
 
+  confirmSell() {
+    let sb = this.sellForm.value;
+    let amountToSpend = +sb.amountToSpend;
+    let amountToGet = +sb.amountToGet;
+
+      let message = 'Are you sure you want to sell '
+        + amountToSpend + ' ' + Constants.WORKING_WALLET + '? You will recieve an estimated '
+        + Constants.numberWithCommas(amountToGet) + ' NGN';  
+      let alert = this.alertCtrl.create({
+        title: 'Confirm Buy',
+        message: message,
+        buttons: [
+          {
+            text: 'Sell',
+            handler: () => {
+              this.continue();
+            }
+          },
+          {
+            text: "Don't Sell",
+            role: 'cancel',
+            handler: () => {
+              //doNothing
+            }
+          }
+        ]
+      });
+      alert.present();
+  }
+
   sellBit() {
     let sb = this.sellForm.value;
     let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
@@ -118,7 +148,7 @@ export class SellBitPage {
       return;
     }
 
-    this.continue();
+    this.confirmSell();
   }
 
   continue() {

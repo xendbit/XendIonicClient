@@ -148,7 +148,7 @@ export class SendBitPage {
     let canSend = balance - blockFees - xendFees;
 
     //Correct for rounding error
-    //canSend = canSend - 0.0001;
+    canSend = canSend - 0.0001;
 
     if (canSend < 0) {
       canSend = 0;
@@ -171,7 +171,43 @@ export class SendBitPage {
     });
   }  
 
+
+  confirmSend() {
+    let bv = this.sendBitForm.value;
+
+    let amountToSend = +bv.amount;    
+
+      let message = 'Are you sure you want to send '
+        + amountToSend + ' ' + Constants.WORKING_WALLET + ' '
+        + 'to ' + bv.networkAddress + '?';
+
+      let alert = this.alertCtrl.create({
+        title: 'Confirm Send',
+        message: message,
+        buttons: [
+          {
+            text: 'Send',
+            handler: () => {
+              this.continue();
+            }
+          },
+          {
+            text: "Don't Send",
+            role: 'cancel',
+            handler: () => {
+              //doNothing
+            }
+          }
+        ]
+      });
+      alert.present();
+  }  
+
   sendBit() {
+    this.confirmSend();
+  }
+
+  continue() {
     let isValid = false;
     let bv = this.sendBitForm.value;
     let amountToSend = +bv.amount;
@@ -215,7 +251,7 @@ export class SendBitPage {
       data['password'] = this.ls.getItem("password");
       this.disableButton = true;
       this.sendCoins(data);
-    }
+    }    
   }
 
   sendCoins(data) {

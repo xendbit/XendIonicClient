@@ -187,7 +187,7 @@ export class BuyBitPage {
         return;
       }
 
-      this.continue();
+      this.confirmBuy();
     } else {
       this.presentAlert(seller);
     }
@@ -263,6 +263,37 @@ export class BuyBitPage {
         //doNothing
       });
     }
+  }
+
+  confirmBuy() {
+    let sb = this.buyForm.value;
+    let amountToGet = +sb.amountToGet;
+    let amountToSpend = +sb.amountToSpend;
+
+      let message = 'Are you sure you want to buy '
+        + Constants.numberWithCommas(amountToSpend) + ' NGN worth of '
+        + Constants.WORKING_WALLET + '? You will recieve an estimated '
+        + amountToGet + ' ' + Constants.WORKING_WALLET;  
+      let alert = this.alertCtrl.create({
+        title: 'Confirm Buy',
+        message: message,
+        buttons: [
+          {
+            text: 'Buy',
+            handler: () => {
+              this.continue();
+            }
+          },
+          {
+            text: "Don't Buy",
+            role: 'cancel',
+            handler: () => {
+              //doNothing
+            }
+          }
+        ]
+      });
+      alert.present();
   }
 
   presentAlert(seller) {
