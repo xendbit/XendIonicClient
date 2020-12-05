@@ -11,11 +11,11 @@
   <ion-card style="opacity: 90%; box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22);">
     <ion-grid>
       <ion-row>
-          <ion-col width-50>
-            <ion-card style="opacity: 70%; box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22); display: inline-block;">
+          <ion-col style="width: auto;">
+            <ion-card class="portfolio">
               <ion-card-content>
                 <ion-row>
-                  <ion-col class="total-assets" style="margin-right: 2rem;">Portfolio Value</ion-col>
+                  <ion-col class="total-assets">Portfolio Value</ion-col>
                 </ion-row>
                 <ion-row>
                   <ion-col class="assets-value" (click)="reloadWallets()">
@@ -30,8 +30,8 @@
               </ion-card-content>
             </ion-card>
           </ion-col>
-          <ion-col width-50>
-            <ion-card style="opacity: 70%; box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22); display: inline-block;">
+          <ion-col style="width: auto;">
+            <ion-card class="portfolio">
               <ion-card-content>
                 <ion-row>
                   <ion-col class="total-assets">Naira (xNGN)</ion-col>
