@@ -12,13 +12,13 @@
 
 
 <ion-content padding>
-  <ion-card>
+  <ion-card style="background:white; border-radius: 1rem;">
     <ion-card-content>
-      <p>{{sendBitWarningText}}</p>
+      <p style="margin-top: 2rem; margin-left: 1rem; margin-right: 1rem; margin-bottom: 2rem;">{{sendBitWarningText}}</p>
     </ion-card-content>
   </ion-card>
 
-  <ion-card>
+  <ion-card style="background: white; border-radius: 1rem;">
     <ion-card-content>
       <button ion-button icon-left clear small (click)="loadRate()" item-left>
         <ion-icon name="refresh-circle" color="dark"></ion-icon>
@@ -41,7 +41,7 @@
           <ion-input formControlName="networkAddress" type="text">{{toBitcoinAddress}}</ion-input>
         </ion-item>
         <ion-item>
-          <button ion-button full medium color="xend" (click)="scanCode();" icon-right>{{scanCodeText}}
+          <button ion-button full medium color="orange" (click)="scanCode();" icon-right>{{scanCodeText}}
             <ion-icon name="barcode"></ion-icon></button>
         </ion-item>
         <ion-item>
@@ -49,21 +49,21 @@
           <ion-input type="password" formControlName="password"></ion-input>
         </ion-item>
         <ion-item>
-          <button ion-button full medium color="xend" (click)="howMuchCanISend();"
+          <button ion-button full medium color="orange" (click)="howMuchCanISend();"
             icon-right>{{howMuchCanISendText}}</button>
         </ion-item>
       </form>
-      <p class="very_small">{{hmcisWarning}}</p>
+      <p style="margin-top: 2rem; margin-left: 1rem; margin-right: 1rem; margin-bottom: 2rem;">{{hmcisWarning}}</p>
     </ion-card-content>
   </ion-card>
 
-  <ion-card>
+  <ion-card style="background: white; border-radius: 1rem;">
     <ion-card-content>
       <ion-item class="center">
         <ion-buttons class="bordered">
           <ion-row>
             <ion-col col-9>
-              <button [disabled]="disableButton" ion-button medium full color="xend" (click)="sendBit();" icon-right>Xend
+              <button [disabled]="disableButton" ion-button medium full color="orange" (click)="sendBit();" icon-right>Xend
                 <ion-icon name="send"></ion-icon></button>
             </ion-col>
             <ion-col col-3>

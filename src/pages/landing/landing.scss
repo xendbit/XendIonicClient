@@ -42,6 +42,13 @@ page-landing {
         font-size: 1.5em;
     }
 
+    .portfolio {
+        opacity: 70%;
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22);  
+        display: flex;
+        justify-content: center;
+    }
+
     .assets-icon {
         text-align: center;
         line-height: 1.2;

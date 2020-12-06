@@ -14,7 +14,7 @@
 
 <ion-content padding>
 
-    <ion-card>
+    <ion-card style="background: white; border-radius: 1rem;">
         <ion-card-content>
             <button ion-button icon-left clear small (click)="loadRate()" item-left>
                 <ion-icon name="refresh-circle"></ion-icon>
@@ -32,21 +32,21 @@
 
     <div padding>
         <ion-segment [(ngModel)]="orderType">
-            <ion-segment-button value="MO">
+            <ion-segment-button value="MO" style="background: white; color:  rgba(141, 55, 239, 0.7) ; border-radius: 1rem;">
                 Market Order
             </ion-segment-button>
-            <ion-segment-button value="P2P">
+            <ion-segment-button value="P2P" style="background: white; color:  rgba(141, 55, 239, 0.7) ; border-radius: 1rem;">
                 P2P Exchange
             </ion-segment-button>
         </ion-segment>
         <ion-item>
-            <button ion-button full medium color="xend" (click)="showOrderTypeInfo();" icon-right>More Info...
+            <button ion-button full medium color="orange" (click)="showOrderTypeInfo();" icon-right>More Info...
                 <ion-icon name="information-circle"></ion-icon></button>
         </ion-item>
     </div>
 
     <div [ngSwitch]="orderType">
-        <ion-card *ngSwitchCase="'MO'">
+        <ion-card *ngSwitchCase="'MO'" style="background: white; border-radius: 1rem;">
             <ion-card-content>
                 <form [formGroup]="buyForm">
                     <ion-item>
@@ -79,7 +79,7 @@
                     <ion-buttons class="bordered">
                         <ion-row>
                             <ion-col col-9>
-                                <button ion-button medium full color="xend" (click)="buyBit();" icon-right>Place Buy
+                                <button ion-button medium full color="orange" (click)="buyBit();" icon-right>Place Buy
                                     Order
                                     <ion-icon name="trending-up"></ion-icon></button>
                             </ion-col>
@@ -95,7 +95,7 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-card *ngSwitchCase="'P2P'">
+        <ion-card *ngSwitchCase="'P2P'" style="background: white; border-radius: 1rem;">
             <ion-card-content>
                 <ion-item style="background-color: none">
                     <ion-label stacked>Select Currency Pair</ion-label>
