@@ -241,13 +241,14 @@ export class SellBitPage {
   sellAll() {
     let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     let xendFees = balance * this.wallet.fees.percXendFees;
-    let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
-    if (xendFees < xfInTokens) {
-      xendFees = xfInTokens
+    let minxfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+    let maxfInTokens = this.wallet.fees.maxXendFees / this.usdRate;
+    if (xendFees < minxfInTokens) {
+      xendFees = minxfInTokens
     }
 
-    if(xendFees > xfInTokens) {
-      xendFees = xfInTokens;
+    if(xendFees > maxfInTokens) {
+      xendFees = maxfInTokens;
     }
 
     this.xendFees = xendFees;
@@ -314,13 +315,14 @@ export class SellBitPage {
     this.rate = this.sellForm.value.pricePerBTC;
     let toSell = +this.sellForm.value.amountToSpend;
     let xendFees = toSell * this.wallet.fees.percXendFees;
-    let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
-    if (xendFees < xfInTokens) {
-      xendFees = xfInTokens
+    let minxfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+    let maxfInTokens = this.wallet.fees.maxXendFees / this.usdRate;
+    if (xendFees < minxfInTokens) {
+      xendFees = minxfInTokens
     }
 
-    if (xendFees > xfInTokens) {
-      xendFees = xfInTokens;
+    if(xendFees > maxfInTokens) {
+      xendFees = maxfInTokens;
     }
 
     if (this.rate !== 0 && toSell !== 0) {

@@ -115,46 +115,31 @@ export class SendBitPage {
       });
   }
 
-  calculateXendFees() {
-    let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
-
-    let xendFees = balance * this.wallet.fees.percXendFees;
-    let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
-    if (xendFees < xfInTokens) {
-      xendFees = xfInTokens
-    }
-
-    if(xendFees > xfInTokens) {
-      xendFees = xfInTokens;
-    }
-
-    this.xendFees = xendFees;
-  }
-
   howMuchCanISend() {
     let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
 
     let xendFees = balance * this.wallet.fees.percXendFees;
-    let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
-    if (xendFees < xfInTokens) {
-      xendFees = xfInTokens
+    let minxfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+    let maxfInTokens = this.wallet.fees.maxXendFees / this.usdRate;
+    if (xendFees < minxfInTokens) {
+      xendFees = minxfInTokens
     }
 
-    if(xendFees > xfInTokens) {
-      xendFees = xfInTokens;
+    if(xendFees > maxfInTokens) {
+      xendFees = maxfInTokens;
     }
 
     let blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
     let canSend = balance - blockFees - xendFees;
 
     //Correct for rounding error
-    canSend = canSend - 0.0001;
+    //canSend = canSend - 0.00015;
 
     if (canSend < 0) {
       canSend = 0;
     }    
 
-    Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, "You can send " + canSend.toFixed(3) + " " + Constants.WORKING_WALLET);
+    Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, "You can send " + canSend.toFixed(7) + " " + Constants.WORKING_WALLET);
   }
 
   loadRate() {
@@ -219,15 +204,21 @@ export class SendBitPage {
 
     let blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
 
-    let xendFees = balance * this.wallet.fees.percXendFees;
-    let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
-    if (xendFees < xfInTokens) {
-      xendFees = xfInTokens
+    let xendFees = amountToSend * this.wallet.fees.percXendFees;
+    let minxfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+    let maxfInTokens = this.wallet.fees.maxXendFees / this.usdRate;
+    if (xendFees < minxfInTokens) {
+      xendFees = minxfInTokens
     }
 
-    if(xendFees > xfInTokens) {
-      xendFees = xfInTokens;
+    if(xendFees > maxfInTokens) {
+      xendFees = maxfInTokens;
     }
+
+    console.log(balance);
+    console.log(amountToSend);
+    console.log(xendFees);
+    console.log(blockFees);
 
     if (amountToSend === 0) {
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);

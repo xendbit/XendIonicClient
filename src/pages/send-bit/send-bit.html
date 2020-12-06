@@ -31,13 +31,10 @@
           <ion-icon range-right name="add">&nbsp;Fast&nbsp;</ion-icon>
         </ion-range>
       </ion-item>
-      <ion-item>
-        <ion-label stacked>XendFi Fees: {{xendFees | number: '.6-7'}}</ion-label>
-      </ion-item>
       <form [formGroup]="sendBitForm">
         <ion-item>
           <ion-label floating>{{amountToSendText}} ({{btcText}})</ion-label>
-          <ion-input formControlName="amount" type="number" (input)="calculateXendFees()"></ion-input>
+          <ion-input formControlName="amount" type="number"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label floating>{{bitcoinAddressText}}</ion-label>

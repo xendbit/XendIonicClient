@@ -102,15 +102,16 @@ export class BuyBitPage {
     if (this.rate !== 0 && amount !== 0 && this.btcToNgn !== 0) {
       let numBTC = amount * (1/this.btcToNgn);
       let xendFees = numBTC * this.wallet.fees.percXendFees;
-      let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
-      if (xendFees < xfInTokens) {
-        xendFees = xfInTokens
+      let minxfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+      let maxfInTokens = this.wallet.fees.maxXendFees / this.usdRate;
+      if (xendFees < minxfInTokens) {
+        xendFees = minxfInTokens
       }
   
-      if (xendFees > xfInTokens) {
-        xendFees = xfInTokens;
+      if(xendFees > maxfInTokens) {
+        xendFees = maxfInTokens;
       }
-  
+    
       numBTC = numBTC - (numBTC * this.wallet.fees.percExternalTradingFees) - this.wallet.fees.externalWithdrawalFees - xendFees;
       this.buyForm.controls.amountToGet.setValue(numBTC.toFixed(7));
     }
