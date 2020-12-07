@@ -182,7 +182,7 @@ page-login {
         box-shadow: none;
         //background: rgba(0,0,0,0.7);
         border-radius: 10px;
-        background-color: white !important;
+        background-color: #fffff0!important;
     }
 
     a, p {
@@ -211,4 +211,65 @@ page-login {
     .item-block .item-inner {
       border: none !important;
     }
+
+    #headerImage {
+      background-image: url(/assets/img/login.jpg);
+      opacity: 100%;
+      height: 15rem;
+      width: 100%;
+      position: relative;
+      
+    }
+
+    #container{
+      position: relative;
+      width: 200px;
+      height: 200px;
+  }
+  #trial {
+    position: relative;
+    width: 55rem;
+  }
+  #main_image{
+      width: 70rem;
+      height: 100%;
+      filter: blur(2px);
+      background: url(/assets/img/login.jpg);
+      background-repeat: no-repeat;
+      background-attachment: initial;
+      background-position: center;
+      margin-left: 0rem !important;
+      margin-right: 2rem;
+  }
+
+  #fade{
+    
+    background: white;
+    opacity: 10%;
+}
+  #overlay_image{
+      position: absolute;
+      bottom: 10px;
+      width: 30rem;
+      height: 100%;
+      display: flex;
+      margin-left: 4rem;
+  }
+
+  #faded{
+    position: absolute;
+    width: 35rem;
+}
+  #overlay_image .header {
+    margin-top: 6rem;
+    width: 120rem;
+  }
+  #buttons_login {
+    top: 10px;
+    position: absolute;
+    bottom: 10px;
+    width: 30rem;
+    height: 100%;
+    margin-left: 4rem;
+  }
 }
