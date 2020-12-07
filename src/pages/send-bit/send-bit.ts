@@ -49,6 +49,8 @@ export class SendBitPage {
 
   wallet: Wallet;
 
+  xendFees = 0;
+
   constructor(private barcodeScanner: BarcodeScanner, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public toastCtrl: ToastController) {
     this.sendBitForm = formBuilder.group({
       amount: ['', Validators.compose([Validators.required])],
@@ -67,6 +69,7 @@ export class SendBitPage {
   }
 
   ionViewDidEnter() {
+    this.loadRate();
     this.pageTitle = "Xend Bit";
     this.sendBitWarningText = "Please make sure the bitcoin address you will enter below is correct. Once you send your bits, the transaction can not be reversed.";
     this.amountToSendText = "Amount to Send";
@@ -92,7 +95,7 @@ export class SendBitPage {
     }, error => {
       this.useFingerprint = false;
       //doNothing
-    });
+    });    
   }
 
   sendBitFingerprint() {
@@ -112,32 +115,31 @@ export class SendBitPage {
       });
   }
 
-
   howMuchCanISend() {
     let balance = this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
 
     let xendFees = balance * this.wallet.fees.percXendFees;
-    let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
-    if (xendFees < xfInTokens) {
-      xendFees = xfInTokens
+    let minxfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+    let maxfInTokens = this.wallet.fees.maxXendFees / this.usdRate;
+    if (xendFees < minxfInTokens) {
+      xendFees = minxfInTokens
     }
 
-    if(xendFees > xfInTokens) {
-      xendFees = xfInTokens;
+    if(xendFees > maxfInTokens) {
+      xendFees = maxfInTokens;
     }
 
     let blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
     let canSend = balance - blockFees - xendFees;
 
     //Correct for rounding error
-    canSend = canSend - 0.0001;
+    //canSend = canSend - 0.00015;
 
     if (canSend < 0) {
       canSend = 0;
-    }
-    this.sendBitForm.controls.amount.setValue(canSend.toFixed(3));
+    }    
 
-    Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, "You can send " + canSend.toFixed(3) + " " + Constants.WORKING_WALLET);
+    Constants.showAlert(this.toastCtrl, this.howMuchCanISendText, "You can send " + canSend.toFixed(7) + " " + Constants.WORKING_WALLET);
   }
 
   loadRate() {
@@ -148,12 +150,49 @@ export class SendBitPage {
       this.usdRate = responseData.result.usdRate;
       this.btcToNgn = responseData.result.ngnRate;
       this.usdToNgnRate = this.btcToNgn / this.usdRate;
+      this.howMuchCanISend();
     }, _error => {
       //doNothing
     });
   }  
 
+
+  confirmSend() {
+    let bv = this.sendBitForm.value;
+
+    let amountToSend = +bv.amount;    
+
+      let message = 'Are you sure you want to send '
+        + amountToSend + ' ' + Constants.WORKING_WALLET + ' '
+        + 'to ' + bv.networkAddress + '?';
+
+      let alert = this.alertCtrl.create({
+        title: 'Confirm Send',
+        message: message,
+        buttons: [
+          {
+            text: 'Send',
+            handler: () => {
+              this.continue();
+            }
+          },
+          {
+            text: "Don't Send",
+            role: 'cancel',
+            handler: () => {
+              //doNothing
+            }
+          }
+        ]
+      });
+      alert.present();
+  }  
+
   sendBit() {
+    this.confirmSend();
+  }
+
+  continue() {
     let isValid = false;
     let bv = this.sendBitForm.value;
     let amountToSend = +bv.amount;
@@ -165,15 +204,21 @@ export class SendBitPage {
 
     let blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
 
-    let xendFees = balance * this.wallet.fees.percXendFees;
-    let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
-    if (xendFees < xfInTokens) {
-      xendFees = xfInTokens
+    let xendFees = amountToSend * this.wallet.fees.percXendFees;
+    let minxfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+    let maxfInTokens = this.wallet.fees.maxXendFees / this.usdRate;
+    if (xendFees < minxfInTokens) {
+      xendFees = minxfInTokens
     }
 
-    if(xendFees > xfInTokens) {
-      xendFees = xfInTokens;
+    if(xendFees > maxfInTokens) {
+      xendFees = maxfInTokens;
     }
+
+    console.log(balance);
+    console.log(amountToSend);
+    console.log(xendFees);
+    console.log(blockFees);
 
     if (amountToSend === 0) {
       Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
@@ -189,7 +234,7 @@ export class SendBitPage {
 
     if (isValid) {
       let data = {};
-      data['amountToRecieve'] = amountToSend
+      data['amountToSend'] = amountToSend
       data['buyerToAddress'] = toBitcoinAddress;
       data['blockFees'] = blockFees;
       data['xendFees'] = xendFees;
@@ -197,7 +242,7 @@ export class SendBitPage {
       data['password'] = this.ls.getItem("password");
       this.disableButton = true;
       this.sendCoins(data);
-    }
+    }    
   }
 
   sendCoins(data) {

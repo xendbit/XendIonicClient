@@ -69,10 +69,10 @@ export class SellBitPage {
     this.numberOfBTCText = this.numberOfBTCText.replace('Coin', this.btcText);
 
     this.sellForm = this.formBuilder.group({
-      numberOfBTC: ['', Validators.required],
+      amountToSpend: ['', Validators.required],
       pricePerBTC: ['', Validators.required],
       usdRate: ['', Validators.required],
-      amountToRecieve: ['', Validators.required],
+      amountToGet: ['', Validators.required],
       password: ['', Validators.required]
     });
 
@@ -96,11 +96,41 @@ export class SellBitPage {
     this.loadBalanceFromStorage();
   }
 
+  confirmSell() {
+    let sb = this.sellForm.value;
+    let amountToSpend = +sb.amountToSpend;
+    let amountToGet = +sb.amountToGet;
+
+      let message = 'Are you sure you want to sell '
+        + amountToSpend + ' ' + Constants.WORKING_WALLET + '? You will recieve an estimated '
+        + Constants.numberWithCommas(amountToGet) + ' NGN';  
+      let alert = this.alertCtrl.create({
+        title: 'Confirm Buy',
+        message: message,
+        buttons: [
+          {
+            text: 'Sell',
+            handler: () => {
+              this.continue();
+            }
+          },
+          {
+            text: "Don't Sell",
+            role: 'cancel',
+            handler: () => {
+              //doNothing
+            }
+          }
+        ]
+      });
+      alert.present();
+  }
+
   sellBit() {
     let sb = this.sellForm.value;
     let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     let password = sb.password;
-    let coinAmount = +sb.numberOfBTC;
+    let coinAmount = +sb.amountToSpend;
     const blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
     const externalTradingFees = this.wallet.fees.percExternalTradingFees * balance;
 
@@ -118,7 +148,7 @@ export class SellBitPage {
       return;
     }
 
-    this.continue();
+    this.confirmSell();
   }
 
   continue() {
@@ -136,13 +166,11 @@ export class SellBitPage {
       this.calculateHowMuchToRecieve();
 
       let sb = this.sellForm.value;
-      let coinAmount = +sb.numberOfBTC;
+      let amountToSpend = +sb.amountToSpend;
       let password = sb.password;
-      let amountToRecieve = +sb.amountToRecieve;
+      let amountToGet = +sb.amountToGet;
 
       let rate = +sb.pricePerBTC;
-
-      let btcValue = coinAmount;
 
       let totalFees = this.xendFees + blockFees;
 
@@ -163,11 +191,11 @@ export class SellBitPage {
       }
 
       let postData = {
-        amountToSell: btcValue,
+        amountToSpend: amountToSpend,
         xendFees: this.xendFees,
         blockFees: blockFees,
         fees: totalFees,
-        amountToRecieve: amountToRecieve,
+        amountToGet: amountToGet,
         sellerFromAddress: sellerFromAddress,
         sellerToAddress: sellerToAddress,
         fromCoin: Constants.WORKING_WALLET,
@@ -213,13 +241,14 @@ export class SellBitPage {
   sellAll() {
     let balance = +this.ls.getItem(Constants.WORKING_WALLET + "confirmedAccountBalance");
     let xendFees = balance * this.wallet.fees.percXendFees;
-    let xfInTokens = this.wallet.fees.minXendFees / this.usdRate;
-    if (xendFees < xfInTokens) {
-      xendFees = xfInTokens
+    let minxfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+    let maxfInTokens = this.wallet.fees.maxXendFees / this.usdRate;
+    if (xendFees < minxfInTokens) {
+      xendFees = minxfInTokens
     }
 
-    if(xendFees > xfInTokens) {
-      xendFees = xfInTokens;
+    if(xendFees > maxfInTokens) {
+      xendFees = maxfInTokens;
     }
 
     this.xendFees = xendFees;
@@ -232,9 +261,9 @@ export class SellBitPage {
       canSend = 0;
     }
 
-    this.sellForm.controls.numberOfBTC.setValue(canSend.toFixed(4));
-    let atr = this.sellForm.value.pricePerBTC * this.sellForm.value.usdRate * canSend;
-    this.sellForm.controls.amountToRecieve.setValue(atr.toFixed(4));
+    this.sellForm.controls.amountToSpend.setValue(canSend.toFixed(4));
+    let atr = this.btcToNgn * canSend;
+    this.sellForm.controls.amountToGet.setValue(atr.toFixed(4));
   }
 
   sellBitFingerprint() {
@@ -284,11 +313,22 @@ export class SellBitPage {
 
   calculateHowMuchToRecieve() {
     this.rate = this.sellForm.value.pricePerBTC;
-    let usdRate = this.sellForm.value.usdRate;
-    let toSell = +this.sellForm.value.numberOfBTC;
+    let toSell = +this.sellForm.value.amountToSpend;
+    let xendFees = toSell * this.wallet.fees.percXendFees;
+    let minxfInTokens = this.wallet.fees.minXendFees / this.usdRate;
+    let maxfInTokens = this.wallet.fees.maxXendFees / this.usdRate;
+    if (xendFees < minxfInTokens) {
+      xendFees = minxfInTokens
+    }
+
+    if(xendFees > maxfInTokens) {
+      xendFees = maxfInTokens;
+    }
+
     if (this.rate !== 0 && toSell !== 0) {
-      let toRecieve = toSell * this.rate * usdRate;
-      this.sellForm.controls.amountToRecieve.setValue(toRecieve.toFixed(3));
+      let toRecieve = toSell * this.btcToNgn;
+      toRecieve = toRecieve - (toRecieve * this.wallet.fees.percExternalTradingFees) - this.wallet.fees.externalWithdrawalFees - xendFees;
+      this.sellForm.controls.amountToGet.setValue(toRecieve.toFixed(3));
     }
   }
 

@@ -51,7 +51,7 @@
                 <form [formGroup]="buyForm">
                     <ion-item>
                         <ion-label floating>Enter Amount (xNGN)</ion-label>
-                        <ion-input type="number" formControlName="amountToRecieve" (input)="calculateHowMuchToRecieve();"></ion-input>
+                        <ion-input type="number" formControlName="amountToSpend" (input)="calculateHowMuchToRecieve();"></ion-input>
                     </ion-item>                    
                     <ion-item>
                         <ion-label floating>Price per {{btcText}}</ion-label>
@@ -67,7 +67,7 @@
                     </ion-item>
                     <ion-item>
                         <ion-label floating>You will get {{btcText}} (approximate)</ion-label>
-                        <ion-input type="number" readonlhy formControlName="numberOfBTC" (input)="calculateHowMuchToRecieve();">
+                        <ion-input type="number" readonlhy formControlName="amountToGet" (input)="calculateHowMuchToRecieve();">
                         </ion-input>
                     </ion-item>                    
                     <ion-item>

@@ -57,8 +57,8 @@
                     <ion-label stacked>Accepted Payment Method</ion-label>
                     <ion-select interface='actionsheet' formControlName="acceptedPaymentMethod" placeholder="select payment methods"
                         (ionChange)="paymentMethodSelected($event)">
-                        <ion-option *ngFor="let paymentMethod of paymentMethods" value="{{paymentMethod.value}}">
-                            {{paymentMethod.text}}
+                        <ion-option *ngFor="let paymentMethod of paymentMethods" value="{{paymentMethod.chain}}">
+                            {{paymentMethod.chain}}
                         </ion-option>
                     </ion-select>
                 </ion-item>
@@ -68,11 +68,11 @@
                 </ion-item>
                 <ion-item>
                     <ion-label floating>You will {{getOrPay}} ({{selectedPaymentMethod}})</ion-label>
-                    <ion-input disabled type="number" formControlName="amountToRecieve"></ion-input>
+                    <ion-input readonly type="number" formControlName="amountToRecieve"></ion-input>
                 </ion-item>
                 <ion-item>
                     <ion-label floating>It will be {{sentOrDeducted}}</ion-label>
-                    <ion-input disabled type="text" formControlName="recipientOtherAddress"></ion-input>
+                    <ion-input readonly type="text" formControlName="recipientOtherAddress"></ion-input>
                 </ion-item>
                 <ion-item>
                     <ion-label floating>Password</ion-label>
