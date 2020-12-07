@@ -20,7 +20,7 @@ import { Http } from '@angular/http';
 export class NgncPage {
   accountAction = "fund";
   user;
-  amountToWithdraw: number;
+  amountToWithdraw = 0;
   password;
   ls: StorageService;
   loading: Loading;
@@ -35,6 +35,11 @@ export class NgncPage {
   }
 
   withdraw() {
+    if(this.amountToWithdraw <= 0) {
+      Constants.showLongToastMessage("Please enter the amount to withdrawal", this.toastCtrl);
+      return;
+    }
+
     let postData = {
       btcValue: this.amountToWithdraw,
       emailAddress: this.ls.getItem("emailAddress"),

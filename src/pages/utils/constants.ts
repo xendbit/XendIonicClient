@@ -4,10 +4,10 @@ import { LocalProps } from "./localprops";
 import { Wallet, Fees } from "./wallet";
 
 export class Constants {
-    static TOMCAT_URL = "https://xendfilb.xendbit.net";
+    //static TOMCAT_URL = "https://xendfilb.xendbit.net";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
-    // static TOMCAT_URL = "http://localhost:8080";
+    static TOMCAT_URL = "http://localhost:8080";
     //static TOMCAT_URL = "https://lb.xendbit.com";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
