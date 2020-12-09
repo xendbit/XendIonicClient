@@ -63,7 +63,7 @@ export class PersonalPage {
     this.pageTitle = "Complete Registration";
     this.cbnWarning = "Due to CBN regulations, Your XendFi wallet must be integrated with your BVN. Make sure the information below is the same as the one on your BVN registration. If we can not validate your information with your BVN information, you will not be able to Send Bits.";
     this.emailAddressText = "Email Address";
-    this.phoneNumberText = "Phone Number";
+    this.phoneNumberText = "Phone Number (International Format)";
     this.bvnText = "BVN";
     this.nextText = "Next";
     this.kycInformationText = "KYC Information";

@@ -182,7 +182,7 @@ page-login {
         box-shadow: none;
         //background: rgba(0,0,0,0.7);
         border-radius: 10px;
-        background-color: white !important;
+        background-color: #fffff0!important;
     }
 
     a, p {
@@ -211,4 +211,112 @@ page-login {
     .item-block .item-inner {
       border: none !important;
     }
+
+    #headerImage {
+      background-image: url(/assets/img/login.jpg);
+      opacity: 100%;
+      height: 15rem;
+      width: 100%;
+      position: relative;
+      
+    }
+
+    #container{
+      position: relative;
+      width: 100%;
+      height: 30%;
+      background: url(/assets/img/login.jpg);
+      background-repeat: no-repeat;
+      background-attachment: initial;
+      background-position: 30%;
+  }
+  #trial {
+    position: relative;
+    width: 55rem;
+  }
+  #main_image{
+      width: 70rem;
+      height: 100%;
+      background: url(/assets/img/login.jpg);
+      background-repeat: no-repeat;
+      background-attachment: initial;
+      background-position: center;
+      margin-left: 0rem !important;
+      margin-right: 2rem;
+  }
+
+  #fade{
+    
+    background: white;
+    opacity: 10%;
 }
+  #overlay_image{
+      position: absolute;
+      bottom: 1px;
+      width: 30rem;
+      height: 100%;
+      display: flex;
+      margin-left: 4rem;
+  }
+
+  #faded{
+    position: absolute;
+    width: 35rem;
+}
+  #overlay_image .header {
+    margin-top: 6rem;
+    width: 120rem;
+  }
+  #buttons_login {
+    top: 10px;
+    position: absolute;
+    bottom: 10px;
+    width: 30rem;
+    height: 100%;
+    margin-left: 4rem;
+  }
+
+  .scroll-content {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+}
+
+ion-app.md [padding] .scroll-content {
+  padding: 0px;
+}
+
+
+.pageButton {
+  border-radius: 2px;
+  overflow: hidden;
+  height: 3.6rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: black;
+  background-color: white;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  -webkit-transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0.4rem 0.2rem;
+  padding: 0 1.1em;
+  margin-left: 1.5rem; 
+  width: 90%;  
+  opacity: 75%;
+  border-color: orange;
+  margin-bottom: 0.6rem;
+}
+
+.contentWork {
+  background: url(/assets/img/trade.jpg); 
+  filter: blur(2%);
+  background-repeat: no-repeat;
+  background-attachment: initial;
+  background-position: center;
+}
+
