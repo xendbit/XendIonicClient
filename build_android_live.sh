@@ -32,11 +32,12 @@ cp $CONSTANTS_FILE $BAK_FILE
 #tail -n +2 prints all file expect the first line
 #tail -n +3 prints all file expect the first 2 lines
 
-tail -n +10 $CONSTANTS_FILE > $WORKING_FILE
+tail -n +11 $CONSTANTS_FILE > $WORKING_FILE
 #add the server base url and the first line of file
 echo 'import { StorageService } from "./storageservice";
 import { Headers } from "@angular/http";
 import { LocalProps } from "./localprops";
+import { Wallet, Fees } from "./wallet";
 
 export class Constants {
 static TOMCAT_URL = "https://xendfilb.xendbit.net";' > /tmp/temp

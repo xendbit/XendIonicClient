@@ -372,13 +372,12 @@ export class BuyBitPage {
   }
 
   showOrderTypeInfo() {    
-    let title = this.orderType === 'MO' ? 'Market Order' : 'P2P Exchange'
+    let title = this.orderType === 'MO' ? 'Market Order' : 'Order Book'
     let moText = 'Market Order: Selling your coins immediately on the exchange using the current market price.';
-    let p2pText = 'P2P Exchnage: Allows you to set the price you want your coins to be sold at.\n'
-      + 'This is usually reserved for advanced traders';
+    let p2pText = 'Oderbook Orders "Allows you to place a sell order for your asset';
     let text = this.orderType === 'MO' ? moText : p2pText;
     console.log(title, text);
-    this.dialogs.alert(text, title, 'OK')
+    this.dialogs.alert(text, title, 'Got It!')
       .then(() => console.log('Dialog dismissed'))
       .catch(e => console.log('Error displaying dialog', e));
   }
