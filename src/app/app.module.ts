@@ -3,7 +3,6 @@ import { MyExceptionHandler } from './../pages/utils/exceptionhandler';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { StartPage } from '../pages/start/start';
 import { IonicStorageModule } from '@ionic/storage';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -17,7 +16,6 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
   declarations: [
     MyApp,
     TabsPage,
-    StartPage,
     LoginPage
   ],
   imports: [
@@ -34,7 +32,6 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
   entryComponents: [
     MyApp,
     TabsPage,
-    StartPage,
     LoginPage
   ],
   providers: [

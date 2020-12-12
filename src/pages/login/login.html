@@ -27,8 +27,8 @@
                     <ion-item>
                         <ion-row>
                             <ion-col col-9>
-                                <button style="opacity: 90% !important; color: purple;" ion-button full medium color="orange" (click)="login();"
-                                    icon-right>{{loginText}}</button>
+                                <button style="opacity: 90% !important; color: purple;" ion-button full medium
+                                    color="orange" (click)="login();" icon-right>{{loginText}}</button>
                             </ion-col>
                             <ion-col col-3>
                                 <button ion-button full medium round color="xend" (click)="loginWithPrint();"
@@ -43,27 +43,21 @@
                             Password? Click Here</button>
                     </ion-item>
                     <ion-item style="margin-left: 7rem !important;">
-                        <button class="no-border" small ion-button clear color="xend"  (click)="register();" icon-right>Register</button> 
-                        <button class="no-border" small ion-button clear color="xend"  (click)="login();" icon-right>Recover</button> 
+                        <button class="no-border" small ion-button clear color="xend" (click)="register();"
+                            icon-right>Register</button>
+                        <button class="no-border" small ion-button clear color="xend" (click)="login();"
+                            icon-right>Recover</button>
                     </ion-item>
                 </ion-list>
-               
-                <!--<div id="container">
-                    <ion-card id="main_image">
-            
-                    </ion-card>
-                    <div id="buttons_login" style="margin-top: 6rem;">
-                        <div>
-             <button style="margin-left: 0rem; width: 90%; border-radius: 0px; opacity: 80%;" ion-button medium color="orange" (click)="register();" icon-right>Register</button> 
-                        </div>
-                        <div>
-                            <button style="margin-left: 0rem; width: 90%; border-radius: 0px; opacity: 80%;"  ion-button medium color="white" (click)="login();" icon-left>Recover</button>
-                        </div>
-                    </div>-->
-    
             </form>
 
         </ion-card-content>
     </ion-card>
-   
+
+    <ion-footer>
+        <ion-toolbar>
+            <button ion-button clear full color="light" class="footer no-border">XendFi Version: {{appVersion}}
+                &copy;DTSL</button>
+        </ion-toolbar>
+    </ion-footer>
 </ion-content>

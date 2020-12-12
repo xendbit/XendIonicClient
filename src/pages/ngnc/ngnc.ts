@@ -36,7 +36,7 @@ export class NgncPage {
 
   withdraw() {
     if(this.amountToWithdraw <= 0) {
-      Constants.showLongToastMessage("Please enter the amount to withdrawal", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter the amount to withdrawal", this.toastCtrl);
       return;
     }
 

@@ -111,7 +111,7 @@ export class GettingStartedPage {
       Constants.showLongerToastMessage('Please enter your password', this.toastCtrl);
       return;
     } else if (found < 0) {
-      Constants.showLongToastMessage("Please enter a valid password", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter a valid password", this.toastCtrl);
       return;
     } else if (this.isReset) {
 

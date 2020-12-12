@@ -120,9 +120,9 @@ export class ConfirmMnemonicPage {
 
     this.http.post(Constants.GET_13TH_WORD, postData, Constants.getHeader()).map(res => res.json()).subscribe(
       responseData => {
-        if (responseData.response_code == 0) {
+        if (responseData.status === 'success') {
           this.ls.clear();
-          let lastWord = responseData.result;
+          let lastWord = responseData.data;
           this.passphrase = this.confirmMnemonic + " " + lastWord;
           let url = Constants.LOGIN_URL;
           let key = Constants.WORKING_WALLET + "Address";
@@ -149,7 +149,7 @@ export class ConfirmMnemonicPage {
                 this.createWallets();
 
                 this.ls.setItem('emailAddress', this.email);
-                Constants.showLongToastMessage("Restore Successful. Now login", this.toastCtrl);
+                Constants.showPersistentToastMessage("Restore Successful. Now login", this.toastCtrl);
                 this.navCtrl.push(LoginPage);
               } else {
                 this.loading.dismiss();
@@ -211,10 +211,10 @@ export class ConfirmMnemonicPage {
           //do nothing the code will never get here.
         } else {
           if (this.confirmMnemonic === undefined) {
-            Constants.showLongToastMessage("Type the Passphrase shown on the previous page", this.toastCtrl);
+            Constants.showPersistentToastMessage("Type the Passphrase shown on the previous page", this.toastCtrl);
             return;
           } else if (minus13thWord !== this.confirmMnemonic) {
-            Constants.showLongToastMessage("The Passphrase don't match", this.toastCtrl);
+            Constants.showPersistentToastMessage("The Passphrase don't match", this.toastCtrl);
             this.confirmMnemonic = "";
             return;
           }

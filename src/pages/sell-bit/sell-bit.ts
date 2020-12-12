@@ -138,10 +138,10 @@ export class SellBitPage {
     console.log(balance);
 
     if (coinAmount === 0) {
-      Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
+      Constants.showPersistentToastMessage("Amount must be greater than 0", this.toastCtrl);
       return;
     } else if (password !== this.ls.getItem("password")) {
-      Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter a valid password.", this.toastCtrl);
       return;
     } else if (coinAmount + this.xendFees + blockFees + externalTradingFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
@@ -278,7 +278,7 @@ export class SellBitPage {
         this.sellBit();
       })
       .catch((error: any) => {
-        Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
+        Constants.showPersistentToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
       });
   }
 

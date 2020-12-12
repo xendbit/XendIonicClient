@@ -219,10 +219,10 @@ export class MyOrdersPage {
               this.loading.dismiss();
               let deletedId = responseData.result;
               if (deletedId > 0) {
-                Constants.showLongToastMessage("Order Deleted Successfully", this.toastCtrl);
+                Constants.showPersistentToastMessage("Order Deleted Successfully", this.toastCtrl);
                 this.loadSellers();
               } else {
-                Constants.showLongToastMessage("Error Deleting your order, please try again", this.toastCtrl)
+                Constants.showPersistentToastMessage("Error Deleting your order, please try again", this.toastCtrl)
               }
             }, _error => {
               this.loading.dismiss();

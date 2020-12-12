@@ -200,53 +200,53 @@ export class RegisterPage {
     console.log(Constants.registrationData);
 
     if (rf.email.match(this.emailRegex) === null) {
-      Constants.showLongToastMessage("Enter valid email address", this.toastCtrl);
+      Constants.showPersistentToastMessage("Enter valid email address", this.toastCtrl);
       return;
     }
 
     if (rf.phoneNumber === '') {
-      Constants.showLongToastMessage("Enter valid phone number", this.toastCtrl);
+      Constants.showPersistentToastMessage("Enter valid phone number", this.toastCtrl);
       return;
     }
 
     if (rf.surName === '') {
-      Constants.showLongToastMessage("Please enter your surname", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter your surname", this.toastCtrl);
       return;
     }
 
     if (rf.firstName === '') {
-      Constants.showLongToastMessage("Please enter your first name", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter your first name", this.toastCtrl);
       return;
     }
 
     if (rf.middleName === '') {
-      Constants.showLongToastMessage("Please enter your middle name", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter your middle name", this.toastCtrl);
       return;
     }
 
     if (rf.idType === '') {
-      Constants.showLongToastMessage("Please select  ID Type", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please select  ID Type", this.toastCtrl);
       return;
     }
 
     if (rf.idNumber === '') {
-      Constants.showLongToastMessage("Please enter  ID Number", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter  ID Number", this.toastCtrl);
       return;
     }
 
     if (rf.accountNumber === '') {
-      Constants.showLongToastMessage("Please enter  Account Number", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter  Account Number", this.toastCtrl);
       return;
     }
 
     if (rf.bank === '') {
-      Constants.showLongToastMessage("Please select Bank", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please select Bank", this.toastCtrl);
       return;
     }
 
 
     if (this.idImagePath === undefined) {
-      Constants.showLongToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
+      Constants.showPersistentToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
       return;
     }
 

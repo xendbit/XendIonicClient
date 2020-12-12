@@ -100,27 +100,27 @@ export class UpgradePage {
       isValid = true;
     } else {
       if (rf.fullName === '') {
-        Constants.showLongToastMessage("Please enter your full name", this.toastCtrl);
+        Constants.showPersistentToastMessage("Please enter your full name", this.toastCtrl);
         return;
       }
 
       if (rf.country === '') {
-        Constants.showLongToastMessage("Please enter your Country", this.toastCtrl);
+        Constants.showPersistentToastMessage("Please enter your Country", this.toastCtrl);
         return;
       }      
 
       if (rf.idNumber === '') {
-        Constants.showLongToastMessage("Please enter  ID Number", this.toastCtrl);
+        Constants.showPersistentToastMessage("Please enter  ID Number", this.toastCtrl);
         return;
       }
 
       if (rf.accountNumber === '') {
-        Constants.showLongToastMessage("Please enter Account Number", this.toastCtrl);
+        Constants.showPersistentToastMessage("Please enter Account Number", this.toastCtrl);
         return;
       }
 
       if (rf.bank === '') {
-        Constants.showLongToastMessage("Please enter Bank Name", this.toastCtrl);
+        Constants.showPersistentToastMessage("Please enter Bank Name", this.toastCtrl);
         return;
       }
 
@@ -129,14 +129,14 @@ export class UpgradePage {
     if (isValid) {
       //this.idImagePath = 'data:image/jpeg;base64,' + "1011001";
       if (this.idImagePath === undefined) {
-        Constants.showLongToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
+        Constants.showPersistentToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
         return;
       }      
 
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please wait");
       this.uploadFile();
     } else {
-      Constants.showLongToastMessage("Please fill form properly", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please fill form properly", this.toastCtrl);
     }
   }
 
@@ -186,7 +186,7 @@ export class UpgradePage {
       fileKey: 'uploadedFile',
       fileName: 'name.jpg'
       // headers: {
-      //   'apiKey':'oalkuisnetgauyno',
+      //   'apiKey':'U2FsdGVkX18k5itQROOzEotUtBOLK4apPBmljl1wphduEXLbXkP08TjP6EVNDq+QzEVSAVgWOD/WMCkV1WQZ9Uo/3JXBrjz2RVdgNQmZ5sU=',
       //   'Content-Disposition': 'form-data; name="file"; filename="name.jpg"'        
       // }
     }

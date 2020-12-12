@@ -89,9 +89,9 @@ export class LoginPage {
     let rf = this.loginForm.value;
 
     if (rf.password === '' || rf.password === undefined) {
-      Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter a valid password.", this.toastCtrl);
     } else if (rf.exchangeType === '' || rf.exchangeType === undefined) {
-      Constants.showLongToastMessage("Please select a wallet type", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please select a wallet type", this.toastCtrl);
     } else {
       isValid = true;
     }
@@ -166,9 +166,9 @@ export class LoginPage {
     this.http.post(url, requestData, Constants.getHeader())
       .map(res => res.json())
       .subscribe(responseData => {
-        if (responseData.response_text === "success") {
+        if (responseData.status === "success") {
           this.loading.dismiss();
-          let user = responseData["result"]["user"];
+          let user = responseData.data;
           Constants.LOGGED_IN_USER = user;
           let walletType = user['walletType'];
           ls.setItem('walletType', walletType);
@@ -176,13 +176,12 @@ export class LoginPage {
           StorageService.ACCOUNT_TYPE = user.accountType;
           StorageService.IS_BENEFICIARY = user.beneficiary;
           ls.setItem("accountType", user.accountType);
-          ls.setItem("exchangeType", exchangeType);
           ls.setItem("userId", user.id);
           ls.setItem("ngncBalance", user.ngncBalance);
 
           try {
-            ls.setItem("accountNumber", user.kyc.bankAccountNumber);
-            ls.setItem("bankCode", user.kyc.bankCode);
+            ls.setItem("accountNumber", user.bankAccountNumber);
+            ls.setItem("bankCode", user.bankCode);
           } catch (e) {
             Console.log(e);
           }
@@ -190,17 +189,17 @@ export class LoginPage {
           this.navCtrl.push(TabsPage);
         } else {
           this.loading.dismiss();
-          Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
-
-          if (responseData.response_code === 601) {
-            //account is not activated
-            this.showResendConfirmationEmailDialog();
-          }
+          Constants.showPersistentToastMessage(responseData.message, this.toastCtrl);
         }
       },
         error => {
           this.loading.dismiss();
-          Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+          let errorBody = JSON.parse(error._body);
+          if (errorBody.error.indexOf("Account is not yet activated") >= 0) {
+            this.showResendConfirmationEmailDialog();
+          } else {
+            Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);
+          }
         });
 
   }
@@ -221,7 +220,7 @@ export class LoginPage {
         this.login();
       })
       .catch((error: any) => {
-        Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
+        Constants.showPersistentToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
       });
   }
 

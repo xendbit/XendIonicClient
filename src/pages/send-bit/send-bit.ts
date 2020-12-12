@@ -111,7 +111,7 @@ export class SendBitPage {
       })
       .catch((error: any) => {
         //doNothing
-        Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
+        Constants.showPersistentToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
       });
   }
 
@@ -221,13 +221,13 @@ export class SendBitPage {
     console.log(blockFees);
 
     if (amountToSend === 0) {
-      Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
+      Constants.showPersistentToastMessage("Amount must be greater than 0", this.toastCtrl);
     } else if (amountToSend + blockFees + xendFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
     } else if (toBitcoinAddress === '') {
       Constants.showPersistentToastMessage(invalidAddressMessage, this.toastCtrl);
     } else if (password !== this.ls.getItem("password")) {
-      Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter a valid password.", this.toastCtrl);
     } else if (this.sendBitForm.valid) {
       isValid = true;
     }

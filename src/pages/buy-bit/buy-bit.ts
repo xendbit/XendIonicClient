@@ -181,10 +181,10 @@ export class BuyBitPage {
       let coinAmount = +sb.amountToGet;
 
       if (coinAmount === 0) {
-        Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
+        Constants.showPersistentToastMessage("Amount must be greater than 0", this.toastCtrl);
         return;
       } else if (password !== this.ls.getItem("password")) {
-        Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
+        Constants.showPersistentToastMessage("Please enter a valid password.", this.toastCtrl);
         return;
       }
 
@@ -367,7 +367,7 @@ export class BuyBitPage {
     }, error => {
       this.loading.dismiss();
       Console.log(error);
-      Constants.showLongToastMessage('Can not buy coin at this time. Please try again', this.toastCtrl);
+      Constants.showPersistentToastMessage('Can not buy coin at this time. Please try again', this.toastCtrl);
     })
   }
 

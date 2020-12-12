@@ -1,13 +1,13 @@
 import { StorageService } from "./storageservice";
-import { Headers } from "@angular/http";
+import { Headers, Http } from "@angular/http";
 import { LocalProps } from "./localprops";
 import { Wallet, Fees } from "./wallet";
 
 export class Constants {
-    static TOMCAT_URL = "https://xendfilb.xendbit.net";
+    //static TOMCAT_URL = "https://xendfilb.xendbit.net";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
-    //static TOMCAT_URL = "http://localhost:8080";
+    static TOMCAT_URL = "http://localhost:9091";
     //static TOMCAT_URL = "https://lb.xendbit.com";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
@@ -36,7 +36,7 @@ export class Constants {
 
     //static ONE_WEI = 1000000000000000000;
     static PAYMENT_METHOD_IMAGE_BASE_URL = Constants.XEND_BASE_URL + "images/payment_method_images";
-    static SERVER_URL = Constants.XEND_BASE_URL + "x/";
+    static SERVER_URL = Constants.XEND_BASE_URL;
 
     static BUY_BIT_URL = Constants.SERVER_URL + "buy/buy";
     static GET_BUY_TX_URL = Constants.SERVER_URL + "buy/tx/";
@@ -70,7 +70,6 @@ export class Constants {
     static ADD_KYC_URL = Constants.SERVER_URL + "user/add/kyc";
     static LOAD_BENEFICIARIES_URL = Constants.SERVER_URL + "user/beneficiaries";
     static GET_IMAGE_URL = Constants.IMAGER_URL + "get-image";
-    static GET_13TH_WORD = Constants.SERVER_URL + "user/get-last-word";
 
     static SEND_2_BANK_URL = Constants.SERVER_URL + "send2bank/new";
     static GET_SEND_2_BANK_REQUEST_URL = Constants.SERVER_URL + "send2bank/tx/";
@@ -85,9 +84,8 @@ export class Constants {
     static REG_STATUS_URL = Constants.SERVER_URL + "register/status";
     static UPLOAD_URL = Constants.SERVER_URL + "register/upload";
 
-    private static currentTime = new Date().getTime();
-
-    static SETTINGS_URL = Constants.XEND_BASE_URL + "en.ng.json?x_session_id=" + Constants.currentTime;
+    static SETTINGS_URL = Constants.XEND_BASE_URL + "config/en.ng.json";
+    static GET_13TH_WORD = Constants.XEND_BASE_URL + "config/get-last-word";
 
     static CHART_URL = "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol={{symbol}}&market=USD&apikey=MIX93213R84R24Z9";
 
@@ -111,43 +109,7 @@ export class Constants {
     static properties = LocalProps.properties;
 
     static showAlert(toastCtrl, title, subtitle) {
-        Constants.showLongerToastMessage(subtitle, toastCtrl);
-    }
-
-    static showLongToastMessage(message, toastCtrl) {
-        let toast = toastCtrl.create({
-            message: message,
-            duration: 10000
-        });
-
-        toast.onDidDismiss(() => {
-        });
-
-        toast.present();
-    }
-
-    static showShortToastMessage(message, toastCtrl) {
-        let toast = toastCtrl.create({
-            message: message,
-            duration: 500
-        });
-
-        toast.onDidDismiss(() => {
-        });
-
-        toast.present();
-    }
-
-    static showLongerToastMessage(message, toastCtrl) {
-        let toast = toastCtrl.create({
-            message: message,
-            duration: 10000
-        });
-
-        toast.onDidDismiss(() => {
-        });
-
-        toast.present();
+        Constants.showPersistentToastMessage(subtitle, toastCtrl);
     }
 
     static showLoading(loading, loadingCtrl, message) {
@@ -161,7 +123,7 @@ export class Constants {
     static showPersistentToastMessage(message, toastCtrl) {
         let toast = toastCtrl.create({
             message: message,
-            duration: 5000
+            showCloseButton: true
         });
 
         toast.onDidDismiss(() => {
@@ -205,41 +167,35 @@ export class Constants {
 
 
         let url = data['url'];
-        let http = data['http'];
+        let http: Http = data['http'];
         let toastCtrl = data['toastCtrl'];
         let loading = data['loading'];
         let loadingCtrl = data['loadingCtrl'];
 
         loading = Constants.showLoading(loading, loadingCtrl, "Please Wait...");
-        http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(
-            responseData => {
-                if (responseData.response_text === "success") {
-                    loading.dismiss();
-                    ls.setItem("emailAddress", data['email']);
-                    ls.setItem("password", data['password']);
-                    ls.setItem("isRegistered", "true");
-                    if (data['updateInfo']) {
-                        Constants.showPersistentToastMessage("Update Successful.", toastCtrl);
-                        data['navCtrl'].pop();
-                        return;
-                    } else {
-                        Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
-                        //data['navCtrl'].push(LoginPage);
-                        data['navCtrl'].popToRoot();
-                    }
-                } else {
-                    Constants.showPersistentToastMessage(responseData.result, toastCtrl);
-                    loading.dismiss();
-                }
-            },
-            error => {
-                loading.dismiss();
-                Constants.showPersistentToastMessage("Error from server: " + error, toastCtrl);
-            });
+        http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(_respose => {
+            loading.dismiss();
+            ls.setItem("emailAddress", data['email']);
+            ls.setItem("password", data['password']);
+            ls.setItem("isRegistered", "true");
+            if (data['updateInfo']) {
+                Constants.showPersistentToastMessage("Update Successful.", toastCtrl);
+                data['navCtrl'].pop();
+                return;
+            } else {
+                Constants.showPersistentToastMessage("Registration Successful. Please Login", toastCtrl);
+                //data['navCtrl'].push(LoginPage);
+                data['navCtrl'].popToRoot();
+            }
+        }, error => {
+            loading.dismiss();
+            const eb = JSON.parse(error._body);
+            Constants.showPersistentToastMessage("Error: " + eb.error, toastCtrl);
+        });
     }
 
     static registerOnServer() {
-      Constants.completeRegistration();
+        Constants.completeRegistration();
     }
 
     static getHeader() {
@@ -247,7 +203,7 @@ export class Constants {
 
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        headers.append('apiKey', 'oalkuisnetgauyno');
+        headers.append('apiKey', 'U2FsdGVkX18k5itQROOzEotUtBOLK4apPBmljl1wphduEXLbXkP08TjP6EVNDq+QzEVSAVgWOD/WMCkV1WQZ9Uo/3JXBrjz2RVdgNQmZ5sU=');
         headers.append('wallet', wallet);
         return { headers: headers };
     }
@@ -255,7 +211,7 @@ export class Constants {
     static getWalletHeader(wallet: string) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        headers.append('apiKey', 'oalkuisnetgauyno');
+        headers.append('apiKey', 'U2FsdGVkX18k5itQROOzEotUtBOLK4apPBmljl1wphduEXLbXkP08TjP6EVNDq+QzEVSAVgWOD/WMCkV1WQZ9Uo/3JXBrjz2RVdgNQmZ5sU=');
         headers.append('wallet', wallet);
         return { headers: headers };
     }
@@ -342,28 +298,28 @@ export class Constants {
     }
 
     static getWalletFormatted(w): Wallet {
-      let chain = w['chain'];
-      let chainAddress = w['chainAddress'];
+        let chain = w['chain'];
+        let chainAddress = w['chainAddress'];
 
-      let wallet: Wallet = new Wallet();
-      wallet.tickerSymbol = chain.toLowerCase();
-      wallet.chainAddress = chainAddress;
-      wallet.chain = chain;
-      
-      const fees: Fees = new Fees();                  
-      fees.externalDepositFees = w['fees']['externalDepositFees'];
-      fees.maxXendFees = w['fees']['maxXendFees'];
-      fees.minBlockFees = w['fees']['minBlockFees'];
-      fees.minXendFees = w['fees']['minXendFees'];
-      fees.percExternalTradingFees = w['fees']['percExternalTradingFees'];
-      fees.externalWithdrawalFees = w['fees']['externalWithdrawalFees'];
-      fees.percXendFees = w['fees']['percXendFees'];
-      fees.tickerSymbol = wallet.tickerSymbol;
-      fees.chain = wallet.chain;
-      fees.chainAddress = wallet.chainAddress;
-      wallet.fees = fees;
+        let wallet: Wallet = new Wallet();
+        wallet.tickerSymbol = chain.toLowerCase();
+        wallet.chainAddress = chainAddress;
+        wallet.chain = chain;
 
-      return wallet;
+        const fees: Fees = new Fees();
+        fees.externalDepositFees = w['fees']['externalDepositFees'];
+        fees.maxXendFees = w['fees']['maxXendFees'];
+        fees.minBlockFees = w['fees']['minBlockFees'];
+        fees.minXendFees = w['fees']['minXendFees'];
+        fees.percExternalTradingFees = w['fees']['percExternalTradingFees'];
+        fees.externalWithdrawalFees = w['fees']['externalWithdrawalFees'];
+        fees.percXendFees = w['fees']['percXendFees'];
+        fees.tickerSymbol = wallet.tickerSymbol;
+        fees.chain = wallet.chain;
+        fees.chainAddress = wallet.chainAddress;
+        wallet.fees = fees;
+
+        return wallet;
     }
 
     static numberWithCommas(x) {

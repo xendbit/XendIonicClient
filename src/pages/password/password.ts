@@ -44,12 +44,12 @@ export class PasswordPage {
     //^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$
     if (this.password !== this.confirmPassword) {
       Console.log("Passwords don't match");
-      Constants.showLongToastMessage("Passwords did not match", this.toastCtrl);
+      Constants.showPersistentToastMessage("Passwords did not match", this.toastCtrl);
     } else {
       let found = this.password.search(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
       if (found < 0) {
         Console.log("Passwords invalid");
-        Constants.showLongToastMessage("Please enter a valid password", this.toastCtrl);
+        Constants.showPersistentToastMessage("Please enter a valid password", this.toastCtrl);
       } else {
         Console.log("Password is OK");
         Constants.registrationData['password'] = this.password;

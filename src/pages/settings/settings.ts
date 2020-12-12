@@ -107,7 +107,7 @@ export class SettingsPage {
     let bv = this.showMnemonicForm.value;
     let password = bv.password;
     if (password !== this.ls.getItem("password")) {
-      Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter a valid password.", this.toastCtrl);
     } else {
       this.showMnemonicForm.controls.password.setValue("");
       let sm = this.ls.getItem('mnemonic').split(' ').splice(0, 12).join(' ');

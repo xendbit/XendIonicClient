@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Console } from '../utils/console';
-import { NavController, NavParams, Loading, LoadingController, IonicPage } from 'ionic-angular';
+import { NavController, NavParams, Loading, LoadingController, IonicPage, ToastController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Constants } from '../utils/constants';
@@ -30,7 +30,7 @@ export class CreateMnemonicPage {
   loading: Loading;
 
 
-  constructor(public http: Http, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController) {
+  constructor(public http: Http, public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public toastCtrl: ToastController) {
     this.pageTitle = "See The Passphrase";
     this.iveWrittenItText = "I've Written It Down";
     this.warning1Text = " “Write down the passphrase displayed below in exact case as displayed. Keep securely and do not misplace it";
@@ -71,18 +71,19 @@ export class CreateMnemonicPage {
       this.http.post(Constants.GET_13TH_WORD, postData, Constants.getHeader()).map(res => res.json()).subscribe(
         responseData => {
           this.loading.dismiss();
-          if (responseData.response_code == 0) {
-            let lastWord = responseData.result;
+          if (responseData.status === 'success') {
+            let lastWord = responseData.data;
             this.fullMnemonic = result.mnemonic + " " + lastWord;
             this.mnemonic = splitted.join(' ');
             Console.log(this.fullMnemonic);
           } else {
-            throw(responseData.response_text);
+            Constants.showPersistentToastMessage(responseData.response_text, this.toastCtrl);
           }
         },
         error => {
           this.loading.dismiss();
-          throw (error);
+          let errorBody = JSON.parse(error._body);
+          Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);
         }
       );
     }
