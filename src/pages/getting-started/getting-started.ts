@@ -105,18 +105,18 @@ export class GettingStartedPage {
       'password': this.password
     };
     if (this.email === '') {
-      Constants.showLongerToastMessage('Please enter your email address', this.toastCtrl);
+      Constants.showPersistentToastMessage('Please enter your email address', this.toastCtrl);
       return;
     } else if (this.password === '') {
-      Constants.showLongerToastMessage('Please enter your password', this.toastCtrl);
+      Constants.showPersistentToastMessage('Please enter your password', this.toastCtrl);
       return;
     } else if (found < 0) {
-      Constants.showLongToastMessage("Please enter a valid password", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter a valid password", this.toastCtrl);
       return;
     } else if (this.isReset) {
 
       if (this.password !== this.confirmPassword) {
-        Constants.showLongerToastMessage('Passwords did not match', this.toastCtrl);
+        Constants.showPersistentToastMessage('Passwords did not match', this.toastCtrl);
         return;
       }
 

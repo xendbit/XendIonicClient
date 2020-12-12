@@ -168,11 +168,11 @@ export class ExchangePage {
     }
 
     if (toSell === 0) {
-      Constants.showLongToastMessage("Please enter amount to sell", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter amount to sell", this.toastCtrl);
     } else if (rate === 0) {
-      Constants.showLongToastMessage("Please enter rate", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter rate", this.toastCtrl);
     } else if (password !== this.ls.getItem("password")) {
-      Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter a valid password.", this.toastCtrl);
     } else if (toSell + this.xendFees + this.blockFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
     } else if (sb.acceptedPaymentMethods === "") {
@@ -206,7 +206,7 @@ export class ExchangePage {
       let url = Constants.SELL_TRADE_URL;
       this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(
         responseData => {
-          Constants.showLongerToastMessage(responseData.result, this.toastCtrl);
+          Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
           this.clearForm();
           this.loading.dismiss();
         }, error => {
@@ -232,7 +232,7 @@ export class ExchangePage {
       this.sellBit();
     })
       .catch((error: any) => {
-        Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
+        Constants.showPersistentToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
       });
   }
 

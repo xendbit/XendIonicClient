@@ -84,7 +84,7 @@ export class HomePage {
     }
     this.clipboard.copy(this.networkAddress);
     let message = "Coin Address Copied".replace("Coin", this.wallet.chain);
-    Constants.showLongToastMessage(message, this.toastCtrl);
+    Constants.showPersistentToastMessage(message, this.toastCtrl);
   }
 
   refresh(showLoading) {

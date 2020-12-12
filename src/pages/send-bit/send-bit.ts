@@ -111,7 +111,7 @@ export class SendBitPage {
       })
       .catch((error: any) => {
         //doNothing
-        Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
+        Constants.showPersistentToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
       });
   }
 
@@ -221,13 +221,13 @@ export class SendBitPage {
     console.log(blockFees);
 
     if (amountToSend === 0) {
-      Constants.showLongToastMessage("Amount must be greater than 0", this.toastCtrl);
+      Constants.showPersistentToastMessage("Amount must be greater than 0", this.toastCtrl);
     } else if (amountToSend + blockFees + xendFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
     } else if (toBitcoinAddress === '') {
       Constants.showPersistentToastMessage(invalidAddressMessage, this.toastCtrl);
     } else if (password !== this.ls.getItem("password")) {
-      Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter a valid password.", this.toastCtrl);
     } else if (this.sendBitForm.valid) {
       isValid = true;
     }
@@ -254,7 +254,7 @@ export class SendBitPage {
       if (responseData.response_text === "success") {
         this.sendCoinsSuccess();
       } else {
-        Constants.showLongerToastMessage('Error Sending Coin: ' + responseData.result, this.toastCtrl);
+        Constants.showPersistentToastMessage('Error Sending Coin: ' + responseData.result, this.toastCtrl);
         this.sendCoinsError();
       }
     }, _error => {
@@ -279,12 +279,12 @@ export class SendBitPage {
   scanCode() {
     this.barcodeScanner.scan().then((barcodeData) => {
       if (barcodeData.cancelled) {
-        Constants.showLongerToastMessage('Barcode scanner cancelled', this.toastCtrl);
+        Constants.showPersistentToastMessage('Barcode scanner cancelled', this.toastCtrl);
       } else {
         this.sendBitForm.controls.networkAddress.setValue(barcodeData.text);
       }
     }, (_err) => {
-      Constants.showLongerToastMessage('Error launching barcode scanner', this.toastCtrl);
+      Constants.showPersistentToastMessage('Error launching barcode scanner', this.toastCtrl);
     });
   }
 }

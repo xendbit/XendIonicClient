@@ -111,43 +111,7 @@ export class Constants {
     static properties = LocalProps.properties;
 
     static showAlert(toastCtrl, title, subtitle) {
-        Constants.showLongerToastMessage(subtitle, toastCtrl);
-    }
-
-    static showLongToastMessage(message, toastCtrl) {
-        let toast = toastCtrl.create({
-            message: message,
-            duration: 10000
-        });
-
-        toast.onDidDismiss(() => {
-        });
-
-        toast.present();
-    }
-
-    static showShortToastMessage(message, toastCtrl) {
-        let toast = toastCtrl.create({
-            message: message,
-            duration: 500
-        });
-
-        toast.onDidDismiss(() => {
-        });
-
-        toast.present();
-    }
-
-    static showLongerToastMessage(message, toastCtrl) {
-        let toast = toastCtrl.create({
-            message: message,
-            duration: 10000
-        });
-
-        toast.onDidDismiss(() => {
-        });
-
-        toast.present();
+        Constants.showPersistentToastMessage(subtitle, toastCtrl);
     }
 
     static showLoading(loading, loadingCtrl, message) {
@@ -161,7 +125,8 @@ export class Constants {
     static showPersistentToastMessage(message, toastCtrl) {
         let toast = toastCtrl.create({
             message: message,
-            duration: 5000
+            showCloseButton: true,
+            closeButtonText: "OK"
         });
 
         toast.onDidDismiss(() => {

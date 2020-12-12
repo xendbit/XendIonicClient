@@ -201,32 +201,32 @@ export class PersonalPage {
       isValid = true;
     } else {
       if (rf.email.match(this.emailRegex) === null) {
-        Constants.showLongToastMessage("Enter valid email address", this.toastCtrl);
+        Constants.showPersistentToastMessage("Enter valid email address", this.toastCtrl);
         return;
       }
 
       if (rf.phoneNumber === '') {
-        Constants.showLongToastMessage("Enter valid phone number", this.toastCtrl);
+        Constants.showPersistentToastMessage("Enter valid phone number", this.toastCtrl);
         return;
       }
 
       if (rf.surName === '') {
-        Constants.showLongToastMessage("Please enter your surname", this.toastCtrl);
+        Constants.showPersistentToastMessage("Please enter your surname", this.toastCtrl);
         return;
       }
 
       if (rf.firstName === '') {
-        Constants.showLongToastMessage("Please enter your first name", this.toastCtrl);
+        Constants.showPersistentToastMessage("Please enter your first name", this.toastCtrl);
         return;
       }
 
       if (rf.country === '') {
-        Constants.showLongToastMessage("Please enter your Country", this.toastCtrl);
+        Constants.showPersistentToastMessage("Please enter your Country", this.toastCtrl);
         return;
       }
 
       if (rf.idNumber === '' && !this.isBasic) {
-        //Constants.showLongToastMessage("Please enter  ID Number", this.toastCtrl);
+        //Constants.showPersistentToastMessage("Please enter  ID Number", this.toastCtrl);
         //return;
         rf.idNumber = "UNDEFINED";
       }
@@ -235,7 +235,7 @@ export class PersonalPage {
     if (isValid) {
       //this.idImagePath = 'data:image/jpeg;base64,' + "1011001";
       if (this.idImagePath === undefined && !this.isBasic) {
-        //Constants.showLongToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
+        //Constants.showPersistentToastMessage("Picture of ID not found, Please upload one", this.toastCtrl);
         //return;
         this.idImagePath = "UNDEFINED";
         this.idImage = "UNDEFINED";
@@ -260,7 +260,7 @@ export class PersonalPage {
 
       this.passwordPadSuccess();
     } else {
-      Constants.showLongToastMessage("Please fill form properly", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please fill form properly", this.toastCtrl);
     }
   }
 
@@ -280,12 +280,12 @@ export class PersonalPage {
 
     if (rf.phoneNumber !== undefined) {
       if (rf.phoneNumber.startsWith("+")) {
-        Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
+        Constants.showPersistentToastMessage("Phone number should contain only numbers", this.toastCtrl);
         return;
       }
 
       if (rf.phoneNumber.startsWith("0")) {
-        Constants.showLongerToastMessage("Phone number entered is not in international format", this.toastCtrl);
+        Constants.showPersistentToastMessage("Phone number entered is not in international format", this.toastCtrl);
         return;
       }
     }

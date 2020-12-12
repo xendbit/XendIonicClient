@@ -149,7 +149,7 @@ export class ConfirmMnemonicPage {
                 this.createWallets();
 
                 this.ls.setItem('emailAddress', this.email);
-                Constants.showLongToastMessage("Restore Successful. Now login", this.toastCtrl);
+                Constants.showPersistentToastMessage("Restore Successful. Now login", this.toastCtrl);
                 this.navCtrl.push(LoginPage);
               } else {
                 this.loading.dismiss();
@@ -162,7 +162,7 @@ export class ConfirmMnemonicPage {
               });
         } else {
           this.loading.dismiss();
-          Constants.showLongerToastMessage(responseData.response_text, this.toastCtrl);
+          Constants.showPersistentToastMessage(responseData.response_text, this.toastCtrl);
           throw (responseData.response_text);
         }
       },
@@ -211,10 +211,10 @@ export class ConfirmMnemonicPage {
           //do nothing the code will never get here.
         } else {
           if (this.confirmMnemonic === undefined) {
-            Constants.showLongToastMessage("Type the Passphrase shown on the previous page", this.toastCtrl);
+            Constants.showPersistentToastMessage("Type the Passphrase shown on the previous page", this.toastCtrl);
             return;
           } else if (minus13thWord !== this.confirmMnemonic) {
-            Constants.showLongToastMessage("The Passphrase don't match", this.toastCtrl);
+            Constants.showPersistentToastMessage("The Passphrase don't match", this.toastCtrl);
             this.confirmMnemonic = "";
             return;
           }

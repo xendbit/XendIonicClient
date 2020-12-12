@@ -89,9 +89,9 @@ export class LoginPage {
     let rf = this.loginForm.value;
 
     if (rf.password === '' || rf.password === undefined) {
-      Constants.showLongToastMessage("Please enter a valid password.", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please enter a valid password.", this.toastCtrl);
     } else if (rf.exchangeType === '' || rf.exchangeType === undefined) {
-      Constants.showLongToastMessage("Please select a wallet type", this.toastCtrl);
+      Constants.showPersistentToastMessage("Please select a wallet type", this.toastCtrl);
     } else {
       isValid = true;
     }
@@ -221,7 +221,7 @@ export class LoginPage {
         this.login();
       })
       .catch((error: any) => {
-        Constants.showLongToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
+        Constants.showPersistentToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
       });
   }
 
