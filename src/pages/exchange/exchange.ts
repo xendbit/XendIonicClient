@@ -206,7 +206,7 @@ export class ExchangePage {
       let url = Constants.SELL_TRADE_URL;
       this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(
         responseData => {
-          Constants.showLongerToastMessage(responseData.result, this.toastCtrl);
+          Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
           this.clearForm();
           this.loading.dismiss();
         }, error => {

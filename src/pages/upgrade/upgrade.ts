@@ -201,11 +201,11 @@ export class UpgradePage {
           this.completeUpgrade(filePath);
         } else {
           this.loading.dismiss();
-          Constants.showLongerToastMessage("Can not complete registration. Please try again later: " + filePath, this.toastCtrl);
+          Constants.showPersistentToastMessage("Can not complete registration. Please try again later: " + filePath, this.toastCtrl);
         }
       }, (err) => {
         this.loading.dismiss();
-        Constants.showLongerToastMessage("Can not complete registration. Please try again later: " + err, this.toastCtrl);
+        Constants.showPersistentToastMessage("Can not complete registration. Please try again later: " + err, this.toastCtrl);
       });
   }
 }

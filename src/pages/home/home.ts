@@ -68,7 +68,7 @@ export class HomePage {
     let tickerSymbol = this.wallet.tickerSymbol;
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/BUY';
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.btcToNgn = responseData.result.ngnRate;
+      this.btcToNgn = responseData.data.ngnRate;
     }, error => {
       //doNothing
     });
@@ -98,7 +98,7 @@ export class HomePage {
 
       app.yourBTCWalletText = "My Coin Wallet".replace('Coin', app.btcText);
 
-      app.getTransactions(showLoading);
+      app.getBalance(showLoading);
       app.loadRate();
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
@@ -159,10 +159,9 @@ export class HomePage {
           }
         }]
       });
-    }, _error => {
-      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-      Console.log("Can not pull data from server");
-      //this.platform.exitApp();
+    }, error => {
+      let errorBody = JSON.parse(error._body);
+      Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);    
     });
   }
 
@@ -185,37 +184,33 @@ export class HomePage {
     Console.log('ionViewWillLeave HomePage');
   }
 
-  getTransactions(showLoading) {
+  getBalance(showLoading) {
     if (showLoading) {
       this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     }
 
-    let postData = {
-      password: this.ls.getItem("password"),
-      networkAddress: this.wallet.chainAddress,
-      emailAddress: this.ls.getItem("emailAddress"),
-    };
+    const userId = this.ls.getItem("userId");
+    const url = Constants.GET_BALANCE_URL + "/" + userId + "/" + this.wallet;
 
-    this.http.post(Constants.GET_TX_URL, postData, Constants.getWalletHeader(Constants.WORKING_WALLET))
+    this.http.get(url)
       .map(res => res.json())
       .subscribe(responseData => {
         if (showLoading) {
           this.loading.dismiss();
         }
-        //if (responseData.response_text === "success") {
-        if (responseData.response_code === 0) {
-          this.confirmedAccountBalance = responseData.result.balance
-          this.ls.setItem(Constants.WORKING_WALLET + "confirmedAccountBalance", responseData.result.balance);
-          this.totalReceived = responseData.result.received
-          this.totalSent = responseData.result.spent
+        
+        if (responseData.status === 'success') {
+          this.confirmedAccountBalance = responseData.data.balance
+          this.ls.setItem(Constants.WORKING_WALLET + "confirmedAccountBalance", responseData.data.balance);
 
-          this.escrow = responseData.result.escrow === 0 ? 0 : (responseData.result.escrow)
+          this.escrow = responseData.data.escrow;
         }
-      }, _error => {
+      }, error => {
         if (showLoading) {
           this.loading.dismiss();
         }
-        Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+        let errorBody = JSON.parse(error._body);
+        Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);    
       });
   }
 
@@ -235,30 +230,14 @@ export class HomePage {
   }
 
   exchange(type) {
-    this.getTransactions(false);
+    this.getBalance(false);
     if (type === 'Sell') {
-      this.getTransactions(false);
+      this.getBalance(false);
       this.navCtrl.push('SellBitPage');
     } else if (type === 'Buy') {
       this.navCtrl.push('BuyBitPage');
     } else if (type === 'Send') {
       this.navCtrl.push('SendBitPage');
     }
-  }
-
-  sellBit() {
-    this.getTransactions(false);
-    if (this.ls.getItem("bankCode") === "000" || this.ls.getItem('bankCode') === undefined) {
-      Constants.showAlert(this.toastCtrl, "Feature Unavailable", "This feature is not available because you didn't provide bank details during registration.");
-      return;
-    } else if (this.ls.getItem("exchangeType") === 'exchange') {
-      this.navCtrl.push('SellBitPage', { 'isOwner': true });
-    } else {
-      this.navCtrl.push('SellEquityPage', { 'isOwner': true });
-    }
-  }
-
-  sellOrders() {
-    this.navCtrl.push('MyOrdersPage');
   }
 }

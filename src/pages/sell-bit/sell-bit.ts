@@ -158,8 +158,8 @@ export class SellBitPage {
     const blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.usdRate = responseData.result.usdRate;
-      this.btcToNgn = responseData.result.ngnRate;
+      this.usdRate = responseData.data.usdRate;
+      this.btcToNgn = responseData.data.ngnRate;
       this.usdToNgnRate = this.btcToNgn / this.usdRate;
       this.sellForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
       this.sellForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
@@ -215,7 +215,7 @@ export class SellBitPage {
 
       this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
         this.loading.dismiss();
-        if (responseData.response_text === "success") {
+        if (responseData.status === "success") {
           this.clearForm();
           Constants.showPersistentToastMessage("Your sell order has been placed. It will be available in the market place soon", this.toastCtrl);
           Constants.properties['selectedPair'] = Constants.WORKING_WALLET + " -> Naira";
@@ -226,11 +226,12 @@ export class SellBitPage {
             this.navCtrl.push('MyOrdersPage');
           }
         } else {
-          Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+          Constants.showPersistentToastMessage(responseData.message, this.toastCtrl);
         }
-      }, _error => {
+      }, error => {
         this.loading.dismiss();
-        Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+        let errorBody = JSON.parse(error._body);
+        Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);    
       });
 
     }, error => {
@@ -287,8 +288,8 @@ export class SellBitPage {
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/SELL';
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.usdRate = responseData.result.usdRate;
-      this.btcToNgn = responseData.result.ngnRate;
+      this.usdRate = responseData.data.usdRate;
+      this.btcToNgn = responseData.data.ngnRate;
       this.usdToNgnRate = this.btcToNgn / this.usdRate;
       this.sellForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
       this.sellForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
@@ -329,6 +330,8 @@ export class SellBitPage {
       let toRecieve = toSell * this.btcToNgn;
       toRecieve = toRecieve - (toRecieve * this.wallet.fees.percExternalTradingFees) - this.wallet.fees.externalWithdrawalFees - xendFees;
       this.sellForm.controls.amountToGet.setValue(toRecieve.toFixed(3));
+    } else {
+      this.sellForm.controls.amountToGet.setValue("0");
     }
   }
 

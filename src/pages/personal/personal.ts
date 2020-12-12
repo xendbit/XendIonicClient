@@ -280,12 +280,12 @@ export class PersonalPage {
 
     if (rf.phoneNumber !== undefined) {
       if (rf.phoneNumber.startsWith("+")) {
-        Constants.showLongerToastMessage("Phone number should contain only numbers", this.toastCtrl);
+        Constants.showPersistentToastMessage("Phone number should contain only numbers", this.toastCtrl);
         return;
       }
 
       if (rf.phoneNumber.startsWith("0")) {
-        Constants.showLongerToastMessage("Phone number entered is not in international format", this.toastCtrl);
+        Constants.showPersistentToastMessage("Phone number entered is not in international format", this.toastCtrl);
         return;
       }
     }

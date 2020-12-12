@@ -162,7 +162,7 @@ export class ConfirmMnemonicPage {
               });
         } else {
           this.loading.dismiss();
-          Constants.showLongerToastMessage(responseData.response_text, this.toastCtrl);
+          Constants.showPersistentToastMessage(responseData.response_text, this.toastCtrl);
           throw (responseData.response_text);
         }
       },

@@ -141,10 +141,11 @@ export class LoginPage {
       .map(res => res.json())
       .subscribe(responseData => {
         Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
-      },
-        _error => {
-          Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-        });
+      }, error => {
+        this.loading.dismiss();
+        let errorBody = JSON.parse(error._body);
+        Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);    
+      });
   }
 
   loginOnServer(password, emailAddress, exchangeType) {
@@ -171,6 +172,7 @@ export class LoginPage {
           let user = responseData.data;
           Constants.LOGGED_IN_USER = user;
           let walletType = user['walletType'];
+          ls.setItem("userId", user.id);
           ls.setItem('walletType', walletType);
           ls.setItem("lastLoginTime", new Date().getTime() + "");
           StorageService.ACCOUNT_TYPE = user.accountType;
@@ -191,8 +193,7 @@ export class LoginPage {
           this.loading.dismiss();
           Constants.showPersistentToastMessage(responseData.message, this.toastCtrl);
         }
-      },
-        error => {
+      }, error => {
           this.loading.dismiss();
           let errorBody = JSON.parse(error._body);
           if (errorBody.error.indexOf("Account is not yet activated") >= 0) {
@@ -254,10 +255,9 @@ export class LoginPage {
     Console.log(Constants.SETTINGS_URL);
     this.http.get(Constants.SETTINGS_URL).map(res => res.json()).subscribe(data => {
       Constants.properties = data;
-    }, _error => {
-      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-      Console.log("Can not pull data from server");
-      //this.platform.exitApp();
+    }, error => {
+      let errorBody = JSON.parse(error._body);
+      Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);          
     });
   }
 }

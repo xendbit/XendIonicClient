@@ -44,7 +44,7 @@ export class Constants {
 
     static SEND_2FA_CODE_URL = Constants.SERVER_URL + "user/send-2fa"
     static GET_EXCHANGE_URL = Constants.SERVER_URL + "exchange/";
-    static GET_USD_RATE_URL = Constants.SERVER_URL + "exchange/usdrate/";
+    static GET_USD_RATE_URL = Constants.SERVER_URL + "exchange/usd-rate/";
     static GET_EXCHANGE_RATE_URL = Constants.SERVER_URL + "exchange/xrate/";
     static SELL_TRADE_URL = Constants.SERVER_URL + "exchange/sell-trade";
     static BUY_TRADE_URL = Constants.SERVER_URL + "exchange/buy-trade";
@@ -63,7 +63,7 @@ export class Constants {
     static UPDATE_USER_INFO_URL = Constants.SERVER_URL + "user/update";
     static RESTORE_USER_URL = Constants.SERVER_URL + "user/restore";
     static UPGRADE_USER_URL = Constants.SERVER_URL + "user/upgrade";
-    static GET_TX_URL = Constants.SERVER_URL + "user/transactions/";
+    static GET_BALANCE_URL = Constants.SERVER_URL + "user/balance";
     static SEND_URL = Constants.SERVER_URL + "user/send-coins";
     static LOGIN_URL = Constants.SERVER_URL + "user/login";
     static SEND_CONFIRMATION_EMAIL_URL = Constants.SERVER_URL + "user/send-confirmation-email";
@@ -74,7 +74,7 @@ export class Constants {
     static SEND_2_BANK_URL = Constants.SERVER_URL + "send2bank/new";
     static GET_SEND_2_BANK_REQUEST_URL = Constants.SERVER_URL + "send2bank/tx/";
 
-    static GET_NGNC_BALANCE_URL = Constants.SERVER_URL + "user/#{userId}/get-ngnc-balance";
+    static GET_NGNC_BALANCE_URL = Constants.SERVER_URL + "user/ngnc-balance/#{userId}";
     static WITHDRAW_NGNC_URL = Constants.SERVER_URL + "user/withdraw-ngnc";
 
     static TRADE_URL = Constants.SERVER_URL + "exchange/trade";

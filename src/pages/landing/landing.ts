@@ -40,7 +40,7 @@ export class LandingPage {
   }
 
   gotongnc() {
-    this.tab.select(3).then(() => {console.log("xNGN Tabbed")});
+    this.tab.select(3).then(() => { console.log("xNGN Tabbed") });
   }
 
   ionViewDidEnter() {
@@ -69,7 +69,7 @@ export class LandingPage {
     for (let w of this.wallets) {
       console.log(w);
       let wallet: Wallet = Constants.getWalletFormatted(w);
-      this.getTransactions(wallet);
+      this.getBalance(wallet);
     }
   }
 
@@ -77,29 +77,25 @@ export class LandingPage {
     let userId = this.ls.getItem("userId");
     let url = Constants.GET_NGNC_BALANCE_URL.replace("#{userId}", userId);
     this.http.get(url, Constants.getWalletHeader('BTC')).map(res => res.json()).subscribe(responseData => {
-      this.ngncBalance = responseData.result;
+      this.ngncBalance = responseData.data;
     });
   }
 
-  getTransactions(wallet: Wallet) {
+  getBalance(wallet: Wallet) {
     console.log("Getting Transactions for " + wallet);
-    let postData = {
-      password: this.ls.getItem("password"),
-      networkAddress: wallet.chainAddress,
-      emailAddress: this.ls.getItem("emailAddress")
-    };
 
-    this.http.post(Constants.GET_TX_URL, postData, Constants.getWalletHeader(wallet.chain))
-      .map(res => res.json())
-      .subscribe(responseData => {
-        if (responseData.response_code === 0) {
-          wallet.confirmedAccountBalance = responseData.result.balance;
-          wallet.escrow = responseData.result.escrow;
-          this.loadRate(wallet);
-        }
-      }, _error => {
-        Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
-      });
+    const userId = this.ls.getItem("userId");
+    const url = Constants.GET_BALANCE_URL + "/" + userId + "/" + wallet.chain;
+    this.http.get(url).map(res => res.json()).subscribe(responseData => {
+      if (responseData.status === 'success') {
+        wallet.confirmedAccountBalance = responseData.data.balance;
+        wallet.escrow = responseData.data.escrow;
+        this.loadRate(wallet);
+      }
+    }, error => {
+      let errorBody = JSON.parse(error._body);
+      Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);
+    });
   }
 
 
@@ -110,7 +106,7 @@ export class LandingPage {
     Console.log(url);
 
     this.http.get(url, Constants.getWalletHeader(working_wallet)).map(res => res.json()).subscribe(responseData => {
-      wallet.usdRate = +responseData.result.usdRate;
+      wallet.usdRate = +responseData.data.usdRate;
       wallet.usdBalance = wallet.usdRate * wallet.confirmedAccountBalance;
 
       console.log("Loaded Wallets", this.loadedWallets);
@@ -126,8 +122,9 @@ export class LandingPage {
         this.ls.setItem("loadedWallets", this.loadedWallets);
         this.ls.setItem("totalAssets", this.totalAssets);
       }
-    }, _error => {
-      //doNothing
+    }, error => {
+      let errorBody = JSON.parse(error._body);
+      Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);    
     });
   }
 

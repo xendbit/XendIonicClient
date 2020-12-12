@@ -359,10 +359,10 @@ export class BuyBitPage {
       this.loading.dismiss();
       if (responseData.response_text === 'success') {
         this.loadSellers();
-        Constants.showLongerToastMessage('Order Successfully Completed. Reload to see your new balance', this.toastCtrl);
+        Constants.showPersistentToastMessage('Order Successfully Completed. Reload to see your new balance', this.toastCtrl);
       } else {
         this.loadSellers();
-        Constants.showLongerToastMessage(responseData.result, this.toastCtrl);
+        Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
       }
     }, error => {
       this.loading.dismiss();

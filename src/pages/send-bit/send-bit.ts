@@ -254,7 +254,7 @@ export class SendBitPage {
       if (responseData.response_text === "success") {
         this.sendCoinsSuccess();
       } else {
-        Constants.showLongerToastMessage('Error Sending Coin: ' + responseData.result, this.toastCtrl);
+        Constants.showPersistentToastMessage('Error Sending Coin: ' + responseData.result, this.toastCtrl);
         this.sendCoinsError();
       }
     }, _error => {
@@ -279,12 +279,12 @@ export class SendBitPage {
   scanCode() {
     this.barcodeScanner.scan().then((barcodeData) => {
       if (barcodeData.cancelled) {
-        Constants.showLongerToastMessage('Barcode scanner cancelled', this.toastCtrl);
+        Constants.showPersistentToastMessage('Barcode scanner cancelled', this.toastCtrl);
       } else {
         this.sendBitForm.controls.networkAddress.setValue(barcodeData.text);
       }
     }, (_err) => {
-      Constants.showLongerToastMessage('Error launching barcode scanner', this.toastCtrl);
+      Constants.showPersistentToastMessage('Error launching barcode scanner', this.toastCtrl);
     });
   }
 }
