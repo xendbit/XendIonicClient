@@ -1,14 +1,14 @@
-import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, Loading, LoadingController, AlertController, IonicPage } from 'ionic-angular';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
-
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams, ToastController } from 'ionic-angular';
+import 'rxjs/add/operator/map';
 import { StorageService } from '../utils/storageservice';
 import { Wallet } from '../utils/wallet';
+import { Constants } from './../utils/constants';
+
 
 /*
   Generated class for the SendBit page.
@@ -129,8 +129,12 @@ export class SendBitPage {
       xendFees = maxfInTokens;
     }
 
-    let blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
+    let blockFees = this.wallet.fees.minBlockFees * this.sliderValue;    
     let canSend = balance - blockFees - xendFees;
+
+    if(this.wallet.fees.feesChain !== undefined) {
+      canSend = balance;
+    }
 
     //Correct for rounding error
     //canSend = canSend - 0.00015;
@@ -220,9 +224,14 @@ export class SendBitPage {
     console.log(xendFees);
     console.log(blockFees);
 
+    let plusFees = amountToSend + blockFees + xendFees;
+    if(this.wallet.fees.feesChain !== undefined) {
+      plusFees = amountToSend;
+    }
+
     if (amountToSend === 0) {
       Constants.showPersistentToastMessage("Amount must be greater than 0", this.toastCtrl);
-    } else if (amountToSend + blockFees + xendFees > balance) {
+    } else if (plusFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
     } else if (toBitcoinAddress === '') {
       Constants.showPersistentToastMessage(invalidAddressMessage, this.toastCtrl);
@@ -259,7 +268,7 @@ export class SendBitPage {
       }
     }, _error => {
       this.loading.dismiss();
-      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+      Constants.showPersistentToastMessage("Your tokens have been sent. Recipient will recieve them once it's confirmed", this.toastCtrl);
     });
   }
 
@@ -267,7 +276,7 @@ export class SendBitPage {
     this.disableButton = false;
     this.sendBitForm.reset();
 
-    Constants.showPersistentToastMessage("Your tokens have been sent successfully.", this.toastCtrl);
+    Constants.showPersistentToastMessage("Your tokens have been sent. Recipient will recieve them once it's confirmed", this.toastCtrl);
     this.navCtrl.pop();
   }
 

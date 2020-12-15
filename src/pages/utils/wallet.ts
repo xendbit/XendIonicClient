@@ -16,6 +16,7 @@ export class Fees {
     constructor() {
 
     }
+    public minBuyAmount = 0;
     public minBlockFees = 0;
     public minXendFees = 0;
     public maxXendFees = 0;
@@ -26,4 +27,5 @@ export class Fees {
     public tickerSymbol: string;
     public chainAddress: string;
     public chain: string;
+    public feesChain: string;
 }

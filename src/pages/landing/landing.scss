@@ -6,7 +6,8 @@ page-landing {
 
     .bg {
         border-bottom: solid thin black !important;
-        line-height: 2.0;
+        line-height: 1.5;
+        height: 65px;
     }
 
     .header-card {
@@ -94,6 +95,11 @@ page-landing {
     .list-ios ion-item-sliding {
         border: none;
         background: none;
+    }
+
+    .depositButtonFab {
+        width: 15rem;
+        border-radius: 0% !important;
     }
 
     .depositButton {

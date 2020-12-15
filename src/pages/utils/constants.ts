@@ -326,6 +326,9 @@ export class Constants {
       fees.tickerSymbol = wallet.tickerSymbol;
       fees.chain = wallet.chain;
       fees.chainAddress = wallet.chainAddress;
+      fees.minBuyAmount = w['fees']['minBuyAmount'];
+      fees.feesChain = w['fees']['feesChain'];
+
       wallet.fees = fees;
 
       return wallet;

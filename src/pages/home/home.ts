@@ -58,10 +58,10 @@ export class HomePage {
 
   constructor(public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public toastCtrl: ToastController, public localNotifications: LocalNotifications, public actionSheetCtrl: ActionSheetController) {
     this.clipboard = new Clipboard();
-    this.ls = Constants.storageService;    
+    this.ls = Constants.storageService;
     Constants.properties['home'] = this;
     this.wtv = Constants.WORKING_TICKER_VALUE;
-    this.wallet = Constants.WALLET;    
+    this.wallet = Constants.WALLET;
   }
 
   loadRate() {
@@ -120,45 +120,47 @@ export class HomePage {
     let symbol = this.wallet.chain;
     let url = Constants.CHART_URL.replace("{{symbol}}", tickerSymbol.toUpperCase());
     this.http.get(url).map(res => res.json()).subscribe(data => {
-      let dates = Object.keys(data['Time Series (Digital Currency Daily)']);
-      dates.sort();
-      let jsonData = data['Time Series (Digital Currency Daily)'];
-      data = [];
-      for (let date of dates) {
-        let dateLong = new Date(date).getTime();
-        let value = +jsonData[date]["4a. close (USD)"];
-        let singleValue = [dateLong, value];
-        data.push(singleValue);
-      }
+      if (data["Error Message"] === undefined) {
+        let dates = Object.keys(data['Time Series (Digital Currency Daily)']);
+        dates.sort();
+        let jsonData = data['Time Series (Digital Currency Daily)'];
+        data = [];
+        for (let date of dates) {
+          let dateLong = new Date(date).getTime();
+          let value = +jsonData[date]["4a. close (USD)"];
+          let singleValue = [dateLong, value];
+          data.push(singleValue);
+        }
 
-      Highcharts.stockChart('container', {
-        chart: {
-          alignTicks: false
-        },
-        rangeSelector: {
-          selected: 1
-        },
-        title: {
-          text: symbol + ' Price Chart'
-        },
-        series: [{
-          type: 'line',
-          name: symbol + ' Price Chart',
-          data: data,
-          tooltip: {
-            valueDecimals: 2
+        Highcharts.stockChart('container', {
+          chart: {
+            alignTicks: false
           },
-          dataGrouping: {
-            units: [[
-              'week', // unit name
-              [1] // allowed multiples
-            ], [
-              'month',
-              [1, 2, 3, 4, 6]
-            ]]
-          }
-        }]
-      });
+          rangeSelector: {
+            selected: 1
+          },
+          title: {
+            text: symbol + ' Price Chart'
+          },
+          series: [{
+            type: 'line',
+            name: symbol + ' Price Chart',
+            data: data,
+            tooltip: {
+              valueDecimals: 2
+            },
+            dataGrouping: {
+              units: [[
+                'week', // unit name
+                [1] // allowed multiples
+              ], [
+                'month',
+                [1, 2, 3, 4, 6]
+              ]]
+            }
+          }]
+        });
+      }
     }, _error => {
       Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
       Console.log("Can not pull data from server");
