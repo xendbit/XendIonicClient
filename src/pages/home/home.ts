@@ -55,6 +55,7 @@ export class HomePage {
   fiatSellOrderText = 'Fiat Sell-Order';
   wtv = 'btc';
   wallet: Wallet;
+  hasNgnPair = false;
 
   constructor(public modalCtrl: ModalController, public alertCtrl: AlertController, public platform: Platform, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public toastCtrl: ToastController, public localNotifications: LocalNotifications, public actionSheetCtrl: ActionSheetController) {
     this.clipboard = new Clipboard();
@@ -69,6 +70,11 @@ export class HomePage {
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/BUY';
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.btcToNgn = responseData.result.ngnRate;
+      if(this.btcToNgn < 0) {
+        this.hasNgnPair = false;
+      } else {
+        this.hasNgnPair = true;
+      }
     }, error => {
       //doNothing
     });

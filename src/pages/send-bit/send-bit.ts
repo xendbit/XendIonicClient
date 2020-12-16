@@ -132,7 +132,8 @@ export class SendBitPage {
     let blockFees = this.wallet.fees.minBlockFees * this.sliderValue;    
     let canSend = balance - blockFees - xendFees;
 
-    if(this.wallet.fees.feesChain !== undefined) {
+    console.log("Fees Chain: " + this.wallet.fees.feesChain);
+    if(this.wallet.fees.feesChain !== null) {
       canSend = balance;
     }
 
@@ -225,7 +226,7 @@ export class SendBitPage {
     console.log(blockFees);
 
     let plusFees = amountToSend + blockFees + xendFees;
-    if(this.wallet.fees.feesChain !== undefined) {
+    if(this.wallet.fees.feesChain !== null) {
       plusFees = amountToSend;
     }
 

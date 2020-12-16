@@ -66,7 +66,7 @@
             <ion-avatar item-start>
               <img style="width: 60px; height: 60px;" src="https://xendbit.com/coins/{{wallet.tickerSymbol}}.png" />
             </ion-avatar>
-            <span class="big">{{wallet.symbol}} {{wallet.confirmedAccountBalance | number: '.2-5'}}</span>
+            <span class="big-color">{{wallet.symbol}} {{wallet.confirmedAccountBalance | number: '.2-5'}}</span>
             <br style="color: orange;" />
             <span class="small">{{wallet.usdRate | currency:'USD' : 'symbol' : '.2-2'}} per {{wallet.chain}}</span>            
             <span class="big-color" item-end>{{wallet.usdBalance | currency:'USD' : 'symbol' : '.2-2'}}</span>

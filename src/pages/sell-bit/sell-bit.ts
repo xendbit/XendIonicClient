@@ -135,7 +135,7 @@ export class SellBitPage {
     const externalTradingFees = this.wallet.fees.percExternalTradingFees * balance;
     let plusFees = coinAmount + this.xendFees + blockFees + externalTradingFees;
     
-    if(this.wallet.fees.feesChain !== undefined) {
+    if(this.wallet.fees.feesChain !== null) {
       plusFees -= blockFees;
     }
 
@@ -262,7 +262,7 @@ export class SellBitPage {
     const blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
     let canSend = balance - blockFees - xendFees - externalTradingFees - 0.00001;
 
-    if(this.wallet.fees.feesChain !== undefined) {
+    if(this.wallet.fees.feesChain !== null) {
       canSend += blockFees;
     }
 
