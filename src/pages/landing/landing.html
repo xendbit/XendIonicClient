@@ -22,11 +22,6 @@
                     {{totalAssets | currency: 'USD' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
                   </ion-col>
                 </ion-row>
-                <ion-row>
-                  <ion-col class="assets-value" (click)="reloadWallets()">
-                    <ion-icon name="refresh" color="xend" class="assets-icon"></ion-icon>
-                  </ion-col>      
-                </ion-row>
               </ion-card-content>
             </ion-card>
           </ion-col>
@@ -40,11 +35,6 @@
                   <ion-col class="assets-value" (click)="getNgncBalance()">
                     {{ngncBalance | currency: '&#8358;' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
                   </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col class="assets-value" (click)="getNgncBalance()">
-                    <ion-icon name="refresh" color="xend" class="assets-icon"></ion-icon>
-                  </ion-col>        
                 </ion-row>
               </ion-card-content>
             </ion-card>
