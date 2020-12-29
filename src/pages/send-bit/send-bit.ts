@@ -131,6 +131,10 @@ export class SendBitPage {
 
     let blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
     let canSend = balance - blockFees - xendFees;
+    console.log(xendFees);
+    console.log(blockFees);
+    console.log(balance);
+    console.log(canSend );
 
     //Correct for rounding error
     //canSend = canSend - 0.00015;
@@ -147,8 +151,8 @@ export class SendBitPage {
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + "/BUY";
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.usdRate = responseData.result.usdRate;
-      this.btcToNgn = responseData.result.ngnRate;
+      this.usdRate = responseData.data.usdRate;
+      this.btcToNgn = responseData.data.ngnRate;
       this.usdToNgnRate = this.btcToNgn / this.usdRate;
       this.howMuchCanISend();
     }, _error => {
@@ -240,7 +244,8 @@ export class SendBitPage {
       data['xendFees'] = xendFees;
       data['emailAddress'] = this.ls.getItem("emailAddress");
       data['password'] = this.ls.getItem("password");
-      this.disableButton = true;
+      data['fromCoin'] = this.wallet.chain;
+      this.disableButton = false;
       this.sendCoins(data);
     }    
   }
@@ -251,10 +256,10 @@ export class SendBitPage {
 
     this.http.post(url, data, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.loading.dismiss();
-      if (responseData.response_text === "success") {
+      if (responseData.status === "success") {
         this.sendCoinsSuccess();
       } else {
-        Constants.showPersistentToastMessage('Error Sending Coin: ' + responseData.result, this.toastCtrl);
+        Constants.showPersistentToastMessage('Error Sending Coin: ' + responseData.message, this.toastCtrl);
         this.sendCoinsError();
       }
     }, _error => {

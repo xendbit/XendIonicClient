@@ -190,7 +190,7 @@ export class HomePage {
     }
 
     const userId = this.ls.getItem("userId");
-    const url = Constants.GET_BALANCE_URL + "/" + userId + "/" + this.wallet;
+    const url = Constants.GET_BALANCE_URL + "/" + userId + "/" + this.wallet.chain;
 
     this.http.get(url)
       .map(res => res.json())
