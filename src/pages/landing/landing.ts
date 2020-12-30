@@ -112,7 +112,11 @@ export class LandingPage {
       console.log("Loaded Wallets", this.loadedWallets);
       console.log("Loading Wallets", this.loadingWallets);
       if (!this.alreadyAdded(wallet)) {
-        this.loadingWallets.push(wallet);
+        if(wallet.confirmedAccountBalance > 0) {
+          this.loadingWallets.unshift(wallet);
+        } else {
+          this.loadingWallets.push(wallet);
+        }
         this.loadingTotalAssets += wallet.usdBalance;
       }
 

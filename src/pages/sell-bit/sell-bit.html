@@ -29,7 +29,7 @@
     </ion-card-content>
   </ion-card>
 
-  <div padding>
+  <!-- <div padding>
     <ion-segment [(ngModel)]="orderType">
       <ion-segment-button value="MO" style="background: white; color:  rgba(141, 55, 239, 0.7) ;">
         Market Order
@@ -42,7 +42,7 @@
       <button ion-button full medium color="orange" (click)="showOrderTypeInfo();" icon-right>More Info...
         <ion-icon name="information-circle"></ion-icon></button>
     </ion-item>
-  </div>
+  </div> -->
 
   <div [ngSwitch]="orderType">
     <ion-card *ngSwitchCase="'MO'" style="background:white; border-radius: 1rem;">

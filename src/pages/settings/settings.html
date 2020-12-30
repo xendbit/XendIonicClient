@@ -21,7 +21,8 @@
                     <ion-label floating>{{passwordText}}</ion-label>
                     <ion-input type="password" formControlName="password"></ion-input>
                 </ion-item>
-                <ion-buttons class="bordered" style="margin-bottom: 5rem; width: 70%; display: flex; margin-left: 4rem;">
+                <ion-buttons class="bordered"
+                    style="margin-bottom: 5rem; width: 70%; display: flex; margin-left: 4rem;">
                     <button ion-button full round color="orange" (click)="showMnemonic();" icon-right>{{revealText}}
                         <ion-icon name="log-out"></ion-icon>
                     </button>
@@ -29,14 +30,14 @@
             </form>
         </ion-card-content>
     </ion-card>
-    <div>
+    <!-- <div>
         <ion-grid>
             <button color="orange" ion-button icon-right full round (click)="showMyInfo();" icon-right>My Info
                 <ion-icon name="person"></ion-icon>
             </button>
         </ion-grid>
-    </div>
-    <div>
+    </div> -->
+    <!-- <div>
         <ion-grid>
             <ion-list>
                 <ion-item>
@@ -45,33 +46,13 @@
                 </ion-item>
               </ion-list>
         </ion-grid>
-    </div>
-
-    <!-- <ion-card *ngIf="canSwitchWallet">
-        <ion-card-content>
-            <button color="xend" ion-button icon-right full round (click)="switchWallet();">Switch Wallet
-                <ion-icon name="switch"></ion-icon>
-            </button>
-        </ion-card-content>
-    </ion-card> -->
-
-    <!-- <ion-card *ngIf="!isBeneficiary">
-        <ion-card-header>Become a Beneficiary</ion-card-header>
-        <ion-card-content>
-            <p>
-                If you accept to be a beneficiary, Donors will be able to view all your information.
-            </p>
-            <button ion-button full round color="dark" (click)="becomeBeneficiary();" icon-right>Become A Beneficiary
-                <ion-icon name="people"></ion-icon>
-            </button>
-        </ion-card-content>
-    </ion-card> -->
+    </div> -->
 
     <div *ngIf="canLogout">
-<ion-grid>
-    <button ion-button full round color="fingerprint" (click)="logout();" icon-right>{{logoutText}}
-        <ion-icon name="log-out"></ion-icon>
-    </button>
-</ion-grid>
+        <ion-grid>
+            <button ion-button full round color="fingerprint" (click)="logout();" icon-right>{{logoutText}}
+                <ion-icon name="log-out"></ion-icon>
+            </button>
+        </ion-grid>
     </div>
 </ion-content>

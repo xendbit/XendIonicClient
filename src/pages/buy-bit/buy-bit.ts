@@ -73,7 +73,7 @@ export class BuyBitPage {
   }
 
   ionViewDidEnter() {
-    this.loadSellers();
+    //this.loadSellers();
     this.loadRate();
   }
 
@@ -84,8 +84,9 @@ export class BuyBitPage {
     Console.log(url);
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.usdRate = responseData.result.usdRate;
-      this.btcToNgn = responseData.result.ngnRate;
+      Console.log(responseData);
+      this.usdRate = responseData.data.usdRate;
+      this.btcToNgn = responseData.data.ngnRate;
       this.usdToNgnRate = this.btcToNgn / this.usdRate;
       this.buyForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
       this.buyForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
@@ -112,8 +113,18 @@ export class BuyBitPage {
         xendFees = maxfInTokens;
       }
     
+      console.log(`numBTC * this.wallet.fees.percExternalTradingFees ${numBTC * this.wallet.fees.percExternalTradingFees}`);
+      console.log(`this.wallet.fees.externalWithdrawalFees ${this.wallet.fees.externalWithdrawalFees}`);
+      console.log(`xendFees ${xendFees}`);
+      console.log(`numBTC ${numBTC}`);
       numBTC = numBTC - (numBTC * this.wallet.fees.percExternalTradingFees) - this.wallet.fees.externalWithdrawalFees - xendFees;
-      this.buyForm.controls.amountToGet.setValue(numBTC.toFixed(7));
+      //console.log(this.wallet.fees);
+      console.log(numBTC);
+      if(numBTC > 0) {
+        this.buyForm.controls.amountToGet.setValue(numBTC.toFixed(4));
+      } else {
+        this.buyForm.controls.amountToGet.setValue(0);
+      }
     }
   }
 
@@ -203,8 +214,8 @@ export class BuyBitPage {
       Console.log(url);
 
       this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-        this.usdRate = responseData.result.usdRate;
-        this.btcToNgn = responseData.result.ngnRate;
+        this.usdRate = responseData.data.usdRate;
+        this.btcToNgn = responseData.data.ngnRate;
         this.usdToNgnRate = this.btcToNgn / this.usdRate;
         this.buyForm.controls.pricePerBTC.setValue(this.usdRate.toFixed(4));
         this.buyForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
@@ -248,7 +259,7 @@ export class BuyBitPage {
 
         this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
           this.loading.dismiss();
-          if (responseData.response_text === "success") {
+          if (responseData.status === "success") {
             this.buyForm.reset();
             this.loadRate();
             Constants.showPersistentToastMessage("Your buy order has been placed.", this.toastCtrl);
@@ -256,9 +267,10 @@ export class BuyBitPage {
           } else {
             Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
           }
-        }, _error => {
+        }, error => {
           this.loading.dismiss();
-          Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+          let errorBody = JSON.parse(error._body);
+          Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);    
         });
       }, _error => {
         //doNothing

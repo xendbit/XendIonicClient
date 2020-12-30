@@ -72,7 +72,7 @@ export class MyOrdersPage {
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/BUY';
 
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.btcToNgn = responseData.result.ngnRate;
+      this.btcToNgn = responseData.data.ngnRate;
     }, error => {
       //doNothing
     });
@@ -170,11 +170,12 @@ export class MyOrdersPage {
 
     let postData = {
       emailAddress: this.ls.getItem("emailAddress"),
-      password: this.ls.getItem("password")
+      password: this.ls.getItem("password"),
+      wallet: Constants.WORKING_WALLET
     };
 
     this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.sellers = responseData.result;
+      this.sellers = responseData.data;
       this.loading.dismiss();
       if (this.currencyPair === undefined || this.currencyPair === "") {
         this.currencyPair = Constants.WORKING_WALLET + " -> Naira";
