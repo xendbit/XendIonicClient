@@ -22,11 +22,6 @@
                     {{totalAssets | currency: 'USD' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
                   </ion-col>
                 </ion-row>
-                <ion-row>
-                  <ion-col class="assets-value" (click)="reloadWallets()">
-                    <ion-icon name="refresh" color="xend" class="assets-icon"></ion-icon>
-                  </ion-col>      
-                </ion-row>
               </ion-card-content>
             </ion-card>
           </ion-col>
@@ -41,11 +36,6 @@
                     {{ngncBalance | currency: '&#8358;' : 'symbol' : '.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
                   </ion-col>
                 </ion-row>
-                <ion-row>
-                  <ion-col class="assets-value" (click)="getNgncBalance()">
-                    <ion-icon name="refresh" color="xend" class="assets-icon"></ion-icon>
-                  </ion-col>        
-                </ion-row>
               </ion-card-content>
             </ion-card>
           </ion-col>
@@ -54,23 +44,24 @@
   </ion-card>
 
   <ion-item style="text-align: left !important;">
-    <p class="coins">Coins</p>
+    <p class="coins">Assets</p>
+    <p style="color: #ddd; font-style: italic;">Select  an asset below to trade with xNGN</p>
   </ion-item>
   <ion-card style="box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22);">
     <ion-card-content>
 
       <ion-list>
-        <ion-item-group *ngFor="let wallet of loadedWallets">          
+        <div *ngFor="let wallet of loadedWallets">          
           <ion-item class="bg" (click)="openHomePage(wallet)">
             <ion-avatar item-start>
               <img style="width: 60px; height: 60px;" src="https://xendbit.com/coins/{{wallet.tickerSymbol}}.png" />
             </ion-avatar>
-            <span class="big">{{wallet.symbol}} {{wallet.confirmedAccountBalance | number: '.2-5'}}</span>
+            <span class="big-color">{{wallet.symbol}} {{wallet.confirmedAccountBalance | number: '.2-5'}}</span>
             <br style="color: orange;" />
-            <span class="small">{{wallet.usdRate | currency:'USD' : 'symbol' : '.2-4'}} per {{wallet.text}}</span>            
+            <span class="small">{{wallet.usdRate | currency:'USD' : 'symbol' : '.2-2'}} per {{wallet.chain}}</span>            
             <span class="big-color" item-end>{{wallet.usdBalance | currency:'USD' : 'symbol' : '.2-2'}}</span>
           </ion-item>          
-        </ion-item-group>
+        </div>
       </ion-list>
       <ion-item *ngIf="isEmpty();">
         No Assets. Click Buy Above to buy some assets
@@ -78,7 +69,11 @@
     </ion-card-content>
   </ion-card>
 
-  <button class="depositButton" color="orange" ion-button full medium icon-right (click)="gotongnc()"><p style="color: darkslategray;"> Deposit Naira (xNGN) </p>
+  <!-- <button class="depositButton" color="orange" ion-button full medium icon-right (click)="gotongnc()"><p style="color: darkslategray;"> Deposit Naira (xNGN) </p>
     <ion-icon name="money"></ion-icon>
-  </button>
+  </button> -->
+  <ion-fab right top>
+    <button class="depositButtonFab" ion-fab (click)="gotongnc()" color="fingerprint">Get xNGN
+    </button>
+  </ion-fab>
 </ion-content>

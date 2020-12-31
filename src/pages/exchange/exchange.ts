@@ -108,8 +108,8 @@ export class ExchangePage {
       if (showLoading) {
         this.loading.dismiss();
       }
-      this.btcToNgn = responseData.result.ngnRate;
-      this.usdRate = responseData.result.usdRate;
+      this.btcToNgn = responseData.data.ngnRate;
+      this.usdRate = responseData.data.usdRate;
 
       if (showLoading) {
         this.calculateHowMuchToRecieve();

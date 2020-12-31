@@ -37,13 +37,13 @@
       </ngx-qrcode>
       <ion-row>
         <ion-col col-4>
-          <button color="orange" ion-button full medium (click)="exchange('Sell');"
+          <button [disabled]="!hasNgnPair" color="orange" ion-button full medium (click)="exchange('Sell');"
             icon-right>{{cryptoSellOrderText}}
             <ion-icon name="fastforward"></ion-icon>
           </button>
         </ion-col>
         <ion-col col-4>
-          <button color="orange" ion-button full medium (click)="exchange('Buy');"
+          <button [disabled]="!hasNgnPair" color="orange" ion-button full medium (click)="exchange('Buy');"
             icon-right>{{cryptoBuyOrderText}}
             <ion-icon name="rewind"></ion-icon>
           </button>

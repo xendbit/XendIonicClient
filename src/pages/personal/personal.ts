@@ -169,7 +169,7 @@ export class PersonalPage {
       .map(res => res.json())
       .subscribe(responseData => {
         if (responseData.response_text === "success") {
-          let user = responseData.result.user;
+          let user = responseData.data.user;
           Constants.properties['loggedInUser'] = user;
           this.registerForm.controls.email.setValue(user.emailAddress);
           this.registerForm.controls.phoneNumber.setValue(user.kyc.phoneNumber);

@@ -52,7 +52,7 @@ export class SettingsPage {
     this.updgradeAccountText = "Upgrade Account";
     this.showMnemonicText = "Show my Passphrase";
     this.revealText = "Reveal";
-    this.canSwitchWallet = Constants.properties['home'] !== undefined;
+    this.canSwitchWallet = Constants.properties['home'] !== null;
     this.ls = Constants.storageService;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     let app = this;
@@ -76,7 +76,7 @@ export class SettingsPage {
     if (StorageService.ACCOUNT_TYPE === "ADVANCED") {
       this.isAdvanced = true;
     }
-    this.canSwitchWallet = Constants.properties['home'] !== undefined;
+    this.canSwitchWallet = Constants.properties['home'] !== null;
     this.canLogout = !this.platform.is('ios');
     this.afterUpgradeWarningText = Constants.AFTER_UPGRADE_WARNING;
     this.accountType = StorageService.ACCOUNT_TYPE;

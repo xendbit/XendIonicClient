@@ -133,6 +133,11 @@ export class SellBitPage {
     let coinAmount = +sb.amountToSpend;
     const blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
     const externalTradingFees = this.wallet.fees.percExternalTradingFees * balance;
+    let plusFees = coinAmount + this.xendFees + blockFees + externalTradingFees;
+    
+    if(this.wallet.fees.feesChain !== null) {
+      plusFees -= blockFees;
+    }
 
     console.log(coinAmount + this.xendFees + blockFees);
     console.log(balance);
@@ -143,7 +148,7 @@ export class SellBitPage {
     } else if (password !== this.ls.getItem("password")) {
       Constants.showPersistentToastMessage("Please enter a valid password.", this.toastCtrl);
       return;
-    } else if (coinAmount + this.xendFees + blockFees + externalTradingFees > balance) {
+    } else if (plusFees > balance) {
       Constants.showPersistentToastMessage("Insufficient Coin Balance", this.toastCtrl);
       return;
     }
@@ -257,6 +262,10 @@ export class SellBitPage {
     const externalTradingFees = this.wallet.fees.percExternalTradingFees * balance;
     const blockFees = this.wallet.fees.minBlockFees * this.sliderValue;
     let canSend = balance - blockFees - xendFees - externalTradingFees - 0.00001;
+
+    if(this.wallet.fees.feesChain !== null) {
+      canSend += blockFees;
+    }
 
     if (canSend < 0) {
       canSend = 0;

@@ -51,7 +51,7 @@ export class BuyBitPage {
 
 
   constructor(public formBuilder: FormBuilder, public loadingCtrl: LoadingController, public http: Http, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController, private dialogs: Dialogs) {
-    this.wallet = Constants.WALLET;    
+    this.wallet = Constants.WALLET;
 
     this.loadRate();
 
@@ -98,18 +98,18 @@ export class BuyBitPage {
   }
 
   calculateHowMuchToRecieve() {
-    this.rate = this.buyForm.value.pricePerBTC;  
+    this.rate = this.buyForm.value.pricePerBTC;
     const amount = +this.buyForm.value.amountToSpend - this.wallet.fees.externalDepositFees;
     if (this.rate !== 0 && amount !== 0 && this.btcToNgn !== 0) {
-      let numBTC = amount * (1/this.btcToNgn);
+      let numBTC = amount * (1 / this.btcToNgn);
       let xendFees = numBTC * this.wallet.fees.percXendFees;
       let minxfInTokens = this.wallet.fees.minXendFees / this.usdRate;
       let maxfInTokens = this.wallet.fees.maxXendFees / this.usdRate;
       if (xendFees < minxfInTokens) {
         xendFees = minxfInTokens
       }
-  
-      if(xendFees > maxfInTokens) {
+
+      if (xendFees > maxfInTokens) {
         xendFees = maxfInTokens;
       }
     
@@ -186,6 +186,14 @@ export class BuyBitPage {
 
   buyBit(seller) {
     Console.log("buyBit");
+    let sb = this.buyForm.value;
+    let amountToGet = +sb.amountToGet;
+
+    if (this.wallet.fees.minBuyAmount > amountToGet) {
+      Constants.showPersistentToastMessage("Amount is too low. Minimum amount you can buy is " + this.wallet.fees.minBuyAmount, this.toastCtrl);
+      return;
+    }
+
     if (this.orderType === 'MO') {
       let sb = this.buyForm.value;
       let password = sb.password;
@@ -221,7 +229,7 @@ export class BuyBitPage {
         this.buyForm.controls.usdRate.setValue(this.usdToNgnRate.toFixed(4));
 
         this.calculateHowMuchToRecieve();
-        
+
         let sb = this.buyForm.value;
         let amountToGet = +sb.amountToGet;
         let password = sb.password;
@@ -283,30 +291,30 @@ export class BuyBitPage {
     let amountToGet = +sb.amountToGet;
     let amountToSpend = +sb.amountToSpend;
 
-      let message = 'Are you sure you want to buy '
-        + Constants.numberWithCommas(amountToSpend) + ' NGN worth of '
-        + Constants.WORKING_WALLET + '? You will recieve an estimated '
-        + amountToGet + ' ' + Constants.WORKING_WALLET;  
-      let alert = this.alertCtrl.create({
-        title: 'Confirm Buy',
-        message: message,
-        buttons: [
-          {
-            text: 'Buy',
-            handler: () => {
-              this.continue();
-            }
-          },
-          {
-            text: "Don't Buy",
-            role: 'cancel',
-            handler: () => {
-              //doNothing
-            }
+    let message = 'Are you sure you want to buy '
+      + Constants.numberWithCommas(amountToSpend) + ' NGN worth of '
+      + Constants.WORKING_WALLET + '? You will recieve an estimated '
+      + amountToGet + ' ' + Constants.WORKING_WALLET;
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Buy',
+      message: message,
+      buttons: [
+        {
+          text: 'Buy',
+          handler: () => {
+            this.continue();
           }
-        ]
-      });
-      alert.present();
+        },
+        {
+          text: "Don't Buy",
+          role: 'cancel',
+          handler: () => {
+            //doNothing
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   presentAlert(seller) {
@@ -383,7 +391,7 @@ export class BuyBitPage {
     })
   }
 
-  showOrderTypeInfo() {    
+  showOrderTypeInfo() {
     let title = this.orderType === 'MO' ? 'Market Order' : 'Order Book'
     let moText = 'Market Order: Selling your coins immediately on the exchange using the current market price.';
     let p2pText = 'Oderbook Orders "Allows you to place a sell order for your asset';
