@@ -100,7 +100,6 @@ export class LandingPage {
 
 
   loadRate(wallet: Wallet) {
-    console.log("Loading Rates for " + wallet);
     let working_wallet = wallet.chain;
     let url = Constants.GET_USD_RATE_URL + working_wallet + '/BUY';
     Console.log(url);
@@ -109,8 +108,6 @@ export class LandingPage {
       wallet.usdRate = +responseData.data.usdRate;
       wallet.usdBalance = wallet.usdRate * wallet.confirmedAccountBalance;
 
-      console.log("Loaded Wallets", this.loadedWallets);
-      console.log("Loading Wallets", this.loadingWallets);
       if (!this.alreadyAdded(wallet)) {
         if(wallet.confirmedAccountBalance > 0) {
           this.loadingWallets.unshift(wallet);
@@ -122,9 +119,9 @@ export class LandingPage {
 
       if (this.loadingWallets.length === this.numberOfWallets) {
         this.loadedWallets = this.loadingWallets;
-        this.totalAssets = this.loadingTotalAssets;
+        this.totalAssets = this.loadingTotalAssets;        
         this.ls.setItem("loadedWallets", this.loadedWallets);
-        this.ls.setItem("totalAssets", this.totalAssets);
+        this.ls.setItem("totalAssets", this.totalAssets);        
       }
     }, error => {
       let errorBody = JSON.parse(error._body);

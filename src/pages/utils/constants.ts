@@ -42,7 +42,8 @@ export class Constants {
     static GET_BUY_TX_URL = Constants.SERVER_URL + "buy/tx/";
     static SEND_OTP_URL = Constants.SERVER_URL + "buy/otp";
 
-    static SEND_2FA_CODE_URL = Constants.SERVER_URL + "user/send-2fa"
+    static HISTORY_URL = Constants.SERVER_URL + "user/history/";
+    static SEND_2FA_CODE_URL = Constants.SERVER_URL + "user/send-2fa";
     static GET_EXCHANGE_URL = Constants.SERVER_URL + "exchange/";
     static GET_USD_RATE_URL = Constants.SERVER_URL + "exchange/usd-rate/";
     static GET_EXCHANGE_RATE_URL = Constants.SERVER_URL + "exchange/xrate/";
@@ -124,6 +125,19 @@ export class Constants {
         let toast = toastCtrl.create({
             message: message,
             showCloseButton: true
+        });
+
+        toast.onDidDismiss(() => {
+        });
+
+        toast.present();
+        return toast;
+    }
+
+    static showToastMessage(message, toastCtrl) {
+        let toast = toastCtrl.create({
+            message: message,
+            duration: 1500,
         });
 
         toast.onDidDismiss(() => {

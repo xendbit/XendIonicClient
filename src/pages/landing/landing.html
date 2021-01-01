@@ -54,7 +54,7 @@
         <div *ngFor="let wallet of loadedWallets">          
           <ion-item class="bg" (click)="openHomePage(wallet)">
             <ion-avatar item-start>
-              <img style="width: 60px; height: 60px;" src="https://xendbit.com/coins/{{wallet.tickerSymbol}}.png" />
+              <!-- <img style="width: 60px; height: 60px;" src="https://xendbit.com/coins/{{wallet.tickerSymbol}}.png" /> -->
             </ion-avatar>
             <span class="big-color">{{wallet.symbol}} {{wallet.confirmedAccountBalance | number: '.2-5'}}</span>
             <br style="color: orange;" />
