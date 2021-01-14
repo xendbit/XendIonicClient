@@ -1,0 +1,99 @@
+page-token-search {
+    ion-card.card {
+        border-radius: 10px;
+        background-color: white !important;
+    }
+
+    .bg {
+        border-bottom: solid thin black !important;
+        line-height: 1.5;
+        height: 100px;
+    }
+
+    .header-card {
+        background: none !important;
+        border: none;
+    }
+
+    .card-header {
+        text-align: center;
+        font-weight: 14px;
+        border: none;
+    }
+
+    .header-content {
+        background-image: url('../assets/img/bg_small.png') !important;
+    }
+
+    .total-assets {
+        margin-top: 3rem;
+        font-family: sans-serif;
+        font-size: 0.9em;
+        text-align: center;
+        line-height: 1.2;
+        color: black;
+    }
+
+    .assets-value {
+        text-align: center;
+        line-height: 1.2;
+        color: darkslategray;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 1.15em;
+    }
+
+    .portfolio {
+        opacity: 70%;
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22);  
+        display: flex;
+        justify-content: center;
+    }
+
+    .assets-icon {
+        text-align: center;
+        line-height: 1.2;
+        color: orange;
+        font-weight: bold;
+        font-size: 1.4em;
+    }    
+
+    .coins {
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 1.0em;
+        text-align: left;
+        line-height: 1.2;
+        color: white;
+    }    
+
+    .small {
+        font-size: 0.9em;
+        font-family: sans-serif;
+    }
+
+    .big {
+        font-size: 1.1rem;
+        font-family: sans-serif;
+    }
+
+    .big-color {
+        font-size: 1.1em;
+        font-family: sans-serif;
+        color: black;
+    }
+
+    .item {
+        font-weight: bold;
+    }
+
+    .list-md ion-item-sliding {
+        border: none;
+        background: none;
+    }
+
+    .list-ios ion-item-sliding {
+        border: none;
+        background: none;
+    }
+}

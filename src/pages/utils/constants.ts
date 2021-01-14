@@ -71,6 +71,9 @@ export class Constants {
     static ADD_KYC_URL = Constants.SERVER_URL + "user/add/kyc";
     static LOAD_BENEFICIARIES_URL = Constants.SERVER_URL + "user/beneficiaries";
     static GET_IMAGE_URL = Constants.IMAGER_URL + "get-image";
+    static GET_TOKENS_URL = Constants.SERVER_URL + "defi/get-tokens/false";
+    static GET_PRICE_URL = Constants.SERVER_URL + "defi/get-price/:from/:to";
+    static SWAP_TOKENS_URL = Constants.SERVER_URL + "defi/swap";
 
     static SEND_2_BANK_URL = Constants.SERVER_URL + "send2bank/new";
     static GET_SEND_2_BANK_REQUEST_URL = Constants.SERVER_URL + "send2bank/tx/";
@@ -108,6 +111,11 @@ export class Constants {
     static registrationData = {};
 
     static properties = LocalProps.properties;
+
+    static defiParams = {
+        from: {},
+        to: {},
+    };
 
     static showAlert(toastCtrl, title, subtitle) {
         Constants.showPersistentToastMessage(subtitle, toastCtrl);
@@ -331,6 +339,7 @@ export class Constants {
         fees.tickerSymbol = wallet.tickerSymbol;
         fees.chain = wallet.chain;
         fees.chainAddress = wallet.chainAddress;
+        fees.logoURI = w['fees']['logoURI'];
         wallet.fees = fees;
 
         return wallet;

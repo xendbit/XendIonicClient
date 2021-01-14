@@ -28,4 +28,5 @@ export class Fees {
     public chainAddress: string;
     public chain: string;
     public feesChain: string;
+    public logoURI: string;
 }

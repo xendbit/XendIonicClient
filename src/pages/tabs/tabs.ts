@@ -19,7 +19,7 @@ export class TabsPage {
   // this tells the tabs component which Pages
   // should be each tab's root Page
   tab1Root: any = 'LandingPage';
-  tab2Root: any = 'ExchangePage';
+  tab2Root: any = 'DefiPage';
   tab3Root: any = 'NgncPage';
   tab4Root: any = 'HistoryPage';
   tab5Root: any = 'SettingsPage';  

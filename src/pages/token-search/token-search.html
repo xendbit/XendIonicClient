@@ -1,0 +1,33 @@
+<!--
+  Generated template for the ExchangePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Select Coin</ion-title>
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-searchbar [(ngModel)]="searchTerm" (input)="searchBar($event)"></ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-card style="box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.22);">
+        <ion-card-content>
+            <ion-list>
+                <div *ngFor="let token of displayedTokens">
+                    <ion-item class="bg" (click)="selectToken(token)">
+                        <ion-label>
+                            <h2>{{token.symbol}}</h2>
+                            <h3>{{token.name}}</h3>
+                            <p>{{token.address}}</p>
+                        </ion-label>
+                    </ion-item>
+                </div>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

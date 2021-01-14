@@ -12,7 +12,9 @@
     <ion-card-content>
       <ion-item>
         <ion-avatar item-start>
-          <img src="https://xendbit.com/coins/{{wtv}}.png">
+          <img *ngIf="wallet.fees.logoURI===undefined" src="https://xendbit.com/coins/{{wallet.tickerSymbol}}.png" />
+          <img *ngIf="wallet.fees.logoURI!==undefined" src="{{wallet.fees.logoURI}}" />
+
         </ion-avatar>
         <ion-row style="font-size: 14px;">
             <ion-col>Balance: {{confirmedAccountBalance | number: '.3-5'}} {{btcText}}</ion-col>

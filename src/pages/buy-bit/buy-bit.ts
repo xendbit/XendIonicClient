@@ -8,6 +8,7 @@ import { Http } from '@angular/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Dialogs } from '@ionic-native/dialogs';
 import { Wallet } from '../utils/wallet';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 
 /**
  * Generated class for the BuyBitPage page.
@@ -112,7 +113,7 @@ export class BuyBitPage {
       if (xendFees > maxfInTokens) {
         xendFees = maxfInTokens;
       }
-    
+
       console.log(`numBTC * this.wallet.fees.percExternalTradingFees ${numBTC * this.wallet.fees.percExternalTradingFees}`);
       console.log(`this.wallet.fees.externalWithdrawalFees ${this.wallet.fees.externalWithdrawalFees}`);
       console.log(`xendFees ${xendFees}`);
@@ -120,7 +121,7 @@ export class BuyBitPage {
       numBTC = numBTC - (numBTC * this.wallet.fees.percExternalTradingFees) - this.wallet.fees.externalWithdrawalFees - xendFees;
       //console.log(this.wallet.fees);
       console.log(numBTC);
-      if(numBTC > 0) {
+      if (numBTC > 0) {
         this.buyForm.controls.amountToGet.setValue(numBTC.toFixed(4));
       } else {
         this.buyForm.controls.amountToGet.setValue(0);
@@ -174,13 +175,27 @@ export class BuyBitPage {
     };
 
     this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
-      this.sellers = responseData.result;
+      this.sellers = responseData.data;
       this.loading.dismiss();
       this.currencyPair = Constants.WORKING_WALLET + " -> Naira";
       this.pairSelected(this.currencyPair);
     }, _error => {
       this.loading.dismiss();
       Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+    });
+  }
+
+  buyBitFingerprint(seller) {
+    let faio: FingerprintAIO = new FingerprintAIO();
+    faio.show({
+      clientId: "XendFi",
+      clientSecret: "password", //Only necessary for Android
+      disableBackup: true  //Only for Android(optional)
+    }).then((_result: any) => {
+        this.buyForm.controls.password.setValue(this.ls.getItem("password"));
+        this.buyBit(seller);
+    }).catch((error: any) => {
+        Constants.showPersistentToastMessage("Fingerprint Device Not Found.", this.toastCtrl);
     });
   }
 
@@ -278,7 +293,7 @@ export class BuyBitPage {
         }, error => {
           this.loading.dismiss();
           let errorBody = JSON.parse(error._body);
-          Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);    
+          Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);
         });
       }, _error => {
         //doNothing

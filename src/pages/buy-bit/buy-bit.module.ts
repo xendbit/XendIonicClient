@@ -2,6 +2,7 @@ import { BuyBitPage } from './buy-bit';
 import { IonicPageModule } from 'ionic-angular';
 import { NgModule } from '@angular/core';
 import { Dialogs } from '@ionic-native/dialogs';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 
 @NgModule({
     declarations: [
@@ -14,7 +15,8 @@ import { Dialogs } from '@ionic-native/dialogs';
       BuyBitPage
     ],
     providers: [
-      Dialogs
+      Dialogs,
+      FingerprintAIO
     ]
   })
 

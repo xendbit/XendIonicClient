@@ -1,21 +1,23 @@
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import { IonicPageModule } from 'ionic-angular';
 import { NgModule } from '@angular/core';
-import { HistoryPage } from './history';
+import { DefiPage } from './defi';
 import { Clipboard } from '@ionic-native/clipboard';
 
 @NgModule({
     declarations: [
-      HistoryPage,
+      DefiPage
     ],
     imports: [
-      IonicPageModule.forChild(HistoryPage),
+      IonicPageModule.forChild(DefiPage),
     ],
     exports: [
-      HistoryPage
+      DefiPage
     ],
     providers: [
-      Clipboard
+        FingerprintAIO,
+        Clipboard,
     ]
   })
 
-  export class MyOrdersPageModule {}
+  export class DefiPageModule {}

@@ -70,7 +70,7 @@ export class HomePage {
     let url = Constants.GET_USD_RATE_URL + tickerSymbol + '/BUY';
     this.http.get(url, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.btcToNgn = responseData.data.ngnRate;
-      if(this.btcToNgn < 0) {
+      if(this.btcToNgn < 0 || this.wallet.fees.externalDepositFees === -1) {
         this.hasNgnPair = false;
       } else {
         this.hasNgnPair = true;

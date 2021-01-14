@@ -45,7 +45,6 @@ export class LandingPage {
 
   ionViewDidEnter() {
     this.wallets = Constants.LOGGED_IN_USER['addressMappings'];
-    console.log(this.wallets);
     this.numberOfWallets = this.wallets.length;
     let wallet: Wallet = Constants.getWalletFormatted(this.wallets[0]);
     Constants.WORKING_WALLET = wallet.chain;
@@ -67,7 +66,6 @@ export class LandingPage {
     this.loadingWallets = [];
     this.loadingTotalAssets = 0;
     for (let w of this.wallets) {
-      console.log(w);
       let wallet: Wallet = Constants.getWalletFormatted(w);
       this.getBalance(wallet);
     }
@@ -108,6 +106,7 @@ export class LandingPage {
       wallet.usdRate = +responseData.data.usdRate;
       wallet.usdBalance = wallet.usdRate * wallet.confirmedAccountBalance;
 
+      Console.log(`logoURI: ${wallet.fees.logoURI}, coin: ${wallet.chain}`);
       if (!this.alreadyAdded(wallet)) {
         if(wallet.confirmedAccountBalance > 0) {
           this.loadingWallets.unshift(wallet);
@@ -130,8 +129,6 @@ export class LandingPage {
   }
 
   openHomePage(wallet: Wallet) {
-    console.log("Opening Home Page");
-    console.log(wallet);
     Constants.WORKING_WALLET = wallet.chain
     Constants.WALLET = wallet;
     Constants.WORKING_TICKER_VALUE = wallet.tickerSymbol

@@ -10,13 +10,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { LoginPage } from '../pages/login/login';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+import { TokenSearchPage } from '../pages/token-search/token-search';
+import { DefiPageModule } from '../pages/defi/defi.module';
+import { Clipboard } from '@ionic-native/clipboard';
 
 
 @NgModule({
   declarations: [
     MyApp,
     TabsPage,
-    LoginPage
+    LoginPage,
+    TokenSearchPage,
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -32,13 +36,15 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
   entryComponents: [
     MyApp,
     TabsPage,
-    LoginPage
+    LoginPage,
+    TokenSearchPage,
   ],
   providers: [
     { provide: ErrorHandler, useClass: MyExceptionHandler },
     SplashScreen,
     StatusBar,
-    FingerprintAIO
+    FingerprintAIO,
+    Clipboard,
   ]
 })
 export class AppModule { }
