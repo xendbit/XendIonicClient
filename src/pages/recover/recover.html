@@ -1,0 +1,72 @@
+<!--
+  Generated template for the BuyBitPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-content padding>
+    <ion-title style="margin-top: 3rem; margin-bottom: 3rem; font-size: 0.9rem;">
+        <ion-icon style="margin-right: 1.0rem;" name="list"></ion-icon> Recover
+    </ion-title>
+    <ion-card style="background: white; border-radius: 1.5rem;">
+        <ion-card-header>
+            <ion-item>
+                Recover Wallet
+            </ion-item>
+        </ion-card-header>
+
+        <ion-card-content class="nbnmnp">
+            <ion-row>
+                <ion-col>
+                    <ion-label stacked>E-Mail Address</ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-input type="email" [(ngModel)]="emailAddress"></ion-input>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-label stacked>New Password</ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-input type="password" [(ngModel)]="password"></ion-input>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-label stacked>Confirm New Password</ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-input type="password" [(ngModel)]="cpassword"></ion-input>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-label>Passphrase</ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-textarea rows="3" [(ngModel)]="passphrase"></ion-textarea>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <button ion-button medium full color="orange" (click)="recoverWallet();" icon-right>Recover Wallet
+                        <ion-icon name="swap"></ion-icon>
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+    </ion-card>
+</ion-content>

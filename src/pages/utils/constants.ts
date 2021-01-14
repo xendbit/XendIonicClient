@@ -67,6 +67,7 @@ export class Constants {
     static GET_BALANCE_URL = Constants.SERVER_URL + "user/balance";
     static SEND_URL = Constants.SERVER_URL + "user/send-coins";
     static LOGIN_URL = Constants.SERVER_URL + "user/login";
+    static RECOVER_URL = Constants.SERVER_URL + "user/recover";
     static SEND_CONFIRMATION_EMAIL_URL = Constants.SERVER_URL + "user/send-confirmation-email";
     static ADD_KYC_URL = Constants.SERVER_URL + "user/add/kyc";
     static LOAD_BENEFICIARIES_URL = Constants.SERVER_URL + "user/beneficiaries";

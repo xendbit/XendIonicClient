@@ -232,7 +232,7 @@ export class LoginPage {
 
   recover() {
     Constants.REG_TYPE = 'recover';
-    this.navCtrl.push('TermsPage');
+    this.navCtrl.push('RecoverPage');
   }
 
   resetPassword() {
