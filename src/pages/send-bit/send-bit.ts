@@ -272,9 +272,10 @@ export class SendBitPage {
         Constants.showPersistentToastMessage('Error Sending Coin: ' + responseData.message, this.toastCtrl);
         this.sendCoinsError();
       }
-    }, _error => {
+    }, error => {
       this.loading.dismiss();
-      Constants.showPersistentToastMessage("Your tokens have been sent. Recipient will recieve them once it's confirmed", this.toastCtrl);
+      const eb = JSON.parse(error._body);
+      Constants.showPersistentToastMessage("Error: " + eb.error, this.toastCtrl);
     });
   }
 

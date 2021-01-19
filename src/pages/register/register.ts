@@ -95,6 +95,7 @@ export class RegisterPage {
       firstName: ['', Validators.required],
       middleName: ['', Validators.required],
       bank: ['', Validators.required],
+      bvn: ['', Validators.required],
       accountNumber: ['', Validators.required]
     });
 
@@ -239,6 +240,11 @@ export class RegisterPage {
       return;
     }
 
+    if (rf.bvn === '') {
+      Constants.showPersistentToastMessage("Please enter  your BVN", this.toastCtrl);
+      return;
+    }    
+
     if (rf.bank === '') {
       Constants.showPersistentToastMessage("Please select Bank", this.toastCtrl);
       return;
@@ -298,6 +304,7 @@ export class RegisterPage {
     Constants.registrationData['referralCode'] = referralCode;
     Constants.registrationData['bankCode'] = rf.bank;
     Constants.registrationData['accountNumber'] = rf.accountNumber;
+    Constants.registrationData['bvn'] = rf.bvn;
     Constants.registrationData['isBeneficiary'] = rf.isBeneficiary;
     StorageService.IS_BENEFICIARY = rf.isBeneficiary;
 

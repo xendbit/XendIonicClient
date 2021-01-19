@@ -149,6 +149,7 @@ export class LoginPage {
   }
 
   loginOnServer(password, emailAddress, exchangeType) {
+    //this.ls.setItem('mnemonic', 'Baba fi owo kan idodo omo oni dodo ni dodo ilu wa');
     this.ls.setItem('isGuest', false);
     this.ls.setItem('emailAddress', emailAddress);
     this.ls.setItem('password', password);
@@ -156,6 +157,7 @@ export class LoginPage {
     let ls = this.ls;
     let key = Constants.WORKING_WALLET + "Address";
     let mnemonicCode = Constants.normalizeMnemonicCode(ls);
+    Console.log(mnemonicCode);
 
     let requestData = {
       emailAddress: emailAddress,

@@ -55,7 +55,7 @@
           <ion-item class="bg" (click)="openHomePage(wallet)">
             <ion-avatar item-start>
               <img *ngIf="wallet.fees.logoURI===undefined" style="width: 60px; height: 60px;" src="https://xendbit.com/coins/{{wallet.tickerSymbol}}.png" />
-              <img *ngIf="wallet.fees.logoURI!==undefined" style="width: 25px; height: 25px;" src="{{wallet.fees.logoURI}}" />
+              <img *ngIf="wallet.fees.logoURI!==undefined" style="width: 60px; height: 60px;" src="{{wallet.fees.logoURI}}" />
             </ion-avatar>
             <span class="big-color">{{wallet.symbol}} {{wallet.confirmedAccountBalance | number: '.2-5'}}</span>
             <br style="color: orange;" />

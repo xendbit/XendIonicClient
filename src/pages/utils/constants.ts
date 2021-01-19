@@ -181,6 +181,7 @@ export class Constants {
             bankCode: data['bankCode'],
             bankName: data['bankName'],
             accountNumber: data['accountNumber'],
+            bvn: data['bvn'],
             dateRegistered: dateRegistered,
             beneficiary: data['isBeneficiary'],
             passphrase: mnemonicCode,
