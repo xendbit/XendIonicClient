@@ -40,7 +40,7 @@ export class LandingPage {
   }
 
   gotongnc() {
-    this.tab.select(3).then(() => { console.log("xNGN Tabbed") });
+    this.tab.select(2).then(() => { console.log("xNGN Tabbed") });
   }
 
   ionViewDidEnter() {
@@ -69,6 +69,12 @@ export class LandingPage {
       let wallet: Wallet = Constants.getWalletFormatted(w);
       this.getBalance(wallet);
     }
+
+    this.loadedWallets = this.loadingWallets;
+    this.totalAssets = this.loadingTotalAssets;        
+    this.ls.setItem("loadedWallets", this.loadedWallets);
+    console.log(this.loadedWallets);
+    this.ls.setItem("totalAssets", this.totalAssets);        
   }
 
   getNgncBalance() {
@@ -80,13 +86,15 @@ export class LandingPage {
   }
 
   getBalance(wallet: Wallet) {
-    console.log("Getting Transactions for " + wallet);
+    console.log("Getting Transactions for " + wallet.chain);
 
     const userId = this.ls.getItem("userId");
     const url = Constants.GET_BALANCE_URL + "/" + userId + "/" + wallet.chain;
+    console.log(url);
     this.http.get(url).map(res => res.json()).subscribe(responseData => {
-      if (responseData.status === 'success') {
+      if (responseData.status === 'success') {        
         wallet.confirmedAccountBalance = responseData.data.balance;
+        console.log(wallet);
         wallet.escrow = responseData.data.escrow;
         this.loadRate(wallet);
       }
@@ -114,13 +122,6 @@ export class LandingPage {
           this.loadingWallets.push(wallet);
         }
         this.loadingTotalAssets += wallet.usdBalance;
-      }
-
-      if (this.loadingWallets.length === this.numberOfWallets) {
-        this.loadedWallets = this.loadingWallets;
-        this.totalAssets = this.loadingTotalAssets;        
-        this.ls.setItem("loadedWallets", this.loadedWallets);
-        this.ls.setItem("totalAssets", this.totalAssets);        
       }
     }, error => {
       let errorBody = JSON.parse(error._body);

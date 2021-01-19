@@ -5,6 +5,8 @@ import 'rxjs/add/operator/map';
 import { Http } from '@angular/http';
 import { Wallet } from '../utils/wallet';
 import { Clipboard } from '@ionic-native/clipboard';
+import { StorageService } from '../utils/storageservice';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the BuyBitPage page.
@@ -24,10 +26,12 @@ export class HistoryPage {
   wallet: Wallet;
   txs = [];
   private clipboard: Clipboard;
+  ls: StorageService;
 
-  constructor(public loadingCtrl: LoadingController, public http: Http, public toastCtrl: ToastController) {
+  constructor(public loadingCtrl: LoadingController, public http: Http, public toastCtrl: ToastController, private storage: Storage) {
     this.wallet = Constants.WALLET;
     this.clipboard = new Clipboard();
+    this.ls = new StorageService(this.storage);
     setTimeout(function () {
     }, Constants.WAIT_FOR_STORAGE_TO_BE_READY_DURATION);
   }
@@ -44,7 +48,7 @@ export class HistoryPage {
   }
 
   loadHistory() {
-    let url = Constants.HISTORY_URL + this.wallet.chainAddress + "/" + this.wallet.chain;
+    let url = Constants.HISTORY_URL + this.ls.getItem("userId") + "/" + this.wallet.chain;
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     this.http.get(url).map(res => res.json()).subscribe(responseData => {
       this.loading.dismiss();

@@ -1,14 +1,15 @@
 import { StorageService } from "./storageservice";
-import { Headers, Http } from "@angular/http";
+import { Headers } from "@angular/http";
 import { LocalProps } from "./localprops";
 import { Wallet, Fees } from "./wallet";
 
-export class Constants {
-    //static TOMCAT_URL = "https://xendfilb.xendbit.net";
+export class Constants {    
+    //static TOMCAT_URL = "http://34.70.143.198:8081";
     static APP_VERSION = "v4.6-rc31"
     static ENABLE_GUEST = false;
     static TOMCAT_URL = "http://localhost:9091";
     //static TOMCAT_URL = "https://lb.xendbit.com";
+    //static TOMCAT_URL = "https://xendfilb.xendbit.net";
     static XEND_BASE_URL = Constants.TOMCAT_URL + "/api/";
     static IMAGER_URL = Constants.TOMCAT_URL + "/imager/x/api/";
 
@@ -191,7 +192,7 @@ export class Constants {
 
 
         let url = data['url'];
-        let http: Http = data['http'];
+        let http = data['http'];
         let toastCtrl = data['toastCtrl'];
         let loading = data['loading'];
         let loadingCtrl = data['loadingCtrl'];

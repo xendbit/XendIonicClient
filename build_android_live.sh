@@ -32,6 +32,8 @@ cp $CONSTANTS_FILE $BAK_FILE
 #tail -n +2 prints all file expect the first line
 #tail -n +3 prints all file expect the first 2 lines
 
+# static TOMCAT_URL = "https://xendfilb.xendbit.net";' > /tmp/temp
+
 tail -n +11 $CONSTANTS_FILE > $WORKING_FILE
 #add the server base url and the first line of file
 echo 'import { StorageService } from "./storageservice";
@@ -40,7 +42,7 @@ import { LocalProps } from "./localprops";
 import { Wallet, Fees } from "./wallet";
 
 export class Constants {
-static TOMCAT_URL = "https://xendfilb.xendbit.net";' > /tmp/temp
+static TOMCAT_URL = "http://34.70.143.198:8081";' > /tmp/temp
 echo "static APP_VERSION = \"$VERSION\"" >> /tmp/temp
 echo "static ENABLE_GUEST = false;" >> /tmp/temp
 cat /tmp/temp | cat - $WORKING_FILE > temp && mv temp $WORKING_FILE
