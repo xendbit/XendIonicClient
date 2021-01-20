@@ -23,10 +23,8 @@ export class LandingPage {
   ls: StorageService;
   wallets = [];
   loadedWallets = [];
-  loadingWallets = [];
   loading: Loading
   totalAssets = 0;
-  loadingTotalAssets = 0;
   numberOfWallets = 0;
   ngncBalance = 0;
   tab: any;
@@ -55,26 +53,17 @@ export class LandingPage {
 
     this.reloadWallets();
     this.getNgncBalance();
-    //this.ls.setItem("loadedWallets", []);
   }
 
   reloadWallets() {
     // chain: "ETH"
-    // chainAddress: "0x21e5eafd04c99ae16ac529da67745c62e543966e"
+    // chainAddress: "0x21e5eafd04c99ae16ac529da67745c62e543966e"    
     this.loadedWallets = this.ls.getItem("loadedWallets");
     this.totalAssets = this.ls.getItem("totalAssets");
-    this.loadingWallets = [];
-    this.loadingTotalAssets = 0;
     for (let w of this.wallets) {
       let wallet: Wallet = Constants.getWalletFormatted(w);
       this.getBalance(wallet);
     }
-
-    this.loadedWallets = this.loadingWallets;
-    this.totalAssets = this.loadingTotalAssets;        
-    this.ls.setItem("loadedWallets", this.loadedWallets);
-    console.log(this.loadedWallets);
-    this.ls.setItem("totalAssets", this.totalAssets);        
   }
 
   getNgncBalance() {
@@ -92,7 +81,7 @@ export class LandingPage {
     const url = Constants.GET_BALANCE_URL + "/" + userId + "/" + wallet.chain;
     console.log(url);
     this.http.get(url).map(res => res.json()).subscribe(responseData => {
-      if (responseData.status === 'success') {        
+      if (responseData.status === 'success') {
         wallet.confirmedAccountBalance = responseData.data.balance;
         console.log(wallet);
         wallet.escrow = responseData.data.escrow;
@@ -116,16 +105,19 @@ export class LandingPage {
 
       Console.log(`logoURI: ${wallet.fees.logoURI}, coin: ${wallet.chain}`);
       if (!this.alreadyAdded(wallet)) {
-        if(wallet.confirmedAccountBalance > 0) {
-          this.loadingWallets.unshift(wallet);
+        if (wallet.confirmedAccountBalance > 0) {
+          this.loadedWallets.unshift(wallet);
         } else {
-          this.loadingWallets.push(wallet);
+          this.loadedWallets.push(wallet);
         }
-        this.loadingTotalAssets += wallet.usdBalance;
+        this.totalAssets += wallet.usdBalance;
       }
+
+      this.ls.setItem("loadedWallets", this.loadedWallets);
+      this.ls.setItem("totalAssets", this.totalAssets);
     }, error => {
       let errorBody = JSON.parse(error._body);
-      Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);    
+      Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);
     });
   }
 
@@ -145,7 +137,7 @@ export class LandingPage {
   }
 
   alreadyAdded(w1) {
-    for (let w2 of this.loadingWallets) {
+    for (let w2 of this.loadedWallets) {
       if (w1.tickerSymbol === w2.tickerSymbol) {
         return true;
       }

@@ -1,8 +1,4 @@
 import { PreImage } from './../utils/preimage';
-import { Base64 } from '@ionic-native/base64';
-import { FileTransfer } from '@ionic-native/file-transfer';
-import { MediaCapture, CaptureImageOptions, MediaFile, CaptureError } from '@ionic-native/media-capture';
-import { ImageResizer, ImageResizerOptions } from '@ionic-native/image-resizer';
 import { Console } from './../utils/console';
 import { Constants } from './../utils/constants';
 import { Component } from '@angular/core';
@@ -15,6 +11,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 
 import { StorageService } from '../utils/storageservice';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 
 /*
@@ -60,7 +57,7 @@ export class RegisterPage {
 
   emailRegex = '^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$';
 
-  constructor(public androidPermissions: AndroidPermissions, public base64: Base64, public imageResizer: ImageResizer, private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, private mediaCapture: MediaCapture, public platform: Platform, private transfer: FileTransfer) {
+  constructor(public androidPermissions: AndroidPermissions, private loadingCtrl: LoadingController, private navCtrl: NavController, private navParams: NavParams, private formBuilder: FormBuilder, private toastCtrl: ToastController, private http: Http, public platform: Platform, private camera: Camera) {
     this.platform.ready().then(() => {
       androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA, androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE]);
     });
@@ -83,8 +80,6 @@ export class RegisterPage {
     this.idTypes = Constants.properties['id.types'];
     this.idImageText = "ID Image";
     this.country = 1;
-
-    Constants.registrationData['fileTransferObject'] = this.transfer.create();
 
     this.registerForm = this.formBuilder.group({
       email: ['', Validators.compose([Validators.maxLength(255), Validators.pattern(this.emailRegex), Validators.required])],
@@ -128,65 +123,27 @@ export class RegisterPage {
       this.idImage = PreImage.idImage;
       return;
     }
-    Console.log("Capturing Passport");
-    let options: CaptureImageOptions = { limit: 1 };
-    this.mediaCapture.captureImage(options)
-      .then(
-        (data: MediaFile[]) => {
-          this.resizeImage(data[0]['fullPath']);
-        },
-        (err: CaptureError) => {
-          Console.log(err);
-        }
-      );
-  }
 
-  resizeImage(uri) {
-    Console.log("Resizing Image");
-    this.idImagePath = uri;
-    if (this.platform.is('ios')) {
-      uri = normalizeURL(uri);
-      this.toDataUrl(uri, function (myBase64) {
-        this.idImage = myBase64;
-      });
-    } else {
-      let fileName = Constants.makeid();
-      let options: ImageResizerOptions = {
-        uri: uri,
-        folderName: 'XendFi',
-        quality: 100,
-        width: 400,
-        height: 400,
-        fileName: fileName
-      };
-
-
-      this.imageResizer.resize(options).then((filePath: string) => {
-        this.idImagePath = filePath;
-        this.base64.encodeFile(filePath).then((base64File: string) => {
-          this.idImage = base64File;
-        }, (err) => {
-          Console.log(err);
-        });
-      }).catch(e => {
-        Console.log(e)
-      });
+    const options: CameraOptions = {
+      quality: 15,
+      sourceType: 1,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
     }
+
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64 (DATA_URL):
+      let base64Image = 'data:image/jpeg;base64,' + imageData;
+      this.idImage = base64Image;
+      this.idImagePath = "data:image";
+
+    }, (err) => {
+      // Handle error
+    });
   }
 
-  toDataUrl(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-      var reader = new FileReader();
-      reader.onloadend = function () {
-        callback(reader.result);
-      }
-      reader.readAsDataURL(xhr.response);
-    };
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
-  }
 
   register() {
     let rf = this.registerForm.value;

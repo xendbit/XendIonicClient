@@ -139,8 +139,8 @@ export class LoginPage {
 
     this.http.post(url, requestData, Constants.getHeader())
       .map(res => res.json())
-      .subscribe(responseData => {
-        Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
+      .subscribe(_responseData => {
+        Constants.showPersistentToastMessage("Confirmation Email Sent", this.toastCtrl);
       }, error => {
         this.loading.dismiss();
         let errorBody = JSON.parse(error._body);
