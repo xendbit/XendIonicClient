@@ -49,7 +49,6 @@ export class CreateMnemonicPage {
     let generateAnotherMnemonic = true;
     while (generateAnotherMnemonic) {
       let result = genwallet();
-      alert(result.mnemonic);
       console.dir(result);
       let splitted = result.mnemonic.split(" ").splice(0, 12);
       let wordCount = {};
