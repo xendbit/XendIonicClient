@@ -50,16 +50,17 @@ export class NgncPage {
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
     this.http.post(url, postData, Constants.getHeader()).map(res => res.json()).subscribe(responseData => {
       this.loading.dismiss();
-      if (responseData.response_text === "success") {
+      if (responseData.status === "success") {
         this.amountToWithdraw = 0;
         this.password = "";
         Constants.showPersistentToastMessage("Your withdrawal request has been successfully sent", this.toastCtrl);
       } else {
         Constants.showPersistentToastMessage(responseData.result, this.toastCtrl);
       }
-    }, _error => {
+    }, error => {
       this.loading.dismiss();
-      Constants.showAlert(this.toastCtrl, "Network seems to be down", "You can check your internet connection and/or restart your phone.");
+      let errorBody = JSON.parse(error._body);
+      Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);          
     });
   }
 }
