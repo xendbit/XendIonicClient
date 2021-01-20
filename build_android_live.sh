@@ -42,7 +42,7 @@ import { LocalProps } from "./localprops";
 import { Wallet, Fees } from "./wallet";
 
 export class Constants {
-static TOMCAT_URL = "http://34.70.143.198:8081";' > /tmp/temp
+static TOMCAT_URL = "https://newserver.xendbit.net";' > /tmp/temp
 echo "static APP_VERSION = \"$VERSION\"" >> /tmp/temp
 echo "static ENABLE_GUEST = false;" >> /tmp/temp
 cat /tmp/temp | cat - $WORKING_FILE > temp && mv temp $WORKING_FILE
