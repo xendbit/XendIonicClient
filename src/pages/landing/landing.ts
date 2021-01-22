@@ -56,10 +56,6 @@ export class LandingPage {
   }
 
   reloadWallets() {
-    // chain: "ETH"
-    // chainAddress: "0x21e5eafd04c99ae16ac529da67745c62e543966e"    
-    this.loadedWallets = this.ls.getItem("loadedWallets");
-    this.totalAssets = this.ls.getItem("totalAssets");
     if (this.loadedWallets === undefined || this.loadedWallets === null) {
       this.loadedWallets = [];
     }
@@ -122,8 +118,6 @@ export class LandingPage {
 
       this.totalAssets += wallet.usdBalance;
       console.log(`Total Assets: ${this.totalAssets}`);
-      this.ls.setItem("loadedWallets", this.loadedWallets);
-      this.ls.setItem("totalAssets", this.totalAssets);
     }, error => {
       let errorBody = JSON.parse(error._body);
       Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);
