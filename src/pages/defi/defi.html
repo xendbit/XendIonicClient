@@ -67,6 +67,9 @@
                         <ion-label *ngIf="price > 0">
                             Price: {{invertedPrice | number: '.3-8'}} {{from.symbol}} per {{to.symbol}}
                         </ion-label>
+                        <ion-label *ngIf="priceLoading === true" style="font-style: italic;">
+                            Price is loading...
+                        </ion-label>
                     </ion-col>
                 </ion-row>
                 <ion-row>

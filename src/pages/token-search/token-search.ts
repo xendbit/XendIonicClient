@@ -28,11 +28,13 @@ export class TokenSearchPage {
   displayedTokens = undefined;
   searchTerm: string;
   param: string;
+  maxShownTokens = 10;
 
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public http: Http, public formBuilder: FormBuilder, public toastCtrl: ToastController, public loadingCtrl: LoadingController) {
     this.ls = Constants.storageService;
     this.wallet = Constants.WALLET;
     this.param = this.navParams.get('param');
+    this.ls.setItem('displayedTokens', []);
   }
 
   ionViewDidLoad() {
@@ -54,12 +56,14 @@ export class TokenSearchPage {
   }
 
   searchBar(input) {
-    this.displayedTokens = this.tokens.filter((value) => {
+    let searched = this.tokens.filter((value) => {
       return (
         value.symbol.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0 ||
         value.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0
       );
     });
+
+    this.displayedTokens = searched.slice(0, this.maxShownTokens);    
   }
 
   loadAllTokens() {
@@ -78,14 +82,15 @@ export class TokenSearchPage {
       if (showloading) {
         this.loading.dismiss();
       }
-      this.tokens = responseData.data;
-      this.displayedTokens = this.tokens;
-      this.displayedTokens.unshift({
+      this.tokens = responseData.data;      
+      this.tokens.unshift({
         symbol: 'ETH',
         name: 'Ethereum',
         address: '0x',
         logoURI: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
       });
+
+      this.displayedTokens = this.tokens.slice(0, this.maxShownTokens);
       this.ls.setItem('displayedTokens', this.displayedTokens);
     }, error => {
       if (showloading) {
