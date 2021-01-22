@@ -60,6 +60,13 @@ export class LandingPage {
     // chainAddress: "0x21e5eafd04c99ae16ac529da67745c62e543966e"    
     this.loadedWallets = this.ls.getItem("loadedWallets");
     this.totalAssets = this.ls.getItem("totalAssets");
+    if (this.loadedWallets === undefined || this.loadedWallets === null) {
+      this.loadedWallets = [];
+    }
+
+    if (this.totalAssets === undefined || this.totalAssets === null) {
+      this.totalAssets = 0;
+    }
     for (let w of this.wallets) {
       let wallet: Wallet = Constants.getWalletFormatted(w);
       this.getBalance(wallet);
@@ -104,15 +111,17 @@ export class LandingPage {
       wallet.usdBalance = wallet.usdRate * wallet.confirmedAccountBalance;
 
       Console.log(`logoURI: ${wallet.fees.logoURI}, coin: ${wallet.chain}`);
-      if (!this.alreadyAdded(wallet)) {
-        if (wallet.confirmedAccountBalance > 0) {
-          this.loadedWallets.unshift(wallet);
-        } else {
-          this.loadedWallets.push(wallet);
-        }
-        this.totalAssets += wallet.usdBalance;
+      this.removeIfAdded(wallet);
+      console.log(`Adding Wallet: ${wallet.chain} : ${wallet.usdBalance}`);
+      if (wallet.confirmedAccountBalance > 0) {
+        this.loadedWallets.unshift(wallet);
+      } else {
+        this.loadedWallets.push(wallet);
       }
 
+
+      this.totalAssets += wallet.usdBalance;
+      console.log(`Total Assets: ${this.totalAssets}`);
       this.ls.setItem("loadedWallets", this.loadedWallets);
       this.ls.setItem("totalAssets", this.totalAssets);
     }, error => {
@@ -136,17 +145,20 @@ export class LandingPage {
     }
   }
 
-  alreadyAdded(w1) {
-    if(this.loadedWallets === undefined) {
+  removeIfAdded(w1) {
+    if (this.loadedWallets === undefined) {
       this.loadedWallets = [];
-      return false;
-    }
-    for (let w2 of this.loadedWallets) {
-      if (w1.tickerSymbol === w2.tickerSymbol) {
-        return true;
-      }
+      return;
     }
 
-    return false;
+    let filtered = this.loadedWallets.filter(x => {
+      if (w1.tickerSymbol === x.tickerSymbol) {
+        return false;
+      }
+
+      return true;
+    });
+
+    this.loadedWallets = filtered;
   }
 }
