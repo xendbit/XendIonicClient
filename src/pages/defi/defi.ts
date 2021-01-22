@@ -30,9 +30,12 @@ export class DefiPage {
   from;
   to;
   clipboard: Clipboard;
-  amountIn;
-  amountOut;
+  amountIn: any = "0.0";
+  amountOut: any = "0.0";
   password;
+  price = 0;
+  invertedPrice = 0;
+  priceLoading = false;
 
   loading: Loading;
 
@@ -52,19 +55,22 @@ export class DefiPage {
   }
 
   ionViewWillEnter() {
-    this.from = Constants.defiParams.from;
-    this.to = Constants.defiParams.to;
   }
 
   ionViewDidLoad() {
   }
 
   ionViewDidEnter() {
+    console.log('Entering....');
     this.from = Constants.defiParams.from;
-    this.to = Constants.defiParams.to;
+    this.to = Constants.defiParams.to;    
+    console.log(this.from);
+    console.log(this.to);
+    this.estimatePrice('in');
   }
 
   init() {
+    console.log('Initializing....');
     this.from = Constants.defiParams.from;
     this.to = Constants.defiParams.to;
   }
@@ -75,24 +81,41 @@ export class DefiPage {
     Constants.showToastMessage(message, this.toastCtrl);
   }
 
-  estimatePrice() {
-    this.getPrice();
+  estimatePrice(inp) {    
+      this.getPrice(inp);    
   }
 
-  getPrice() {
-    this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-    const url = Constants.GET_PRICE_URL.replace(":from", this.from.address).replace(":to", this.to.address);
-    this.http.get(url).map(res => res.json()).subscribe(responseData => {
-      this.loading.dismiss();
-      const price = +responseData.data;
-      this.amountOut = (+this.amountIn * price).toFixed(6);
-    }, error => {
-      this.loading.dismiss();
-      let errorBody = JSON.parse(error._body);
-      console.log(errorBody);
-      this.amountOut = 0;
-      Constants.showPersistentToastMessage("Insufficient Reserves for Token Pair", this.toastCtrl);
-    });    
+  getPrice(inp) {
+    if (this.price === 0 && this.from.address !== '' && this.to.address !== '') {
+      if(this.priceLoading) {
+        return;
+      }
+      this.priceLoading = true;
+      const url = Constants.GET_PRICE_URL.replace(":from", this.from.address).replace(":to", this.to.address);
+      this.http.get(url).map(res => res.json()).subscribe(responseData => {
+        this.price = +responseData.data;
+        this.invertedPrice = 1/this.price;
+        if(inp === 'in') {
+          this.amountOut = (+this.amountIn * this.price).toFixed(6);
+        } else {
+          this.amountIn = (+this.amountOut / this.price).toFixed(6);
+        }
+        this.priceLoading = false;
+      }, error => {
+        let errorBody = JSON.parse(error._body);
+        console.log(errorBody);
+        this.amountOut = 0;
+        this.price = -1;
+        Constants.showPersistentToastMessage("Insufficient Reserves for Token Pair", this.toastCtrl);
+        this.priceLoading = false;
+      });      
+    } else if(this.price > 0) {      
+      if(inp === 'in') {
+        this.amountOut = (+this.amountIn * this.price).toFixed(6);
+      } else {
+        this.amountIn = (+this.amountOut / this.price).toFixed(6);
+      }
+    }
   }
 
   loadAllTokens() {
@@ -106,6 +129,11 @@ export class DefiPage {
   }
 
   confirmSwap() {
+    if(this.password === '' || this.password === undefined)  {
+      Constants.showPersistentToastMessage('Enter your password', this.toastCtrl);
+      return;
+    }
+    
     let message = 'Are you sure you want to swap '
       + this.amountIn + this.from.symbol + ' to ' + this.to.symbol + '?';
     let alert = this.alertCtrl.create({
@@ -189,6 +217,7 @@ export class DefiPage {
   }
 
   async openModal(param) {
+    this.price = 0;
     this.navCtrl.push(TokenSearchPage, { param: param });
   }
 }

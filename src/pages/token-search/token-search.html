@@ -20,6 +20,7 @@
             <ion-list>
                 <div *ngFor="let token of displayedTokens">
                     <ion-item class="bg" (click)="selectToken(token)">
+                        <img src="{{token.logoURI}}" style="width: 25px !important;" item-end>&nbsp;&nbsp;
                         <ion-label>
                             <h2>{{token.symbol}}</h2>
                             <h3>{{token.name}}</h3>

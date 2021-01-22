@@ -137,6 +137,10 @@ export class LandingPage {
   }
 
   alreadyAdded(w1) {
+    if(this.loadedWallets === undefined) {
+      this.loadedWallets = [];
+      return false;
+    }
     for (let w2 of this.loadedWallets) {
       if (w1.tickerSymbol === w2.tickerSymbol) {
         return true;

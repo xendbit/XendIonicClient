@@ -83,7 +83,8 @@ export class TokenSearchPage {
       this.displayedTokens.unshift({
         symbol: 'ETH',
         name: 'Ethereum',
-        address: '0x'
+        address: '0x',
+        logoURI: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
       });
       this.ls.setItem('displayedTokens', this.displayedTokens);
     }, error => {

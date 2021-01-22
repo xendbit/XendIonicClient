@@ -54,52 +54,66 @@ export class RecoverPage {
       return;
     }
 
-    let requestData = {
-      emailAddress: this.emailAddress,
-      password: this.password,
+    let postData = {
       passphrase: this.passphrase
     };
 
-    let url = Constants.RECOVER_URL;
-
     this.loading = Constants.showLoading(this.loading, this.loadingCtrl, "Please Wait...");
-    this.http.post(url, requestData, Constants.getHeader())
-      .map(res => res.json())
-      .subscribe(responseData => {
-        if (responseData.status === "success") {
-          this.loading.dismiss();
-          let user = responseData.data;
-          Constants.LOGGED_IN_USER = user;
-          let walletType = user['walletType'];
-          this.ls.setItem("emailAddress", this.emailAddress);
-          this.ls.setItem("password", this.password);
-          this.ls.setItem("isRegistered", "true");
 
-          this.ls.setItem("userId", user.id);
-          this.ls.setItem('walletType', walletType);
-          this.ls.setItem("lastLoginTime", new Date().getTime() + "");
-          StorageService.ACCOUNT_TYPE = user.accountType;
-          StorageService.IS_BENEFICIARY = user.beneficiary;
-          this.ls.setItem("accountType", user.accountType);
-          this.ls.setItem("userId", user.id);
-          this.ls.setItem("ngncBalance", user.ngncBalance);
+    this.http.post(Constants.GET_13TH_WORD, postData, Constants.getHeader()).map(res => res.json()).subscribe(
+      responseData => {
+        if (responseData.status === 'success') {
+          this.ls.clear();
+          let lastWord = responseData.data;
+          this.passphrase = this.passphrase + " " + lastWord;
 
-          try {
-            this.ls.setItem("accountNumber", user.bankAccountNumber);
-            this.ls.setItem("bankCode", user.bankCode);
-          } catch (e) {
-            console.log(e);
-          }
-
-          this.navCtrl.push(TabsPage);
-        } else {
-          this.loading.dismiss();
-          Constants.showPersistentToastMessage(responseData.message, this.toastCtrl);
+          let requestData = {
+            emailAddress: this.emailAddress,
+            password: this.password,
+            passphrase: this.passphrase
+          };
+      
+          let url = Constants.RECOVER_URL;
+      
+          this.http.post(url, requestData, Constants.getHeader())
+            .map(res => res.json())
+            .subscribe(responseData => {
+              this.loading.dismiss();
+              if (responseData.status === "success") {                
+                let user = responseData.data;
+                Constants.LOGGED_IN_USER = user;
+                let walletType = user['walletType'];
+                this.ls.setItem("emailAddress", this.emailAddress);
+                this.ls.setItem("password", this.password);
+                this.ls.setItem("isRegistered", "true");
+                this.ls.setItem('mnemonic', this.passphrase);
+      
+                this.ls.setItem("userId", user.id);
+                this.ls.setItem('walletType', walletType);
+                this.ls.setItem("lastLoginTime", new Date().getTime() + "");
+                StorageService.ACCOUNT_TYPE = user.accountType;
+                StorageService.IS_BENEFICIARY = user.beneficiary;
+                this.ls.setItem("accountType", user.accountType);
+                this.ls.setItem("ngncBalance", user.ngncBalance);
+      
+                try {
+                  this.ls.setItem("accountNumber", user.bankAccountNumber);
+                  this.ls.setItem("bankCode", user.bankCode);
+                } catch (e) {
+                  console.log(e);
+                }
+      
+                this.navCtrl.push(TabsPage);
+              } else {
+                Constants.showPersistentToastMessage(responseData.message, this.toastCtrl);
+              }
+            }, error => {
+              this.loading.dismiss();
+              let errorBody = JSON.parse(error._body);
+              Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);
+            });          
         }
-      }, error => {
-        this.loading.dismiss();
-        let errorBody = JSON.parse(error._body);
-        Constants.showPersistentToastMessage(errorBody.error, this.toastCtrl);
-      });
+      }
+    );
   }
 }

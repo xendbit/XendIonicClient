@@ -23,52 +23,50 @@
             </ion-card-header>
             <ion-card-content>
                 <ion-row>
-                    <ion-col col-4>
-                        <ion-label stacked>You Have</ion-label>
+                    <ion-col col12>
+                        <ion-label stacked>From</ion-label>
                     </ion-col>
+                </ion-row>
+                <ion-row>
                     <ion-col col-8>
-                        <button ion-button medium round full color="orange" (click)="openModal('from');">
-                            Tap to Select
-                        </button>
+                        <ion-input type="number" [(ngModel)]="amountIn" (input)="estimatePrice('in');"></ion-input>
                     </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col col-12>
-                        <ion-label class="big" stacked (click)="copyAddress(from)">{{from.name}} {{from.address}}</ion-label>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col col-12>
-                        <ion-label stacked>How Many</ion-label>
-                        <ion-input type="number" [(ngModel)]="amountIn"></ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
                     <ion-col col-4>
-                        <ion-label stacked>You Want</ion-label>
+                        <button ion-button medium round full clear (click)="openModal('from');">
+                            <img src="{{from.logoURI}}">&nbsp;&nbsp;{{from.symbol}}
+                        </button>
                     </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <button ion-button medium full clear icon-only>
+                            <ion-icon name="arrow-round-down"></ion-icon>
+                        </button>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col col-12>
+                        <ion-label stacked>To</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
                     <ion-col col-8>
-                        <button ion-button medium round full color="orange" (click)="openModal('to');">
-                            Tap to Select
+                        <ion-input type="number" [(ngModel)]="amountOut" (input)="estimatePrice('out');"></ion-input>
+                    </ion-col>
+                    <ion-col col-4>
+                        <button *ngIf="to.symbol !== 'Select Token'" ion-button medium round full clear (click)="openModal('to');">
+                            <img src="{{to.logoURI}}">&nbsp;&nbsp;{{to.symbol}}
                         </button>
+                        <button *ngIf="to.symbol === 'Select Token'" ion-button medium round full color='orange' (click)="openModal('to');">
+                                {{to.symbol}}
+                        </button>                        
                     </ion-col>
                 </ion-row>
                 <ion-row>
                     <ion-col col-12>
-                        <ion-label class="big" stacked (click)="copyAddress(to)">{{to.name}} {{to.address}}</ion-label>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col col-12>
-                        <button ion-button medium round full color="fingerprint" (click)="estimatePrice();">
-                            Estimate How Much You'll Get
-                        </button>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col col-12>
-                        <ion-label stacked>You Get (estimated)</ion-label>
-                        <ion-input type="number" [(ngModel)]="amountOut"></ion-input>
+                        <ion-label *ngIf="price > 0">
+                            Price: {{invertedPrice | number: '.3-8'}} {{from.symbol}} per {{to.symbol}}
+                        </ion-label>
                     </ion-col>
                 </ion-row>
                 <ion-row>
